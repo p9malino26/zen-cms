@@ -1,0 +1,31 @@
+<!doctype>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="Content-Language" content="en-gb">
+        <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, nodp, notranslate, noimageindex">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        {% block pageHeader %}
+        <title>Untitled Page</title>
+        {% endblock %}
+        
+        {% block thinclient %}
+        <script src="/qx/code/thinclient/index.js" type="text/javascript"></script>
+        {% endblock %}
+        <link rel="stylesheet" href="/qx/theme/theme.css">
+    </head>
+    <body class="normal-page {% block pageBodyClass %}gw-default-body{% endblock %}">
+      {% block pageOuter %}
+        <div id="container">
+            <div id="content">
+                {% block pageContent %}
+                    <p>pageContent should go here!</p>
+                {% endblock %}
+                <div class="border-uncollapse"></div>
+            </div>
+        </div>
+      {% endblock %}
+    </body>
+</html>
+

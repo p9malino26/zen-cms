@@ -1,0 +1,1 @@
+"{"status":"ok","result":{"result":"ok","out":{"aborted":false,"arr":[{"rowIndex":7,"lineCode":4853,"dbRdcPrice":14.07,"eanDesc":"SPAR Rich Roast Coffee Granules","status":"Already On Promotion","errors":"","warnings":"Database already has correct pro

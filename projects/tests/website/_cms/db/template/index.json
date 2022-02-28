@@ -1,0 +1,11 @@
+{
+  "_classname": "zx.cms.content.Page",
+  "title": "My Home Page",
+  "_uuid": "bfeb82e2-18f5-4cf2-a626-69366cd41f69",
+  "pieces": [
+    {
+      "_classname": "zx.cms.content.ContentPiece",
+      "content": "<h1>My New Website</h1>\n<p>Hello World!</p>"
+    }
+  ]
+}

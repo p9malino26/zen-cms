@@ -1,0 +1,32 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Fix Headers",
+      "program": "${workspaceFolder}/bin/fix-headers.js",
+      "args": [
+        "source/class/zx/cms/server/Standalone.js"
+      ],
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**",
+        "${workspaceFolder}/zx",
+        "**/polyfill.js"
+      ],
+      "type": "pwa-node"
+    },
+    {
+      "name": "ZX: Run Node Tests",
+      "program": "${workspaceFolder}/projects/tests/compiled/source-node/nodeUnitTests/index.js",
+      "type": "pwa-node",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/polyfill.js"
+      ]
+    }
+  ]
+}

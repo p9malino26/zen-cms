@@ -1,0 +1,13 @@
+<div class="{{ cssClass }}" id="{{ uniqueDivId }}">
+    {{ html() | safe }}
+</div>
+<script type="text/javascript">
+qx.$$loader.on("ready", function() {
+  var piece = {
+      uniqueDivId: "{{ uniqueDivId }}",
+      uniqueDiv: document.getElementById("{{ uniqueDivId }}"),
+      featureName: "{{ featureName }}"
+  };
+  {{ clientInstall() | safe }}
+});
+</script>

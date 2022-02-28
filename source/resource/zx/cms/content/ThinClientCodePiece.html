@@ -1,0 +1,10 @@
+<div id="{{ piece.uniqueDivId }}"></div>
+<script type="text/javascript">
+qx.$$loader.on("ready", function() {
+  var piece = {
+      uniqueDivId: "{{ piece.uniqueDivId}}",
+      uniqueDiv: document.getElementById("{{ piece.uniqueDivId }}")
+  };
+  {{ piece.code | safe }};
+});
+</script>

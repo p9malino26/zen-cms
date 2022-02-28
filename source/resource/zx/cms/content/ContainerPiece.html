@@ -1,0 +1,18 @@
+<div class="{{ cssClass }} qxl-container-{{ orientation }}" data-zx-cms-piece-uuid="{{ uuid }}">
+  {% asyncEach childPiece in pieces %}
+    {% renderPiece childPiece %}
+  {% endeach %}
+</div>
+
+
+{% if zx.user.hasPermission("zx-can-edit-page") %}
+<script type="text/javascript">
+  qx.$$loader.on("ready", function() {
+    qx.core.Init.getApplication().addEditablePiece("{{ uuid }}", "zx.cms.content.ContainerPieceRemoteControl");
+  });
+</script>
+{% endif %}
+
+
+
+

@@ -1,0 +1,161 @@
+{
+  "title": "cms.json Schema",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://raw.githubusercontent.com/qooxdoo/zx.cms/master/source/resource/zx/cms/schema/cms-1-0-0.json",
+  "description": "cms.json controls the Zenesis Server",
+  "type": "object",
+  "required": [
+    "database",
+    "theme",
+    "$schema"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "the json schema of the version of cms.json"
+    },
+    "directory": {
+      "type": "string",
+      "description": "The directory that the website files will exist in"
+    },
+    "database": {
+      "type": "object",
+      "additionalItems": false,
+      "required": [ "type" ],
+      "properties": {
+        "type": {
+          "description": "The type of database, ",
+          "type": "string",
+          "pattern": "^(nedb|mongo)$"
+        },
+        "directory": {
+          "description": "The directory where the database will be stored",
+          "type": "string"
+        },
+        "mongo": {
+          "description": "Mongo specific options",
+          "type": "object",
+          "properties": {
+            "uri": {
+              "type": "string",
+              "description": "Connection URI"
+            },
+            "databaseName": {
+              "type": "string",
+              "description": "Database name"
+            },
+            "collectionName": {
+              "type": "string",
+              "description": "Collection name"
+            }
+          }
+        },
+        "nedb": {
+          "description": "NeDb specific options",
+          "type": "object",
+          "properties": {
+            "directory": {
+              "description": "The directory where the database will be stored",
+              "type": "string"
+            }
+          }
+        },
+        "import": {
+          "description": "Automatic importing from a template",
+          "type": "object",
+          "properties": {
+            "from": {
+              "description": "List of directories to import from",
+              "type": "array",
+              "items": {
+                "type" :"string"
+              }
+            },
+            "when": {
+              "description": "How often to import - always (every time CMS starts) or initialize (default; only if the database does not yet exist)",
+              "type": "string",
+              "pattern": "^(always|initialize)$"
+            }
+          }
+        }
+      }
+    },
+    "port": {
+      "type": "integer",
+      "description": "The port for the CMS web server to run on"
+    },
+    "targets": {
+      "description": "The names of the compilation targets for different types of application",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "browser": {
+          "type": "string",
+          "description": "Target used for browser applications (default: source)"
+        },
+        "cms": {
+          "type": "string",
+          "description": "Target used for CMS Server application (default: source)"
+        }
+      }
+    },
+    "theme": {
+      "type": "string",
+      "description": "The theme name"
+    },
+    "session": {
+      "type": "object",
+      "description": "Session configuration",
+      "properties": {
+        "secret": {
+          "type": "string",
+          "description": "The secret encryption key used to encrypt session data in clients; this should be unique"
+        },
+        "secure": {
+          "type": "boolean",
+          "description": "Whether to require HTTPS for cookies"
+        }
+      }
+    },
+    "keys": {
+      "type": "object",
+      "description": "Encryption keys",
+      "properties": {
+        "password": {
+          "type": "string",
+          "description": "The secret encryption key used for one-way encryption of passwords; this should be unique"
+        },
+        "impersonate": {
+          "type": "string",
+          "description": "The secret encryption key used for two-way encryption of impersonation; this should be unique"
+        }
+      }
+    },
+    "createProxies": {
+      "type": "object",
+      "description": "Automatically create client proxies when starting the server",
+      "properties": {
+        "outputPath": {
+          "type": "string",
+          "description": "The directory to create the proxies in (must match compile.json for browser targets)"
+        },
+        "compilerTargetPath": {
+          "type": "string",
+          "description": "The directory the compiler outputs the server classes into"
+        }
+      }
+    },
+    "firebase": {
+      "type": "object",
+      "description": "Firebase configuration",
+      "properties": {
+        "serviceAccount": {
+          "type": "string",
+          "description": "Path to configuration file for the service account"
+        }
+      }
+      
+    }
+  }
+}

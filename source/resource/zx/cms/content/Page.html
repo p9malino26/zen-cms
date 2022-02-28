@@ -1,0 +1,27 @@
+{% extends "page-layout-base" %}
+
+{% block pageBodyClass %}{{ page.cssClass }}{% endblock %}
+
+{% block pageHeader %}
+  <title>{{ page.title }}</title>
+  {% if page.thinClient %}
+    <script type="text/javascript" src="/qx/code/{{ page.thinClient }}/index.js"/></script>
+  {% endif %}
+{% endblock %}
+
+{% block pageContent %}
+{% asyncEach piece in page.pieces %}
+    {% renderPiece piece %}
+  {% endeach %}
+{% endblock %}
+
+{% block pageFooter %}
+  {% if zx.user.hasPermission("zx-can-edit-page") %}
+  <script type="text/javascript">
+    qx.$$loader.on("ready", function() {
+      qx.core.Init.getApplication().addEditablePiece("{{ uuid }}", "zx.cms.content.PageRemoteControl", document.body);
+    });
+  </script>
+  {% endif %}
+{% endblock %}
+

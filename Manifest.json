@@ -1,0 +1,65 @@
+{
+  "$schema": "https://qooxdoo.org/schema/Manifest-2-0-0.json",
+  "info": {
+    "name": "zx.cms",
+    "summary": "Zen CMS",
+    "description": "Zen [and the art of] CMS",
+    "homepage": "https://zenesis.com",
+    "license": "Proprietary",
+    "authors": [
+      {
+        "name": "John Spackman (johnspackman)",
+        "email": "john.spackman@zenesis.com"
+      }
+    ],
+    "version": "0.2.1"
+  },
+  "provides": {
+    "namespace": "zx",
+    "encoding": "utf-8",
+    "class": "source/class",
+    "resource": "source/resource",
+    "translation": "source/translation",
+    "webfonts": [
+      {
+        "name": "FontAwesomeBrands",
+        "defaultSize": 32,
+        "comparisonString": "\\uf26e\\uf368",
+        "mapping": "zx/cms/fontawesome/fa-brands.map",
+        "resources": [
+          "zx/cms/fontawesome/fa-brands-400.eot",
+          "zx/cms/fontawesome/fa-brands-400.woff2",
+          "zx/cms/fontawesome/fa-brands-400.woff",
+          "zx/cms/fontawesome/fa-brands-400.ttf"
+        ]
+      },
+      {
+        "name": "FontAwesome",
+        "defaultSize": 32,
+        "comparisonString": "\\uf2b9\\uf2bb",
+        "mapping": "zx/cms/fontawesome/fa-regular.map",
+        "resources": [
+          "zx/cms/fontawesome/fa-regular-400.eot",
+          "zx/cms/fontawesome/fa-regular-400.woff2",
+          "zx/cms/fontawesome/fa-regular-400.woff",
+          "zx/cms/fontawesome/fa-regular-400.ttf"
+        ]
+      },
+      {
+        "name": "FontAwesomeSolid",
+        "defaultSize": 32,
+        "comparisonString": "\\uf2b9\\uf2bb",
+        "mapping": "zx/cms/fontawesome/fa-solid.map",
+        "resources": [
+          "zx/cms/fontawesome/fa-solid-900.eot",
+          "zx/cms/fontawesome/fa-solid-900.woff2",
+          "zx/cms/fontawesome/fa-solid-900.woff",
+          "zx/cms/fontawesome/fa-solid-900.ttf"
+        ]
+      }
+    ]
+  },
+  "requires": {
+    "@qooxdoo/framework": "^7.0.0-beta"
+  }
+}

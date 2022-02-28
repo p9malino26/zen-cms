@@ -1,0 +1,38 @@
+{
+  "_classname": "zx.cms.content.Page",
+  "title": "Demo Container Piece",
+  "_uuid": "dda85601-ccb9-449d-9bf4-48a374978953",
+  "pieces": [
+    {
+      "_classname": "zx.cms.content.ContentPiece",
+      "content": "<h1>My Header</h1>"
+    },
+    {
+      "_classname": "zx.cms.content.ContainerPiece",
+      "orientation": "vertical",
+      "cssClass": "infoboxes",
+      "pieces": [
+        {
+          "_classname": "zx.cms.content.ContentPiece",
+          "cssClass": "infobox",
+          "content": "<h2>Sub Piece 1</h2><p>Sub Piece 1 Desc</p>"
+        },
+        {
+          "_classname": "zx.cms.content.ContentPiece",
+          "cssClass": "infobox",
+          "content": "<h2>Sub Piece 2</h2><p>Sub Piece 2 Desc</p>"
+        },
+        {
+          "_classname": "zx.cms.content.ContentPiece",
+          "cssClass": "infobox",
+          "content": "<h2>Sub Piece 3</h2><p>Sub Piece 3 Desc</p>"
+        },
+        {
+          "_classname": "zx.cms.content.ContentPiece",
+          "cssClass": "infobox",
+          "content": "<h2>Sub Piece 4</h2><p>Sub Piece 4 Desc</p>"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "../../source/resource/zx/cms/schema/cms-1-0-0.json",
+  "directory": "website",
+  "database": {
+    "type": "nedb",
+    "import": {
+      "when": "always",
+      "from": ["../../source/tests/template", "website/_cms/db/template"]
+    }
+  },
+  "session": {
+    "secret": "TXfbMmRkjw7TascpJ4MNbEYRYqjRvvFC"
+  },
+  "theme": "themes.CmsPlainTheme",
+  "createProxies": {
+    "outputPath": "source/proxies",
+    "compilerTargetPath": "compiled/source-node"
+  }
+}

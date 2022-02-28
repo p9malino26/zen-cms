@@ -1,0 +1,14 @@
+{
+  "$schema": "../../source/resource/zx/cms/schema/cms-1-0-0.json",
+  "directory": "website",
+  "database": {
+    "type": "file",
+    "import": {
+      "when": "always"
+    }
+  },
+  "session": {
+    "secret": "biZi5EYALOPU"
+  },
+  "theme": "zx.test.cms.CmsTestTheme"
+}

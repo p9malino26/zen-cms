@@ -1,0 +1,10 @@
+{
+  "_classname": "zx.cms.content.Page",
+  "title": "Demo Hello Window",
+  "pieces": [
+    {
+      "_classname": "zx.cms.content.FeaturePiece",
+      "featureName": "zx.test.thin.DemoHelloWindow"
+    }
+  ]
+}

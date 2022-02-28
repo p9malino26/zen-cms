@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+const path = require("path");
+
+let compiled = path.resolve("./compiled/source-node/cli/index.js");
+require(compiled);
+
+let app = qx.core.Init.getApplication();
+app.runCli();

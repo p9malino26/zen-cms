@@ -1,0 +1,95 @@
+{
+  "$schema": "https://qooxdoo.org/schema/compile-1-0-0.json",
+  "targets": [
+    {
+      "type": "source",
+      "application-types": ["browser"],
+      "outputPath": "compiled/source",
+      "proxySourcePath": "source/proxies",
+      "babelOptions": {
+        "targets": "Chrome >= 72, Firefox >= 64, edge >= 18"
+      },
+      "environment": {
+        "qx.buildType": "source",
+        "zx.io.remote.NetworkEndpoint.server": false
+      },
+      "writeCompileInfo": true,
+      "addTimestampsToUrls": false,
+      "addCreatedAt": true
+    },
+    {
+      "type": "source",
+      "outputPath": "compiled/source-node",
+      "application-types": ["node"],
+      "babelOptions": {
+        "targets": "node >= 14"
+      },
+      "environment": {
+        "qx.buildType": "source",
+        "zx.cms.thinClientTargetPath": "compiled/source",
+        "zx.io.remote.NetworkEndpoint.server": true
+      },
+      "writeCompileInfo": true,
+      "addTimestampsToUrls": false,
+      "addCreatedAt": true
+    },
+    {
+      "type": "build",
+      "application-types": ["browser"],
+      "outputPath": "compiled/build",
+      "proxySourcePath": "source/proxies",
+      "babelOptions": {
+        "targets": "Chrome >= 72, Firefox >= 64, edge >= 18"
+      },
+      "environment": {
+        "zx.io.remote.NetworkEndpoint.server": false,
+        "qx.buildType": "build"
+      },
+      "addTimestampsToUrls": false
+    },
+    {
+      "type": "build",
+      "outputPath": "compiled/build-node",
+      "application-types": ["node"],
+      "babelOptions": {
+        "targets": "node >= 14"
+      },
+      "environment": {
+        "qx.buildType": "build",
+        "zx.cms.thinClientTargetPath": "compiled/build",
+        "zx.io.remote.NetworkEndpoint.server": true
+      },
+      "addTimestampsToUrls": false
+    }
+  ],
+  "defaultTarget": "source",
+  "locales": ["en"],
+  "environment": {
+    "qx.icontheme": "Tango",
+    "zx.cms.client.theme": "zx.cms.client.theme.Simple",
+    "zx.io.remote.Endpoint.traceIo": false,
+    "zx.io.remote.BrowserXhrEndpoint.traceIo": false,
+    "zx.io.remote.FastifyXhrListener.sessionTracing": false
+  },
+  "libraries": [".", "../../Qooxdoo/qxl.widgetbrowser", "../../Qooxdoo/qxl.formdemo", "../../Qooxdoo/qxl.versionlabel"],
+  "applications": [
+    {
+      "title": "Node Unit Tests",
+      "description": "Node Unit Tests",
+      "class": "zx.test.NodeUnitTestsApp",
+      "type": "node",
+      "name": "node-tests"
+    },
+    {
+      "title": "Zen CLI",
+      "description": "Command Line app (`zx`) used for managing and running the Zen CMS",
+      "class": "zx.cli.CliApp",
+      "type": "node",
+      "name": "cli"
+    }
+  ],
+  "sass": {
+    "compiler": "latest",
+    "copyOriginal": true
+  }
+}

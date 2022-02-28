@@ -1,0 +1,11 @@
+{
+  "_classname": "zx.cms.content.Page",
+  "title": "Demo Xhr",
+  "pieces": [
+    {
+      "_classname": "zx.cms.content.FeaturePiece",
+      "title": "Demo Thin Xhr",
+      "featureName": "zx.test.io.remote.RemoteThinXhrFeature"
+    }
+  ]
+}

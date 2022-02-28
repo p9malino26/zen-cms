@@ -1,0 +1,18 @@
+<!DOCTYPE >
+<html>
+  <head>
+    {% block pageheader %}
+    <title>Untitled Page</title>
+    {% endblock %}
+  </head>
+  <body>
+    <h1>Default page-layout-base</h1>
+    <p>
+      If you're seeing this, it's because no theme has been selected and the
+      website doesn't provide any layouts!
+    </p>
+    {% block pagebody %}
+    <p>page-body should go here!</p>
+    {% endblock %}
+  </body>
+</html>

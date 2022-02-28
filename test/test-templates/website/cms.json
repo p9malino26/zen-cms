@@ -1,0 +1,11 @@
+{
+  "$schema": "https://raw.githubusercontent.com/qooxdoo/zx.cms/master/source/resource/zx/cms/schema/cms-1-0-0.json",
+
+  "database": {
+    "type": "file",
+    "import": {
+      "when": "always"
+    }
+  },
+  "theme": "zx.test.cms.CmsTestTheme"
+}

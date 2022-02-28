@@ -1,0 +1,22 @@
+@import "zx:zx/thin/theme/materials/_theme.scss";
+
+body {
+	background-color: #034e7f;
+	color: white;
+	height: 100%;
+	overflow-x: hidden;
+}
+html {
+	height: 100%;
+}
+
+
+* {
+	margin: 0px;
+	padding: 0px;
+}
+html, body {
+	height: 100%;
+	width: 100%;
+}
+

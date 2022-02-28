@@ -1,0 +1,10 @@
+{
+  "_classname": "zx.cms.content.Page",
+  "title": "Demo Utils Message Dialogs",
+  "pieces": [
+    {
+      "_classname": "zx.cms.content.FeaturePiece",
+      "featureName": "zx.test.thin.DemoUtilsMessage"
+    }
+  ]
+}

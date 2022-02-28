@@ -1,0 +1,430 @@
+$colorBg: white !default;
+$colorBannerBg: #6000e9 !default;
+$colorBannerBgDark: #4900d1 !default;
+$colorTextInverse: white !default;
+$colorWindowAppBarButton: #be8fff !default;
+$colorError: red !default;
+$colorLabelFocus: rgba(98, 0, 238, 0.87) !default;
+$colorLabel: rgba(0, 0, 0, 0.6) !default;
+$colorInputBg: #f5f5f5 !default;
+$colorInputBorder: rgba(0, 0, 0, 0.42) !default;
+$colorInputBorderHover: black !default;
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:focus {
+  outline-width: 1px;
+}
+
+.qx-modal {
+  background-color: black;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  opacity: 0.3;
+  backdrop-filter: blur(5px);
+}
+
+.qx-screen-lock {
+  background-color: black;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5000;
+  opacity: 0.15;
+  cursor: wait;
+}
+
+.qx-window {
+  box-shadow: 0px 4px 7px 1px rgba(0, 0, 0, 0.75);
+  margin: 0 50px;
+  background-color: $colorBg;
+
+  &.qx-window-inline {
+  }
+
+  &:not(.qx-window-inline) {
+    position: absolute;
+    margin: 0;
+  }
+
+  .qx-window-app-bar {
+    background-color: $colorBannerBg;
+    border-bottom: 1px solid $colorBannerBg;
+    color: $colorTextInverse;
+
+    h1 {
+      margin: 5px 20px;
+      font-weight: normal;
+      font-size: 1.5em;
+    }
+
+    .qx-window-button-bar {
+      background-color: $colorBannerBgDark;
+      text-align: right;
+
+      button {
+        width: 15px;
+        height: 15px;
+        padding: 0px 1px 0px 0px;
+        background: transparent;
+        border: none;
+        color: $colorWindowAppBarButton;
+        &:hover {
+          background: $colorWindowAppBarButton;
+          color: $colorBannerBgDark;
+          border-radius: 3px;
+        }
+      }
+    }
+  }
+
+  .qx-window-body {
+    padding: 10px 20px;
+    color: $colorLabel;
+  }
+}
+
+.qx-dialog {
+  box-shadow: 0px 4px 7px 1px rgba(0, 0, 0, 0.75);
+  border-radius: 5px;
+  padding: 20px;
+
+  h1 {
+    margin: 5px 0px;
+    font-weight: normal;
+    font-size: 1.5em;
+  }
+
+  .qx-window-body {
+    padding: 10px 0px;
+  }
+
+  .qx-window-footer {
+    margin-top: 20px;
+  }
+}
+
+.qx-utils-message {
+  @extend .qx-window;
+}
+
+.qx-button {
+  border-radius: 4px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  font-size: 14px;
+  margin-right: 6px;
+  margin-bottom: 4px;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .qx-image {
+    margin-right: 11px;
+  }
+
+  &.qx-button-contained {
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+      0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+    background-color: $colorBannerBg;
+    color: $colorTextInverse;
+
+    &.qx-button-down {
+      background-color: rgba($colorBannerBg, 0.7);
+    }
+
+    &:hover {
+      box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+        0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+        0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  &.qx-button-outlined,
+  &.qx-button-text {
+    color: $colorBannerBg;
+    background-color: $colorTextInverse;
+    &:hover {
+      background-color: rgba($colorBannerBg, 0.07);
+    }
+  }
+
+  &.qx-button-outlined {
+    border: 1px solid $colorBannerBg;
+  }
+
+  &.qx-button-text {
+    border: none;
+  }
+
+  .qx-loading.la-sm {
+    display: inline-block;
+    top: 2px;
+    left: -3px;
+    margin-right: 11px;
+  }
+}
+
+.qx-loading.la-sm {
+  display: inline-block;
+}
+
+.qx-image {
+  display: inline;
+}
+
+.qx-form-field {
+  margin: 5px 0;
+}
+
+.qx-text {
+  @extend .qx-form-field;
+
+  .qx-text-input-area {
+    display: grid;
+    grid-template-columns: 30px auto 30px;
+    background-color: $colorInputBg;
+    border-bottom: 1px solid $colorInputBorder;
+    padding: 10px 10px 10px;
+
+    &:hover {
+      border-bottom-color: $colorInputBorderHover;
+    }
+
+    .qx-input-leading-icon {
+      grid-column: 1;
+    }
+
+    .qx-input-trailing-icon {
+      grid-column: 3;
+    }
+
+    .qx-input-leading-icon,
+    .qx-input-trailing-icon {
+      grid-row: 1 / span 2;
+      align-self: center;
+      justify-self: center;
+      color: $colorLabel;
+    }
+
+    label {
+      grid-column: 2;
+      grid-row: 1;
+      font-size: 0.7em;
+      color: $colorLabel;
+      transition-duration: 0.2s;
+      transition-property: font-size;
+    }
+
+    input {
+      grid-column: 2;
+      grid-row: 2;
+      font-size: 1em;
+      transition-duration: 0.2s;
+      transition-property: font-size;
+      border: none;
+      background-color: transparent;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  &.qx-text-empty:not(.qx-widget-focus) {
+    .qx-text-input-area {
+      label {
+        font-size: 1em;
+      }
+      input {
+        font-size: 0.7em;
+      }
+    }
+  }
+  &.qx-widget-focus {
+    .qx-text-input-area {
+      border-bottom: 2px solid $colorBannerBg;
+
+      label {
+        color: $colorLabelFocus;
+      }
+    }
+  }
+
+  .qx-text-feedback-area {
+    display: grid;
+    grid-template-columns: auto 30px;
+    color: $colorLabel;
+    font-size: 0.7em;
+
+    .qx-text-error-text .qx-input-extra-text {
+      color: $colorError;
+    }
+    .qx-input-extra-text {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .qx-input-charcount {
+      grid-column: 2;
+      grid-row: 1;
+    }
+  }
+}
+
+.qx-selector {
+  @extend .qx-form-field;
+
+  position: relative;
+  height: 40px;
+
+  input {
+    visibility: hidden;
+    outline: none;
+  }
+
+  label {
+    position: absolute;
+    top: 11px;
+    display: block;
+    left: 44px;
+    color: $colorLabel;
+  }
+
+  &.qx-widget-focus {
+    input {
+      appearance: none;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      visibility: visible;
+      border: 18px solid $colorBannerBg;
+      border-radius: 24px;
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      -webkit-appearance: none;
+      opacity: 0.2;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+    }
+  }
+}
+
+.qx-checkbox {
+  @extend .qx-selector;
+
+  svg {
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    left: 13px;
+    top: 13px;
+    border: 2px solid $colorBannerBg;
+    border-radius: 3px;
+  }
+
+  &.qx-selector-on {
+    svg {
+      stroke: white;
+      stroke-width: 3px;
+      background-color: blue;
+    }
+  }
+}
+
+.qx-radio {
+  @extend .qx-selector;
+
+  .qx-radio-outer {
+    width: 14px;
+    height: 14px;
+    border: 2px solid blue;
+    border-radius: 20px;
+    top: 12px;
+    left: 12px;
+    position: absolute;
+  }
+  .qx-radio-inner {
+    display: none;
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border: 1px solid blue;
+    background-color: blue;
+    border-radius: 10px;
+    top: 17px;
+    left: 17px;
+  }
+  &.qx-selector-on {
+    .qx-radio-inner {
+      display: block;
+    }
+  }
+  &.qx-widget-focus {
+    input {
+      top: 3px;
+      left: 3px;
+    }
+  }
+}
+
+.qx-switch {
+  @extend .qx-selector;
+
+  .qx-switch-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 14px;
+    position: absolute;
+    top: 12px;
+    right: 24px;
+    background-color: white;
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+      0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  }
+  .qx-switch-track {
+    width: 30px;
+    height: 14px;
+    background-color: $colorLabel;
+    border-radius: 10px;
+    position: absolute;
+    top: 15px;
+    right: 11px;
+  }
+  &.qx-selector-on {
+    .qx-switch-thumb {
+      background-color: $colorBannerBg;
+      right: 7px;
+    }
+    .qx-switch-track {
+      background-color: lighten($colorBannerBg, 20%);
+    }
+  }
+  &.qx-widget-focus {
+    input {
+      left: -13px;
+      top: -12px;
+      border-width: 22px;
+      border-color: $colorLabel;
+    }
+    &.qx-selector-on {
+      input {
+        border-color: $colorBannerBg;
+      }
+    }
+  }
+}

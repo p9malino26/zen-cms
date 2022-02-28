@@ -1,0 +1,14 @@
+/compiled/
+/node_modules/
+/website/_cms/
+test/persistence/website-db/_uuids/
+qx_packages
+.package-cache.json
+/.vscode/
+/tmp/
+/project/tests/compiled/
+/source/resource/zx/cms/
+/source/resource/zx/cms/client/theme/
+/projects/tests/website/_cms/
+/test/test-templates/website/_cms/
+/source/resource/zx/thin/theme/load-awesome-1.1.0/

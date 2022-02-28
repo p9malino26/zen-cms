@@ -1,0 +1,9 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+	ignorecase = true
+	precomposeunicode = true
+[remote "upstream"]
+	url = git@github.com:johnspackman/zen-cms.git
+	fetch = +refs/heads/*:refs/remotes/upstream/*

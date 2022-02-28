@@ -1,0 +1,13 @@
+{
+  "_classname": "zx.cms.content.Page",
+  "title": "Logout",
+  "pieces": [
+    {
+      "_classname": "zx.cms.content.FeaturePiece",
+      "featureName": "zx.cms.app.auth.LogoutFeature",
+      "options": {
+        "redirectTo": "/"
+      }
+    }
+  ]
+}
