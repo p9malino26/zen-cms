@@ -1,32 +1,31 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.utils.Sha", {
   extend: qx.core.Object,
 
   statics: {
     sha1(value) {
-      let str = zx.utils.BrowserifiedBundle.shajs("sha1").update(value).digest("hex");
+      let str = require("sha.js")("sha1").update(value).digest("hex");
       return str;
     },
 
     sha256(value) {
-      let str = zx.utils.BrowserifiedBundle.shajs("sha256").update(value).digest("hex");
+      let str = require("sha.js")("sha256").update(value).digest("hex");
       return str;
     }
   }

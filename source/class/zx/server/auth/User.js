@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Every user is an instance of one of these documents.
@@ -35,7 +34,8 @@ qx.Class.define("zx.server.auth.User", {
       }),
       roles: new zx.data.IndexedArray().set({
         keyGenerator: role => role.getShortCode()
-      })
+      }),
+      state: new zx.data.Map()
     });
   },
 
@@ -46,10 +46,7 @@ qx.Class.define("zx.server.auth.User", {
       check: "String",
       event: "changeUsername",
       transform: "_transformUsername",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.PROTECTED
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED]
     },
 
     /** Full name of the user */
@@ -58,10 +55,7 @@ qx.Class.define("zx.server.auth.User", {
       nullable: false,
       check: "String",
       event: "changeFullName",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** Password */
@@ -70,10 +64,7 @@ qx.Class.define("zx.server.auth.User", {
       nullable: true,
       check: "String",
       event: "changePassword",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.PROTECTED
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED]
     },
 
     /** List of permissions assigned to this user */
@@ -83,10 +74,7 @@ qx.Class.define("zx.server.auth.User", {
       check: "zx.data.IndexedArray",
       event: "changePermissions",
       transform: "_transformPermissions",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.PROTECTED
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED]
     },
 
     /** List of roles assigned to this user */
@@ -96,10 +84,16 @@ qx.Class.define("zx.server.auth.User", {
       check: "zx.data.IndexedArray",
       event: "changeRoles",
       transform: "_transformRoles",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.PROTECTED
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED]
+    },
+
+    /** Map of simple key/value pairs used for storing user state (eg UI state) */
+    state: {
+      init: null,
+      nullable: true,
+      check: "zx.data.Map",
+      event: "changeState",
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED]
     }
   },
 
@@ -122,9 +116,7 @@ qx.Class.define("zx.server.auth.User", {
      * @returns
      */
     isPassword(password) {
-      return (
-        this.getPassword() === zx.server.auth.User.encryptPassword(password)
-      );
+      return this.getPassword() === zx.server.auth.User.encryptPassword(password);
     },
 
     /**
@@ -144,8 +136,7 @@ qx.Class.define("zx.server.auth.User", {
      */
     async grantPermission(shortCode) {
       let perm = await zx.server.auth.Security.findPermission(shortCode);
-      if (!perm)
-        throw new Error(`Cannot find permission to grant from ${shortCode}`);
+      if (!perm) throw new Error(`Cannot find permission to grant from ${shortCode}`);
       if (!this.getPermissions().lookup(shortCode)) {
         this.getPermissions().push(perm);
         await this.save();
@@ -162,8 +153,7 @@ qx.Class.define("zx.server.auth.User", {
      */
     async removePermission(shortCode) {
       let perm = await zx.server.auth.Security.findPermission(shortCode);
-      if (!perm)
-        throw new Error(`Cannot find permission to remove from ${shortCode}`);
+      if (!perm) throw new Error(`Cannot find permission to remove from ${shortCode}`);
       if (this.getPermissions().remove(perm)) {
         await this.save();
         return true;
@@ -219,9 +209,7 @@ qx.Class.define("zx.server.auth.User", {
       if (classname == null) return zx.server.auth.User;
       let clazz = qx.Class.getByName(classname);
       if (!clazz || !qx.Class.isSubClassOf(clazz, zx.server.auth.User))
-        throw new Error(
-          `Invalid class for User objects - expected ${classname} but found ${clazz}`
-        );
+        throw new Error(`Invalid class for User objects - expected ${classname} but found ${clazz}`);
       return clazz;
     },
 

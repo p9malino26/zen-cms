@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.io.persistence.Endpoint", {
   extend: qx.core.Object,
@@ -24,7 +24,9 @@ qx.Class.define("zx.io.persistence.Endpoint", {
   },
 
   destruct() {
-    this.__controller = null;
+    if (qx.core.Environment.get("qx.debug")) {
+      this.assertTrue(this.__controller === null);
+    }
     this.__availableJson = this.__putDependentObjects = this.__putQueueDoneObjects = null;
     this.__controller = null;
   },
@@ -67,6 +69,7 @@ qx.Class.define("zx.io.persistence.Endpoint", {
      */
     detachFromController() {
       this.__controller = null;
+      this.__detachedFromController = true;
     },
 
     /**
@@ -138,7 +141,7 @@ qx.Class.define("zx.io.persistence.Endpoint", {
      */
     async _putImpl(obj) {
       let io = this.__controller.getClassIos().getClassIo(obj.constructor);
-      let json = await io.toJson(this, obj);
+      let json = await io.toJson([this], obj);
       json._classname = obj.classname;
       let uuid = obj.toUuid();
       json._uuid = uuid;

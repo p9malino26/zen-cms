@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Represents a connection on the serevr to a client; this object MUST be disposed of
@@ -30,7 +29,6 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
     this.__lastPacketId = 0;
     this._pendingPromises = {};
     this.__availableJson = {};
-    this.__watchedObjects = {};
     this.__uuid = uuid || this.toUuid();
     this.__receiveQueue = new zx.utils.Queue(packets => this._receivePacketsImpl(packets));
 
@@ -71,9 +69,6 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
     /** @type{Map} list of property changes that are queued for delivery */
     __propertyChangeStore: null,
 
-    /** @type{Map} watched objects listener information, indexed by uuid  */
-    __watchedObjects: null,
-
     /**
      * Whether the end point is open
      *
@@ -81,6 +76,15 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      */
     isOpen() {
       return this.__open;
+    },
+
+    /**
+     * @override
+     */
+    detachFromController() {
+      let watcher = this.getController().getSharedWatcher();
+      watcher && watcher.unwatchAll(this);
+      super.detachFromController();
     },
 
     /**
@@ -232,7 +236,8 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
       await this.base(arguments, obj);
 
       let uuid = obj.toUuid();
-      if (!this.__watchedObjects[uuid]) this.watchObject(obj);
+      let watcher = this.getController().getSharedWatcher();
+      if (!watcher.isWatching(obj, this)) this.watchObject(obj);
     },
 
     /**
@@ -265,12 +270,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      * @param obj {zx.io.persistence.IObject} the object
      */
     watchObject(obj) {
-      let io = this.getController().getClassIos().getClassIo(obj.constructor);
-      let uuid = obj.toUuid();
-      if (this.__watchedObjects[uuid]) {
-        throw new Error("Cannot watch an object multiple times");
-      }
-      this.__watchedObjects[uuid] = io.watchForChanges(this, obj, (...args) => this._onWatchChange(...args));
+      this.getController().getSharedWatcher().watchObject(obj, this);
     },
 
     /**
@@ -279,10 +279,8 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      * @param obj {zx.io.persistence.IObject} the object
      */
     unwatchObject(obj) {
-      let io = this.getController().getClassIos().getClassIo(obj.constructor);
+      this.getController().getSharedWatcher().unwatchObject(obj, this);
       let uuid = obj.toUuid();
-      io.unwatchForChanges(this, this.__watchedObjects[uuid]);
-      delete this.__watchedObjects[uuid];
       delete this.__propertyChangeStore[uuid];
     },
 
@@ -294,7 +292,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      * @param {qx.io.persistence.ClassIo~WatchForChangesChangeType} changeType the type of change, eg "setValue", "arrayChange", etc
      * @param {Object} value native JSON representation of the property
      */
-    _onWatchChange(obj, propertyName, changeType, value) {
+    onWatchedPropertySerialized(obj, propertyName, changeType, value) {
       if (this.isChangingProperty(obj, propertyName)) return;
 
       let io = this.getController().getClassIos().getClassIo(obj.constructor);
@@ -480,6 +478,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
       let waitForAll = async () => {
         await this.getController().waitForAll();
       };
+      let watcher = this.getController().getSharedWatcher();
 
       for (let i = 0; i < packets.length; i++) {
         let packet = packets[i];
@@ -494,7 +493,8 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
             }
             this.__sentUuids[packet.uuid] = "received";
             zx.io.remote.NetworkEndpoint.setEndpointFor(obj, this);
-            if (!this.__watchedObjects[packet.uuid]) this.watchObject(obj);
+
+            if (!watcher.isWatching(obj, this)) this.watchObject(obj);
           }
         } else if (packet.type == "sendPropertyChanges") {
           let changes = packet.changes;

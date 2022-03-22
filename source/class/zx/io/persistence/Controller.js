@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * A Controller manages the import and export between Qooxdoo objects and their
@@ -34,13 +33,16 @@ qx.Class.define("zx.io.persistence.Controller", {
     this.__classIos = classIos;
     this.__endpoints = [];
     this.__endPointsByIndex = {};
-    this.__knownObjectsByUuid = {};
+    this._knownObjectsByUuid = {};
     zx.io.persistence.ObjectCaches.getInstance().addCache(this);
   },
 
   destruct() {
     zx.io.persistence.ObjectCaches.getInstance().removeCache(this);
-    this.__endpoints.forEach(endpoint => endpoint.dispose());
+    if (qx.core.Environment.get("qx.debug")) {
+      // You need to shut down the endpoints gracefully
+      this.assertTrue(this.__endpoints.length == 0);
+    }
     this.__endpoints = this.__endPointsByIndex = null;
   },
 
@@ -48,7 +50,7 @@ qx.Class.define("zx.io.persistence.Controller", {
     __classIos: null,
     __endpoints: null,
     __endPointsByIndex: null,
-    __knownObjectsByUuid: null,
+    _knownObjectsByUuid: null,
 
     /**
      * Adds a new endpoint; the endpoint will be removed automatically when it closes
@@ -58,14 +60,12 @@ qx.Class.define("zx.io.persistence.Controller", {
     addEndpoint(endpoint) {
       this.__endpoints.push(endpoint);
       let index = endpoint.getUniqueIndexId();
-      if (index) this.__endPointsByIndex[index] = endpoint;
-      let listenerId = endpoint.addListenerOnce("close", () => {
-        if (this.isDisposing()) return;
-        endpoint.setUserData(this.classname + ".listenerId", null);
-        qx.lang.Array.remove(this.__endpoints, endpoint);
-        if (index && this.__endPointsByIndex[index] === endpoint) delete this.__endPointsByIndex[index];
-      });
-      endpoint.setUserData(this.classname + ".listenerId", listenerId);
+      if (index) {
+        if (qx.core.Environment.get("qx.debug")) {
+          this.assertTrue(!this.__endPointsByIndex[index]);
+        }
+        this.__endPointsByIndex[index] = endpoint;
+      }
       endpoint.attachToController(this);
     },
 
@@ -76,16 +76,25 @@ qx.Class.define("zx.io.persistence.Controller", {
      */
     removeEndpoint(endpoint) {
       let index = endpoint.getUniqueIndexId();
-      if (index) delete this.__endPointsByIndex[index];
-      if (qx.core.Environment.get("qx.debug")) this.assertTrue(qx.lang.Array.contains(this.__endpoints, endpoint));
+      if (index) {
+        if (qx.core.Environment.get("qx.debug")) {
+          this.assertTrue(this.__endPointsByIndex[index] === endpoint);
+        }
+        delete this.__endPointsByIndex[index];
+      }
+      if (qx.core.Environment.get("qx.debug")) {
+        this.assertTrue(qx.lang.Array.contains(this.__endpoints, endpoint));
+      }
 
       qx.lang.Array.remove(this.__endpoints, endpoint);
-      let listenerId = endpoint.getUserData(this.classname + ".listenerId");
-      if (listenerId) {
-        endpoint.setUserData(this.classname + ".listenerId", null);
-        endpoint.removeListenerById(listenerId);
-      }
       endpoint.detachFromController(this);
+    },
+
+    /**
+     * Removes all endpoints
+     */
+    async removeAllEndpoints() {
+      for (let endpoint of this.__endpoints) await endpoint.close();
     },
 
     /**
@@ -146,7 +155,7 @@ qx.Class.define("zx.io.persistence.Controller", {
      * @return {qx.core.Object?} the loaded object, null if not found
      */
     getByUuidNoWait(uuid, allowIncomplete) {
-      let knownObject = this.__knownObjectsByUuid[uuid];
+      let knownObject = this._knownObjectsByUuid[uuid];
       if (knownObject) {
         if (knownObject.complete === "error") throw new knownObject.exceptionThrown();
         if (knownObject.complete === "success" || (allowIncomplete && knownObject.obj)) {
@@ -169,7 +178,7 @@ qx.Class.define("zx.io.persistence.Controller", {
           return knownObject.promise;
         }
       } else {
-        knownObject = this.__knownObjectsByUuid[uuid] = {
+        knownObject = this._knownObjectsByUuid[uuid] = {
           obj: null,
           promise: new qx.Promise(),
           a: 1
@@ -183,13 +192,13 @@ qx.Class.define("zx.io.persistence.Controller", {
         data = endpoint.getDataFromUuid(uuid);
       }
       if (!data) {
-        this.__knownObjectsByUuid[uuid].promise.resolve(null);
+        this._knownObjectsByUuid[uuid].promise.resolve(null);
         return null;
       }
 
       return zx.utils.Promisify.resolveNow(data, data => {
         if (!data) {
-          this.__knownObjectsByUuid[uuid].promise.resolve(null);
+          this._knownObjectsByUuid[uuid].promise.resolve(null);
           return null;
         }
 
@@ -238,7 +247,7 @@ qx.Class.define("zx.io.persistence.Controller", {
     createObject(clazz, uuid) {
       let knownObject = null;
       if (uuid) {
-        knownObject = this.__knownObjectsByUuid[uuid];
+        knownObject = this._knownObjectsByUuid[uuid];
         if (knownObject && knownObject.obj) {
           if (knownObject.reloading) return knownObject.obj;
           throw new Error(
@@ -256,7 +265,7 @@ qx.Class.define("zx.io.persistence.Controller", {
       }
 
       if (!knownObject) {
-        knownObject = this.__knownObjectsByUuid[uuid] = {
+        knownObject = this._knownObjectsByUuid[uuid] = {
           obj: null,
           promise: new qx.Promise()
         };
@@ -276,10 +285,10 @@ qx.Class.define("zx.io.persistence.Controller", {
      */
     setObjectComplete(obj, err) {
       let uuid = obj.toHashCode();
-      let knownObject = this.__knownObjectsByUuid[uuid];
+      let knownObject = this._knownObjectsByUuid[uuid];
       if (!knownObject) {
         uuid = obj.toUuid();
-        knownObject = this.__knownObjectsByUuid[uuid];
+        knownObject = this._knownObjectsByUuid[uuid];
       }
 
       if (knownObject) {
@@ -299,18 +308,21 @@ qx.Class.define("zx.io.persistence.Controller", {
 
         if (this.isAllComplete()) {
           let result = [];
-          Object.values(this.__knownObjectsByUuid).forEach(knownObject => {
+          Object.values(this._knownObjectsByUuid).forEach(knownObject => {
             if (!knownObject.notified) {
               if (qx.Class.hasInterface(knownObject.obj.constructor, zx.io.persistence.IObjectNotifications)) {
                 knownObject.notified = true;
                 let p = knownObject.obj.receiveDataNotification(
                   zx.io.persistence.IObjectNotifications.DATA_LOAD_COMPLETE
                 );
-                result.push(p);
+                result.push(zx.utils.Promisify.resolveNow(p, () => knownObject));
               }
             }
           });
-          return zx.utils.Promisify.allNow(result, () => obj);
+          return zx.utils.Promisify.allNow(result, knownObjects => {
+            knownObjects.forEach(knownObject => this._objectIsReady(knownObject.obj));
+            return obj;
+          });
         }
         return obj;
       } else {
@@ -319,12 +331,20 @@ qx.Class.define("zx.io.persistence.Controller", {
     },
 
     /**
+     * Called when an object is ready
+     * @param {zx.io.persistence.IObject} obj
+     */
+    _objectIsReady(obj) {
+      // Nothing
+    },
+
+    /**
      * Removes all objects from the list of known objects which are complete
      */
     forgetAllComplete() {
-      Object.keys(this.__knownObjectsByUuid).forEach(uuid => {
-        let knownObject = this.__knownObjectsByUuid[uuid];
-        if (!!knownObject.complete) delete this.__knownObjectsByUuid[uuid];
+      Object.keys(this._knownObjectsByUuid).forEach(uuid => {
+        let knownObject = this._knownObjectsByUuid[uuid];
+        if (!!knownObject.complete) this._disposeKnownObject(uuid);
       });
     },
 
@@ -332,8 +352,8 @@ qx.Class.define("zx.io.persistence.Controller", {
      * Waits for all objects to finish loading
      */
     async waitForAll() {
-      let uuids = Object.keys(this.__knownObjectsByUuid);
-      await qx.Promise.all(Object.values(this.__knownObjectsByUuid).map(knownObject => knownObject.promise));
+      let uuids = Object.keys(this._knownObjectsByUuid);
+      await qx.Promise.all(Object.values(this._knownObjectsByUuid).map(knownObject => knownObject.promise));
     },
 
     /**
@@ -343,15 +363,19 @@ qx.Class.define("zx.io.persistence.Controller", {
      */
     forgetObject(obj) {
       let uuid = obj.toHashCode();
-      let knownObject = this.__knownObjectsByUuid[uuid];
+      let knownObject = this._knownObjectsByUuid[uuid];
       if (!knownObject) {
         let io = this.__classIos.getClassIo(obj.constructor);
         uuid = obj.toUuid();
-        knownObject = this.__knownObjectsByUuid[uuid];
+        knownObject = this._knownObjectsByUuid[uuid];
       }
-      if (knownObject) {
-        delete this.__knownObjectsByUuid[uuid];
-      }
+      this._disposeKnownObject(uuid);
+    },
+
+    _disposeKnownObject(uuid) {
+      let knownObject = this._knownObjectsByUuid[uuid];
+      if (knownObject.listenerIds) knownObject.listenerIds.forEach(id => knownObject.obj.removeListenerById(id));
+      delete this._knownObjectsByUuid[uuid];
     },
 
     /**
@@ -370,7 +394,7 @@ qx.Class.define("zx.io.persistence.Controller", {
      * @return {Boolean} true if all loaded
      */
     isAllComplete() {
-      return !Object.values(this.__knownObjectsByUuid).some(knownObject => !knownObject.complete);
+      return !Object.values(this._knownObjectsByUuid).some(knownObject => !knownObject.complete);
     },
 
     /**
@@ -380,7 +404,7 @@ qx.Class.define("zx.io.persistence.Controller", {
      * @returns {qx.core.Object?} null if not known
      */
     _getKnownObject(uuid) {
-      return (this.__knownObjectsByUuid[uuid] && this.__knownObjectsByUuid[uuid].obj) || null;
+      return (this._knownObjectsByUuid[uuid] && this._knownObjectsByUuid[uuid].obj) || null;
     },
 
     /**
@@ -390,8 +414,8 @@ qx.Class.define("zx.io.persistence.Controller", {
      * @returns {String?} the status, null if the UUID is not recognised
      */
     _getKnownObjectStatus(uuid) {
-      if (!this.__knownObjectsByUuid[uuid]) return null;
-      return this.__knownObjectsByUuid[uuid].complete || "loading";
+      if (!this._knownObjectsByUuid[uuid]) return null;
+      return this._knownObjectsByUuid[uuid].complete || "loading";
     },
 
     /**
@@ -401,7 +425,7 @@ qx.Class.define("zx.io.persistence.Controller", {
      * @param {qx.core.Object} object
      */
     _addKnownObject(uuid, object) {
-      this.__knownObjectsByUuid[uuid] = {
+      this._knownObjectsByUuid[uuid] = {
         obj: object,
         complete: "success"
       };

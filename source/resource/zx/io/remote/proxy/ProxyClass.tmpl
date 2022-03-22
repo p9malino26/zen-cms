@@ -38,6 +38,9 @@ qx.Class.define("{{= it.classname }}", {
         nullable: {{= !!property.nullable }},
         event: "{{= property.event }}",
         apply: "{{= property.apply }}",
+        {{? property.transform }}
+        transform: "{{= property.transform }}",
+        {{?}}
         "@": {{= property.annoExpr }},
       },
     {{~}}
@@ -51,10 +54,17 @@ qx.Class.define("{{= it.classname }}", {
     {{~}}
 
     {{~ it.methods :method }}
+      {{? method.annoExpr }}
       "@{{= method.name }}": {{= method.annoExpr }},
-      {{= method.name}}() { 
-        throw new Error("This object does not exist on the server yet, so remote method invocationm is not possible");
-      },
+      {{?}}
+
+      {{? method.code }}
+        {{= method.code }},
+      {{??}}
+        {{= method.name}}() { 
+          throw new Error("This object does not exist on the server yet, so remote method invocationm is not possible");
+        },
+      {{?}}
     {{~}}
   }
 });

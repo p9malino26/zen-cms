@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.io.persistence.TestPersistence", {
   extend: qx.dev.unit.TestCase,
@@ -32,7 +31,7 @@ qx.Class.define("zx.test.io.persistence.TestPersistence", {
       pg.getPieces().push(new zx.test.io.persistence.Piece().set({ content: "content-one" }));
       pg.getPieces().push(new zx.test.io.persistence.Piece().set({ content: "content-two" }));
       let io = ctlr.getClassIos().getClassIo(pg.constructor);
-      let json = await io.toJson(db, pg);
+      let json = await io.toJson([db], pg);
       json._uuid = "UUID-1";
       this.info(JSON.stringify(json, null, 2));
       await ctlr.waitForAll();

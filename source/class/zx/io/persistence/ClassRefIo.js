@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Handles persistence of a reference to a qx.core.Object
@@ -56,9 +55,7 @@ qx.Class.define("zx.io.persistence.ClassRefIo", {
       if (json === null) return null;
       let clazz = qx.Class.getByName(json._classname);
       if (!clazz) {
-        this.error(
-          `Cannot deserialize class because there is no class called ${json._classname}`
-        );
+        this.error(`Cannot deserialize class because there is no class called ${json._classname}`);
         return null;
       }
 
@@ -78,9 +75,7 @@ qx.Class.define("zx.io.persistence.ClassRefIo", {
       }
 
       if (!json._uuid) {
-        this.error(
-          `Cannot deserialize class because there is no uuid for ${json._classname}`
-        );
+        this.error(`Cannot deserialize class because there is no uuid for ${json._classname}`);
         return null;
       }
 
@@ -92,14 +87,14 @@ qx.Class.define("zx.io.persistence.ClassRefIo", {
      * Serialises an object into JSON in a way that can be retrieved later via fromJson.  It is up to the
      * implementation how it serialises it and in what form, but it must be reversible via fromJson
      *
-     * @param endpoint {zx.io.persistence.Endpoint} the endpoint
+     * @param endpoints {zx.io.persistence.Endpoint} the endpoints
      * @param obj {qx.core.Object?} the object to serialize
      * @return {Object?} the JSON
      * @async May return a Promise
      */
-    toJson(endpoint, obj) {
+    toJson(endpoints, obj) {
       if (obj === null) return null;
-      endpoint.putDependentObject(obj);
+      endpoints.forEach(endpoint => endpoint.putDependentObject(obj));
       return { _uuid: obj.toUuid(), _classname: obj.classname };
     }
   }

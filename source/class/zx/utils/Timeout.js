@@ -1,23 +1,33 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
+/**
+ * Timeout class, with options to repeat and enable/disable
+ */
 qx.Class.define("zx.utils.Timeout", {
   extend: qx.core.Object,
 
+  /**
+   * Constructor
+   *
+   * @param {Integer} duration in milliseconds
+   * @param {Function} callback default callback
+   * @param {var} context for the callback
+   */
   construct(duration, callback, context) {
     this.base(arguments);
     this.__onTimeoutBound = this._onTimeout.bind(this);
@@ -25,11 +35,15 @@ qx.Class.define("zx.utils.Timeout", {
     if (callback) this.addListener("timeout", callback, context);
   },
 
+  /**
+   * Destructor
+   */
   destruct: function () {
     this.killTimer();
   },
 
   properties: {
+    /** How long between firings, in milliseconds */
     duration: {
       init: 5000,
       nullable: false,
@@ -38,35 +52,63 @@ qx.Class.define("zx.utils.Timeout", {
       apply: "_applyXxxx"
     },
 
+    /** Whether this recurs */
     recurring: {
       init: false,
       nullable: false,
       check: "Boolean",
       apply: "_applyXxxx"
+    },
+
+    /** Whether the timeout is enabled */
+    enabled: {
+      init: true,
+      check: "Boolean",
+      apply: "_applyEnabled"
     }
   },
 
   events: {
+    /** Triggered when the timeout happens */
     timeout: "qx.event.type.Event",
+
+    /** Triggered when the timeout delay is reset */
     reset: "qx.event.type.Event"
   },
 
   members: {
+    /** @type{var} the `setTimeout` ID */
     __timerId: null,
+
+    /** @type{Function} the callback for `setImeout`, bound to this */
     __onTimeoutBound: null,
 
+    /**
+     * Apply method for various properties
+     */
     _applyXxxx() {
       if (this.__timerId) this.resetTimer();
+    },
+
+    /**
+     * Apply for `enabled`
+     */
+    _applyEnabled(value) {
+      if (value && !this.__timerId) {
+        this.resetTimer();
+      }
     },
 
     /**
      * Starts the timer
      */
     startTimer() {
-      var dur = this.getDuration();
-      if (this.__timerId == null && dur > 0) {
-        this.__timerId = setTimeout(this.__onTimeoutBound, dur);
-        this.fireEvent("reset");
+      if (this.isEnabled()) {
+        var dur = this.getDuration();
+        if (this.__timerId == null && dur > 0) {
+          this.__timerId = setTimeout(this.__onTimeoutBound, dur);
+          this.fireEvent("reset");
+        }
       }
     },
 
@@ -91,17 +133,19 @@ qx.Class.define("zx.utils.Timeout", {
     /**
      * Fires the timer
      */
-    fire() {
-      this.fireEvent("timeout");
+    async fire() {
+      await this.fireEventAsync("timeout");
     },
 
     /**
      * Event handler for timeouts
      */
-    _onTimeout(evt) {
+    async _onTimeout(evt) {
       this.__timerId = null;
-      this.fire();
-      if (this.isRecurring()) this.startTimer();
+      if (this.isEnabled()) {
+        await this.fire();
+        if (this.isEnabled() && this.isRecurring()) this.startTimer();
+      }
     }
   }
 });

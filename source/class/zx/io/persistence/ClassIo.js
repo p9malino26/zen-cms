@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Handles persistence for a specific class derived from qx.core.Object
@@ -43,7 +42,9 @@ qx.Class.define("zx.io.persistence.ClassIo", {
     let properties = {};
     qx.Class.getProperties(clazz).forEach(propertyName => {
       let pdOrig = qx.Class.getPropertyDefinition(clazz, propertyName);
-      let propertyDef = {};
+      let propertyDef = {
+        propertyName
+      };
       ["init", "check", "name", "nullable"].forEach(key => {
         if (pdOrig[key] !== undefined) propertyDef[key] = pdOrig[key];
       });
@@ -153,7 +154,18 @@ qx.Class.define("zx.io.persistence.ClassIo", {
     /** {qx.Class} The class */
     __clazz: null,
 
-    /** {Map} A map of property definitions, indexed by property name */
+    /**
+     * @typedef PropertyDef {Object}
+     * @property {var} init
+     * @property {Class|String?} check the check
+     * @property {qx.Annotation[]?} "@" Annotations
+     * @property {qx.Class?} arrayType the type of arrays (or values in case of `zx.data.Map` properties)
+     * @property {qx.Class?} keyType type of keys (only applies to `zx.data.Map` properties)
+     * @property {qx.Class?} refType the type of refIo to look for
+     * @property {zx.io.persistence.ClassRefIo} refIo
+     */
+
+    /** @type {Map<String,PropertyDef} A map of property definitions, indexed by property name */
     __properties: null,
 
     /**
@@ -177,7 +189,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
         let annos = propertyDef["@"];
         let check = propertyDef.check;
 
-        let value = this._fromJsonValue(endpoint, json[propertyName], propertyDef, propertyPath);
+        let value = this.fromJsonValue(endpoint, json[propertyName], propertyDef, propertyPath);
         let promise = zx.utils.Promisify.resolveNow(value, value => {
           this._setPropertyValueImpl(endpoint, obj, propertyName, value, propertyDef, propertyPath);
         });
@@ -195,6 +207,78 @@ qx.Class.define("zx.io.persistence.ClassIo", {
       );
     },
 
+    __getRefIo(propertyDef, clazz) {
+      if (propertyDef) {
+        if (propertyDef.refIo) return propertyDef.refIo;
+        if (propertyDef.embed) return this.__classIos.getClassIo(clazz);
+      }
+      return this.__classIos.getDefaultRefIo(clazz);
+    },
+
+    __convertObjectFromJson(endpoint, propertyDef, value, defaultType) {
+      if (value === null) return null;
+
+      if (value.$query) {
+        let query = qx.lang.Object.clone(value.$query);
+        query._classname = value._classname;
+        return endpoint
+          .findOne(query, { _uuid: 1, _classname: 1 })
+          .then(newJson =>
+            newJson ? this.__convertObjectFromJson(endpoint, propertyDef, newJson, defaultType) : null
+          );
+      }
+
+      let valueType = null;
+      if (typeof value._classname == "string") {
+        valueType = qx.Class.getByName(value._classname);
+        if (!valueType) {
+          this.error(
+            `Unable to convert IObject in __convertObjectFromJson because cannot find class ${value._classname}`
+          );
+        }
+      }
+
+      if (!valueType && defaultType) valueType = defaultType;
+      if (valueType) {
+        let refIo = this.__getRefIo(propertyDef, valueType);
+        if (refIo) {
+          let obj = zx.utils.Promisify.resolveNow(refIo.fromJson(endpoint, value));
+          value = obj;
+        }
+      }
+
+      return value;
+    },
+
+    __convertArrayFromJson(endpoint, propertyDef, arr) {
+      if (!qx.lang.Type.isArray(arr)) arr = [arr];
+      else arr = qx.lang.Array.clone(arr);
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i]) {
+          arr[i] = this.__convertObjectFromJson(endpoint, propertyDef, arr[i], propertyDef.arrayType);
+        }
+      }
+
+      return zx.utils.Promisify.allNow(arr);
+    },
+
+    __convertMapFromJson(endpoint, propertyDef, map) {
+      map = qx.lang.Object.clone(map);
+      let promises = [];
+      Object.keys(map).forEach(key => {
+        key = this.__convertObjectFromJson(endpoint, propertyDef, key, propertyDef.keyType);
+        let promise = zx.utils.Promisify.resolveNow(key, key => {
+          let value = this.__convertObjectFromJson(endpoint, propertyDef, map[key], propertyDef.arrayType);
+          return zx.utils.Promisify.resolveNow(value, value => {
+            map[key] = value;
+          });
+        });
+        promises.push(promise);
+      });
+
+      return zx.utils.Promisify.allNow(promises, () => map);
+    },
+
     /**
      * Serialises a single property value from JSON
      *
@@ -206,10 +290,10 @@ qx.Class.define("zx.io.persistence.ClassIo", {
      *
      * @async Note that this may return a promise
      */
-    _fromJsonValue(endpoint, value, propertyDef, propertyPath) {
+    fromJsonValue(endpoint, value, propertyDef, propertyPath) {
       let ctlr = endpoint.getController();
 
-      if (propertyPath.match(/requiredPermissions$/)) console.log("_fromJsonValue: " + propertyPath);
+      if (propertyPath.match(/requiredPermissions$/)) console.log("fromJsonValue: " + propertyPath);
 
       const getRefIo = clazz => {
         if (propertyDef) {
@@ -219,58 +303,6 @@ qx.Class.define("zx.io.persistence.ClassIo", {
         return this.__classIos.getDefaultRefIo(clazz);
       };
 
-      const convertObject = (value, defaultType) => {
-        if (value === null) return null;
-
-        if (value.$query) {
-          let query = qx.lang.Object.clone(value.$query);
-          query._classname = value._classname;
-          return endpoint
-            .findOne(query, { _uuid: 1, _classname: 1 })
-            .then(newJson => (newJson ? convertObject(newJson, defaultType) : null));
-        }
-
-        let valueType = null;
-        if (typeof value._classname == "string") {
-          valueType = qx.Class.getByName(value._classname);
-          if (!valueType) {
-            this.error(`Unable to convert IObject in _fromJsonValue because cannot find class ${value._classname}`);
-          }
-        }
-
-        if (!valueType && defaultType) valueType = defaultType;
-        if (valueType) {
-          let refIo = getRefIo(valueType);
-          if (refIo) {
-            let obj = zx.utils.Promisify.resolveNow(refIo.fromJson(endpoint, value));
-            value = obj;
-          }
-        }
-
-        return value;
-      };
-
-      const convertArray = arr => {
-        if (!qx.lang.Type.isArray(arr)) arr = [arr];
-        else arr = qx.lang.Array.clone(arr);
-        for (let i = 0; i < arr.length; i++) if (arr[i]) arr[i] = convertObject(arr[i], propertyDef.arrayType);
-
-        return zx.utils.Promisify.allNow(arr);
-      };
-
-      const convertMap = map => {
-        map = qx.lang.Object.clone(map);
-        let promises = [];
-        Object.keys(map).forEach(key => {
-          let value = map[key];
-          if (value) value = convertObject(value, propertyDef.keyType, propertyDef.arrayType);
-          map[key] = value;
-          if (qx.Promise.isPromise(value)) promises.push(value);
-        });
-
-        return zx.utils.Promisify.allMapValuesNow(map);
-      };
-
       if (value === null || value === undefined) return value;
 
       let check = propertyDef.check;
@@ -278,9 +310,15 @@ qx.Class.define("zx.io.persistence.ClassIo", {
       // If the check is a class which exists, then check will be that class
       if (check && typeof check != "string") {
         if (qx.Class.isSubClassOf(check, qx.data.Array)) {
-          value = zx.utils.Promisify.resolveNow(convertArray(value), arr => new check(arr));
+          value = zx.utils.Promisify.resolveNow(
+            this.__convertArrayFromJson(endpoint, propertyDef, value),
+            arr => new check(arr)
+          );
         } else if (qx.Class.isSubClassOf(check, zx.data.Map)) {
-          value = zx.utils.Promisify.resolveNow(convertMap(value), map => new check(map));
+          value = zx.utils.Promisify.resolveNow(
+            this.__convertMapFromJson(endpoint, propertyDef, value),
+            map => new check(map)
+          );
         } else if (qx.Class.isSubClassOf(check, qx.core.Object)) {
           let refIo = propertyDef.refIo || propertyDef.defaultRefIo;
           if (refIo) {
@@ -295,7 +333,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
           }
         }
       } else if (check === "Array") {
-        value = convertArray(value);
+        value = this.__convertArrayFromJson(endpoint, propertyDef, value);
       } else if (check === "Date") {
         if (typeof value == "string") {
           try {
@@ -346,13 +384,12 @@ qx.Class.define("zx.io.persistence.ClassIo", {
     /**
      * Serializes the object into JSON
      *
-     * @param endpoint {zx.io.persistence.Endpoint} the endpoint
+     * @param endpoints {zx.io.persistence.Endpoint[]} the endpoints
      * @param obj {qx.core.Object} the object to serialize
      * @param json {Object?} the JSON to update, created if not provided
      * @return {Object} serialized JSON object
      */
-    async toJson(endpoint, obj, json) {
-      let ctlr = endpoint.getController();
+    async toJson(endpoints, obj, json) {
       if (!json) json = {};
       json._classname = obj.classname;
       json._uuid = obj.toUuid();
@@ -364,7 +401,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
         let check = propertyDef.check;
 
         let value = obj["get" + qx.lang.String.firstUp(propertyName)]();
-        let jsonValue = await this._toJsonValue(endpoint, value, propertyDef, propertyPath);
+        let jsonValue = await this.toJsonValue(endpoints, value, propertyDef, propertyPath);
         json[propertyName] = jsonValue;
       }
 
@@ -374,7 +411,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
     /**
      * Serialises a single property value into JSON
      *
-     * @param endpoint {zx.io.persistence.Endpoint} the endpoint
+     * @param endpoints {zx.io.persistence.Endpoint[]} the endpoints to write to
      * @param value {Object?} the value to serialize
      * @param propertyDef {Map?} normalized map of property definition
      * @param propertyMap {String?} property path for debug output
@@ -382,7 +419,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
      *
      * @async Note may return a promise
      */
-    _toJsonValue(endpoint, value, propertyDef, propertyPath) {
+    toJsonValue(endpoints, value, propertyDef, propertyPath) {
       if (!propertyPath) propertyPath = "(unspecified)";
 
       const getRefIo = clazz => {
@@ -398,7 +435,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
           if (arr[i] !== null) {
             let refIo = getRefIo(arr[i].constructor);
             if (refIo) {
-              arr[i] = refIo.toJson(endpoint, arr[i]);
+              arr[i] = refIo.toJson(endpoints, arr[i]);
             }
           }
         }
@@ -411,7 +448,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
           if (value !== null) {
             let refIo = getRefIo(value.constructor);
             if (refIo) {
-              map[key] = refIo.toJson(endpoint, value);
+              map[key] = refIo.toJson(endpoints, value);
             }
           }
         });
@@ -435,7 +472,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
 
       if (this.__classIos.isCompatibleObject(value)) {
         let refIo = getRefIo(value.constructor);
-        value = refIo.toJson(endpoint, value);
+        value = refIo.toJson(endpoints, value);
         return value;
       }
 
@@ -448,7 +485,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
       if (value instanceof qx.core.Object) {
         let refIo = propertyDef && (propertyDef.refIo || propertyDef.defaultRefIo);
         if (refIo) {
-          value = zx.utils.Promisify.resolveNow(refIo.toJson(endpoint, value), tmp => {
+          value = zx.utils.Promisify.resolveNow(refIo.toJson(endpoints, value), tmp => {
             if (tmp === null || tmp === undefined) {
               this.warn(
                 `Failed to serialize object: property=${propertyPath}, class=${value.classname}, value=${value}`
@@ -503,7 +540,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
 
         const toJsonNow = (value, fn) => {
           return zx.utils.Promisify.resolveNow(value, value => {
-            return zx.utils.Promisify.resolveNow(this._toJsonValue(endpoint, value, propertyDef, propertyPath), fn);
+            return zx.utils.Promisify.resolveNow(this.toJsonValue(endpoint, value, propertyDef, propertyPath), fn);
           });
         };
 
@@ -522,7 +559,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
             }
 
             return zx.utils.Promisify.allNow(arr, arr => {
-              arr = arr.map(item => this._toJsonValue(endpoint, item, propertyDef, propertyPath));
+              arr = arr.map(item => this.toJsonValue(endpoint, item, propertyDef, propertyPath));
               return zx.utils.Promisify.allNow(arr, fn);
             });
           };
@@ -530,7 +567,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
           const onArrayChange = evt => {
             let data = evt.getData();
             if (data.type == "order") {
-              let value = this._toJsonValue(endpoint, evt.getTarget(), propertyDef, propertyPath);
+              let value = this.toJsonValue(endpoint, evt.getTarget(), propertyDef, propertyPath);
               return zx.utils.Promisify.resolveNow(value, value => callback(obj, propertyName, "arrayReplace", value));
             } else {
               return allToJsonValueNow(data.removed, removed => {
@@ -551,7 +588,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
               oldData.removeListenerById(propState.arrayChangeListenerId);
               propState.arrayChangeListenerId = null;
             }
-            let value = this._toJsonValue(endpoint, data, propertyDef, propertyPath);
+            let value = this.toJsonValue(endpoint, data, propertyDef, propertyPath);
             if (data) {
               propState.arrayChangeListenerId = data.addListener("change", onArrayChange);
               return zx.utils.Promisify.resolveNow(value, value => callback(obj, propertyName, "arrayReplace", value));
@@ -583,9 +620,9 @@ qx.Class.define("zx.io.persistence.ClassIo", {
                   "Adding/removing promises to a zx.data.Map may not be what you intended - make sure to handle recursion"
                 );
               }
-              return toJsonNow(data.value, value => {
-                return toJsonNow(data.oldValue, oldValue => {
-                  return { value, oldValue };
+              return toJsonNow(data.key, key => {
+                return toJsonNow(data.value, value => {
+                  return { key, value };
                 });
               });
             });
@@ -595,7 +632,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
           const onMapContentsChange = evt => {
             let data = evt.getData();
             if (data.type == "order") {
-              let value = this._toJsonValue(endpoint, evt.getTarget(), propertyDef, propertyPath);
+              let value = this.toJsonValue(endpoint, evt.getTarget(), propertyDef, propertyPath);
               return zx.utils.Promisify.resolveNow(value, value => callback(obj, propertyName, "mapReplace", value));
             } else {
               return resolveChangedDataNow(data.removed, removed => {
@@ -616,7 +653,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
               oldData.removeListenerById(propState.arrayChangeListenerId);
               propState.arrayChangeListenerId = null;
             }
-            let value = this._toJsonValue(endpoint, data, propertyDef, propertyPath);
+            let value = this.toJsonValue(endpoint, data, propertyDef, propertyPath);
             if (data) {
               propState.arrayChangeListenerId = data.addListener("change", onMapContentsChange);
               return zx.utils.Promisify.resolveNow(value, value => callback(obj, propertyName, "mapReplace", value));
@@ -634,7 +671,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
           // Normal values
         } else {
           propState.changeListenerId = obj.addListener("change" + upname, evt => {
-            let value = this._toJsonValue(endpoint, evt.getData(), propertyDef, propertyPath);
+            let value = this.toJsonValue(endpoint, evt.getData(), propertyDef, propertyPath);
             return zx.utils.Promisify.resolveNow(value, value => callback(obj, propertyName, "setValue", value));
           });
         }
@@ -768,8 +805,8 @@ qx.Class.define("zx.io.persistence.ClassIo", {
         if (changeType == "arrayChange") {
           if (!qx.lang.Type.isArray(value)) value = [value];
           let promises = value.map(value => {
-            let removed = this._fromJsonValue(endpoint, value.removed, propertyDef, propertyPath) || [];
-            let added = this._fromJsonValue(endpoint, value.added, propertyDef, propertyPath) || [];
+            let removed = this.fromJsonValue(endpoint, value.removed, propertyDef, propertyPath) || [];
+            let added = this.fromJsonValue(endpoint, value.added, propertyDef, propertyPath) || [];
 
             return zx.utils.Promisify.resolveNow(removed, removed => {
               return zx.utils.Promisify.resolveNow(added, added => {
@@ -780,8 +817,34 @@ qx.Class.define("zx.io.persistence.ClassIo", {
             });
           });
           return zx.utils.Promisify.allNow(promises);
+        } else if (changeType == "mapChange") {
+          /*
+           * mapChange means that `value` is an array of change data, each of which has `put` and `removed`; the
+           * `put` and `removed` are also arrays of objects, each of which has `value` and `key`
+           */
+          if (!qx.lang.Type.isArray(value)) value = [value];
+          const getValue = (value, type, fn) => {
+            let newValue = this.__convertObjectFromJson(endpoint, propertyDef, value, type);
+            return zx.utils.Promisify.resolveNow(newValue, fn);
+          };
+          let map = obj["get" + qx.lang.String.firstUp(propertyName)]();
+          let promise = zx.utils.Promisify.forEachNow(value, entry => {
+            let promise = zx.utils.Promisify.forEachNow(entry.removed || [], change => {
+              return getValue(change.key, propertyDef.keyType, key => map.remove(key));
+            });
+            return zx.utils.Promisify.resolveNow(promise, () => {
+              return zx.utils.Promisify.forEachNow(entry.put || [], change => {
+                return getValue(change.key, propertyDef.keyType, key => {
+                  return getValue(change.value, propertyDef.arrayType, value => {
+                    map.put(key, value);
+                  });
+                });
+              });
+            });
+          });
+          return zx.utils.Promisify.resolveNow(promise);
         } else if (changeType == "setValue" || changeType == "arrayReplace") {
-          value = this._fromJsonValue(endpoint, value, propertyDef, propertyPath);
+          value = this.fromJsonValue(endpoint, value, propertyDef, propertyPath);
           return zx.utils.Promisify.resolveNow(value, value => {
             return this._setPropertyValueImpl(endpoint, obj, propertyName, value, propertyDef, propertyPath);
           });
@@ -831,6 +894,25 @@ qx.Class.define("zx.io.persistence.ClassIo", {
       } finally {
         endpoint.endChangingProperty(obj, propertyName);
       }
+    },
+
+    /**
+     * Returns the target class that this is for; note that `object.constructor` may differ
+     * because this could be handling for derived classes
+     *
+     * @returns {qx.Class}
+     */
+    getClass() {
+      return this.__clazz;
+    },
+
+    /**
+     * Returns the properties
+     *
+     * @return {Map<String,PropertyDef} A map of property definitions, indexed by property name
+     */
+    getProperties() {
+      return this.__properties;
     }
   },
 

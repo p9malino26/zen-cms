@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.utils.Promisify", {
   statics: {
@@ -252,6 +251,18 @@ qx.Class.define("zx.utils.Promisify", {
       } else {
         return cb(value);
       }
+    },
+
+    forEachNow(value, fn, cb, cberr) {
+      let promise = null;
+      value.forEach(value => {
+        if (promise) promise = promise.then(() => fn(value));
+        else {
+          let tmp = fn(value);
+          if (qx.Promise.isPromise(tmp)) promise = tmp;
+        }
+      });
+      return zx.utils.Promisify.resolveNow(promise, cb, cberr);
     },
 
     /**

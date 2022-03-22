@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.app.auth.UsersEditor", {
   extend: zx.ui.editor.FormEditor,
@@ -24,7 +24,6 @@ qx.Class.define("zx.app.auth.UsersEditor", {
     this._add(this.getQxObject("toolbar"));
     this._add(this.getQxObject("edtSearch"));
     this._add(this.getQxObject("root"), { flex: 1 });
-    this.bind("value", this.getQxObject("ctlr"), "model");
     let ed = this.getQxObject("edUser");
     ed.set({ visibility: "excluded" });
     ed.bind("modified", this, "modified");
@@ -56,9 +55,7 @@ qx.Class.define("zx.app.auth.UsersEditor", {
 
   members: {
     async _getLoginApiAdmin() {
-      let loginApiAdmin = await qx.core.Init.getApplication().getApi(
-        "zx.server.auth.LoginApiAdmin"
-      );
+      let loginApiAdmin = await qx.core.Init.getApplication().getApi(zx.server.auth.LoginApiAdmin.classname);
       return loginApiAdmin;
     },
 
@@ -66,9 +63,6 @@ qx.Class.define("zx.app.auth.UsersEditor", {
      * Apply for `currentUserJson`
      */
     async _applyCurrentUserJson(value) {
-      this.getQxObject("ctlr")
-        .getSelection()
-        .replace(value ? [value] : []);
       let user = null;
       if (value) {
         let loginApiAdmin = await this._getLoginApiAdmin();
@@ -112,6 +106,8 @@ qx.Class.define("zx.app.auth.UsersEditor", {
         item.dispose();
       }
       matches.forEach(info => lst.add(this.__createListItem(info)));
+      let state = zx.ui.utils.UserState.getStateFor(this.getQxObject("lst"));
+      state.copyStateToSelection();
     },
 
     /**
@@ -136,9 +132,7 @@ qx.Class.define("zx.app.auth.UsersEditor", {
     async _impersonate(user) {
       let loginApiAdmin = await this._getLoginApiAdmin();
       let result = await loginApiAdmin.createImpersonateCode(user);
-      zx.app.auth.ImpersonateDlg.showDialog(
-        `${document.location.origin}/zx/impersonate/${result.shortCode}`
-      );
+      zx.app.auth.ImpersonateDlg.showDialog(`${document.location.origin}/zx/impersonate/${result.shortCode}`);
     },
 
     /**
@@ -153,13 +147,8 @@ qx.Class.define("zx.app.auth.UsersEditor", {
           return tb;
 
         case "btnSave":
-          var btn = new qx.ui.toolbar.Button(
-            "Save",
-            "@FontAwesomeSolid/save/16"
-          );
-          btn.addListener("execute", async () =>
-            this.getQxObject("edUser").saveValue()
-          );
+          var btn = new qx.ui.toolbar.Button("Save", "@FontAwesomeSolid/save/16");
+          btn.addListener("execute", async () => this.getQxObject("edUser").saveValue());
           this.getQxObject("edUser").bind("modified", btn, "enabled");
           return btn;
 
@@ -176,14 +165,12 @@ qx.Class.define("zx.app.auth.UsersEditor", {
             if (result == "create") {
               let ed = dlg.getEditor();
               let loginApiAdmin = await this._getLoginApiAdmin();
-              let results = await loginApiAdmin.createUser(
-                ed.getUsername(),
-                ed.getFullName(),
-                ed.getPassword()
-              );
+              let results = await loginApiAdmin.createUser(ed.getUsername(), ed.getFullName(), ed.getPassword());
               let model = this.getQxObject("ctlr").getModel();
-              this.getQxObject("lst").add(this.__createListItem(results.user));
-              this.setCurrentUserJson(results.user);
+              let item = this.__createListItem(results.user);
+              let lst = this.getQxObject("lst");
+              lst.add(item);
+              lst.setSelection([item]);
             }
           });
           return btn;
@@ -196,9 +183,7 @@ qx.Class.define("zx.app.auth.UsersEditor", {
           return mnu;
 
         case "dlgCreateUser":
-          return new zx.ui.utils.EditorDialog(
-            this.getQxObject("edCreateUser")
-          ).set({
+          return new zx.ui.utils.EditorDialog(this.getQxObject("edCreateUser")).set({
             buttons: ["create", "cancel"]
           });
 
@@ -206,40 +191,33 @@ qx.Class.define("zx.app.auth.UsersEditor", {
           return new zx.app.auth.CreateUserEditor();
 
         case "mniDelete":
-          var btn = new qx.ui.menu.Button(
-            "Delete User",
-            "@FontAwesomeSolid/user-times/16"
-          ).set({ enabled: false });
+          var btn = new qx.ui.menu.Button("Delete User", "@FontAwesomeSolid/user-times/16").set({ enabled: false });
           btn.addListener("execute", async () => {
             let user = this.getCurrentUser();
             let result = await zx.ui.utils.MessageDlg.showConfirmation(
               `Are you sure that you want to delete ${user.getUsername()}?`
             );
             if (result == "yes") {
+              let lst = this.getQxObject("lst");
+              let item = lst.getSelection()[0] || null;
               this.setCurrentUserJson(null);
+              if (item) {
+                lst.remove(item);
+                item.dispose();
+              }
               let loginApiAdmin = await this._getLoginApiAdmin();
               loginApiAdmin.deleteUser(user);
-              let model = this.getQxObject("ctlr").getModel();
-              model.remove(user);
             }
           });
           return btn;
 
         case "mniImpersonate":
-          var btn = new qx.ui.menu.Button(
-            "Impersonate User",
-            "@FontAwesomeSolid/ghost/16"
-          ).set({ enabled: false });
-          btn.addListener("execute", async () =>
-            this._impersonate(this.getCurrentUser())
-          );
+          var btn = new qx.ui.menu.Button("Impersonate User", "@FontAwesomeSolid/ghost/16").set({ enabled: false });
+          btn.addListener("execute", async () => this._impersonate(this.getCurrentUser()));
           return btn;
 
         case "mniSetPassword":
-          var btn = new qx.ui.menu.Button(
-            "Set Password",
-            "@FontAwesomeSolid/key/16"
-          ).set({ enabled: false });
+          var btn = new qx.ui.menu.Button("Set Password", "@FontAwesomeSolid/key/16").set({ enabled: false });
           btn.addListener("execute", async () => {
             let dlg = this.getQxObject("dlgSetPassword");
             dlg.reset();
@@ -247,18 +225,13 @@ qx.Class.define("zx.app.auth.UsersEditor", {
             if (result == "apply") {
               let ed = dlg.getEditor();
               let loginApiAdmin = await this._getLoginApiAdmin();
-              await loginApiAdmin.setUserPassword(
-                this.getCurrentUser(),
-                ed.getPassword()
-              );
+              await loginApiAdmin.setUserPassword(this.getCurrentUser(), ed.getPassword());
             }
           });
           return btn;
 
         case "dlgSetPassword":
-          return new zx.ui.utils.EditorDialog(
-            this.getQxObject("edSetPassword")
-          ).set({
+          return new zx.ui.utils.EditorDialog(this.getQxObject("edSetPassword")).set({
             buttons: ["apply", "cancel"]
           });
 
@@ -279,20 +252,14 @@ qx.Class.define("zx.app.auth.UsersEditor", {
           return comp;
 
         case "lst":
-          return new qx.ui.form.List().set({ minWidth: 300 });
-
-        case "ctlr":
-          var ctlr = new qx.data.controller.List(
-            null,
-            this.getQxObject("lst"),
-            "username"
-          );
-          ctlr.addListener("changeSelection", evt => {
-            let sel = ctlr.getSelection();
-            let item = sel.getLength() ? sel.getItem(0) : null;
-            this.setCurrentUserJson(item);
+          let lst = new qx.ui.form.List().set({ minWidth: 300 });
+          zx.ui.utils.UserState.watch(lst, true);
+          lst.addListener("changeSelection", evt => {
+            let sel = lst.getSelection();
+            let item = sel[0] || null;
+            this.setCurrentUserJson(item ? item.getModel() : null);
           });
-          return ctlr;
+          return lst;
 
         case "edUser":
           return new zx.app.auth.UserEditor();

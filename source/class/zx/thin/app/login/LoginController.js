@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.thin.app.login.LoginController", {
   extend: qx.core.Object,
@@ -26,8 +26,7 @@ qx.Class.define("zx.thin.app.login.LoginController", {
   },
 
   destruct() {
-    if (zx.thin.app.login.LoginController.__instance === this)
-      zx.thin.app.login.LoginController.__instance = null;
+    if (zx.thin.app.login.LoginController.__instance === this) zx.thin.app.login.LoginController.__instance = null;
   },
 
   properties: {
@@ -46,9 +45,7 @@ qx.Class.define("zx.thin.app.login.LoginController", {
       if (this.__loginApiPromise) return await this.__loginApiPromise;
 
       let controller = await qx.core.Init.getApplication().getNetController();
-      this.__loginApiPromise = controller.getUriMappingAsync(
-        "zx.server.auth.LoginApi"
-      );
+      this.__loginApiPromise = controller.getUriMappingAsync(zx.server.auth.LoginApi.classname);
       this.__loginApi = await this.__loginApiPromise;
       return this.__loginApi;
     },
@@ -70,8 +67,7 @@ qx.Class.define("zx.thin.app.login.LoginController", {
         return;
       }
 
-      if (result.appId)
-        window.location = "/zx/code/" + result.appId + "/index.html";
+      if (result.appId) window.location = "/zx/code/" + result.appId + "/index.html";
       else if (result.appPath) window.location = "" + result.appPath;
       else {
         let redirectTo = this.getRedirectTo();
@@ -116,8 +112,7 @@ qx.Class.define("zx.thin.app.login.LoginController", {
      * @returns
      */
     getInstance() {
-      if (zx.thin.app.login.LoginController.__instance == null)
-        new zx.thin.app.login.LoginController();
+      if (zx.thin.app.login.LoginController.__instance == null) new zx.thin.app.login.LoginController();
       return zx.thin.app.login.LoginController.__instance;
     }
   }

@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.cms.system.UrlRule", {
   extend: zx.io.persistence.Object,
@@ -29,21 +29,15 @@ qx.Class.define("zx.cms.system.UrlRule", {
     url: {
       check: "String",
       event: "changeUrl",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** Whether the URL is a RegEx string */
     isRegEx: {
       init: false,
       check: "Boolean",
-      event: "changeRegex",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      event: "changeIsRegEx",
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** Can the content be cached? */
@@ -52,10 +46,7 @@ qx.Class.define("zx.cms.system.UrlRule", {
       nullable: true,
       check: ["public", "private", "no-store"],
       event: "changeCachability",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** Browser revalidation policy */
@@ -64,10 +55,7 @@ qx.Class.define("zx.cms.system.UrlRule", {
       nullable: true,
       check: ["must-revalidate", "immutable"],
       event: "changeCacheRevalidation",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** Max age of the content in seconds */
@@ -76,10 +64,7 @@ qx.Class.define("zx.cms.system.UrlRule", {
       nullable: true,
       check: ["Integer"],
       event: "changeMaxAge",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** List of permission names that must be granted to the current user */
@@ -87,26 +72,15 @@ qx.Class.define("zx.cms.system.UrlRule", {
       check: "qx.data.Array",
       event: "changeRequiredPermissions",
       transform: "_transformRequiredPermissions",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** The action to take if permissions are denied */
     deniedAction: {
       init: "blockNotFound",
-      check: [
-        "blockNotFound",
-        "redirectTemporary",
-        "redirectPermanent",
-        "redirectInternally",
-        "custom"
-      ],
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      check: ["blockNotFound", "redirectTemporary", "redirectPermanent", "redirectInternally", "custom"],
+      event: "changeDeniedAction",
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** The Site is able to handle custom actions, this is the identifier for the action to take if permissions are denied */
@@ -115,10 +89,7 @@ qx.Class.define("zx.cms.system.UrlRule", {
       nullable: true,
       check: "String",
       event: "changeDeniedCustomActionCode",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** Where to redirect to if the `deniedAction` is a redirect */
@@ -127,27 +98,16 @@ qx.Class.define("zx.cms.system.UrlRule", {
       nullable: true,
       check: "String",
       event: "changeDeniedRedirectTo",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** The action to take if permissions are granted */
     grantedAction: {
       init: null,
       nullable: true,
-      check: [
-        "allow",
-        "redirectTemporary",
-        "redirectPermanent",
-        "redirectInternally",
-        "custom"
-      ],
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      event: "changeGrantedAction",
+      check: ["allow", "redirectTemporary", "redirectPermanent", "redirectInternally", "custom"],
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** The Site is able to handle custom actions, this is the identifier for the action to take if permissions are granted */
@@ -155,11 +115,8 @@ qx.Class.define("zx.cms.system.UrlRule", {
       init: null,
       nullable: true,
       check: "String",
-      event: "changeDeniedCustomActionCode",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      event: "changeGrantedCustomActionCode",
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** Where to redirect to if the `grantedAction` is a redirect */
@@ -168,10 +125,7 @@ qx.Class.define("zx.cms.system.UrlRule", {
       nullable: true,
       check: "String",
       event: "changeGrantedRedirectTo",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     }
   },
 
@@ -201,9 +155,7 @@ qx.Class.define("zx.cms.system.UrlRule", {
       let user = await zx.server.auth.User.getUserFromSession(req);
       if (!user) return false;
       if (user.hasPermission("zx-super-user")) return true;
-      let granted = this.getRequiredPermissions().every(code =>
-        user.hasPermission(code)
-      );
+      let granted = this.getRequiredPermissions().every(code => user.hasPermission(code));
       return granted;
     },
 
@@ -220,9 +172,7 @@ qx.Class.define("zx.cms.system.UrlRule", {
       let user = await zx.server.auth.User.getUserFromSession(req);
       if (!user) return true;
       if (user.hasPermission("zx-super-user")) return false;
-      let denied = !this.getRequiredPermissions().every(perm =>
-        user.hasPermission(perm)
-      );
+      let denied = !this.getRequiredPermissions().every(perm => user.hasPermission(perm));
       return denied;
     },
 

@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Controller for serialisation to network
@@ -31,6 +30,7 @@ qx.Class.define("zx.io.remote.NetworkController", {
     this.base(arguments, new zx.io.remote.NetworkClassIos(), datasource);
     this.__uris = {};
     this.__pendingUriPromises = {};
+    this.__watcher = new zx.io.remote.SerializingWatcher(this.getClassIos());
   },
 
   events: {
@@ -43,6 +43,9 @@ qx.Class.define("zx.io.remote.NetworkController", {
 
     /** @type{Map<String,qx.Promise>} promises waiting to be fulfilled when a URI arrives */
     __pendingUriPromises: null,
+
+    /** @type{zx.io.remote.SerializingWatcher} the watcher for changes that need to be pushed */
+    __watcher: null,
 
     /**
      * Called when a URI mapping is received from the other side
@@ -95,8 +98,7 @@ qx.Class.define("zx.io.remote.NetworkController", {
     async putUriMapping(uri, object) {
       if (!object) delete this.__uris[uri];
       else this.__uris[uri] = object;
-      for (let arr = this.getDataSources(), i = 0; i < arr.length; i++)
-        arr[i].putUriMapping(uri, object);
+      for (let arr = this.getEndpoints(), i = 0; i < arr.length; i++) arr[i].putUriMapping(uri, object);
     },
 
     /**
@@ -105,6 +107,15 @@ qx.Class.define("zx.io.remote.NetworkController", {
      */
     getUriMappings() {
       return this.__uris;
+    },
+
+    /**
+     * Returns a shared watcher for all endpoints
+     *
+     * @returns {zx.io.remote.Watcher}
+     */
+    getSharedWatcher() {
+      return this.__watcher;
     }
   }
 });
