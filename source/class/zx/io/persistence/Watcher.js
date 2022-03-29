@@ -163,7 +163,7 @@ qx.Class.define("zx.io.persistence.Watcher", {
       let uuid = object.toUuid();
       let info = this.__objectInfoByUuid[uuid];
       if (!info) return false;
-      return this._isWatchingImpl(info);
+      return this._isWatchingImpl(info, ...args);
     },
 
     /**
@@ -264,7 +264,7 @@ qx.Class.define("zx.io.persistence.Watcher", {
           eventName.startsWith("change") && eventName.length > 6 && qx.lang.String.isUpperCase(eventName[6])
         );
       }
-      let propertyName = qx.lang.String.firstDown(eventName.substring(6));
+      let propertyName = qx.lang.String.firstLow(eventName.substring(6));
       return this._onPropertyChange(object, propertyName);
     },
 

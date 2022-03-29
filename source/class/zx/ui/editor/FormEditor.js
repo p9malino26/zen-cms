@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.editor.FormEditor", {
   extend: zx.ui.editor.Editor,
@@ -25,14 +25,13 @@ qx.Class.define("zx.ui.editor.FormEditor", {
     this._resetter = this._createResetter();
     this._miscController = new qx.data.controller.Object();
 
-    this.setRequiredFieldMessage(
-      qx.locale.Manager.tr("This field is required")
-    );
+    this.setRequiredFieldMessage(qx.locale.Manager.tr("This field is required"));
   },
 
   defer(statics, members) {
     qx.Class.include(qx.ui.form.AbstractField, zx.ui.editor.MField);
     qx.Class.include(qx.ui.form.AbstractSelectBox, zx.ui.editor.MField);
+    qx.Class.include(qx.ui.form.List, zx.ui.editor.MField);
   },
 
   events: {
@@ -149,17 +148,11 @@ qx.Class.define("zx.ui.editor.FormEditor", {
           Number: new zx.ui.editor.datatypes.Number()
         };
         let dataType = DATATYPES[options.dataType];
-        if (!dataType)
-          throw new Error("Unknown data type for field: " + dataType);
+        if (!dataType) throw new Error("Unknown data type for field: " + dataType);
         widgetInfo.dataType = dataType;
       }
 
-      [
-        "convertToTarget",
-        "convertToModel",
-        "onUpdateTarget",
-        "onUpdateModel"
-      ].forEach(key => {
+      ["convertToTarget", "convertToModel", "onUpdateTarget", "onUpdateModel"].forEach(key => {
         if (typeof options[key] == "function") widgetInfo[key] = options[key];
       });
 
@@ -191,9 +184,7 @@ qx.Class.define("zx.ui.editor.FormEditor", {
           if (label instanceof qx.ui.basic.Label) caption = label.getValue();
           else {
             caption = "" + label;
-            label = new qx.ui.basic.Label(
-              caption.length == 0 || !isGrid ? caption : caption + " :"
-            ).set({
+            label = new qx.ui.basic.Label(caption.length == 0 || !isGrid ? caption : caption + " :").set({
               rich: true,
               allowGrowX: true,
               allowShrinkX: true
@@ -208,8 +199,7 @@ qx.Class.define("zx.ui.editor.FormEditor", {
         let widgetToAdd;
         if (showFieldInvalid != "none" && typeof widget.isValid == "function") {
           widgetToAdd = new qx.ui.container.Composite();
-          widgetInfo.invalidMessageAtom =
-            new zx.ui.editor.InvalidFieldWidget().set({ fieldWidget: widget });
+          widgetInfo.invalidMessageAtom = new zx.ui.editor.InvalidFieldWidget().set({ fieldWidget: widget });
           if (showFieldInvalid == "icon") {
             widgetToAdd.setLayout(new qx.ui.layout.HBox());
             widgetToAdd.add(widget, { flex: 1 });
@@ -221,10 +211,7 @@ qx.Class.define("zx.ui.editor.FormEditor", {
             widgetToAdd.add(widgetInfo.invalidMessageAtom);
             widgetInfo.invalidMessageAtom.setShow("both");
           }
-          widget.addListener(
-            "changeValid",
-            this.__onWidgetChangeValid.bind(this, widgetInfo)
-          );
+          widget.addListener("changeValid", this.__onWidgetChangeValid.bind(this, widgetInfo));
         } else {
           widgetToAdd = widget;
         }
@@ -236,22 +223,14 @@ qx.Class.define("zx.ui.editor.FormEditor", {
           let rowIndex = 0;
           group.getChildren().forEach(function (child) {
             var lp = child.getLayoutProperties();
-            if (lp && typeof lp.row == "number" && lp.row >= rowIndex)
-              rowIndex = lp.row + 1;
+            if (lp && typeof lp.row == "number" && lp.row >= rowIndex) rowIndex = lp.row + 1;
           });
 
           // options.layout can adjust the layout options
           if (options.layout) {
             if (options.layout.row !== undefined) rowIndex = options.layout.row;
-            else if (
-              options.layout.column !== undefined &&
-              options.layout.row == undefined
-            ) {
-              if (
-                rowIndex > 0 &&
-                !layout.getCellWidget(rowIndex - 1, options.layout.column)
-              )
-                rowIndex--;
+            else if (options.layout.column !== undefined && options.layout.row == undefined) {
+              if (rowIndex > 0 && !layout.getCellWidget(rowIndex - 1, options.layout.column)) rowIndex--;
             }
           }
 
@@ -279,12 +258,7 @@ qx.Class.define("zx.ui.editor.FormEditor", {
 
             // No label, the widget layout options are much simpler
           } else {
-            if (
-              options.layout &&
-              options.layout.column === 0 &&
-              !widget.getAlignX()
-            )
-              widget.setAlignX("left");
+            if (options.layout && options.layout.column === 0 && !widget.getAlignX()) widget.setAlignX("left");
 
             layoutOptions = qx.lang.Object.mergeWith(
               {
@@ -307,8 +281,7 @@ qx.Class.define("zx.ui.editor.FormEditor", {
         // Add the widget
         group.add(widgetInfo.widgetToAdd, layoutOptions);
       } else {
-        if (options.label !== null && options.label !== undefined)
-          caption = "" + options.label;
+        if (options.label !== null && options.label !== undefined) caption = "" + options.label;
         widgetInfo.caption = caption;
       }
 
@@ -317,28 +290,12 @@ qx.Class.define("zx.ui.editor.FormEditor", {
         this.__widgetInfosByHash[widget.toHashCode()] = widgetInfo;
         let bindingOptions = {
           options: {
-            converter: qx.lang.Function.bind(
-              this._convertToTarget,
-              this,
-              widgetInfo
-            ),
-            onUpdate: qx.lang.Function.bind(
-              this._onUpdateTarget,
-              this,
-              widgetInfo
-            )
+            converter: qx.lang.Function.bind(this._convertToTarget, this, widgetInfo),
+            onUpdate: qx.lang.Function.bind(this._onUpdateTarget, this, widgetInfo)
           },
           reverseOptions: {
-            converter: qx.lang.Function.bind(
-              this._convertToModel,
-              this,
-              widgetInfo
-            ),
-            onUpdate: qx.lang.Function.bind(
-              this._onUpdateModel,
-              this,
-              widgetInfo
-            )
+            converter: qx.lang.Function.bind(this._convertToModel, this, widgetInfo),
+            onUpdate: qx.lang.Function.bind(this._onUpdateModel, this, widgetInfo)
           }
         };
 
@@ -350,42 +307,25 @@ qx.Class.define("zx.ui.editor.FormEditor", {
               evt.getOldData().removeListenerById(widgetInfo.changeListenerId);
               widgetInfo.changeListenerId = null;
             }
-            if (evt.getData())
-              widgetInfo.changeListenerId = evt
-                .getData()
-                .addListener("change", onModified);
+            if (evt.getData()) widgetInfo.changeListenerId = evt.getData().addListener("change", onModified);
           });
-          widgetInfo.changeListenerId = widget["get" + upname]().addListener(
-            "change",
-            onModified
-          );
+          widgetInfo.changeListenerId = widget["get" + upname]().addListener("change", onModified);
         };
 
         // If it's a List controller, then watch it's selection so that we can copy that to the value
         if (widget instanceof qx.data.controller.List) {
           this._miscController.addTarget(widget, "selection", bindPath, false);
           listenToSelectionChanges(widget, "selection");
-        } else if (
-          qx.Class.hasInterface(widget.constructor, qx.ui.form.IForm)
-        ) {
+        } else if (qx.Class.hasInterface(widget.constructor, qx.ui.form.IForm)) {
           let targetProperty = "value";
           if (
-            qx.Class.hasInterface(
-              widget.constructor,
-              qx.ui.core.ISingleSelection
-            ) &&
-            qx.Class.hasInterface(
-              widget.constructor,
-              qx.ui.form.IModelSelection
-            )
+            qx.Class.hasInterface(widget.constructor, qx.ui.core.ISingleSelection) &&
+            qx.Class.hasInterface(widget.constructor, qx.ui.form.IModelSelection)
           ) {
             listenToSelectionChanges(widget, "modelSelection");
             targetProperty = "modelSelection[0]";
           } else {
-            widget.addListener(
-              "changeValue",
-              this.__onWidgetModified.bind(this, widgetInfo)
-            );
+            widget.addListener("changeValue", this.__onWidgetModified.bind(this, widgetInfo));
           }
 
           this._miscController.addTarget(
@@ -398,10 +338,7 @@ qx.Class.define("zx.ui.editor.FormEditor", {
           );
           this._resetter.add(widget);
         } else if (qx.Class.supportsEvent(widget.constructor, "changeValue")) {
-          widget.addListener(
-            "changeValue",
-            this.__onWidgetModified.bind(this, widgetInfo)
-          );
+          widget.addListener("changeValue", this.__onWidgetModified.bind(this, widgetInfo));
           this._miscController.addTarget(
             widget,
             "value",
@@ -415,8 +352,7 @@ qx.Class.define("zx.ui.editor.FormEditor", {
 
       // TabIndex
       if (typeof widget.setTabIndex == "function") {
-        if (options.tabIndex !== undefined)
-          widget.setTabIndex(options.tabIndex);
+        if (options.tabIndex !== undefined) widget.setTabIndex(options.tabIndex);
         else widget.setTabIndex(++zx.ui.editor.FormEditor.__tabIndex);
       }
     },
@@ -448,17 +384,9 @@ qx.Class.define("zx.ui.editor.FormEditor", {
      */
     async validate() {
       let numInvalid = 0;
-      for (
-        let groups = Object.values(this.__groups), groupIndex = 0;
-        groupIndex < groups.length;
-        groupIndex++
-      ) {
+      for (let groups = Object.values(this.__groups), groupIndex = 0; groupIndex < groups.length; groupIndex++) {
         let group = groups[groupIndex];
-        for (
-          let widgetIndex = 0;
-          widgetIndex < group.widgetInfos.length;
-          widgetIndex++
-        ) {
+        for (let widgetIndex = 0; widgetIndex < group.widgetInfos.length; widgetIndex++) {
           let widgetInfo = group.widgetInfos[widgetIndex];
           let message = await this.__runValidation(widgetInfo);
           if (message) numInvalid++;
@@ -493,12 +421,7 @@ qx.Class.define("zx.ui.editor.FormEditor", {
     async _validateEditor() {
       let validator = this.getValidator();
       let message = null;
-      if (validator)
-        message = await this.__runValidatorFunction(
-          validator,
-          this.getValue(),
-          this
-        );
+      if (validator) message = await this.__runValidatorFunction(validator, this.getValue(), this);
       return message;
     },
 
@@ -511,29 +434,22 @@ qx.Class.define("zx.ui.editor.FormEditor", {
     async __runValidation(widgetInfo) {
       let message = null;
       let widget = widgetInfo.widget;
+      if (!(widget instanceof qx.ui.form.AbstractField)) return;
       let value = widget.getValue();
 
       if (typeof widget.isRequired == "function") {
         if (widget.isRequired() && widget.isEmptyField())
-          message =
-            widget.getRequiredInvalidMessage() ||
-            this.getRequiredFieldMessage();
+          message = widget.getRequiredInvalidMessage() || this.getRequiredFieldMessage();
       }
 
-      if (!message && widgetInfo.dataType)
-        message = await widgetInfo.dataType.validate(value, widget);
+      if (!message && widgetInfo.dataType) message = await widgetInfo.dataType.validate(value, widget);
 
       if (!message && widgetInfo.validator)
-        message = await this.__runValidatorFunction(
-          widgetInfo.validator,
-          value,
-          widget
-        );
+        message = await this.__runValidatorFunction(widgetInfo.validator, value, widget);
 
       if (!message && typeof widget.getValidator == "function") {
         let validator = widget.getValidator();
-        if (validator)
-          message = await this.__runValidatorFunction(validator, value, widget);
+        if (validator) message = await this.__runValidatorFunction(validator, value, widget);
       }
 
       widget.set({ valid: !message, invalidMessage: message || null });
@@ -555,8 +471,7 @@ qx.Class.define("zx.ui.editor.FormEditor", {
         return message;
       } catch (ex) {
         if (ex instanceof qx.core.ValidationError) {
-          if (ex.message && ex.message != qx.type.BaseError.DEFAULTMESSAGE)
-            return ex.message;
+          if (ex.message && ex.message != qx.type.BaseError.DEFAULTMESSAGE) return ex.message;
           return ex.getComment();
         }
         throw ex;
@@ -570,17 +485,9 @@ qx.Class.define("zx.ui.editor.FormEditor", {
      * @returns {WidgetInfo}
      */
     __findWidgetInfoFor(widget) {
-      for (
-        let groups = Object.values(this.__groups), groupIndex = 0;
-        groupIndex < groups.length;
-        groupIndex++
-      ) {
+      for (let groups = Object.values(this.__groups), groupIndex = 0; groupIndex < groups.length; groupIndex++) {
         let group = groups[groupIndex];
-        for (
-          let widgetIndex = 0;
-          widgetIndex < group.widgetInfos.length;
-          widgetIndex++
-        ) {
+        for (let widgetIndex = 0; widgetIndex < group.widgetInfos.length; widgetIndex++) {
           let widgetInfo = group.widgetInfos[widgetIndex];
           if (widgetInfo.widget == widget) return widgetInfo;
         }
@@ -596,22 +503,11 @@ qx.Class.define("zx.ui.editor.FormEditor", {
      */
     getInvalidFormTargets() {
       let result = [];
-      for (
-        let groups = Object.values(this.__groups), groupIndex = 0;
-        groupIndex < groups.length;
-        groupIndex++
-      ) {
+      for (let groups = Object.values(this.__groups), groupIndex = 0; groupIndex < groups.length; groupIndex++) {
         let group = groups[groupIndex];
-        for (
-          let widgetIndex = 0;
-          widgetIndex < group.widgetInfos.length;
-          widgetIndex++
-        ) {
+        for (let widgetIndex = 0; widgetIndex < group.widgetInfos.length; widgetIndex++) {
           let widgetInfo = group.widgetInfos[widgetIndex];
-          if (
-            typeof widgetInfo.widget.isValid == "function" &&
-            !widgetInfo.widget.isValid()
-          )
+          if (typeof widgetInfo.widget.isValid == "function" && !widgetInfo.widget.isValid())
             result.push(widgetInfo.widget);
         }
       }
@@ -625,9 +521,7 @@ qx.Class.define("zx.ui.editor.FormEditor", {
      * @return {String[]} All invalid messages.
      */
     getInvalidMessages() {
-      let result = this.getInvalidFormTargets().map(widget =>
-        widget.getInvalidMessage()
-      );
+      let result = this.getInvalidFormTargets().map(widget => widget.getInvalidMessage());
       let msg = this.getInvalidMessage();
       if (msg) result.push(msg);
       return result;
@@ -647,17 +541,9 @@ qx.Class.define("zx.ui.editor.FormEditor", {
      */
     reset() {
       this._resetter.reset();
-      for (
-        let groups = Object.values(this.__groups), groupIndex = 0;
-        groupIndex < groups.length;
-        groupIndex++
-      ) {
+      for (let groups = Object.values(this.__groups), groupIndex = 0; groupIndex < groups.length; groupIndex++) {
         let group = groups[groupIndex];
-        for (
-          let widgetIndex = 0;
-          widgetIndex < group.widgetInfos.length;
-          widgetIndex++
-        ) {
+        for (let widgetIndex = 0; widgetIndex < group.widgetInfos.length; widgetIndex++) {
           let widgetInfo = group.widgetInfos[widgetIndex];
           widgetInfo.widget.set({
             invalidMessage: null,
@@ -698,10 +584,8 @@ qx.Class.define("zx.ui.editor.FormEditor", {
      * @returns the converted value
      */
     _convertToTarget(widgetInfo, value, model) {
-      if (widgetInfo.convertToTarget)
-        value = widgetInfo.convertToTarget(value, model, widgetInfo);
-      else if (widgetInfo.dataType)
-        value = widgetInfo.dataType.convertToTarget(value, model, widgetInfo);
+      if (widgetInfo.convertToTarget) value = widgetInfo.convertToTarget(value, model, widgetInfo);
+      else if (widgetInfo.dataType) value = widgetInfo.dataType.convertToTarget(value, model, widgetInfo);
       return value;
     },
 
@@ -713,10 +597,8 @@ qx.Class.define("zx.ui.editor.FormEditor", {
      * @returns the converted value
      */
     _convertToModel(widgetInfo, value) {
-      if (widgetInfo.convertToModel)
-        value = widgetInfo.convertToModel(value, widgetInfo);
-      else if (widgetInfo.dataType)
-        value = widgetInfo.dataType.convertToModel(value, widgetInfo);
+      if (widgetInfo.convertToModel) value = widgetInfo.convertToModel(value, widgetInfo);
+      else if (widgetInfo.dataType) value = widgetInfo.dataType.convertToModel(value, widgetInfo);
       return value;
     },
 
@@ -729,8 +611,7 @@ qx.Class.define("zx.ui.editor.FormEditor", {
      */
     _onUpdateTarget(widgetInfo, widget, value) {
       if (!this.inSetValue()) {
-        if (widgetInfo.onUpdateTarget)
-          widgetInfo.onUpdateTarget(widget, value, widgetInfo);
+        if (widgetInfo.onUpdateTarget) widgetInfo.onUpdateTarget(widget, value, widgetInfo);
       }
     },
 
@@ -743,8 +624,7 @@ qx.Class.define("zx.ui.editor.FormEditor", {
      */
     _onUpdateModel(widgetInfo, model, value) {
       if (!this.inSetValue()) {
-        if (widgetInfo.onUpdateModel)
-          widgetInfo.onUpdateModel(model, value, widgetInfo);
+        if (widgetInfo.onUpdateModel) widgetInfo.onUpdateModel(model, value, widgetInfo);
       }
     }
   },

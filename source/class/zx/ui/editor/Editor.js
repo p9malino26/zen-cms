@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.editor.Editor", {
   extend: qx.ui.core.Widget,
@@ -25,11 +25,7 @@ qx.Class.define("zx.ui.editor.Editor", {
     this.setValue(null);
     if (this.__entities) {
       Object.values(this.__entities).forEach(entity =>
-        entity.removeListener(
-          "changeModified",
-          this.__onEntityChangeModified,
-          this
-        )
+        entity.removeListener("changeModified", this.__onEntityChangeModified, this)
       );
       this.__entities = null;
     }
@@ -109,6 +105,9 @@ qx.Class.define("zx.ui.editor.Editor", {
     /** @type{Boolean} true if setValue is in progress */
     __inSetValue: false,
 
+    /** @type{qx.Promise} the promise of the currently running setValue, if any */
+    __setValuePromise: null,
+
     /** @type{Map<String,zx.ui.editor.SubEntity} all known sub entities, indexed by hash code */
     __entities: null,
 
@@ -127,39 +126,45 @@ qx.Class.define("zx.ui.editor.Editor", {
      * @param {*} the value
      */
     async setValue(value) {
-      if (qx.Promise.isPromise(value)) value = await value;
-
-      if (value === this.__value) return;
-
-      if (this.__inSetValue)
-        throw new Error(
-          `Already setting value for ${this}, cannot setValue recursively`
-        );
-
-      this.__inSetValue = true;
-      try {
-        if (
-          this.isAutoSave() &&
-          this.isModified() &&
-          this.getMasterValue() === this.getValue()
-        ) {
-          await this.save();
+      const setValueImpl = async () => {
+        if (qx.Promise.isPromise(value)) {
+          value = await value;
         }
-        let oldValue = this.__value;
-        this.__value = value;
-        let entity = value
-          ? zx.ui.editor.SubEntity.getEntity(value, true)
-          : null;
-        this.setEntity(entity);
-        this.setModified(entity ? entity.getModified() : false);
-        if (this.isMasterValueEditor() && this.__entities)
-          Object.values(this.__entities).forEach(entity =>
-            entity.setModified(false)
-          );
-        await this._applyValue(value, oldValue, "value");
-        await this.fireDataEventAsync("changeValue", value, oldValue);
-      } finally {
-        this.__inSetValue = false;
+
+        if (value === this.__value) {
+          return;
+        }
+
+        if (this.__inSetValue) {
+          throw new Error(`Already setting value for ${this}, cannot setValue recursively`);
+        }
+
+        this.__inSetValue = true;
+        try {
+          if (this.isAutoSave() && this.isModified() && this.getMasterValue() === this.getValue()) {
+            await this.save();
+          }
+          let oldValue = this.__value;
+          this.__value = value;
+          let entity = value ? zx.ui.editor.SubEntity.getEntity(value, true) : null;
+          this.setEntity(entity);
+          this.setModified(entity ? entity.getModified() : false);
+          if (this.isMasterValueEditor() && this.__entities)
+            Object.values(this.__entities).forEach(entity => entity.setModified(false));
+          await this._applyValue(value, oldValue, "value");
+          await this.fireDataEventAsync("changeValue", value, oldValue);
+        } finally {
+          this.__inSetValue = false;
+        }
+      };
+
+      if (this.__setValuePromise) this.__setValuePromise = this.__setValuePromise.then(setValueImpl);
+      else this.__setValuePromise = setValueImpl();
+
+      let promise = this.__setValuePromise;
+      await promise;
+      if (promise === this.__setValuePromise) {
+        this.__setValuePromise = null;
       }
     },
 
@@ -189,20 +194,12 @@ qx.Class.define("zx.ui.editor.Editor", {
      */
     _applyEntity(value, oldValue) {
       if (oldValue) {
-        oldValue.removeListener(
-          "changeModified",
-          this.__onEntityChangeModified,
-          this
-        );
+        oldValue.removeListener("changeModified", this.__onEntityChangeModified, this);
         oldValue.decRef();
       }
       if (value) {
         value.incRef();
-        value.addListener(
-          "changeModified",
-          this.__onEntityChangeModified,
-          this
-        );
+        value.addListener("changeModified", this.__onEntityChangeModified, this);
       }
       let mva = this.getMasterValueAccessor();
       if (mva) {
@@ -220,10 +217,7 @@ qx.Class.define("zx.ui.editor.Editor", {
       let entity = this.getEntity();
       if (entity) entity.setModified(value);
 
-      if (!value && this.__entities)
-        Object.values(this.__entities).forEach(entity =>
-          entity.setModified(false)
-        );
+      if (!value && this.__entities) Object.values(this.__entities).forEach(entity => entity.setModified(false));
     },
 
     /**
@@ -236,12 +230,9 @@ qx.Class.define("zx.ui.editor.Editor", {
       let modifiedEntity = evt.getTarget();
       let thisEntity = this.getEntity();
       let modified = evt.getData();
-      this.debug(
-        `entity modified=${modified}: modifiedEntity=${modifiedEntity}`
-      );
+      this.debug(`entity modified=${modified}: modifiedEntity=${modifiedEntity}`);
       if (thisEntity === modifiedEntity) this.setModified(modified);
-      else if (thisEntity !== modifiedEntity && modified)
-        this.setModified(true);
+      else if (thisEntity !== modifiedEntity && modified) this.setModified(true);
     },
 
     /**
@@ -255,10 +246,7 @@ qx.Class.define("zx.ui.editor.Editor", {
       } else {
         let mva = this.getMasterValueAccessor();
         if (mva) return mva.getValue();
-        else
-          throw new Error(
-            `Cannot getMasterValue ${this.classname} because there is no masterValueAccessor`
-          );
+        else throw new Error(`Cannot getMasterValue ${this.classname} because there is no masterValueAccessor`);
       }
     },
 
@@ -280,24 +268,15 @@ qx.Class.define("zx.ui.editor.Editor", {
 
       let entity = this.getEntity();
       if (oldValue) {
-        if (this.__entities)
-          Object.values(this.__entities).forEach(entity =>
-            oldValue.detachSubEntity(entity)
-          );
+        if (this.__entities) Object.values(this.__entities).forEach(entity => oldValue.detachSubEntity(entity));
         if (entity) oldValue.detachSubEntity(entity);
       }
       if (value) {
         if (entity) value.attachSubEntity(entity);
-        if (this.__entities)
-          Object.values(this.__entities).forEach(entity =>
-            value.attachSubEntity(entity)
-          );
+        if (this.__entities) Object.values(this.__entities).forEach(entity => value.attachSubEntity(entity));
       }
       this.getOwnedQxObjects().forEach(object => {
-        if (
-          object instanceof zx.ui.editor.Editor &&
-          !object.isMasterValueEditor()
-        )
+        if (object instanceof zx.ui.editor.Editor && !object.isMasterValueEditor())
           object.setMasterValueAccessor(value);
       });
     },
@@ -311,10 +290,7 @@ qx.Class.define("zx.ui.editor.Editor", {
       else {
         let mva = this.getMasterValueAccessor();
         if (mva) await mva.saveValue();
-        else
-          throw new Error(
-            `Cannot save ${this.classname} because there is no masterValueAccessor`
-          );
+        else throw new Error(`Cannot save ${this.classname} because there is no masterValueAccessor`);
       }
     },
 
@@ -322,8 +298,7 @@ qx.Class.define("zx.ui.editor.Editor", {
      * @Override
      */
     async saveValue() {
-      if (await this.fireDataEventAsync("save", this.getValue(), null, true))
-        await this._saveValueImpl();
+      if (await this.fireDataEventAsync("save", this.getValue(), null, true)) await this._saveValueImpl();
       this.setModified(false);
     },
 
@@ -351,11 +326,7 @@ qx.Class.define("zx.ui.editor.Editor", {
     detachSubEntity(entity) {
       let mva = this.getMasterValueAccessor();
 
-      entity.removeListener(
-        "changeModified",
-        this.__onEntityChangeModified,
-        this
-      );
+      entity.removeListener("changeModified", this.__onEntityChangeModified, this);
       delete this.__entities[entity.toHashCode()];
       if (mva) mva.detachSubEntity(entity);
     },
@@ -365,14 +336,9 @@ qx.Class.define("zx.ui.editor.Editor", {
      */
     _createQxObject(id) {
       let object = this.base(arguments, id);
-      let mva = this.isMasterValueEditor()
-        ? this
-        : this.getMasterValueAccessor();
+      let mva = this.isMasterValueEditor() ? this : this.getMasterValueAccessor();
       if (mva) {
-        if (
-          object instanceof zx.ui.editor.Editor &&
-          !object.isMasterValueEditor()
-        ) {
+        if (object instanceof zx.ui.editor.Editor && !object.isMasterValueEditor()) {
           object.setMasterValueAccessor(mva);
         }
       }
@@ -391,9 +357,7 @@ qx.Class.define("zx.ui.editor.Editor", {
      * Apply method
      */
     _applyEditable(value) {
-      this.getOwnedQxObjects().forEach(object =>
-        this._setEditableOnObject(object, value)
-      );
+      this.getOwnedQxObjects().forEach(object => this._setEditableOnObject(object, value));
     },
 
     /**
@@ -404,10 +368,8 @@ qx.Class.define("zx.ui.editor.Editor", {
      */
     _setEditableOnObject(object, editable) {
       if (typeof object.setEditable == "function") object.setEditable(editable);
-      else if (typeof object.setReadOnly == "function")
-        object.setReadOnly(!editable);
-      else if (typeof object.setEnabled == "function")
-        object.setEnabled(editable);
+      else if (typeof object.setReadOnly == "function") object.setReadOnly(!editable);
+      else if (typeof object.setEnabled == "function") object.setEnabled(editable);
     },
 
     /**
@@ -418,8 +380,7 @@ qx.Class.define("zx.ui.editor.Editor", {
      * @returns
      */
     _applyAutoSave(value, oldValue) {
-      if (value)
-        zx.ui.editor.AutoSave.getInstance().add(this._onAutoSave, this);
+      if (value) zx.ui.editor.AutoSave.getInstance().add(this._onAutoSave, this);
       else zx.ui.editor.AutoSave.getInstance().remove(this._onAutoSave, this);
     }
   }

@@ -14,6 +14,8 @@ qx.Class.define("zx.ui.utils.state.ControllerState", {
     super(state, ctlr, true);
     this._attachSelection();
     this._addListenerFor("changeSelection", this._changeSelection);
+    this._addListenerFor("beforeApplyModel", () => (this.__inChangeModel = true));
+    this._addListenerFor("afterApplyModel", () => (this.__inChangeModel = false));
     this._addListenerFor("changeModel", this._changeModel);
     let model = ctlr.getModel();
     if (model) this.copyStateToSelection();
@@ -25,6 +27,9 @@ qx.Class.define("zx.ui.utils.state.ControllerState", {
   },
 
   members: {
+    // Whether the model is currently changing
+    __inChangeModel: false,
+
     /**
      * Event handler for changes to the controller's model property
      *
@@ -41,10 +46,12 @@ qx.Class.define("zx.ui.utils.state.ControllerState", {
      * @param {qx.event.type.Data} evt
      */
     _changeSelection(evt) {
-      let oldSelection = evt.getOldData();
-      if (oldSelection) oldSelection.removeListener("change", this._changeSelectionContents, this);
-      this._attachSelection();
-      this.copySelectionToState();
+      if (!this.__inChangeModel) {
+        let oldSelection = evt.getOldData();
+        if (oldSelection) oldSelection.removeListener("change", this._changeSelectionContents, this);
+        this._attachSelection();
+        this.copySelectionToState();
+      }
     },
 
     /**
@@ -61,7 +68,9 @@ qx.Class.define("zx.ui.utils.state.ControllerState", {
      * @param {qx.event.type.Data} evt
      */
     _changeSelectionContents(evt) {
-      this.copySelectionToState();
+      if (!this.__inChangeModel) {
+        this.copySelectionToState();
+      }
     },
 
     /**
@@ -71,7 +80,7 @@ qx.Class.define("zx.ui.utils.state.ControllerState", {
       let id = this.getTargetId();
       if (!id) return;
 
-      let model = this.getModel();
+      let model = this.getTarget().getModel();
       if (!model) return;
 
       let valueIds = {};

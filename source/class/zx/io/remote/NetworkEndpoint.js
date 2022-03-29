@@ -16,7 +16,7 @@
  * ************************************************************************ */
 
 /**
- * Represents a connection on the serevr to a client; this object MUST be disposed of
+ * Represents a connection on the server to a client; this object MUST be disposed of
  *
  */
 qx.Class.define("zx.io.remote.NetworkEndpoint", {
@@ -43,6 +43,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
   environment: {
     /** @type{Boolean} whether to trace I/O data */
     "zx.io.remote.NetworkEndpoint.traceIo": false,
+
+    /** @type{Boolean} whether to trace session creation */
+    "zx.io.remote.NetworkEndpoint.traceSessions": false,
 
     /** @type{Boolean} is this the server?  Set to true when compiling, so that remote methods are executed in the right place */
     "zx.io.remote.NetworkEndpoint.server": false
@@ -458,11 +461,59 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      */
     async _receivePackets(req, reply, packets) {
       if (qx.core.Environment.get("zx.io.remote.NetworkEndpoint.traceIo")) {
-        console.log(`${this.classname}: receive = ${JSON.stringify(packets, null, 2)}`);
+        if (packets.length) console.log(`${this.classname}: receive = ${JSON.stringify(packets, null, 2)}`);
       }
 
       let response = await this.__receiveQueue.push({ req, reply, packets });
       return response;
+    },
+
+    async _serializeReturnValue(value) {
+      const controller = this.getController();
+
+      const serializeValue = async value => {
+        if (value === null || value === undefined) return value;
+        if (value instanceof qx.data.Array) value = value.toArray();
+        if (qx.lang.Type.isArray(value)) {
+          value = qx.lang.Array.clone(value);
+          for (let i = 0; i < value.length; i++) value[i] = await serializeValue(value[i]);
+          return value;
+        }
+        if (controller.isCompatibleObject(value)) {
+          let uuid = value.toUuid();
+          if (!uuid || !this.hasObject(uuid)) {
+            await this.put(value);
+            uuid = value.toUuid();
+          }
+          return {
+            _uuid: uuid,
+            _classname: value.classname
+          };
+        } else if (value instanceof qx.core.Object) {
+          throw new Error(
+            `Cannot return ${value} because it is ${value.classname} which is not capable of being sent remotely`
+          );
+        }
+        return value;
+      };
+
+      let result = await serializeValue(value);
+      return result;
+    },
+
+    async _deserializeReturnValue(value) {
+      const deserializeValue = async value => {
+        if (value === null || value === undefined) return value;
+        if (qx.lang.Type.isArray(value)) {
+          for (let i = 0; i < value.length; i++) value[i] = await deserializeValue(value[i]);
+          return value;
+        }
+        if (typeof value._uuid == "string" && typeof value._classname == "string")
+          value = await this.getController().getByUuid(value._uuid);
+        return value;
+      };
+
+      return await deserializeValue(value);
     },
 
     async _receivePacketsImpl(context) {
@@ -502,6 +553,13 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
             let uuid = uuids[uuidsIndex];
             await this.restoreRemoteChanges(uuid, changes[uuid]);
           }
+        } else if (packet.type == "sendUriMapping") {
+          if (!packet.uuid) {
+            this.getController().addUriMapping(packet.uri, null);
+          } else {
+            let obj = await this.getController().getByUuidNoWait(packet.uuid, true);
+            this.getController().receiveUriMapping(packet.uri, obj);
+          }
         } else if (packet.type == "callMethod") {
           await waitForAll();
           let controller = this.getController();
@@ -526,29 +584,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           let resultPacket = {
             originPacketId: packet.packetId,
             type: "return",
-            result: result
+            result: await this._serializeReturnValue(result)
           };
-          if (controller.isCompatibleObject(result)) {
-            let uuid = result.toUuid();
-            if (!uuid || !this.hasObject(uuid)) {
-              await this.put(result);
-              uuid = result.toUuid();
-            }
-            resultPacket.result = uuid;
-            resultPacket.resultType = "uuid";
-          } else if (result instanceof qx.core.Object) {
-            throw new Error(
-              `Cannot return ${result} because it is ${result.classname} which is not capable of being sent remotely`
-            );
-          }
           this._queuePacket(resultPacket);
-        } else if (packet.type == "sendUriMapping") {
-          if (!packet.uuid) {
-            this.getController().addUriMapping(packet.uri, null);
-          } else {
-            let obj = await this.getController().getByUuidNoWait(packet.uuid, true);
-            this.getController().receiveUriMapping(packet.uri, obj);
-          }
         } else if (packet.type == "return") {
           await waitForAll();
           if (qx.core.Environment.get("qx.debug")) {
@@ -571,13 +609,25 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           delete this._pendingPromises[packet.originPacketId];
           if (!promise) throw new Error("No promise to return to!");
 
-          let result = packet.result;
-          if (result) {
-            if (packet.resultType === "uuid") result = await this.getController().getByUuid(result);
-          }
+          let result = this._deserializeReturnValue(packet.result);
 
           if (result === undefined) promise.resolve();
           else promise.resolve(result);
+
+          // Upload
+        } else if (packet.type == "upload") {
+          await waitForAll();
+
+          let source = packet.sourceUuid ? await this.getController().getByUuid(packet.sourceUuid) : null;
+          if (!source && packet.sourceQxObjectId) {
+            source = qx.core.Id.getQxObject(packet.sourceQxObjectId);
+          }
+          let result = this._deserializeReturnValue(packet.result);
+          if (source) {
+            await source.onUploadCompleted(result);
+          }
+
+          // Close
         } else if (packet.type == "close") {
           this.__open = false;
           this.fireEvent("close");
@@ -637,10 +687,51 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
       await this.getController().flush();
       let responses = this.__takeQueuedPackets() || [];
       if (qx.core.Environment.get("zx.io.remote.NetworkEndpoint.traceIo")) {
-        console.log(`${this.classname}: responses = ${JSON.stringify(responses, null, 2)}`);
+        if (responses.length) console.log(`${this.classname}: responses = ${JSON.stringify(responses, null, 2)}`);
       }
 
       return responses;
+    },
+
+    async _uploadFile(req, reply) {
+      if (qx.core.Environment.get("zx.io.remote.NetworkEndpoint.server")) {
+        let controller = this.getController();
+
+        const parts = req.parts();
+
+        for await (const part of parts) {
+          if (part.file) {
+            let fields = {};
+            for (let key of Object.keys(part.fields)) {
+              if (part.fields[key].value) {
+                fields[key] = decodeURIComponent(part.fields[key].value);
+              }
+            }
+
+            let target = await controller.getByUuid(fields.targetUuid);
+            if (!target) {
+              throw new Error(`Cannot find target for upload for ${JSON.stringify(fields)}`);
+            }
+            if (!qx.Class.hasInterface(target.constructor, zx.io.remote.IUploadReceiver)) {
+              throw new Error(`Target for upload for ${JSON.stringify(fields)} is the wrong type`);
+            }
+            let uploadingFile = target.getUploadingFile(part.filename, fields);
+            let result = (await uploadingFile.writeFromStream(part.file)) || null;
+            uploadingFile.dispose();
+            let resultPacket = {
+              type: "upload",
+              sourceUuid: fields.sourceUuid,
+              sourceQxObjectId: fields.sourceQxObjectId,
+              result: await this._serializeReturnValue(result)
+            };
+            this._queuePacket(resultPacket);
+          }
+        }
+
+        return {
+          status: "ok"
+        };
+      }
     },
 
     /**
@@ -662,6 +753,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
   },
 
   statics: {
+    // Stream that calculates the SHA-256 of the data that it passes
+    ShaStream: null,
+
     /** @type{Object} list of classes already processed */
     __remoteClasses: {},
 
@@ -861,12 +955,15 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      * @param methodName {String} the name of the method
      * @return {Promise<*>}
      */
-    callRemoteMethod(object, name, varargs) {
+    async callRemoteMethod(object, name, varargs) {
       if (!qx.core.Environment.get("zx.io.remote.NetworkEndpoint.server")) {
         let endpoint = zx.io.remote.NetworkEndpoint.getEndpointFor(object);
         if (endpoint) {
+          if (!endpoint.hasObject(object.toUuid())) {
+            await endpoint.put(object);
+          }
           let promise = endpoint.callRemoteMethod(object.toUuid(), name, ...varargs);
-          return promise;
+          return await promise;
         } else {
           let result = object.constructor.prototype[name].$$zxIo?.originalMethod.call(object, ...varargs);
           if (result && typeof result.then != "function") {
@@ -874,13 +971,43 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
               `The method ${object.classname}.${name} did not return a promise, but it is a remote function and will be promisified when used remotely`
             );
           }
-          return result;
+          return await result;
         }
       } else {
         throw new Error(
           "zx.io.remote.NetworkEndpoint.callRemoteMethod is not supported on the server (use a specific endpoint instead)"
         );
       }
+    }
+  },
+
+  defer(statics) {
+    if (qx.core.Environment.get("zx.io.remote.NetworkEndpoint.server")) {
+      const stream = require("stream");
+
+      class ShaStream extends stream.Writable {
+        constructor(algorithm) {
+          super();
+          this.hashAlgorithm = require("sha.js")(algorithm);
+          this.__promise = new qx.Promise();
+          this.on("finish", () => {
+            this.__promise.resolve(this.toHash());
+          });
+        }
+        async done() {
+          return await this.__promise;
+        }
+        _write(chunk, encoding, callback) {
+          this.hashAlgorithm.update(chunk);
+          callback();
+        }
+        toHash() {
+          const hash = this.hashAlgorithm.digest("hex");
+          return hash;
+        }
+      }
+
+      zx.io.remote.NetworkEndpoint.ShaStream = ShaStream;
     }
   }
 });

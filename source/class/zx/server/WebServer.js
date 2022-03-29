@@ -155,31 +155,21 @@ qx.Class.define("zx.server.WebServer", {
         sessionConfig.secret = null;
       }
 
-      let session = require("@fastify/session");
-      let sessionOpts = {
+      let databaseConfig = this._config.database.mongo;
+      let manager = new zx.server.SessionManager(databaseConfig.uri, databaseConfig.databaseName, "sessions");
+      manager.set({
         secret: sessionConfig.secret || "yHbUWDFyEKikhuXgqzkgjxj7gBwZ6Ahm",
-        saveUninitialized: false,
         cookieName: "zx.cms.sessionId",
-        cookie: {
+        cookieOptions: {
           maxAge: 5 * 24 * 60 * 60 * 1000,
           sameSite: "strict",
           // This needs to be false unless on HTTPS (otherwise cookies will not be sent by @fastify/session)
           secure: false //sessionConfig.secureCookie === false ? false : true
         }
-      };
+      });
 
-      if (this._config.database.type === "mongo") {
-        const MongoStore = require("connect-mongo");
-        let mongoOpts = this._config.database.mongo || {};
-        let mongoUrl = mongoOpts.uri || "mongodb://localhost";
-        mongoUrl += "/" + (mongoOpts.databaseName || "cms");
-
-        sessionOpts.store = MongoStore.create({
-          mongoUrl: mongoUrl
-        });
-      }
-
-      app.register(session, sessionOpts);
+      await manager.open();
+      manager.registerWithFastify(app);
     },
 
     /**

@@ -104,9 +104,9 @@ qx.Class.define("zx.server.auth.User", {
      * @param {FastifyRequest} req
      */
     login(req) {
-      req.session[this.classname] = {
+      req.session.set(this.classname, {
         userUuid: this.toUuid()
-      };
+      });
     },
 
     /**
@@ -222,9 +222,8 @@ qx.Class.define("zx.server.auth.User", {
      */
     async getUserFromSession(req) {
       if (!req) req = zx.server.WebServer.getCurrentRequest();
-      let classname = qx.core.Environment.get("zx.server.auth.User.classname");
-      if (classname == null) return zx.server.auth.User;
-      let data = req.session[classname];
+      let classname = qx.core.Environment.get("zx.server.auth.User.classname") || zx.server.auth.User.classname;
+      let data = req.session.get(classname);
       if (!data || !data.userUuid) return null;
       let server = zx.server.Standalone.getInstance();
       let clazz = zx.server.auth.User.getUserClass();

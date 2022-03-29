@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.io.remote.FastifyXhrEndpoint", {
   extend: zx.io.remote.NetworkEndpoint,
@@ -45,9 +44,14 @@ qx.Class.define("zx.io.remote.FastifyXhrEndpoint", {
      * @param {Fastify.Reply} reply
      */
     async _receive(req, reply) {
-      let body = (req.body && JSON.parse(req.body)) || null;
-      let responses = await this._receivePackets(req, reply, body);
-      reply.send(responses);
-    },
-  },
+      let contentType = req.headers["content-type"];
+      if (req.method.toUpperCase() == "POST" && contentType && contentType.startsWith("multipart/form-data")) {
+        this._uploadFile(req, reply);
+      } else {
+        let body = (req.body && JSON.parse(req.body)) || null;
+        let responses = await this._receivePackets(req, reply, body);
+        reply.send(responses);
+      }
+    }
+  }
 });

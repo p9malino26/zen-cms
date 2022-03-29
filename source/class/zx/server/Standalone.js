@@ -279,15 +279,17 @@ qx.Class.define("zx.server.Standalone", {
      * Locates an object of a given class and matching a query
      *
      * @param {Class<zx.io.persistence.IObject>} clazz
-     * @param {*} query
+     * @param {var} query
+     * @param {Integer?} limit
      * @returns {zx.io.persistence.IObject[]}
      */
-    async findObjectsByType(clazz, query) {
+    async findObjectsByType(clazz, query, limit) {
       query = this.__createCorrectedQuery(query);
       query._classname = clazz.classname;
 
       let data = await this._db.find(query, { _uuid: 1 });
       let all = await data
+        .limit(limit || 0)
         .map(async data => {
           let uuid = (data && data._uuid) || null;
           if (!uuid) return null;

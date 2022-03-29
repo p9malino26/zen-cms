@@ -90,7 +90,7 @@ qx.Class.define("zx.ui.utils.state.TargetState", {
      * @returns {var?}
      */
     _get(key) {
-      return this.getState().getValues().get(key);
+      return this.getState().get(key);
     },
 
     /**
@@ -100,8 +100,7 @@ qx.Class.define("zx.ui.utils.state.TargetState", {
      * @param {var?} value
      */
     _put(key, value) {
-      if (value !== null && value !== undefined) this.getState().getValues().put(key, value);
-      else this.getState().getValues().remove(key);
+      this.getState().put(key, value);
     },
 
     /**

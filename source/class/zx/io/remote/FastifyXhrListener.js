@@ -59,27 +59,44 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
      * @return zx.io.remote.NetworkEndpoint
      */
     _getOrCreateEndpoint(req) {
-      if (!req.session[this.classname]) req.session[this.classname] = {};
-      if (!req.session[this.classname].endpoints) req.session[this.classname].endpoints = {};
-      let endpoints = req.session[this.classname].endpoints;
+      if (req.session.get("sessionSequenceId") === undefined) {
+        req.session.set("sessionSequenceId", (this.__sessionSequenceId = 0));
+      }
+      if (!this.__sessionSequenceId) this.__sessionSequenceId = 0;
+      if (req.session.get("sessionSequenceId") != this.__sessionSequenceId) {
+        this.warn(
+          ` **** req.session.sessionSequenceId = ${req.session.get("sessionSequenceId")}, this.__sessionSequenceId = ${
+            this.__sessionSequenceId
+          }`
+        );
+      }
+      req.session.set("sessionSequenceId", ++this.__sessionSequenceId);
+
+      let sessionValues = req.session.get(this.classname, {});
+      if (!sessionValues.endpoints) sessionValues.endpoints = {};
+      let endpoints = sessionValues.endpoints;
 
       // localSessionId is just a unique identifier that we use to index into datasource endpoints, because datasource
       //  is global, and we need to reduce the scope down to just the one browser
-      let localSessionId = req.session[this.classname].localSessionId || null;
+      let localSessionId = sessionValues.localSessionId || null;
       if (!localSessionId) {
         localSessionId = "" + ++zx.io.remote.FastifyXhrListener.__lastSessionId;
-        req.session[this.classname].localSessionId = localSessionId;
+        sessionValues.localSessionId = localSessionId;
       }
 
       // Each browser can have multiple endpoints simultaneously, for example in a thin client in an iframe as well as
       //  a thick client Desktop app
       let remoteSessionId = req.headers["x-zx-io-remote-sessionuuid"];
       let remoteAppName = req.headers["x-zx-io-remote-applicationname"];
+      let requestIndex = -1;
+      if (qx.core.Environment.get("zx.io.remote.BrowserXhrEndpoint.sessionTracing")) {
+        requestIndex = req.headers["x-zx-io-remote-requestindex"];
+      }
       if (qx.core.Environment.get("zx.io.remote.FastifyXhrListener.sessionTracing")) {
         console.log(
           `localSessionId=${localSessionId}, remoteSessionId=${remoteSessionId}, remoteAppName=${remoteAppName}`
         );
-        this.debug(`RECEIVE START: remoteSessionId=${remoteSessionId}`);
+        this.debug(`RECEIVE START: remoteSessionId=${remoteSessionId}, requestIndex=${requestIndex}`);
       }
 
       // The first request will restart the endpoint no matter what
@@ -90,7 +107,7 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
 
       // If the remote session id has changed, we will force a reset of the endpoint
       if (endpoint && endpoints[remoteAppName]) {
-        if (endpoints[remoteAppName].remoteSessionId != remoteSessionId) {
+        if (endpoints[remoteAppName].remoteSessionId != remoteSessionId && !firstRequest) {
           firstRequest = true;
           if (qx.core.Environment.get("zx.io.remote.FastifyXhrListener.sessionTracing")) {
             this.debug(
@@ -98,14 +115,18 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
                 endpoints[remoteAppName].remoteSessionId
               } (${endpoint.toHashCode()})`
             );
+            let body = (req.body && JSON.parse(req.body)) || null;
+            this.debug(`Body=${JSON.stringify(body, null, 2)}`);
           }
         }
       }
 
       if (qx.core.Environment.get("zx.io.remote.FastifyXhrListener.sessionTracing")) {
-        if (endpoints[remoteAppName])
+        if (endpoints[remoteAppName]) {
           this.debug(`endpoints[${remoteAppName}].remoteSessionId=${endpoints[remoteAppName].remoteSessionId}`);
-        else this.debug(`endpoints[${remoteAppName}] is undefined`);
+        } else {
+          this.debug(`endpoints[${remoteAppName}] is undefined`);
+        }
         this.debug(
           `endpoint=${
             endpoint ? endpoint.getUuid() : "(null)"
@@ -188,6 +209,12 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
       let result = await endpoint._receive(req, reply);
 
       if (qx.core.Environment.get("zx.io.remote.FastifyXhrListener.sessionTracing")) {
+        let sessionValues = req.session.get(this.classname);
+        var localSessionId = sessionValues?.localSessionId || null;
+        var endpoints = sessionValues?.endpoints || [];
+        var remoteSessionId = req.headers["x-zx-io-remote-sessionuuid"];
+        var remoteAppName = req.headers["x-zx-io-remote-applicationname"];
+
         this.debug(
           `RECEIVE END: remoteSessionId=${remoteSessionId} endpoints[${remoteAppName}].remoteSessionId=${
             endpoints[remoteAppName].remoteSessionId

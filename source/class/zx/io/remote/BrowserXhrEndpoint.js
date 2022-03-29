@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
   extend: zx.io.remote.NetworkEndpoint,
@@ -256,8 +255,21 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
         headers["X-Zx-Io-Remote-ClientTime"] = new Date().getTime();
         headers["X-Zx-Io-Remote-SessionUuid"] = this.getUuid();
         headers["X-Zx-Io-Remote-ApplicationName"] = qx.core.Environment.get("qx.compiler.applicationName");
-        if (firstRequest) headers["X-Zx-Io-Remote-FirstRequest"] = true;
-        Object.keys(headers).forEach(key => req.setRequestHeader(key, headers[key]));
+        if (firstRequest) {
+          headers["X-Zx-Io-Remote-FirstRequest"] = true;
+        }
+        if (qx.core.Environment.get("zx.io.remote.BrowserXhrEndpoint.sessionTracing")) {
+          if (!this.__requestIndex) {
+            this.__requestIndex = 0;
+          }
+          headers["X-Zx-Io-Remote-RequestIndex"] = this.__requestIndex++;
+        }
+        Object.keys(headers).forEach(key => {
+          req.setRequestHeader(key, headers[key]);
+          if (qx.core.Environment.get("zx.io.remote.BrowserXhrEndpoint.sessionTracing")) {
+            this.debug(`Header: ${key} = ${headers[key]}`);
+          }
+        });
 
         req.addListener("success", onSuccess);
         req.addListener("fail", onFailure);
@@ -270,6 +282,15 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
       req = createRequest();
 
       req.send();
+    },
+
+    /**
+     * Returns the URL for upload widgets
+     *
+     * @returns {String}
+     */
+    getUploadUrl() {
+      return this.__url;
     }
   }
 });

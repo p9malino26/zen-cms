@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const fs = require("fs");
 const path = require("path");
@@ -57,10 +57,7 @@ qx.Class.define("zx.io.remote.proxy.ClassesWriter", {
      */
     loadTemplate(resourceName) {
       let info = null;
-      let filename = path.join(
-        qx.util.LibraryManager.getInstance().get("zx", "resourceUri"),
-        resourceName
-      );
+      let filename = path.join(qx.util.LibraryManager.getInstance().get("zx", "resourceUri"), resourceName);
 
       const loadTemplateImpl = async () => {
         let stat = await fs.promises.stat(filename);
@@ -79,10 +76,7 @@ qx.Class.define("zx.io.remote.proxy.ClassesWriter", {
     },
 
     async _initialise() {
-      let db = await fs.promises.readFile(
-        path.join(this.getCompilerTargetPath(), "db.json"),
-        "utf8"
-      );
+      let db = await fs.promises.readFile(path.join(this.getCompilerTargetPath(), "db.json"), "utf8");
       this._db = JSON.parse(db);
     },
 
@@ -97,10 +91,7 @@ qx.Class.define("zx.io.remote.proxy.ClassesWriter", {
 
       if (!qx.lang.Type.isArray(classnames)) classnames = [classnames];
 
-      if (this.isVerbose())
-        this.info(
-          `Generating classes to ${path.resolve(this.getOutputPath())}`
-        );
+      if (this.isVerbose()) this.info(`Generating classes to ${path.resolve(this.getOutputPath())}`);
 
       let classes = {};
 
@@ -123,14 +114,10 @@ qx.Class.define("zx.io.remote.proxy.ClassesWriter", {
       });
 
       for (let classname in classes) {
-        if (classname.match(/pet/i)) debugger;
         let clazz = classes[classname];
-        let filename =
-          path.join(this.getOutputPath(), classname.replace(/\./g, path.sep)) +
-          ".js";
+        let filename = path.join(this.getOutputPath(), classname.replace(/\./g, path.sep)) + ".js";
 
-        let anno =
-          qx.Annotation.getOwnClass(clazz, zx.io.remote.anno.Class)[0] || null;
+        let anno = qx.Annotation.getOwnClass(clazz, zx.io.remote.anno.Class)[0] || null;
         if (anno && anno.getProxy() == "never") {
           try {
             await fs.promises.unlink(filename);

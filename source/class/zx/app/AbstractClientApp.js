@@ -40,6 +40,7 @@ qx.Class.define("zx.app.AbstractClientApp", {
   members: {
     __netController: null,
     __endpoint: null,
+    __uploadMgr: null,
 
     async main() {
       if (this.__endpoint) {
@@ -57,9 +58,9 @@ qx.Class.define("zx.app.AbstractClientApp", {
       // Connect to the parent window because we know that we are in an iframe created by PeerOne
       let endpoint = (this.__endpoint = new zx.io.remote.BrowserXhrEndpoint().set({
         timeout: 60000,
-        polling: false
+        polling: true
       }));
-      this.warn(" *************** POLLING TURNED OFF IN CODE ********* ");
+      if (!endpoint.isPolling()) this.warn(" *************** POLLING TURNED OFF IN CODE ********* ");
       this.__netController.addEndpoint(endpoint);
       await endpoint.open();
 
@@ -69,6 +70,40 @@ qx.Class.define("zx.app.AbstractClientApp", {
       let loginApi = await this.__netController.getUriMapping(zx.server.auth.LoginApi.classname);
       let user = await loginApi.getCurrentUser();
       this.setUser(user);
+    },
+
+    getUploadMgr() {
+      if (!this.__uploadMgr) {
+        let url = this.getNetEndpoint().getUploadUrl();
+        this.__uploadMgr = new com.zenesis.qx.upload.UploadMgr(null, url);
+        this.__uploadMgr.getUploadHandler().setExtraHeaders({
+          "X-Zx-Io-Remote-SessionUuid": this.__endpoint.getUuid(),
+          "X-Zx-Io-Remote-ApplicationName": qx.core.Environment.get("qx.compiler.applicationName")
+        });
+        this.__uploadMgr.addListener("addFile", evt => {
+          var file = evt.getData();
+          file.setParam("X-Zx-Io-Remote-SessionUuid", this.__endpoint.getUuid());
+          file.setParam("X-Zx-Io-Remote-ApplicationName", qx.core.Environment.get("qx.compiler.applicationName"));
+          var progressListenerId = file.addListener("changeProgress", evt => {
+            var file = evt.getTarget();
+            var uploadedSize = evt.getData();
+
+            this.debug(
+              "Upload " +
+                file.getFilename() +
+                ": " +
+                uploadedSize +
+                " / " +
+                file.getSize() +
+                " - " +
+                Math.round((uploadedSize / file.getSize()) * 100) +
+                "%"
+            );
+          });
+        });
+      }
+
+      return this.__uploadMgr;
     },
 
     /**
