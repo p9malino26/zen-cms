@@ -84,7 +84,7 @@ qx.Class.define("zx.ui.utils.state.ControllerState", {
       if (!model) return;
 
       let valueIds = {};
-      this._get(id).forEach(valueId => (valueIds[valueId] = true));
+      (this._get(id) || []).forEach(valueId => (valueIds[valueId] = true));
       let sel = model.toArray().filter(item => valueIds[this._getIdOfItem(item)]);
       this.getTarget().getSelection().replace(sel);
     },

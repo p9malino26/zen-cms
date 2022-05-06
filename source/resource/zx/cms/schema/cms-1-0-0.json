@@ -104,6 +104,16 @@
       "type": "string",
       "description": "The theme name"
     },
+    "uploads": {
+      "type": "object",
+      "description": "Uploading settings",
+      "properties": {
+        "maxFileUploadSize": {
+          "type": "integer",
+          "description": "Maximum size allowed for uploads, in bytes"
+        }
+      }
+    },
     "session": {
       "type": "object",
       "description": "Session configuration",

@@ -120,7 +120,10 @@ qx.Class.define("zx.server.WebServer", {
      * @return {Fastify}
      */
     async _createApplication() {
-      if (this._app) return this._app;
+      if (this._app) {
+        return this._app;
+      }
+      let maxFileUploadSize = this._config.uploads?.maxFileUploadSize || 10 * 1024 * 1024;
       const app = (this._app = require("fastify")({ logger: false }));
       app.register(require("fastify-cookie"));
       app.register(require("fastify-prettier"));
@@ -129,8 +132,8 @@ qx.Class.define("zx.server.WebServer", {
           fieldNameSize: 100, // Max field name size in bytes
           fieldSize: 512, // Max field value size in bytes
           fields: 10, // Max number of non-file fields
-          fileSize: 10 * 1024 * 1024, // For multipart forms, the max file size in bytes
-          files: 2, // Max number of file fields
+          fileSize: maxFileUploadSize, // For multipart forms, the max file size in bytes
+          files: 10, // Max number of file fields
           headerPairs: 2000 // Max number of header key=>value pairs
         }
       });
@@ -227,6 +230,10 @@ qx.Class.define("zx.server.WebServer", {
       app.get(
         "/zx/shorturl/:shortCode",
         wrapMiddleware(async (req, reply) => await this.__shortUrl(req, reply))
+      );
+      app.get(
+        "/zx/blobs/:uuid",
+        wrapMiddleware(async (req, reply) => await this.__blobs(req, reply))
       );
 
       app.get(
@@ -426,6 +433,15 @@ qx.Class.define("zx.server.WebServer", {
     },
 
     __shortUrl(request, reply) {},
+
+    __blobs(request, reply) {
+      let uuid = request.params.uuid.toLowerCase();
+      let pos = uuid.lastIndexOf(".");
+      let ext = uuid.substring(pos);
+      uuid = uuid.substring(0, pos);
+      let filename = this.getBlobFilename(uuid) + ext;
+      return reply.sendFile(filename, ".");
+    },
 
     /**
      * Called to handle a custom action for a url rule

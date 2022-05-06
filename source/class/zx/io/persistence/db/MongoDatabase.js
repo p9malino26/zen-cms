@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const fs = require("fs");
 const path = require("path");
@@ -67,9 +66,7 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
       await this.__mongo.connect();
       this.__db = this.__mongo.db(this.__databaseName);
       let collections = await this.__db.collections();
-      let exists = collections.find(
-        coll => coll.collectionName == this.__collectionName
-      );
+      let exists = collections.find(coll => coll.collectionName == this.__collectionName);
       this.__newDatabase = !exists;
       this.__collection = this.__db.collection(this.__collectionName);
 
@@ -108,19 +105,37 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
      */
     async flush() {},
 
+    /**
+     * Compiles options for use with a find query
+     *
+     * @param {*} projection
+     * @param {*} options
+     * @returns {Object}
+     */
+    __createOptions(projection, options) {
+      options = options ? qx.lang.Object.clone(options) : {};
+      if (options.projection && projection) {
+        throw new Error("Cannot use multiple projections at once");
+      }
+      if (projection) {
+        options.projection = projection;
+      }
+      return options;
+    },
+
     /*
      * @Override
      */
-    async find(query, projection) {
-      let result = await this.__collection.find(query, { projection });
+    async find(query, projection, options) {
+      let result = await this.__collection.find(query, this.__createOptions(projection, options));
       return result;
     },
 
     /*
      * @Override
      */
-    async findOne(query, projection) {
-      let json = await this.__collection.findOne(query, { projection });
+    async findOne(query, projection, options) {
+      let json = await this.__collection.findOne(query, this.__createOptions(projection, options));
       return json;
     },
 

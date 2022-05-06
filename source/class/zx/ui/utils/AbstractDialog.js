@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.utils.AbstractDialog", {
   extend: qx.ui.window.Window,
@@ -153,8 +153,7 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
      * @return {String} either "submit" or "cancel"
      */
     async open() {
-      if (this.__onClosePromise)
-        throw new Error("Cannot open the dialog multiple times");
+      if (this.__onClosePromise) throw new Error("Cannot open the dialog multiple times");
       this.__opened = true;
       let promise = (this.__onClosePromise = new qx.Promise());
       this.base(arguments);
@@ -189,11 +188,7 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
      */
     async submitDialog(buttonCode) {
       if (!buttonCode) {
-        for (
-          let arr = this.getButtons(), i = 0;
-          i < arr.length && !buttonCode;
-          i++
-        ) {
+        for (let arr = this.getButtons(), i = 0; i < arr.length && !buttonCode; i++) {
           let type = this._getButtonType(arr[i]);
           if (type.kind == "submit") buttonCode = arr[i];
         }
@@ -223,10 +218,7 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
      */
     async _resolve(value) {
       let promise = this.__onClosePromise;
-      if (!promise)
-        throw new Error(
-          "Cannot resolve the dialog more than once per time it is opened"
-        );
+      if (!promise) throw new Error("Cannot resolve the dialog more than once per time it is opened");
       this.__onClosePromise = null;
       this.close();
       await promise.resolve(value);
@@ -260,8 +252,7 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
      */
     getDialogButton(code) {
       let button = this.__buttons[code];
-      if (!button)
-        button = this.__buttons[code] = this._createDialogButton(code);
+      if (!button) button = this.__buttons[code] = this._createDialogButton(code);
       return button;
     },
 
@@ -285,8 +276,7 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
      * @returns {ButtonType}
      */
     _getButtonType(code) {
-      let data = (this.__buttonTypes ||
-        zx.ui.utils.AbstractDialog.DEFAULT_BUTTON_TYPES)[code];
+      let data = (this.__buttonTypes || zx.ui.utils.AbstractDialog.DEFAULT_BUTTON_TYPES)[code];
       if (!data) throw new Error(`Unrecognised code for button: ${code}`);
       return data;
     },
@@ -301,8 +291,7 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
       if (this.__buttonTypes === null) {
         this.__buttonTypes = {};
         for (let key in zx.ui.utils.AbstractDialog.DEFAULT_BUTTON_TYPES)
-          this.__buttonTypes[key] =
-            zx.ui.utils.AbstractDialog.DEFAULT_BUTTON_TYPES[key];
+          this.__buttonTypes[key] = zx.ui.utils.AbstractDialog.DEFAULT_BUTTON_TYPES[key];
       }
       this.__buttonTypes[code] = map;
     },
@@ -337,9 +326,7 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
     _createQxObjectImpl(id) {
       switch (id) {
         case "buttonBar":
-          var comp = new qx.ui.container.Composite(
-            new qx.ui.layout.HBox(5, "right")
-          );
+          var comp = new qx.ui.container.Composite(new qx.ui.layout.HBox(5, "right"));
           var codes = this.getButtons();
           codes.forEach(code => {
             let button = this.getDialogButton(code);
@@ -392,6 +379,11 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
         caption: "Delete",
         icon: "@FontAwesomeSolid/minus-circle/16",
         kind: "cancel"
+      },
+      upload: {
+        caption: "Upload",
+        icon: "@FontAwesomeSolid/cloud-arrow-up/16",
+        kind: "ok"
       }
     }
   }

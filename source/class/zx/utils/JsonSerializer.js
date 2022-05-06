@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.utils.JsonSerializer", {
   extend: qx.core.Object,
@@ -37,10 +37,7 @@ qx.Class.define("zx.utils.JsonSerializer", {
     _getPropertiesFor(clazz) {
       let maybeClassname = clazz;
       if (typeof clazz == "string") clazz = qx.Class.getByName(clazz);
-      if (!clazz)
-        throw new Error(
-          `Cannot serialize without a class (possibly for ${maybeClassname})`
-        );
+      if (!clazz) throw new Error(`Cannot serialize without a class (possibly for ${maybeClassname})`);
       let props = this.__propertiesByClass[clazz.classname];
       if (props !== undefined) return props;
 
@@ -86,40 +83,19 @@ qx.Class.define("zx.utils.JsonSerializer", {
       const serializeImpl = obj => {
         if (obj === null || obj === undefined) return null;
 
-        if (obj instanceof qx.data.Array)
-          return obj.toArray().map(tmp => serializeImpl(tmp));
+        if (obj instanceof qx.data.Array) return obj.toArray().map(tmp => serializeImpl(tmp));
 
-        if (qx.lang.Type.isArray(obj))
-          return obj.map(tmp => serializeImpl(tmp));
+        if (qx.lang.Type.isArray(obj)) return obj.map(tmp => serializeImpl(tmp));
 
-        if (qx.lang.Type.isDate(obj))
-          return !isNaN(obj.getDate()) ? obj.toISOString() : null;
+        if (qx.lang.Type.isDate(obj)) return !isNaN(obj.getDate()) ? obj.toISOString() : null;
 
         if (qx.lang.Type.isError(obj)) return "" + obj;
 
-        if (
-          qx.lang.Type.isNumber(obj) ||
-          qx.lang.Type.isBoolean(obj) ||
-          typeof obj == "string"
-        )
-          return obj;
+        if (qx.lang.Type.isNumber(obj) || qx.lang.Type.isBoolean(obj) || typeof obj == "string") return obj;
 
         if (obj instanceof qx.core.Object) {
           let props = this._getPropertiesFor(obj.constructor);
-          if (!props) {
-            this.warn(
-              `Cannot find any properties for ${obj.classname} (${obj})`
-            );
-            return {};
-          }
-
           let result = {};
-
-          let id = null;
-          if (typeof obj.toUuid == "function") id = obj.toUuid();
-          if (!id) id = obj.toHashCode();
-          result["_classname"] = obj.classname;
-          result["_uuid"] = id;
 
           for (let name in props) {
             let anno = props[name];
@@ -128,15 +104,29 @@ qx.Class.define("zx.utils.JsonSerializer", {
             if (name.match(/promotions/)) console.log(name);
 
             if (anno.isRefer()) {
-              if (value instanceof qx.data.Array)
-                result[name] = value.toArray().map(tmp => ref(tmp));
-              else if (qx.lang.Type.isArray(obj))
-                result[name] = value.map(tmp => ref(tmp));
+              if (value instanceof qx.data.Array) result[name] = value.toArray().map(tmp => ref(tmp));
+              else if (qx.lang.Type.isArray(obj)) result[name] = value.map(tmp => ref(tmp));
               else result[name] = ref(value, anno);
             } else {
               result[name] = serializeImpl(value);
             }
           }
+
+          if (typeof obj.toJsonSerialize == "function") {
+            obj.toJsonSerialize(result);
+          }
+
+          if (Object.keys(result).length == 0) {
+            this.warn(`Cannot find any properties for ${obj.classname} (${obj})`);
+            return {};
+          }
+
+          let id = null;
+          if (typeof obj.toUuid == "function") id = obj.toUuid();
+          if (!id) id = obj.toHashCode();
+          result["_classname"] = obj.classname;
+          result["_uuid"] = id;
+
           return result;
         }
 
@@ -165,9 +155,7 @@ qx.Class.define("zx.utils.JsonSerializer", {
      */
     getPublicOnly() {
       if (!zx.utils.JsonSerializer.__publicOnly)
-        zx.utils.JsonSerializer.__publicOnly = new zx.utils.JsonSerializer(
-          true
-        );
+        zx.utils.JsonSerializer.__publicOnly = new zx.utils.JsonSerializer(true);
       return zx.utils.JsonSerializer.__publicOnly;
     }
   }

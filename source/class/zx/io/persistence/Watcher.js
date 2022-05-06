@@ -256,7 +256,7 @@ qx.Class.define("zx.io.persistence.Watcher", {
      *
      * @param {qx.event.type.Data} evt
      */
-    __onSimplePropertyChangeEvent(evt) {
+    async __onSimplePropertyChangeEvent(evt) {
       let object = evt.getTarget();
       let eventName = evt.getType();
       if (qx.core.Environment.get("qx.debug")) {
@@ -265,7 +265,7 @@ qx.Class.define("zx.io.persistence.Watcher", {
         );
       }
       let propertyName = qx.lang.String.firstLow(eventName.substring(6));
-      return this._onPropertyChange(object, propertyName);
+      return await this._onPropertyChange(object, propertyName);
     },
 
     /**
@@ -274,17 +274,17 @@ qx.Class.define("zx.io.persistence.Watcher", {
      * @param {zx.io.persistence.IObject} object
      * @param {String} propertyName
      */
-    _onPropertyChange(object, propertyName) {
+    async _onPropertyChange(object, propertyName) {
       let uuid = object.toUuid();
       let info = this.__objectInfoByUuid[uuid];
       if (qx.core.Environment.get("qx.debug")) {
         this.assertTrue(!!info);
       }
-      this._markObjectChanged(object);
+      await this._markObjectChanged(object);
 
       let io = this.__classIos.getClassIo(object.constructor);
       let propertyDef = io.getProperties()[propertyName];
-      this.fireDataEvent("propertyChanged", { object: object, propertyName, propertyDef });
+      await this.fireDataEvent("propertyChanged", { object: object, propertyName, propertyDef });
     },
 
     /**
@@ -292,13 +292,13 @@ qx.Class.define("zx.io.persistence.Watcher", {
      *
      * @param {zx.io.persistence.IObject} object
      */
-    _markObjectChanged(object) {
+    async _markObjectChanged(object) {
       let uuid = object.toUuid();
       let info = this.__objectInfoByUuid[uuid];
       if (!info.changed) {
         info.changed = true;
         this.__status.numDirtyObjects++;
-        this._onObjectChanged(object);
+        await this._onObjectChanged(object);
       }
     },
 
@@ -307,8 +307,8 @@ qx.Class.define("zx.io.persistence.Watcher", {
      *
      * @param {zx.io.persistence.IObject} object
      */
-    _onObjectChanged(object) {
-      this.fireDataEvent("objectChanged", object);
+    async _onObjectChanged(object) {
+      await this.fireDataEvent("objectChanged", object);
     },
 
     /**

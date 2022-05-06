@@ -261,21 +261,6 @@ qx.Class.define("zx.server.Standalone", {
     },
 
     /**
-     * Deletes objects of a given class and matching a query
-     *
-     * @param {Class<zx.io.persistence.IObject>} clazz
-     * @param {*} query
-     */
-    async deleteObjectsByType(clazz, query) {
-      query = this.__createCorrectedQuery(query);
-      let properties = query ? qx.lang.Object.clone(query) : {};
-      if (!query) query = {};
-      query._classname = clazz.classname;
-
-      await this._db.findAndRemove(query);
-    },
-
-    /**
      * Locates an object of a given class and matching a query
      *
      * @param {Class<zx.io.persistence.IObject>} clazz
@@ -329,6 +314,30 @@ qx.Class.define("zx.server.Standalone", {
       query = qx.lang.Object.clone(query, true);
       scan(query);
       return query;
+    },
+
+    /**
+     * Deletes an object from the database
+     *
+     * @param {zx.io.persistence.IObject} object object to delete
+     */
+    async deleteObject(object) {
+      await this.deleteObjectsByType(object.constructor, { _uuid: object.toUuid() });
+    },
+
+    /**
+     * Deletes objects of a given class and matching a query
+     *
+     * @param {Class<zx.io.persistence.IObject>} clazz
+     * @param {*} query
+     */
+    async deleteObjectsByType(clazz, query) {
+      query = this.__createCorrectedQuery(query);
+      let properties = query ? qx.lang.Object.clone(query) : {};
+      if (!query) query = {};
+      query._classname = clazz.classname;
+
+      await this._db.findAndRemove(query);
     },
 
     /**

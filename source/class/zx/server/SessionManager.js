@@ -102,7 +102,7 @@ qx.Class.define("zx.server.SessionManager", {
      * @returns {zx.server.Session} the new session
      */
     newSession(request) {
-      this.clearSession();
+      this.clearSession(request);
       request.session = new zx.server.Session(this, null);
       request.session.addUse();
       return request.session;
@@ -147,7 +147,6 @@ qx.Class.define("zx.server.SessionManager", {
      */
     async _onRequest(request, reply) {
       let cookieOptions = this.getCookieOptions();
-      request.session = {};
 
       let url = request.raw.url;
       if (url.indexOf(cookieOptions.path || "/") !== 0) {
@@ -155,7 +154,7 @@ qx.Class.define("zx.server.SessionManager", {
       }
 
       let encryptedSessionId = request.cookies[this.getCookieName()];
-      let sessionId = cookieSignature.unsign(encryptedSessionId, this.getSecret());
+      let sessionId = encryptedSessionId ? cookieSignature.unsign(encryptedSessionId, this.getSecret()) : null;
       if (!sessionId) {
         this.newSession(request);
         return;

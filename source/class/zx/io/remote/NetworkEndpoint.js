@@ -470,6 +470,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
 
     async _serializeReturnValue(value) {
       const controller = this.getController();
+      if (!controller) return null;
 
       const serializeValue = async value => {
         if (value === null || value === undefined) return value;
@@ -587,6 +588,8 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
             result: await this._serializeReturnValue(result)
           };
           this._queuePacket(resultPacket);
+
+          //
         } else if (packet.type == "return") {
           await waitForAll();
           if (qx.core.Environment.get("qx.debug")) {
@@ -622,7 +625,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           if (!source && packet.sourceQxObjectId) {
             source = qx.core.Id.getQxObject(packet.sourceQxObjectId);
           }
-          let result = this._deserializeReturnValue(packet.result);
+          let result = await this._deserializeReturnValue(packet.result);
           if (source) {
             await source.onUploadCompleted(result);
           }

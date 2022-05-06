@@ -212,6 +212,7 @@ qx.Class.define("zx.ui.editor.FormEditor", {
             widgetInfo.invalidMessageAtom.setShow("both");
           }
           widget.addListener("changeValid", this.__onWidgetChangeValid.bind(this, widgetInfo));
+          this.__onWidgetChangeValid(widgetInfo, null);
         } else {
           widgetToAdd = widget;
         }
@@ -348,10 +349,14 @@ qx.Class.define("zx.ui.editor.FormEditor", {
             bindingOptions.reverseOptions
           );
         }
+
+        // If no bind path, we still add a resetter
+      } else if (qx.Class.hasInterface(widget.constructor, qx.ui.form.IForm)) {
+        this._resetter.add(widget);
       }
 
-      // TabIndex
       if (typeof widget.setTabIndex == "function") {
+        // TabIndex
         if (options.tabIndex !== undefined) widget.setTabIndex(options.tabIndex);
         else widget.setTabIndex(++zx.ui.editor.FormEditor.__tabIndex);
       }
@@ -367,11 +372,17 @@ qx.Class.define("zx.ui.editor.FormEditor", {
       }
     },
 
-    __onWidgetChangeValid(widgetInfo, evt) {
+    /**
+     * Called to update the display based on the widgets `valid` property
+     *
+     * @param {WidgetInfo} widgetInfo
+     */
+    __onWidgetChangeValid(widgetInfo) {
       let widget = widgetInfo.widget;
       let invalidMessageAtom = widgetInfo.invalidMessageAtom;
-      if (widget.isValid()) invalidMessageAtom.setVisibility("excluded");
-      else {
+      if (widget.isValid()) {
+        invalidMessageAtom.setVisibility("excluded");
+      } else {
         invalidMessageAtom.set({
           visibility: "visible",
           label: widget.getInvalidMessage()
@@ -545,10 +556,12 @@ qx.Class.define("zx.ui.editor.FormEditor", {
         let group = groups[groupIndex];
         for (let widgetIndex = 0; widgetIndex < group.widgetInfos.length; widgetIndex++) {
           let widgetInfo = group.widgetInfos[widgetIndex];
-          widgetInfo.widget.set({
-            invalidMessage: null,
-            valid: true
-          });
+          if (widgetInfo.widget instanceof qx.ui.form.AbstractField) {
+            widgetInfo.widget.set({
+              invalidMessage: null,
+              valid: true
+            });
+          }
         }
       }
       this.set({

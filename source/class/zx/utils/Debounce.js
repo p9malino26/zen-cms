@@ -60,7 +60,7 @@ qx.Class.define("zx.utils.Debounce", {
      * @return {var?}
      */
     async run() {
-      let promise = this.__isPromise;
+      let promise = this.__runPromise;
       if (promise) {
         let repeatedTrigger = this.getRepeatedTrigger();
         if (repeatedTrigger == "restart") {
