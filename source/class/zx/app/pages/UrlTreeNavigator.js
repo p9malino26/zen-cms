@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.app.pages.UrlTreeNavigator", {
   extend: zx.io.persistence.Object,
@@ -48,35 +48,45 @@ qx.Class.define("zx.app.pages.UrlTreeNavigator", {
     async open() {
       let prefix = this.getPrefix() || "";
       if (prefix.length) {
-        if (prefix[0] == "/") prefix = prefix.substring(1);
-        if (prefix.length && prefix[prefix.length - 1] == "/")
+        if (prefix[0] == "/") {
+          prefix = prefix.substring(1);
+        }
+        if (prefix.length && prefix[prefix.length - 1] == "/") {
           prefix = prefix.substring(0, prefix.length - 1);
+        }
       }
 
       let query;
-      if (!prefix) query = { url: { $exists: true } };
-      else query = { url: { $regex: "^" + prefix + "\\/", $options: "i" } };
+      if (!prefix) {
+        query = { url: { $exists: true } };
+      } else {
+        query = { url: { $regex: "^" + prefix + "\\/", $options: "i" } };
+      }
 
       prefix += "/";
 
-      let cursor = await zx.server.Standalone.getInstance()
-        .getDb()
-        .find(query, { _uuid: 1, url: 1 });
+      let cursor = await zx.server.Standalone.getInstance().getDb().find(query, { _uuid: 1, url: 1 });
       let docs = [];
       let rootDoc = null;
       await cursor.sort("url").forEach(doc => {
         doc.originalUrl = doc.url;
         doc.url = doc.url.toLowerCase();
-        if (doc.url.endsWith("/index"))
+        if (doc.url.endsWith("/index")) {
           doc.url = doc.url.substring(0, doc.url.length - 5);
-        if (qx.core.Environment.get("qx.debug"))
+        }
+        if (qx.core.Environment.get("qx.debug")) {
           this.assertTrue(doc.url.startsWith(prefix));
+        }
         doc.url = doc.url.substring(prefix.length);
-        if (doc.url.length == 0) rootDoc = doc;
+        if (doc.url.length == 0) {
+          rootDoc = doc;
+        }
         docs.push(doc);
       });
 
-      if (!rootDoc) throw new Error("Cannot find root URL");
+      if (!rootDoc) {
+        throw new Error("Cannot find root URL");
+      }
 
       let root = new zx.app.pages.UrlNode().set({
         name: "",
@@ -88,7 +98,9 @@ qx.Class.define("zx.app.pages.UrlTreeNavigator", {
         while (docIndex < docs.length) {
           let doc = docs[docIndex];
           let url = doc.url;
-          if (!url.startsWith(parentUrl)) return;
+          if (!url.startsWith(parentUrl)) {
+            return;
+          }
           docIndex++;
 
           let remainder = url.substring(parentUrl.length);

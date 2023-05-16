@@ -58,26 +58,12 @@ qx.Class.define("zx.io.remote.proxy.ClassWriter", {
       if (clazz.$$properties) {
         const getPropertyDefinition = (clazz, propertyName) => {
           let info = clazz.$$properties[propertyName];
-          if (!info) return getPropertyDefinition(clazz.superclass, propertyName);
-          if (info.refine) {
-            let superInfo = getPropertyDefinition(clazz.superclass, propertyName);
-            if (qx.core.Environment.get("qx.debug")) this.assertTrue(!!superInfo);
-
-            info = qx.lang.Object.clone(info);
-            if (info["@"] && !qx.lang.Type.isArray(info["@"])) info["@"] = [info["@"]];
-            if (superInfo["@"] && !qx.lang.Type.isArray(superInfo["@"])) superInfo["@"] = [superInfo["@"]];
-
-            for (let key in superInfo) {
-              if (key == "@") {
-                info["@"] = info["@"] ? qx.lang.Array.clone(info["@"]) : [];
-                qx.lang.Array.append(info["@"], superInfo["@"]);
-              } else if (info[key] === undefined) {
-                info[key] = superInfo[key];
-              }
-            }
-          } else {
-            info = qx.lang.Object.clone(info);
-            if (info["@"] && !qx.lang.Type.isArray(info["@"])) info["@"] = [info["@"]];
+          if (!info) {
+            return getPropertyDefinition(clazz.superclass, propertyName);
+          }
+          info = qx.lang.Object.clone(info);
+          if (info["@"] && !qx.lang.Type.isArray(info["@"])) {
+            info["@"] = [info["@"]];
           }
           return info;
         };
@@ -88,7 +74,9 @@ qx.Class.define("zx.io.remote.proxy.ClassWriter", {
 
           let annos = allAnnos.filter(anno => qx.Class.isSubClassOf(anno.constructor, zx.io.persistence.anno.Array));
           let arrayType = null;
-          if (annos.length) arrayType = info.arrayType = annos[annos.length - 1].getArrayType();
+          if (annos.length) {
+            arrayType = info.arrayType = annos[annos.length - 1].getArrayType();
+          }
 
           annos = allAnnos.filter(anno => qx.Class.isSubClassOf(anno.constructor, zx.io.persistence.anno.Map));
           let keyType = null;
@@ -106,9 +94,13 @@ qx.Class.define("zx.io.remote.proxy.ClassWriter", {
             if (info.check === "Array") {
               refType = arrayType;
             } else if (typeof info.check != "string") {
-              if (qx.Class.isSubClassOf(info.check, qx.data.Array)) refType = arrayType;
-              else if (qx.Class.isSubClassOf(info.check, qx.data.Array)) refType = arrayType;
-              else if (qx.Class.isSubClassOf(info.check, qx.core.Object)) refType = info.check;
+              if (qx.Class.isSubClassOf(info.check, qx.data.Array)) {
+                refType = arrayType;
+              } else if (qx.Class.isSubClassOf(info.check, qx.data.Array)) {
+                refType = arrayType;
+              } else if (qx.Class.isSubClassOf(info.check, qx.core.Object)) {
+                refType = info.check;
+              }
             }
           }
 
@@ -146,7 +138,9 @@ qx.Class.define("zx.io.remote.proxy.ClassWriter", {
           let prefix = name.substring(0, pos);
           if (PROPERTY_PREFIXES[prefix]) {
             let propertyName = qx.lang.String.firstLow(name.substring(pos));
-            if (clazz.$$properties && clazz.$$properties[propertyName]) return false;
+            if (clazz.$$properties && clazz.$$properties[propertyName]) {
+              return false;
+            }
           }
         }
 
@@ -204,11 +198,24 @@ qx.Class.define("zx.io.remote.proxy.ClassWriter", {
           let it = {
             name: propertyName
           };
-          for (let key in info) it[key] = info[key];
-          let upname = qx.lang.String.firstUp(propertyName);
-          it.apply = "_apply" + upname;
-          it.event = "change" + upname;
-          it.annoExpr = compileAnnos(info["@"]);
+          if (info.refine || info.refined) {
+            if (info.init !== undefined) {
+              it.init = info.init;
+            }
+            it.refine = true;
+            it.annoExpr = compileAnnos(info["@"]);
+          } else {
+            for (let key in info) {
+              it[key] = info[key];
+            }
+            if (info.refined) {
+              it.refine = true;
+            }
+            let upname = qx.lang.String.firstUp(propertyName);
+            it.apply = "_apply" + upname;
+            it.event = "change" + upname;
+            it.annoExpr = compileAnnos(info["@"]);
+          }
           return it;
         }),
         methods: Object.keys(this.__methods).map(methodName => {
@@ -226,7 +233,9 @@ qx.Class.define("zx.io.remote.proxy.ClassWriter", {
         let info = this.__properties[propertyName];
         if (info.check) {
           let clazz = qx.Class.getByName(info.check);
-          if (clazz) useClasses[clazz.classname] = true;
+          if (clazz) {
+            useClasses[clazz.classname] = true;
+          }
         }
       });
 
@@ -234,13 +243,21 @@ qx.Class.define("zx.io.remote.proxy.ClassWriter", {
       if (anno) {
         let mixins = anno.getClientMixins();
         if (mixins) {
-          if (!qx.lang.Type.isArray(mixins)) mixins = [mixins];
+          if (!qx.lang.Type.isArray(mixins)) {
+            mixins = [mixins];
+          }
           mixins = mixins.map(mixin => {
-            if (typeof mixin == "string") return mixin;
-            if (typeof mixin.classname == "string") return mixin.classname;
+            if (typeof mixin == "string") {
+              return mixin;
+            }
+            if (typeof mixin.classname == "string") {
+              return mixin.classname;
+            }
             return "" + mixin;
           });
-          if (mixins.length) it.mixins = mixins;
+          if (mixins.length) {
+            it.mixins = mixins;
+          }
         }
       }
 

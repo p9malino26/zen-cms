@@ -1,31 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Mixin.define("zx.server.MObjectLastModified", {
   construct() {
-    let propertyNames = zx.server.MObjectLastModified.getPropertyNames(
-      this.constructor
-    );
+    let propertyNames = zx.server.MObjectLastModified.getPropertyNames(this.constructor);
     this.__listeners = propertyNames.forEach(propertyName => {
-      this.addListener(
-        "change" + qx.lang.String.firstUp(propertyName),
-        this.__onLastModifiedPropertyChange,
-        this
-      );
+      this.addListener("change" + qx.lang.String.firstUp(propertyName), this.__onLastModifiedPropertyChange, this);
     });
   },
 
@@ -45,6 +39,9 @@ qx.Mixin.define("zx.server.MObjectLastModified", {
   },
 
   members: {
+    /** @type{Object[]} array of listener ids for each property */
+    __listeners: null,
+
     /**
      * Event handler for changes to property values that need to be tracked
      *
@@ -52,48 +49,37 @@ qx.Mixin.define("zx.server.MObjectLastModified", {
      */
     __onLastModifiedPropertyChange(evt) {
       // This is provided by zx.io.persistence.MObject
-      if (
-        typeof this.isDataLoadComplete == "function" &&
-        !this.isDataLoadComplete()
-      ) {
+      if (typeof this.isDataLoadComplete == "function" && !this.isDataLoadComplete()) {
         return;
       }
 
       // This can optionally be provided by the object itself
-      if (
-        typeof this.isInRemoteSynchronization == "function" &&
-        this.isInRemoteSynchronization()
-      ) {
+      if (typeof this.isInRemoteSynchronization == "function" && this.isInRemoteSynchronization()) {
         return;
       }
 
       let value = evt.getData();
       let oldValue = evt.getOldData();
 
-      if (oldValue instanceof qx.data.Array)
-        oldValue.removeListener(
-          "change",
-          this.__onLastModifiedListChange,
-          this
-        );
+      if (oldValue instanceof qx.data.Array) {
+        oldValue.removeListener("change", this.__onLastModifiedListChange, this);
+      }
 
-      if (value instanceof qx.data.Array)
+      if (value instanceof qx.data.Array) {
         value.addListener("change", this.__onLastModifiedListChange, this);
+      }
 
       let propertyName = evt.getType();
       if (qx.core.Environment.get("qx.debug")) {
-        this.assertTrue(
-          propertyName.startsWith("change") &&
-            qx.lang.String.isUpperCase(propertyName[6])
-        );
+        this.assertTrue(propertyName.startsWith("change") && qx.lang.String.isUpperCase(propertyName[6]));
       }
       propertyName = qx.lang.String.firstLow(propertyName.substring(6));
-      let lastModifiedName = zx.server.MObjectLastModified.getLastModifiedName(
-        this.constructor,
-        propertyName
-      );
-      if (lastModifiedName === null) this.setLastModified(new Date());
-      else this["set" + qx.lang.String.firstUp(lastModifiedName)](new Date());
+      let lastModifiedName = zx.server.MObjectLastModified.getLastModifiedName(this.constructor, propertyName);
+      if (lastModifiedName === null) {
+        this.setLastModified(new Date());
+      } else {
+        this["set" + qx.lang.String.firstUp(lastModifiedName)](new Date());
+      }
     },
 
     /**
@@ -104,18 +90,12 @@ qx.Mixin.define("zx.server.MObjectLastModified", {
      */
     __onLastModifiedListChange(evt) {
       // This is provided by zx.io.persistence.MObject
-      if (
-        typeof this.isDataLoadComplete == "function" &&
-        !this.isDataLoadComplete()
-      ) {
+      if (typeof this.isDataLoadComplete == "function" && !this.isDataLoadComplete()) {
         return;
       }
 
       // This can optionally be provided by the object itself
-      if (
-        typeof this.isInRemoteSynchronization == "function" &&
-        this.isInRemoteSynchronization()
-      ) {
+      if (typeof this.isInRemoteSynchronization == "function" && this.isInRemoteSynchronization()) {
         return;
       }
 
@@ -142,33 +122,33 @@ qx.Mixin.define("zx.server.MObjectLastModified", {
       if (info == null) {
         let defaultAnno = null;
         for (let tmp = clazz; tmp && !defaultAnno; tmp = tmp.superclass) {
-          let annos = qx.Annotation.getOwnClass(
-            tmp,
-            zx.server.anno.LastModified
-          );
-          if (annos.length) defaultAnno = annos[0];
+          let annos = qx.Annotation.getOwnClass(tmp, zx.server.anno.LastModified);
+          if (annos.length) {
+            defaultAnno = annos[0];
+          }
         }
         let defaultIncluded = !!defaultAnno && !defaultAnno.isExcluded();
         let allPropertyNames = {};
         for (let tmp = clazz; tmp && !defaultAnno; tmp = tmp.superclass) {
-          for (let propertyName in tmp.$$properties)
+          for (let propertyName in tmp.$$properties) {
             allPropertyNames[propertyName] = true;
+          }
         }
         allPropertyNames = Object.keys(allPropertyNames);
         let properties = {};
         allPropertyNames.forEach(propertyName => {
-          let annos = qx.Annotation.getProperty(
-            clazz,
-            propertyName,
-            zx.server.anno.LastModified
-          );
+          let annos = qx.Annotation.getProperty(clazz, propertyName, zx.server.anno.LastModified);
           let included = defaultIncluded;
           let name = defaultIncluded ? defaultIncluded.getName() : null;
           if (annos.length) {
             included = !annos[0].isExcluded();
-            if (annos[0].getName()) name = annos[0].getName();
+            if (annos[0].getName()) {
+              name = annos[0].getName();
+            }
           }
-          if (included) properties[propertyName] = name;
+          if (included) {
+            properties[propertyName] = name;
+          }
         });
         info = zx.server.MObjectLastModified.__classes[clazz.classname] = {
           properties

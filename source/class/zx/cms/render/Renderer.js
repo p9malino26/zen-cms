@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const fs = zx.utils.Promisify.fs;
 
@@ -54,8 +53,7 @@ qx.Class.define("zx.cms.render.Renderer", {
     getView(template) {
       let hash = template.toHashCode();
       let view = this.__views[hash];
-      if (!view)
-        view = this.__views[hash] = new zx.cms.render.NunjucksView(template);
+      if (!view) view = this.__views[hash] = new zx.cms.render.NunjucksView(template);
       return view;
     },
 
@@ -68,11 +66,7 @@ qx.Class.define("zx.cms.render.Renderer", {
     async renderViewable(rendering, viewable) {
       let ctlr = zx.cms.render.Controller.getController(viewable);
       let templateName = ctlr.getTemplateName(viewable);
-      let template = await zx.cms.render.Resolver.resolveTemplate(
-        ctlr,
-        this.getTheme(),
-        templateName
-      );
+      let template = await zx.cms.render.Resolver.resolveTemplate(ctlr, this.getTheme(), templateName);
       if (!template)
         throw new zx.server.WebServer.HttpError(
           404,
@@ -106,10 +100,7 @@ qx.Class.define("zx.cms.render.Renderer", {
           },
           filehash: filename => server.getUrlFileHash(filename),
           browser: {
-            name: qx.bom.client.Browser.detectName(userAgent).replace(
-              / /g,
-              "-"
-            ),
+            name: qx.bom.client.Browser.detectName(userAgent).replace(/ /g, "-"),
             deviceType: qx.bom.client.Device.detectDeviceType(userAgent)
           }
         }
@@ -149,21 +140,16 @@ qx.Class.define("zx.cms.render.Renderer", {
     async renderPiece(context) {
       let templateName = context._templateName;
       let pos = templateName.indexOf(":");
-      if (pos < 0)
-        throw new Error(`Badly formed template name ${templateName}`);
+      if (pos < 0) throw new Error(`Badly formed template name ${templateName}`);
       let pieceClassname = templateName.substring(0, pos);
       templateName = templateName.substring(pos + 1);
       let ctlr = zx.cms.render.Controller.getController(pieceClassname);
 
-      let template = await zx.cms.render.Resolver.resolveTemplate(
-        ctlr,
-        this.getTheme(),
-        templateName
-      );
+      let template = await zx.cms.render.Resolver.resolveTemplate(ctlr, this.getTheme(), templateName);
       if (!template)
         throw new zx.server.WebServer.HttpError(
           404,
-          `Cannot find template called ${templateName}`
+          `Cannot find template called ${templateName} for ${pieceClassname}`
         );
 
       let view = new zx.cms.render.NunjucksView(template);
@@ -201,10 +187,7 @@ qx.Class.define("zx.cms.render.Renderer", {
      * @return {String} the filename, throws an exception if nothing can be found
      */
     async resolveSystemPage(name) {
-      let filename = zx.server.Config.getInstance().resolve(
-        "system-pages",
-        name
-      );
+      let filename = zx.server.Config.getInstance().resolve("system-pages", name);
       if (await fs.existsAsync(filename)) return filename;
 
       filename = this.getTheme().resolve(name);
@@ -218,9 +201,7 @@ qx.Class.define("zx.cms.render.Renderer", {
         return this.resolveSystemPage("404.html");
       }
 
-      throw new Error(
-        `Cannot find any system pages when searching for ${name}`
-      );
+      throw new Error(`Cannot find any system pages when searching for ${name}`);
     },
 
     /**

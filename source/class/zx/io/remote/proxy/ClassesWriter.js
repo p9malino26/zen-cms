@@ -48,6 +48,9 @@ qx.Class.define("zx.io.remote.proxy.ClassesWriter", {
     /** @type{Map<String,Object>} template cache indexed by filename */
     __templateCache: null,
 
+    /** @type{Object} the db.json written by the compiler */
+    _db: null,
+
     /**
      * Loads a template from resources, caching the result
      *

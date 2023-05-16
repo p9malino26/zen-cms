@@ -62,7 +62,7 @@ qx.Class.define("zx.cms.system.UrlRule", {
     maxAge: {
       init: null,
       nullable: true,
-      check: ["Integer"],
+      check: "Integer",
       event: "changeMaxAge",
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },

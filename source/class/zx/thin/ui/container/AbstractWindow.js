@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.thin.ui.container.AbstractWindow", {
   extend: zx.thin.ui.container.Composite,
@@ -121,7 +120,7 @@ qx.Class.define("zx.thin.ui.container.AbstractWindow", {
      */
     _applyVisible(value, oldValue) {
       if (value) {
-        if (!this.isInRoot()) {
+        if (!this.isInDocument()) {
           let root = qx.html.Element.getDefaultRoot();
           if (qx.core.Environment.get("qx.debug")) {
             this.assertTrue(!!root);
@@ -141,9 +140,7 @@ qx.Class.define("zx.thin.ui.container.AbstractWindow", {
      * Called to add the elements to `this`; this should add the body and the header at the very least
      */
     _createElements() {
-      throw new Error(
-        `No implementation for ${this.classname}._createElements`
-      );
+      throw new Error(`No implementation for ${this.classname}._createElements`);
     },
 
     /**
@@ -152,9 +149,7 @@ qx.Class.define("zx.thin.ui.container.AbstractWindow", {
      * @return {qx.html.Element} the element to drag
      */
     _getMoverDragElement() {
-      throw new Error(
-        `No implementation for ${this.classname}._getMoverDragElement`
-      );
+      throw new Error(`No implementation for ${this.classname}._getMoverDragElement`);
     },
 
     /**
@@ -195,19 +190,9 @@ qx.Class.define("zx.thin.ui.container.AbstractWindow", {
      */
     _applyCentered(value, oldValue) {
       if (value !== "none" && oldValue === "none") {
-        qx.event.Registration.addListener(
-          window,
-          "resize",
-          this._onWindowResize,
-          this
-        );
+        qx.event.Registration.addListener(window, "resize", this._onWindowResize, this);
       } else if (value === "none" && oldValue !== "none") {
-        qx.event.Registration.removeListener(
-          window,
-          "resize",
-          this._onWindowResize,
-          this
-        );
+        qx.event.Registration.removeListener(window, "resize", this._onWindowResize, this);
       }
       this.center(value);
     },
@@ -269,8 +254,7 @@ qx.Class.define("zx.thin.ui.container.AbstractWindow", {
 
         let size = this.getDimensions();
         let css = {};
-        if (centered == "x" || centered == "both")
-          css.left = Math.round((qx.bom.Viewport.getWidth() - size.width) / 2);
+        if (centered == "x" || centered == "both") css.left = Math.round((qx.bom.Viewport.getWidth() - size.width) / 2);
         if (centered == "y" || centered == "both")
           css.top = Math.round((qx.bom.Viewport.getHeight() - size.height) / 2);
         this.setStyles(css);

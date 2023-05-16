@@ -154,7 +154,7 @@ qx.Class.define("zx.ui.utils.UserState", {
      */
     setInstance(instance) {
       if (qx.core.Environment.get("qx.debug")) {
-        qx.core.Assert.assertTrue(!zx.ui.utils.UserState.__instance);
+        qx.core.Assert.assertTrue(!instance || !zx.ui.utils.UserState.__instance);
       }
       zx.ui.utils.UserState.__instance = instance;
     },
@@ -194,6 +194,8 @@ qx.Class.define("zx.ui.utils.UserState", {
      * @returns {zx.ui.utils.state.TargetState}
      */
     getStateFor(target) {
+      if (!zx.ui.utils.UserState.getInstance()) return null;
+
       return zx.ui.utils.UserState.getInstance().getStateFor(target);
     }
   },

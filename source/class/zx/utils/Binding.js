@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.utils.Binding", {
   extend: qx.core.Object,
@@ -111,8 +111,7 @@ qx.Class.define("zx.utils.Binding", {
         }
       }
       if (path === null || !model) {
-        if (oldValue !== undefined && oldValue !== null)
-          this.fireDataEvent("changeValue", oldValue, null);
+        if (oldValue !== undefined && oldValue !== null) this.fireDataEvent("changeValue", oldValue, null);
       }
     },
 
@@ -130,8 +129,7 @@ qx.Class.define("zx.utils.Binding", {
         this._bindChild(0, model);
         this.__value = this.getValue();
       } else {
-        if (oldValue !== undefined && oldValue !== null)
-          this.fireDataEvent("changeValue", null, oldValue);
+        if (oldValue !== undefined && oldValue !== null) this.fireDataEvent("changeValue", null, oldValue);
       }
     },
 
@@ -147,12 +145,8 @@ qx.Class.define("zx.utils.Binding", {
         try {
           var upname = qx.lang.String.firstUp(data.path);
           if (data.index !== undefined) {
-            var obj =
-              upname.length == 0
-                ? data.parentModel
-                : data.parentModel["get" + upname]();
-            if (obj instanceof qx.data.Array)
-              obj.setItem(parseInt(data.index, 10), value);
+            var obj = upname.length == 0 ? data.parentModel : data.parentModel["get" + upname]();
+            if (obj instanceof qx.data.Array) obj.setItem(parseInt(data.index, 10), value);
             else if (obj instanceof zx.data.Map) obj.put(data.index, value);
             else obj[data.index] = value;
           } else {
@@ -173,15 +167,8 @@ qx.Class.define("zx.utils.Binding", {
      */
     _sameValue: function (left, right) {
       if (left === right) return true;
-      if (
-        left === null ||
-        right === null ||
-        left === undefined ||
-        right === undefined
-      )
-        return false;
-      if (left instanceof Date && right instanceof Date)
-        return left.getTime() == right.getTime();
+      if (left === null || right === null || left === undefined || right === undefined) return false;
+      if (left instanceof Date && right instanceof Date) return left.getTime() == right.getTime();
       return false;
     },
 
@@ -196,12 +183,8 @@ qx.Class.define("zx.utils.Binding", {
 
       var upname = qx.lang.String.firstUp(data.path);
       if (data.index !== undefined) {
-        var obj =
-          upname.length == 0
-            ? data.parentModel
-            : data.parentModel["get" + upname]();
-        if (obj instanceof qx.data.Array)
-          return obj.getItem(data.index) || null;
+        var obj = upname.length == 0 ? data.parentModel : data.parentModel["get" + upname]();
+        if (obj instanceof qx.data.Array) return obj.getItem(data.index) || null;
         if (obj instanceof zx.data.Map) return obj.get(data.index) || null;
         return obj[data.index] || null;
       } else if (upname.length) {
@@ -221,17 +204,14 @@ qx.Class.define("zx.utils.Binding", {
       function onArrayChange(evt) {
         var arrayValue = evt.getTarget();
         var childValue = null;
-        if (arrayValue instanceof qx.data.Array)
-          childValue = arrayValue.getItem(parseInt(data.index, 10));
-        else if (childValue instanceof zx.data.Map)
-          childValue = arrayValue.get(data.index);
+        if (arrayValue instanceof qx.data.Array) childValue = arrayValue.getItem(parseInt(data.index, 10));
+        else if (childValue instanceof zx.data.Map) childValue = arrayValue.get(data.index);
         else childValue = arrayValue[data.index];
         if (childValue === undefined) childValue = null;
 
         if (depth == t.__stack.length - 1) {
           if (childValue === t.getValue()) {
-            if (!t.__inSetValue)
-              t.fireDataEvent("changeValue", childValue, childValue);
+            if (!t.__inSetValue) t.fireDataEvent("changeValue", childValue, childValue);
           }
         } else {
           t._unbindChild(depth + 1);
@@ -252,10 +232,7 @@ qx.Class.define("zx.utils.Binding", {
           if (childValue !== null) {
             if (childValue instanceof qx.data.Array) {
               data.arrayValue = childValue;
-              data.arrayListenerId = data.arrayValue.addListener(
-                "change",
-                onArrayChange
-              );
+              data.arrayListenerId = data.arrayValue.addListener("change", onArrayChange);
               childValue = childValue.getItem(parseInt(data.index, 10));
             } else if (childValue instanceof zx.data.Map) {
               childValue = childValue.get(data.index);
@@ -268,8 +245,7 @@ qx.Class.define("zx.utils.Binding", {
 
         if (depth == t.__stack.length - 1) {
           if (childValue === t.getValue()) {
-            if (!t.__inSetValue)
-              t.fireDataEvent("changeValue", childValue, childValue);
+            if (!t.__inSetValue) t.fireDataEvent("changeValue", childValue, childValue);
           }
         } else {
           var oldDescendantValue = t.getValue();
@@ -300,8 +276,7 @@ qx.Class.define("zx.utils.Binding", {
      */
     _unbindChild: function (depth) {
       var data = this.__stack[depth];
-      if (data.listenerId && depth < this.__stack.length - 1)
-        this._unbindChild(depth + 1);
+      if (data.listenerId && depth < this.__stack.length - 1) this._unbindChild(depth + 1);
       if (data.listenerId) {
         data.parentModel.removeListenerById(data.listenerId);
         delete data.listenerId;

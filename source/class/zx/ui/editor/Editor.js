@@ -15,6 +15,67 @@
  *
  * ************************************************************************ */
 
+/**
+ * Base class for a widget that is an editor for a (potentially) complex object,
+ * eg an editor for something like a "Person" or an "Address" object.
+ *
+ * Tracking when something being edited is not as simple as it may at first seem,
+ * because Editor classes can also include other Editor instances - sometimes this
+ * can be quite a substantial graph of Editor instances, which are editing a graph
+ * of objects.  See below.
+ *
+ * ## Master Value
+ * Some objects are edited and saved independently of each other, while others are
+ * embedded in a master object - for example, an Address object might be embedded in
+ * a Person object; the Person object has its own record in the database, but the Address
+ * object does not (i.e. the Address is stored inside the Person record).
+ *
+ * However, when you write editors for Person and Address, they would have separate
+ * `zx.ui.editor.Editor` classes.  When the user modifies a field, the editor updates
+ * the `modified` property, so that (eg) a "Save" button on the UI can be enabled and the
+ * code knows that the Person object needs to be saved to the database.
+ *
+ * As the Address object is embedded, then user changes to the Address fields need to
+ * change the Person editor's `modified` property.
+ *
+ * In this example, the Person object is called a "master value", and the Person editor
+ * class is the "Master Value".  The Address is a "child value", and the Address editor
+ * MUST redefine `_masterValueEditor` to be `false`.
+ *
+ * ### Internal implementation of Master Value
+ * So that `modified` can be properly tracked, all the child value editors (recursively)
+ * must be connected to the master value editor; this is done by setting the `masterValueAccessor`
+ * property of the child editor.  Editor classes do this automatically for child value
+ * editors returned by `_createQxObjectImpl`, you will have to do this manually if you
+ * create the editors outside of that mechanism.
+ *
+ * The Editor also tracks the child value objects via `zx.ui.editor.SubEntity` instances,
+ * which allows the child editor to operate on lists of objects, and modify a whole graph
+ * of objects which are child value objects - the master editor is then able to reset the
+ * modified flags for all child value objects, even if they are no longer being edited.
+ *
+ * ## Nested Master Values and Editors
+ * It is also possible (and perfectly reasonable) to nest editors of Master Values within
+ * one another - for example, let's say that a Person can buy Tickets; each Ticket is a
+ * "master value" (ie is saved separately in the database).  Your PersonEditor class might
+ * have a section where all the Tickets can be browsed by the user and edited.
+ *
+ * While you could have a "save" button on each Master Value editor, it is generally expected
+ * that saving at the top level (ie the Person) will also save edits to nested values (ie
+ * the Ticket being edited will also be saved).
+ *
+ * To do this, use a `zx.ui.editor.ModifiedMonitor` instance and set it on the outer most
+ * Editor where you want to place a "save" button; that ModifiedMonitor instance has a
+ * `modified` property that will will be `true` if *any* of the editors within it are
+ * modified.  By binding the `zx.ui.editor.ModifiedMonitor.modified` property to your "save"
+ * button's `enabled` property, you can show the user that something needs to be saved; and
+ * by calling the ModifiedMonitor instance's `saveAll` method, you can ensure that all
+ * editors are saved.
+ *
+ * You can set ModifiedMonitor at any point in the tree of Editors - the ModifiedMonitor will
+ * only apply to descendents which do not have an explicit ModifiedMonitor, and will only
+ * apply to Master Value Editors.
+ */
 qx.Class.define("zx.ui.editor.Editor", {
   extend: qx.ui.core.Widget,
   implement: [zx.ui.editor.IMasterValueAccessor],
@@ -65,11 +126,20 @@ qx.Class.define("zx.ui.editor.Editor", {
 
     /** Whether modified */
     modified: {
-      init: true,
+      init: false,
       nullable: false,
       check: "Boolean",
       event: "changeModified",
       apply: "_applyModified"
+    },
+
+    /** Shared monitor that tracks modified in a tree of master value editors */
+    modifiedMonitor: {
+      init: null,
+      nullable: true,
+      check: "zx.ui.editor.ModifiedMonitor",
+      event: "changeModifiedMonitor",
+      apply: "_applyModifiedMonitor"
     },
 
     /** Whether to autosave */
@@ -96,7 +166,10 @@ qx.Class.define("zx.ui.editor.Editor", {
   },
 
   members: {
-    /** @type{Boolean} set to true if this editor is for a master value, false if is is for subentities */
+    /** @type{Boolean} set to true if this editor is for a master value, false if is is for subentities
+     *
+     * See class description for details
+     */
     _masterValueEditor: true,
 
     /** @type{*} the psuedo property `value` */
@@ -268,17 +341,61 @@ qx.Class.define("zx.ui.editor.Editor", {
 
       let entity = this.getEntity();
       if (oldValue) {
-        if (this.__entities) Object.values(this.__entities).forEach(entity => oldValue.detachSubEntity(entity));
-        if (entity) oldValue.detachSubEntity(entity);
+        if (this.__entities) {
+          Object.values(this.__entities).forEach(entity => oldValue.detachSubEntity(entity));
+        }
+        if (entity) {
+          oldValue.detachSubEntity(entity);
+        }
       }
+
       if (value) {
-        if (entity) value.attachSubEntity(entity);
-        if (this.__entities) Object.values(this.__entities).forEach(entity => value.attachSubEntity(entity));
+        if (entity) {
+          value.attachSubEntity(entity);
+        }
+        if (this.__entities) {
+          Object.values(this.__entities).forEach(entity => value.attachSubEntity(entity));
+        }
       }
+
       this.getOwnedQxObjects().forEach(object => {
         if (object instanceof zx.ui.editor.Editor && !object.isMasterValueEditor())
           object.setMasterValueAccessor(value);
       });
+    },
+
+    /**
+     * Apply for modifiedMonitor
+     */
+    _applyModifiedMonitor(value, oldValue) {
+      if (value && !this.isMasterValueEditor()) {
+        throw new Error(
+          `Unexpected modifiedMonitor set on an editor ${this.classname} where isMasterValueEditor() returns false`
+        );
+      }
+
+      if (oldValue) {
+        oldValue.removeMasterValueEditor(this);
+        this.getOwnedQxObjects().forEach(object => {
+          if (
+            object instanceof zx.ui.editor.Editor &&
+            object.isMasterValueEditor() &&
+            object.getModifiedMonitor() === oldValue
+          )
+            object.setModifiedMonitor(null);
+        });
+      }
+      if (value) {
+        value.addMasterValueEditor(this);
+        this.getOwnedQxObjects().forEach(object => {
+          if (
+            object instanceof zx.ui.editor.Editor &&
+            object.isMasterValueEditor() &&
+            object.getModifiedMonitor() === null
+          )
+            object.setModifiedMonitor(value);
+        });
+      }
     },
 
     /**
@@ -340,6 +457,12 @@ qx.Class.define("zx.ui.editor.Editor", {
       if (mva) {
         if (object instanceof zx.ui.editor.Editor && !object.isMasterValueEditor()) {
           object.setMasterValueAccessor(mva);
+        }
+      }
+      let monitor = this.getModifiedMonitor();
+      if (monitor) {
+        if (object instanceof zx.ui.editor.Editor && object.isMasterValueEditor() && !object.getModifiedMonitor()) {
+          object.setModifiedMonitor(monitor);
         }
       }
       /*

@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.server.auth.LoginApi", {
   extend: zx.server.Object,
@@ -33,7 +32,7 @@ qx.Class.define("zx.server.auth.LoginApi", {
     "@logout": zx.io.remote.anno.Method.DEFAULT,
     async logout() {
       let request = zx.server.WebServer.getCurrentRequest();
-      await new qx.Promise(resolve => request.destroySession(resolve));
+      await zx.server.WebServer.getSessionManager().disposeSession(request);
     },
 
     "@getCurrentUser": zx.io.remote.anno.Method.DEFAULT,

@@ -52,6 +52,9 @@ qx.Class.define("zx.io.persistence.Endpoint", {
     /** @type{Map} list of dependent objects that need to be sent in the next flush, indexed by uuid */
     __putDependentObjects: null,
 
+    /** @type{Map} list of dependent objects that have already been sent, indexed by uuid */
+    __putQueueDoneObjects: null,
+
     /** @type{Map} properties being changed, the key is "uuid:propertyName" the value is the recursion count */
     __changingProperties: null,
 
@@ -150,10 +153,17 @@ qx.Class.define("zx.io.persistence.Endpoint", {
       await this._sendJson(uuid, json);
       let uuidNow = obj.toUuid();
       if (uuidNow && uuid != uuidNow) throw new Error(`UUID changed from ${uuid} to ${uuidNow} while saving`);
-      if (!this.__putQueueDoneObjects) this.__putQueueDoneObjects = {};
+      if (!this.__putQueueDoneObjects) {
+        this.__putQueueDoneObjects = {};
+      }
       this.__putQueueDoneObjects[uuid] = true;
     },
 
+    /**
+     * Sends JSON for a UUID
+     * @param {String} uuid
+     * @param {Object} json
+     */
     async _sendJson(uuid, json) {
       throw new Error(`No such implementation for ${this.classname}._sendJson`);
     },

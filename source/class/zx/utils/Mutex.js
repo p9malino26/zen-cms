@@ -15,63 +15,55 @@
  *
  * ************************************************************************ */
 
-qx.Class.define("zx.utils.Queue", {
+/**
+ * Operates a promise based mutex, ie where a series of functions are added to
+ * an array, and will be processed one at a time with promise chaining.
+ */
+qx.Class.define("zx.utils.Mutex", {
   extend: qx.core.Object,
 
-  /**
-   * Constructor
-   *
-   * @param {Function?} handler callback to process each item
-   */
-  construct(handler) {
-    this.base(arguments);
-    this.__queue = [];
-    if (handler) this.setHandler(handler);
-  },
-
-  properties: {
-    /** The function that processes each item */
-    handler: {
-      check: "Function",
-      event: "changeHandler"
-    }
+  construct() {
+    super();
+    this.__tasks = [];
   },
 
   members: {
-    /** @type{Object[]} the queue */
-    __queue: null,
-
-    /** @type{Boolean} whether the function is running */
+    __tasks: null,
     __running: false,
 
     /**
-     * Adds an object to the queue
+     * Runs a task, sequentially with other tasks to this Mutex
      *
-     * @param {Object} item
-     * @return {Promise} promise that results with the results of the handler for the item
+     * @param {Function} fn the task to complete
+     * @returns {*} whatever `fn` returns
      */
-    push(item) {
+    async run(fn) {
       let data = {
-        item: item,
+        fn,
         promise: new qx.Promise()
       };
-      this.__queue.push(data);
+      this.__tasks.push(data);
+
       if (!this.__running) {
-        zx.utils.Queue.__NEXTTICK(() => this._run());
+        zx.utils.Mutex.__NEXTTICK(() => this.__processor());
       }
-      return data.promise;
+
+      return await data.promise;
     },
 
     /**
-     * Processes all items in the queue
+     * Runs the queue of tasks
      */
-    async _run() {
+    async __processor() {
+      if (this.__running) {
+        return;
+      }
+
       this.__running = true;
-      while (this.__queue.length) {
-        let data = this.__queue.shift();
-        let handler = this.getHandler();
+      while (this.__tasks.length) {
+        let data = this.__tasks.shift();
         try {
-          let result = await handler(data.item);
+          let result = await data.fn();
           data.promise.resolve(result);
         } catch (ex) {
           data.promise.reject(ex);

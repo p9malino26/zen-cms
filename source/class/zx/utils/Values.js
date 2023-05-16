@@ -1,25 +1,77 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.utils.Values", {
   type: "singleton",
   extend: qx.core.Object,
 
   statics: {
+    /**
+     * Converts a string into an identifier; this means lower case, and compressing any
+     * non-identifier characters into a single '-'.  EG "My Amazing Story!!" becomes "my-amazing-story"
+     *
+     * @param {String} str
+     * @returns {String}
+     */
+    toIdentifier(str) {
+      str = str.trim().toLowerCase();
+      let result = "";
+      let lastC = 0;
+      let lastWasInvalid = false;
+      for (let i = 0; i < str.length; i++) {
+        let c = str[i];
+        if (c == "." && lastC == ".") {
+          continue;
+        }
+        if (!this.isIdentifierCharacter(c)) {
+          if (!lastWasInvalid && lastC != "-") {
+            result += c = "-";
+          }
+          lastWasInvalid = true;
+        } else {
+          result += c;
+          lastWasInvalid = false;
+        }
+        lastC = c;
+      }
+
+      // Strip leading '-'
+      for (let i = 0; i < result.length; i++) {
+        if (result[i] != "-") {
+          if (i > 0) {
+            result = result.substring(i);
+          }
+          break;
+        }
+      }
+
+      // Strip trailing '-'
+      for (let i = result.length - 1; i >= 0; i--) {
+        if (result[i] != "-") {
+          if (i < result.length - 1) {
+            result = result.substring(0, i + 1);
+          }
+          break;
+        }
+      }
+
+      return result;
+    },
+
     /**
      * Converts a value to a boolean
      *
@@ -33,10 +85,8 @@ qx.Class.define("zx.utils.Values", {
       if (type == "undefined" || !value) return false;
       if (type == "number") return value != 0;
       var str = value.trim().toLowerCase();
-      if (str == "true" || str == "yes" || str == "on" || str == "1")
-        return true;
-      if (str == "false" || str == "no" || str == "off" || str == "0")
-        return false;
+      if (str == "true" || str == "yes" || str == "on" || str == "1") return true;
+      if (str == "false" || str == "no" || str == "off" || str == "0") return false;
       if (!/[\-\+]?[0-9.]/.test(value)) return false;
       var intVal = parseInt(str);
       return !isNaN(intVal) && intVal != 0;
@@ -50,10 +100,8 @@ qx.Class.define("zx.utils.Values", {
       if (type == "undefined" || !value) return false;
       if (type == "number") return true;
       var str = value.trim().toLowerCase();
-      if (str == "true" || str == "yes" || str == "on" || str == "1")
-        return true;
-      if (str == "false" || str == "no" || str == "off" || str == "0")
-        return true;
+      if (str == "true" || str == "yes" || str == "on" || str == "1") return true;
+      if (str == "false" || str == "no" || str == "off" || str == "0") return true;
       if (!/[\-\+]?[0-9.]/.test(value)) return false;
       var intVal = parseInt(str);
       return !isNaN(intVal);
@@ -95,11 +143,7 @@ qx.Class.define("zx.utils.Values", {
     toFloat: function (value, defaultValue) {
       if (!this.isFloat(value, false)) {
         if (defaultValue != null) return defaultValue;
-        throw (
-          "Cannot convert value '" +
-          value +
-          "' to a float and no default provided"
-        );
+        throw "Cannot convert value '" + value + "' to a float and no default provided";
       }
       return parseFloat(value);
     },
@@ -140,11 +184,7 @@ qx.Class.define("zx.utils.Values", {
     toInt: function (value, defaultValue) {
       if (!this.isInt(value, false)) {
         if (defaultValue != null) return defaultValue;
-        throw (
-          "Cannot convert value '" +
-          value +
-          "' to an integer and no default provided"
-        );
+        throw "Cannot convert value '" + value + "' to an integer and no default provided";
       }
       return parseInt(value);
     },
@@ -222,6 +262,16 @@ qx.Class.define("zx.utils.Values", {
     },
 
     /**
+     * Checks whether the character is an identifier character
+     *
+     * @param c
+     * @return {Boolean}
+     */
+    isIdentifierCharacter(c) {
+      return this.isLetter(c) || this.isDigit(c) || "_-.".indexOf(c) > -1;
+    },
+
+    /**
      * Checks whether a character is an upper case character
      *
      * @param ch
@@ -276,8 +326,7 @@ qx.Class.define("zx.utils.Values", {
 
       /* Known tlds */
 
-      var knownDomsPat =
-        /^(com|net|org|edu|int|mil|gov|arpa|biz|aero|name|coop|info|pro|museum)$/;
+      var knownDomsPat = /^(com|net|org|edu|int|mil|gov|arpa|biz|aero|name|coop|info|pro|museum)$/;
 
       /*
        * The following pattern is used to check if the entered e-mail address
@@ -531,10 +580,7 @@ qx.Class.define("zx.utils.Values", {
       }
       result.object = obj;
       result.propName = segs[segs.length - 1];
-      result.propDef = qx.Class.getPropertyDefinition(
-        obj.constructor,
-        result.propName
-      );
+      result.propDef = qx.Class.getPropertyDefinition(obj.constructor, result.propName);
 
       var seg = segs[i];
       var pos = seg.indexOf("[");
@@ -543,14 +589,7 @@ qx.Class.define("zx.utils.Values", {
         seg = seg.substring(0, pos);
         var upname = qx.lang.String.firstUp(seg);
         if (obj["get" + upname] === undefined) {
-          console.error(
-            "Cannot find accessor 'get" +
-              upname +
-              "' in " +
-              path +
-              " for " +
-              obj
-          );
+          console.error("Cannot find accessor 'get" + upname + "' in " + path + " for " + obj);
           return null;
         }
 
@@ -562,23 +601,14 @@ qx.Class.define("zx.utils.Values", {
         };
       } else {
         var upname = qx.lang.String.firstUp(seg);
-        if (typeof obj["get" + upname] == "function")
-          result.get = qx.lang.Function.bind(obj["get" + upname], obj);
-        else if (typeof obj["is" + upname] == "function")
-          result.get = qx.lang.Function.bind(obj["is" + upname], obj);
+        if (typeof obj["get" + upname] == "function") result.get = qx.lang.Function.bind(obj["get" + upname], obj);
+        else if (typeof obj["is" + upname] == "function") result.get = qx.lang.Function.bind(obj["is" + upname], obj);
         else throw new Error("Cannot find a getter for " + upname);
         if (typeof obj["get" + upname + "Async"] == "function")
-          result.getAsync = qx.lang.Function.bind(
-            obj["get" + upname + "Async"],
-            obj
-          );
-        if (typeof obj["set" + upname] == "function")
-          result.set = qx.lang.Function.bind(obj["set" + upname], obj);
+          result.getAsync = qx.lang.Function.bind(obj["get" + upname + "Async"], obj);
+        if (typeof obj["set" + upname] == "function") result.set = qx.lang.Function.bind(obj["set" + upname], obj);
         if (typeof obj["set" + upname + "Async"] == "function")
-          result.setAsync = qx.lang.Function.bind(
-            obj["set" + upname + "Async"],
-            obj
-          );
+          result.setAsync = qx.lang.Function.bind(obj["set" + upname + "Async"], obj);
       }
       return result;
     },
@@ -593,11 +623,7 @@ qx.Class.define("zx.utils.Values", {
     getValue(model, propName) {
       if (!propName) return model;
       var len = propName.length;
-      if (
-        len > 1 &&
-        propName.charAt(0) == "'" &&
-        propName.charAt(len - 1) == "'"
-      )
+      if (len > 1 && propName.charAt(0) == "'" && propName.charAt(len - 1) == "'")
         return propName.substring(1, len - 1);
 
       var propInfo = this.getPropertyInfo(model, propName);
@@ -615,11 +641,7 @@ qx.Class.define("zx.utils.Values", {
     async getValueAsync(model, propName) {
       if (!propName) return model;
       var len = propName.length;
-      if (
-        len > 1 &&
-        propName.charAt(0) == "'" &&
-        propName.charAt(len - 1) == "'"
-      )
+      if (len > 1 && propName.charAt(0) == "'" && propName.charAt(len - 1) == "'")
         return propName.substring(1, len - 1);
 
       var propInfo = this.getPropertyInfo(model, propName);
@@ -639,12 +661,7 @@ qx.Class.define("zx.utils.Values", {
      */
     setValue(model, propName, value, options) {
       var len = propName.length;
-      if (
-        len > 1 &&
-        propName.charAt(0) == "'" &&
-        propName.charAt(len - 1) == "'"
-      )
-        return;
+      if (len > 1 && propName.charAt(0) == "'" && propName.charAt(len - 1) == "'") return;
 
       var propInfo = this.getPropertyInfo(model, propName);
       if (!propInfo) return;
@@ -664,12 +681,7 @@ qx.Class.define("zx.utils.Values", {
      */
     async setValueAsync(model, propName, value, options) {
       var len = propName.length;
-      if (
-        len > 1 &&
-        propName.charAt(0) == "'" &&
-        propName.charAt(len - 1) == "'"
-      )
-        return;
+      if (len > 1 && propName.charAt(0) == "'" && propName.charAt(len - 1) == "'") return;
 
       var propInfo = this.getPropertyInfo(model, propName);
       if (!propInfo) return;
@@ -709,27 +721,16 @@ qx.Class.define("zx.utils.Values", {
       var propDef = propInfo.propDef;
       if (propDef && propDef.check) {
         if (typeof value == "String") {
-          if (
-            propDef.check == "Integer" ||
-            propDef.check == "PositiveInteger"
-          ) {
+          if (propDef.check == "Integer" || propDef.check == "PositiveInteger") {
             value = parseInt(value);
             if (isNaN(value)) value = 0;
-          } else if (
-            propDef.check == "Number" ||
-            propDef.check == "PositiveNumber"
-          ) {
+          } else if (propDef.check == "Number" || propDef.check == "PositiveNumber") {
             value = parseFloat(value);
             if (isNaN(value)) value = 0;
           } else if (propDef.check == "Date") {
             var df = null;
             if (options && options.dateFormat) df = options.dateFormat;
-            else if (
-              qx.Class.isSubClassOf(
-                propInfo.object.constructor,
-                qx.ui.form.IDateForm
-              )
-            )
+            else if (qx.Class.isSubClassOf(propInfo.object.constructor, qx.ui.form.IDateForm))
               df = propInfo.object.getDateFormat();
             if (!df) df = qx.util.format.DateFormat.getDateInstance();
             value = df.parse(value);
@@ -859,10 +860,7 @@ qx.Class.define("zx.utils.Values", {
 
   var sprintf = (function () {
     function get_type(variable) {
-      return Object.prototype.toString
-        .call(variable)
-        .slice(8, -1)
-        .toLowerCase();
+      return Object.prototype.toString.call(variable).slice(8, -1).toLowerCase();
     }
     function str_repeat(input, multiplier) {
       for (var output = []; multiplier > 0; output[--multiplier] = input) {
@@ -878,11 +876,7 @@ qx.Class.define("zx.utils.Values", {
       if (!str_format.cache.hasOwnProperty(arguments[0])) {
         str_format.cache[arguments[0]] = str_format.parse(arguments[0]);
       }
-      return str_format.format.call(
-        null,
-        str_format.cache[arguments[0]],
-        arguments
-      );
+      return str_format.format.call(null, str_format.cache[arguments[0]], arguments);
     };
 
     str_format.format = function (parse_tree, argv) {
@@ -908,10 +902,7 @@ qx.Class.define("zx.utils.Values", {
             arg = argv[cursor];
             for (k = 0; k < match[2].length; k++) {
               if (!arg.hasOwnProperty(match[2][k])) {
-                throw sprintf(
-                  '[sprintf] property "%s" does not exist',
-                  match[2][k]
-                );
+                throw sprintf('[sprintf] property "%s" does not exist', match[2][k]);
               }
               arg = arg[match[2][k]];
             }
@@ -924,10 +915,7 @@ qx.Class.define("zx.utils.Values", {
           }
 
           if (/[^s]/.test(match[8]) && get_type(arg) != "number") {
-            throw sprintf(
-              "[sprintf] expecting number but found %s",
-              get_type(arg)
-            );
+            throw sprintf("[sprintf] expecting number but found %s", get_type(arg));
           }
           switch (match[8]) {
             case "b":
@@ -940,23 +928,16 @@ qx.Class.define("zx.utils.Values", {
               arg = parseInt(arg, 10);
               break;
             case "e":
-              arg = match[7]
-                ? arg.toExponential(match[7])
-                : arg.toExponential();
+              arg = match[7] ? arg.toExponential(match[7]) : arg.toExponential();
               break;
             case "f":
-              arg = match[7]
-                ? parseFloat(arg).toFixed(match[7])
-                : parseFloat(arg);
+              arg = match[7] ? parseFloat(arg).toFixed(match[7]) : parseFloat(arg);
               break;
             case "o":
               arg = arg.toString(8);
               break;
             case "s":
-              arg =
-                (arg = String(arg)) && match[7]
-                  ? arg.substring(0, match[7])
-                  : arg;
+              arg = (arg = String(arg)) && match[7] ? arg.substring(0, match[7]) : arg;
               break;
             case "u":
               arg = Math.abs(arg);
@@ -968,13 +949,8 @@ qx.Class.define("zx.utils.Values", {
               arg = arg.toString(16).toUpperCase();
               break;
           }
-          arg =
-            /[def]/.test(match[8]) && match[3] && arg >= 0 ? "+" + arg : arg;
-          pad_character = match[4]
-            ? match[4] == "0"
-              ? "0"
-              : match[4].charAt(1)
-            : " ";
+          arg = /[def]/.test(match[8]) && match[3] && arg >= 0 ? "+" + arg : arg;
+          pad_character = match[4] ? (match[4] == "0" ? "0" : match[4].charAt(1)) : " ";
           pad_length = match[6] - String(arg).length;
           pad = match[6] ? str_repeat(pad_character, pad_length) : "";
           output.push(match[5] ? arg + pad : pad + arg);
@@ -996,35 +972,21 @@ qx.Class.define("zx.utils.Values", {
         } else if ((match = /^\x25{2}/.exec(_fmt)) !== null) {
           parse_tree.push("%");
         } else if (
-          (match =
-            /^\x25(?:([1-9]\d*)\$|\(([^\)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-fosuxX])/.exec(
-              _fmt
-            )) !== null
+          (match = /^\x25(?:([1-9]\d*)\$|\(([^\)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-fosuxX])/.exec(
+            _fmt
+          )) !== null
         ) {
           if (match[2]) {
             arg_names |= 1;
             var field_list = [],
               replacement_field = match[2],
               field_match = [];
-            if (
-              (field_match = /^([a-z_][a-z_\d]*)/i.exec(replacement_field)) !==
-              null
-            ) {
+            if ((field_match = /^([a-z_][a-z_\d]*)/i.exec(replacement_field)) !== null) {
               field_list.push(field_match[1]);
-              while (
-                (replacement_field = replacement_field.substring(
-                  field_match[0].length
-                )) !== ""
-              ) {
-                if (
-                  (field_match = /^\.([a-z_][a-z_\d]*)/i.exec(
-                    replacement_field
-                  )) !== null
-                ) {
+              while ((replacement_field = replacement_field.substring(field_match[0].length)) !== "") {
+                if ((field_match = /^\.([a-z_][a-z_\d]*)/i.exec(replacement_field)) !== null) {
                   field_list.push(field_match[1]);
-                } else if (
-                  (field_match = /^\[(\d+)\]/.exec(replacement_field)) !== null
-                ) {
+                } else if ((field_match = /^\[(\d+)\]/.exec(replacement_field)) !== null) {
                   field_list.push(field_match[1]);
                 } else {
                   throw "[sprintf] huh?";

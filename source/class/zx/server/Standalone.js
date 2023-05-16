@@ -36,8 +36,9 @@ qx.Class.define("zx.server.Standalone", {
 
   construct() {
     this.base(arguments);
-    if (zx.server.Standalone.__instance)
+    if (zx.server.Standalone.__instance) {
       console.error("Multiple instances of zx.server.Standalone detected - this is probably not intentional");
+    }
     zx.server.Standalone.__instance = this;
 
     this._objectsUrlsToId = {};
@@ -102,7 +103,7 @@ qx.Class.define("zx.server.Standalone", {
       let isNewDatabase = false;
       switch (database.type || "null") {
         case "nedb":
-          let dbDir = config.resolve(database.nedb.directory || "_cms/db/nedb");
+          let dbDir = config.resolve(database.nedb?.directory || "_cms/db/nedb");
           isNewDatabase = !(await fs.exists(dbDir));
 
           await fs.ensureDir(dbDir);
@@ -119,7 +120,9 @@ qx.Class.define("zx.server.Standalone", {
       }
 
       this._dbController.addEndpoint(this._db);
-      if (database.statusFile) this._dbController.setStatusFile(database.statusFile);
+      if (database.statusFile) {
+        this._dbController.setStatusFile(database.statusFile);
+      }
       await this._db.open();
 
       // Make sure that there is a Security object; if this has to be created, it will initialise
@@ -130,13 +133,22 @@ qx.Class.define("zx.server.Standalone", {
       if (imp) {
         let when = imp.when || "initialize";
         let doImport = false;
-        if ((when === "initialize" || when === "initialise") && isNewDatabase) doImport = true;
-        else if (when === "always") doImport = true;
+        if ((when === "initialize" || when === "initialise") && isNewDatabase) {
+          doImport = true;
+        } else if (when === "always") {
+          doImport = true;
+        }
 
         if (doImport) {
           let impDirs = imp.from || [config.resolve("_cms/db/template")];
           for (let i = 0; i < impDirs.length; i++) {
-            let filename = zx.utils.Path.locateFile(impDirs[i], {
+            let impDir = impDirs[i];
+            let tmp = impDir + "/pages/index.json";
+            let matched = qx.util.ResourceManager.getInstance().toUri(tmp);
+            if (matched != tmp) {
+              impDir = matched.substring(0, matched.length - 17);
+            }
+            let filename = zx.utils.Path.locateFile(impDir, {
               mustExist: true
             });
             await new zx.io.persistence.db.ImportExport(filename, this._db).importToDb();
@@ -227,6 +239,23 @@ qx.Class.define("zx.server.Standalone", {
      */
     async putObject(object) {
       await this._db.put(object);
+    },
+
+    /**
+     * Tests whether an object of a given class and matching query exists
+     *
+     * @param {Class<zx.io.persistence.IObject>} clazz
+     * @param {*} query
+     * @returns {Boolean}
+     */
+    async objectExistsByType(clazz, query, create) {
+      let properties = query ? qx.lang.Object.clone(query) : {};
+      query = this.__createCorrectedQuery(query);
+      query._classname = clazz.classname;
+
+      let data = await this._db.findOne(query, { _uuid: 1 });
+      let uuid = (data && data._uuid) || null;
+      return !!uuid;
     },
 
     /**
@@ -346,7 +375,9 @@ qx.Class.define("zx.server.Standalone", {
      * @return{zx.io.persistence.db.Database}
      */
     getDb() {
-      if (!this._db) throw new Error("Database not yet opened");
+      if (!this._db) {
+        throw new Error("Database not yet opened");
+      }
       return this._db;
     },
 

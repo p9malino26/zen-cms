@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const path = require("path");
 const nunjucks = require("nunjucks");
@@ -29,8 +28,7 @@ qx.Class.define("zx.cms.render.NunjucksController", {
   construct(theme) {
     this.base(arguments);
     const NC = zx.cms.render.NunjucksController;
-    if (NC.__instance)
-      throw new Error("Multiple instances of " + this.classname);
+    if (NC.__instance) throw new Error("Multiple instances of " + this.classname);
     NC.__instance = this;
 
     if (theme) this.setTheme(theme);
@@ -38,10 +36,7 @@ qx.Class.define("zx.cms.render.NunjucksController", {
     let loader = new NC.QooxdooCmsLoader();
     loader.controller = this;
     this.__env = new nunjucks.Environment(loader);
-    this.__env.addExtension(
-      "renderPiece",
-      new zx.cms.render.NjRenderPiece().getExtension()
-    );
+    this.__env.addExtension("renderPiece", new zx.cms.render.NjRenderPiece().getExtension());
 
     this.__filenamesToUris = {};
     this._watcher = chokidar.watch();
@@ -50,9 +45,7 @@ qx.Class.define("zx.cms.render.NunjucksController", {
       Object.keys(this.__filenamesToUris).forEach(filename => {
         let uris = this.__filenamesToUris[filename];
         if (uris) {
-          Object.keys(uris).forEach(uri =>
-            loader.emit("update", uri, filename)
-          );
+          Object.keys(uris).forEach(uri => loader.emit("update", uri, filename));
         }
       });
     };
@@ -62,9 +55,7 @@ qx.Class.define("zx.cms.render.NunjucksController", {
       let uris = this.__filenamesToUris[filename];
       if (uris) {
         if (qx.core.Environment.get("qx.debug")) {
-          this.debug(
-            `Change: ${filename} :: ${JSON.stringify(Object.keys(uris))}`
-          );
+          this.debug(`Change: ${filename} :: ${JSON.stringify(Object.keys(uris))}`);
         }
         Object.keys(uris).forEach(uri => loader.emit("update", uri, filename));
       }
@@ -75,8 +66,7 @@ qx.Class.define("zx.cms.render.NunjucksController", {
   },
 
   destruct() {
-    if (zx.cms.render.NunjucksController.__instance === this)
-      zx.cms.render.NunjucksController.__instance = null;
+    if (zx.cms.render.NunjucksController.__instance === this) zx.cms.render.NunjucksController.__instance = null;
   },
 
   members: {
@@ -93,6 +83,9 @@ qx.Class.define("zx.cms.render.NunjucksController", {
      */
     __filenamesToUris: null,
 
+    /** @type{nunjucks.Environment} Nunjucks Environment */
+    __env: null,
+
     /**
      * Loads the source for a template, called by the custom QooxdooCmsLoader for nunjucks
      *
@@ -104,18 +97,11 @@ qx.Class.define("zx.cms.render.NunjucksController", {
 
       let breakdown = NC.parseFilename(uri);
       let classname = breakdown.scope || breakdown.query.classname || null;
-      let ctlr = classname
-        ? zx.cms.render.Controller.getController(classname)
-        : null;
-      this.assertTrue(
-        (classname === null && ctlr === null) ||
-          (classname !== null && ctlr !== null)
-      );
-      let template = await zx.cms.render.Resolver.resolveTemplate(
-        ctlr,
-        this.__theme,
-        breakdown.template
-      );
+      let ctlr = classname ? zx.cms.render.Controller.getController(classname) : null;
+      if (qx.core.Environment.get("qx.debug")) {
+        this.assertTrue((classname === null && ctlr === null) || (classname !== null && ctlr !== null));
+      }
+      let template = await zx.cms.render.Resolver.resolveTemplate(ctlr, this.__theme, breakdown.template);
       if (!template) {
         this.error(`Cannot find template source for ${uri}`);
         return null;
@@ -157,11 +143,7 @@ qx.Class.define("zx.cms.render.NunjucksController", {
             uris[uri] = true;
           }
           if (qx.core.Environment.get("qx.debug")) {
-            this.debug(
-              `Watching ${filename} :: ${
-                uris ? JSON.stringify(Object.keys(uris)) : ""
-              }`
-            );
+            this.debug(`Watching ${filename} :: ${uris ? JSON.stringify(Object.keys(uris)) : ""}`);
           }
           this._watcher.add(filename);
         }

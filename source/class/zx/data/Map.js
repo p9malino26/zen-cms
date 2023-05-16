@@ -455,8 +455,7 @@ qx.Class.define("zx.data.Map", {
      * @param cb {Function} called with (key, value, entry)
      */
     forEach(cb) {
-      var t = this;
-      return Object.keys(this.__lookupEntries).forEach(function (id) {
+      return Object.keys(this.__lookupEntries).forEach(id => {
         var entry = this.__lookupEntries[id];
         return cb(entry.getKey(), entry.getValue(), entry);
       });

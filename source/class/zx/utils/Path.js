@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Provides static methods for common path related functions
@@ -61,12 +60,7 @@ qx.Class.define("zx.utils.Path", {
           }
           let stat = await fs.statAsync(made);
           if (!stat.isDirectory()) {
-            throw new Error(
-              "Cannot create " +
-                made +
-                " because it exists and is not a directory",
-              "ENOENT"
-            );
+            throw new Error("Cannot create " + made + " because it exists and is not a directory", "ENOENT");
           }
         }
       }
@@ -87,10 +81,7 @@ qx.Class.define("zx.utils.Path", {
       options = options || {};
 
       function locateFromResources(filename) {
-        filename = path.join(
-          qx.util.LibraryManager.getInstance().get("qx", "resourceUri"),
-          filename
-        );
+        filename = path.join(qx.util.LibraryManager.getInstance().get("qx", "resourceUri"), filename);
         if (options.mustExist) {
           let stat = fs.statSync(filename, { throwIfNoEntry: false });
           if (!stat) throw new Error(`Cannot locate the file for ${uri}`);
@@ -98,16 +89,13 @@ qx.Class.define("zx.utils.Path", {
         return filename;
       }
 
-      if (uri.startsWith("resource:"))
-        return locateFromResources(uri.substring("resource:".length));
+      if (uri.startsWith("resource:")) return locateFromResources(uri.substring("resource:".length));
 
       let pos = uri.indexOf(":");
       if (pos > -1) {
         let ns = uri.substring(0, pos);
         if (!qx.util.LibraryManager.getInstance().has(ns))
-          throw new Error(
-            `Cannot locate the file for ${uri} because there is no such library`
-          );
+          throw new Error(`Cannot locate the file for ${uri} because there is no such library`);
         this.warn(
           "Using a library prefix to locate a resource works, but there is no such thing as library-specific prefixes any more; try using 'resource:' as a prefix"
         );
@@ -128,6 +116,7 @@ qx.Class.define("zx.utils.Path", {
      * @param fsPath {String} the filename to normalise
      * @returns {String} the new path
      * @async
+     * @ignore(process)
      */
     correctCase: function (dir) {
       var drivePrefix = "";
@@ -174,34 +163,30 @@ qx.Class.define("zx.utils.Path", {
         }
 
         return new Promise((resolve, reject) => {
-          fs.readdir(
-            currentDir.length == 0 ? "." : drivePrefix + currentDir,
-            { encoding: "utf8" },
-            (err, files) => {
-              if (err) {
-                reject(err);
-                return;
-              }
-
-              let nextLowerCase = nextSeg.toLowerCase();
-              let exact = false;
-              let insensitive = null;
-              for (let i = 0; i < files.length; i++) {
-                if (files[i] === nextSeg) {
-                  exact = true;
-                  break;
-                }
-                if (files[i].toLowerCase() === nextLowerCase) {
-                  insensitive = files[i];
-                }
-              }
-              if (!exact && insensitive) {
-                nextSeg = insensitive;
-              }
-
-              bumpToNext(nextSeg).then(resolve);
+          fs.readdir(currentDir.length == 0 ? "." : drivePrefix + currentDir, { encoding: "utf8" }, (err, files) => {
+            if (err) {
+              reject(err);
+              return;
             }
-          );
+
+            let nextLowerCase = nextSeg.toLowerCase();
+            let exact = false;
+            let insensitive = null;
+            for (let i = 0; i < files.length; i++) {
+              if (files[i] === nextSeg) {
+                exact = true;
+                break;
+              }
+              if (files[i].toLowerCase() === nextLowerCase) {
+                insensitive = files[i];
+              }
+            }
+            if (!exact && insensitive) {
+              nextSeg = insensitive;
+            }
+
+            bumpToNext(nextSeg).then(resolve);
+          });
         });
       }
 

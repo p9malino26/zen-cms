@@ -46,8 +46,6 @@
     "columnify": "^1.6.0",
     "connect-mongo": "^4.4.1",
     "es6-promise-pool": "^2.5.0",
-    "express": "^4.17.1",
-    "express-session": "^1.17.0",
     "fastify": "^3.18.0",
     "fastify-cookie": "^5.3.1",
     "fastify-formbody": "^5.0.0",

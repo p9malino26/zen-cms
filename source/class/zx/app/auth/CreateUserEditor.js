@@ -27,10 +27,6 @@ qx.Class.define("zx.app.auth.CreateUserEditor", {
     this._addField(this, "edtConfirmPassword", "Confirm Password");
   },
 
-  defer(statics, members) {
-    qx.ui.core.MChildrenHandling.remap(members);
-  },
-
   members: {
     getUsername() {
       return this.getQxObject("edtUsername").getValue();

@@ -34,14 +34,16 @@ qx.Class.define("{{= it.classname }}", {
     {{~ it.properties :property }}
       {{= property.name }}: {
         {{? property.init !== undefined }} init: {{= JSON.stringify(property.init) }}, {{?}}
-        {{? property.check }} check: {{= JSON.stringify(property.check) }}, {{?}}
-        nullable: {{= !!property.nullable }},
-        event: "{{= property.event }}",
-        apply: "{{= property.apply }}",
-        {{? property.transform }}
-        transform: "{{= property.transform }}",
+        {{? property.refine }} 
+          refine: true, 
+        {{??}}
+          {{? property.check }} check: {{= JSON.stringify(property.check) }}, {{?}}
+          nullable: {{= !!property.nullable }},
+          {{? property.event }} event: "{{= property.event }}", {{?}}
+          {{? property.apply }} apply: "{{= property.apply }}", {{?}}
+          {{? property.transform }} transform: "{{= property.transform }}", {{?}}
         {{?}}
-        "@": {{= property.annoExpr }},
+        "@": {{= property.annoExpr }}
       },
     {{~}}
   },

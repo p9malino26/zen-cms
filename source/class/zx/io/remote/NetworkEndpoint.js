@@ -601,11 +601,6 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
             let index = parseInt(str.substring(pos + 1), 10);
             if (isNaN(index) || index < 1 || index > this.__lastPacketId)
               throw new Error("Received invalid index in packet ID");
-
-            if (!this.__receivedReturns) this.__receivedReturns = {};
-            if (this.__receivedReturns[packet.originPacketId])
-              throw new Error("Duplicate `return` data, packet ID " + packet.originPacketId);
-            this.__receivedReturns[packet.originPacketId] = true;
           }
 
           let promise = this._pendingPromises[packet.originPacketId];

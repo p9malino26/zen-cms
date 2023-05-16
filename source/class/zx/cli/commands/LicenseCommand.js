@@ -1,21 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const fs = require("fs");
 const path = require("path");
@@ -78,6 +76,16 @@ qx.Class.define("zx.cli.commands.LicenseCommand", {
               src = lines.slice(i + 1).join("\n");
             }
             break;
+          }
+        }
+        if (headerComment) {
+          if (
+            !headerComment.match(/\bcopyright\b/i) &&
+            !headerComment.match(/\blicense\b/i) &&
+            !headerComment.match(/\bauthor\b/i)
+          ) {
+            src = headerComment + "\n" + src;
+            headerComment = null;
           }
         }
         if (headerComment) {

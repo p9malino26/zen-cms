@@ -63,6 +63,9 @@ qx.Class.define("zx.server.SessionManager", {
     /** @type{MongoClient.DB} the Mongo database */
     __db: null,
 
+    /** @type{Boolean} true if it is a new database */
+    __newDatabase: false,
+
     /** @type{MongoClient.Collection} the Mongo collection */
     __collection: null,
 
@@ -81,6 +84,8 @@ qx.Class.define("zx.server.SessionManager", {
       let exists = collections.find(coll => coll.collectionName == this.__collectionName);
       this.__newDatabase = !exists;
       this.__collection = this.__db.collection(this.__collectionName);
+
+      await this.deleteExpiredSessions();
     },
 
     /**
@@ -114,12 +119,12 @@ qx.Class.define("zx.server.SessionManager", {
      * @param {Fastify.Request} request
      * @returns {zx.server.Session} the new session
      */
-    async eraseSession(request) {
+    async disposeSession(request) {
       if (request.session) {
         let sessionId = request.session.getSessionId();
         request.session = null;
         delete this.__sessionCache[sessionId];
-        await this.__collection.deleteOne({ sessionId }, {});
+        await this.__collection.deleteOne({ sessionId });
       }
     },
 
@@ -137,6 +142,13 @@ qx.Class.define("zx.server.SessionManager", {
         }
         request.session = null;
       }
+    },
+
+    /**
+     * Deletes expired sessions
+     */
+    async deleteExpiredSessions() {
+      await this.__collection.deleteMany({ expires: { $lt: new Date() } });
     },
 
     /**
@@ -172,7 +184,7 @@ qx.Class.define("zx.server.SessionManager", {
       request.session.addUse();
 
       if (request.session.hasExpired()) {
-        await this.deleteSession(request);
+        await this.disposeSession(request);
         this.newSession(request);
       }
     },
@@ -275,21 +287,10 @@ qx.Class.define("zx.server.SessionManager", {
      * @param {Fastify} fastify
      */
     registerWithFastify(fastify) {
-      let t = this;
-
-      //      fastify.register((fastify, options, done) => {
       fastify.decorateRequest("session", null);
-      fastify.decorateRequest("sessionManager", function (done) {
-        let request = this;
-        request.sessionManager = t;
-        done();
-      });
       fastify.addHook("onRequest", async (request, reply) => await this._onRequest(request, reply));
       fastify.addHook("onSend", async (request, reply, payload) => await this._onSend(request, reply, payload));
       fastify.addHook("onResponse", async (request, reply) => await this._onResponse(request, reply));
-
-      //        done();
-      //      });
     }
   }
 });

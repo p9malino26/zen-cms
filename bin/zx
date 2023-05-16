@@ -2,7 +2,7 @@
 
 const path = require("path");
 
-let compiled = path.resolve("./compiled/source-node/cli/index.js");
+let compiled = path.resolve(__dirname, "../compiled/source-node/cli/index.js");
 require(compiled);
 
 let app = qx.core.Init.getApplication();

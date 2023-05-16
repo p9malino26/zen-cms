@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.app.auth.SetPasswordEditor", {
   extend: zx.ui.editor.FormEditor,
@@ -23,10 +23,6 @@ qx.Class.define("zx.app.auth.SetPasswordEditor", {
     this.base(arguments);
     this._addField(this, "edtPassword", "Password");
     this._addField(this, "edtConfirmPassword", "Confirm Password");
-  },
-
-  defer(statics, members) {
-    qx.ui.core.MChildrenHandling.remap(members);
   },
 
   members: {
@@ -51,9 +47,7 @@ qx.Class.define("zx.app.auth.SetPasswordEditor", {
             liveUpdate: true,
             validator: () => {
               let password = this.getQxObject("edtPassword").getValue().trim();
-              let confirmPassword = this.getQxObject("edtConfirmPassword")
-                .getValue()
-                .trim();
+              let confirmPassword = this.getQxObject("edtConfirmPassword").getValue().trim();
               if (password == confirmPassword) return null;
               return "Both passwords must match exactly";
             }

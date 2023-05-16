@@ -20,6 +20,8 @@ qx.Class.define("zx.app.auth.UsersEditor", {
 
   construct() {
     this.base(arguments);
+    this.setModifiedMonitor(new zx.ui.editor.ModifiedMonitor());
+
     this._setLayout(new qx.ui.layout.VBox());
     this._add(this.getQxObject("toolbar"));
     this._add(this.getQxObject("edtSearch"));
@@ -107,7 +109,7 @@ qx.Class.define("zx.app.auth.UsersEditor", {
       }
       matches.forEach(info => lst.add(this.__createListItem(info)));
       let state = zx.ui.utils.UserState.getStateFor(this.getQxObject("lst"));
-      state.copyStateToSelection();
+      if (state != null) state.copyStateToSelection();
     },
 
     /**
@@ -148,8 +150,8 @@ qx.Class.define("zx.app.auth.UsersEditor", {
 
         case "btnSave":
           var btn = new qx.ui.toolbar.Button("Save", "@FontAwesomeSolid/save/16");
-          btn.addListener("execute", async () => this.getQxObject("edUser").saveValue());
-          this.getQxObject("edUser").bind("modified", btn, "enabled");
+          btn.addListener("execute", async () => await this.getModifiedMonitor().saveAll());
+          this.getModifiedMonitor().bind("modified", btn, "enabled");
           return btn;
 
         case "btnAdd":

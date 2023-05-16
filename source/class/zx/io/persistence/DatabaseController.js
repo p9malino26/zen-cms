@@ -38,7 +38,13 @@ qx.Class.define("zx.io.persistence.DatabaseController", {
   },
 
   members: {
+    /** @type{zx.utils.Debounce} debounce for _saveDirty() */
+    __debounceSaveDirty: null,
+
+    /** @type{Object} map of dirty UUIDs */
     __dirtyObjectUuids: null,
+
+    /** @type{zx.io.persistence.Watcher} the object watcher */
     __watcher: null,
 
     /**

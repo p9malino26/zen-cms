@@ -1,5 +1,3 @@
-const fs = require("fs");
-
 /**
  * Watches objects, only refering to the properties defined by a particular zx.io.persistence.ClassIos,
  * and detects when the object becomes dirty.
@@ -78,8 +76,12 @@ qx.Class.define("zx.io.persistence.Watcher", {
      * Called by the timeout to write the status file
      */
     async __onWriteStatusFile() {
-      let filename = this.getStatusFile();
-      await fs.promises.writeFile(filename, JSON.stringify(this.__status, null, 2), "utf8");
+      if (qx.core.Environment.get("zx.io.remote.NetworkEndpoint.server")) {
+        let filename = this.getStatusFile();
+        const fs = require("fs");
+
+        await fs.promises.writeFile(filename, JSON.stringify(this.__status, null, 2), "utf8");
+      }
     },
 
     /**

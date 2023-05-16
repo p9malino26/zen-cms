@@ -50,7 +50,7 @@ qx.Class.define("zx.io.remote.FastifyXhrEndpoint", {
       } else {
         let body = (req.body && JSON.parse(req.body)) || null;
         let responses = await this._receivePackets(req, reply, body);
-        reply.send(responses);
+        await reply.send(responses);
       }
     }
   }

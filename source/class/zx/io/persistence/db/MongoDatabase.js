@@ -74,6 +74,15 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
     },
 
     /**
+     * Returns the mongo client connection
+     *
+     * @returns {MongoClient}
+     */
+    getMongoClient() {
+      return this.__db;
+    },
+
+    /**
      * Detects whether the collection existed when the database was opened
      *
      * @return {Boolean}

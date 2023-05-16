@@ -1,6 +1,6 @@
 {% extends "page-layout-base" %}
 
-{% block pageBodyClass %}{{ page.cssClass }}{% endblock %}
+{% block pageBodyClass %}{% if page.cssClass|length %}{{ page.cssClass }}{% else %}unstyled-page{% endif %}{% endblock %}
 
 {% block pageHeader %}
   <title>{{ page.title }}</title>
@@ -9,8 +9,17 @@
   {% endif %}
 {% endblock %}
 
+{% block pageHeroContent %}
+  {% if page.hero %}
+    {% renderPiece page.hero %}
+  {% else %}
+    <div class="no-hero">
+    </div>
+  {% endif %}
+{% endblock %}
+
 {% block pageContent %}
-{% asyncEach piece in page.pieces %}
+  {% asyncEach piece in page.pieces %}
     {% renderPiece piece %}
   {% endeach %}
 {% endblock %}

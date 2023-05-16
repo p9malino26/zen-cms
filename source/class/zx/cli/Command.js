@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.cli.Command", {
   extend: qx.core.Object,
@@ -54,7 +53,8 @@ qx.Class.define("zx.cli.Command", {
       check: "String"
     },
 
-    /** Function to run this command */
+    /** Function to run this command, called with the result of `getValues()` and the command itself
+     */
     run: {
       init: null,
       nullable: true,
@@ -421,6 +421,38 @@ qx.Class.define("zx.cli.Command", {
 
       // Return the command (or sub command) to execute
       return finalCommand;
+    },
+
+    /**
+     * Parses the command line and performs the required tasks.  The process will terminate if
+     * there is an error or the command returns a number (ie exit code)
+     *
+     * @returns {Integer} the exit code
+     */
+    async execute() {
+      let cmd = null;
+      try {
+        cmd = this.parseRoot();
+      } catch (ex) {
+        console.error("Error: " + ex.message);
+        process.exit(-1);
+      }
+      let errors = (cmd && cmd.getErrors()) || null;
+      if (errors) {
+        console.error(errors.join("\n"));
+        process.exit(-1);
+      }
+
+      let run = (cmd && cmd.getRun()) || null;
+      if (!cmd || run === null || errors || cmd.getFlag("help").getValue()) {
+        console.log((cmd || this).usage());
+        process.exit(0);
+      }
+
+      let exitCode = await run.call(cmd, cmd.getValues(), cmd);
+      if (typeof exitCode == "number") {
+        process.exit(exitCode);
+      }
     },
 
     toString() {

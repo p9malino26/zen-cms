@@ -17,6 +17,8 @@
 
 const fs = require("fs");
 const path = require("path");
+const ip = require("ip");
+const rotatingFileStream = require("rotating-file-stream");
 const { AsyncLocalStorage } = require("async_hooks");
 
 /**
@@ -34,34 +36,99 @@ qx.Class.define("zx.server.WebServer", {
       init: 8080,
       nullable: false,
       check: "Integer"
+    },
+
+    /** HTTPS port to listen on */
+    sslListenPort: {
+      init: 8488,
+      nullable: false,
+      check: "Integer"
+    },
+
+    /** Whether to provide an SSL listener */
+    sslEnabled: {
+      init: false,
+      nullable: false,
+      check: "Boolean"
+    },
+
+    /** The SSL certificate */
+    sslCertificate: {
+      init: null,
+      nullable: true,
+      check: "String",
+      event: "changeSslCertificate"
+    },
+
+    /** The SSL key */
+    sslPrivateKey: {
+      init: null,
+      nullable: true,
+      check: "String",
+      event: "changeSslPrivateKey"
+    },
+
+    /** Set to true if behind a proxy and X-Forwarded-For can be trusted */
+    trustProxy: {
+      init: false,
+      check: "Boolean",
+      event: "changeTrustProxy"
+    },
+
+    /** Filename to log accesses to */
+    accessLog: {
+      init: null,
+      nullable: true,
+      check: "String"
+    },
+
+    /** Adds extra debug output */
+    debug: {
+      init: false,
+      check: "Boolean"
     }
   },
 
   members: {
-    /** {Fastify} the application */
+    /** @type{Fastify} the application */
     _app: null,
 
-    /** {zx.io.remote.NetworkController} controller for IO with the browsers */
+    /** @type{zx.io.remote.NetworkController} controller for IO with the browsers */
     _networkController: null,
+
+    /** Stream to write access logs to, may be null */
+    __accessLogStream: null,
+
+    /** @type{String[]} list of allowed subnets */
+    __validSubnets: null,
 
     /**
      * @typedef {Object} AlsRequestContext
      * @property {Fastify.Request} request
      * @property {Fastify.Reply} reply
      *
-     * @type{AsyncLocalStorage<AlsRequestContext>} used for the current request/reply */
+     * @type{AsyncLocalStorage<AlsRequestContext>} used for the current request/reply
+     */
     __alsRequest: null,
+
+    /** @type{zx.server.SessionManager} the session manager */
+    __sessionManager: null,
+
+    /** @type{Object[]} array of objects describing url rules */
+    __urlRules: null,
 
     /**
      * Called to start the server
      */
     async start() {
-      await this.base(arguments);
+      await super.start();
       if (this._config.createProxies) {
         let proxiesOutputPath = this._config.createProxies?.outputPath;
         if (proxiesOutputPath) {
           let compilerTargetPath = this._config.createProxies?.compilerTargetPath;
-          if (!compilerTargetPath) throw new Error("Missing compilerTargetPath in cms.json/createProxies");
+          if (!compilerTargetPath) {
+            throw new Error("Missing compilerTargetPath in cms.json/createProxies");
+          }
           let ctlr = new zx.io.remote.proxy.ClassesWriter().set({
             outputPath: proxiesOutputPath,
             compilerTargetPath: compilerTargetPath
@@ -75,12 +142,42 @@ qx.Class.define("zx.server.WebServer", {
 
     /**
      * Creates and starts the web server
+     * @ignore(process)
      */
     async _startServer() {
+      // We either trust the proxy server, in which case we require it to be on a local subnet, or
+      //  we dont trust the proxy server in which case it must be a private IP range
+      const os = require("os");
+      let trustProxy = this.isTrustProxy();
+      const ifaces = os.networkInterfaces();
+      this.__validSubnets = [];
+
+      // Build list of valid subnets
+      Object.keys(ifaces).forEach(ifname => {
+        ifaces[ifname].forEach(iface => {
+          if (!iface.internal) {
+            this.__validSubnets.push(ip.cidrSubnet(iface.cidr));
+          }
+        });
+      });
+
+      let accessLog = this.getAccessLog();
+      if (accessLog) {
+        this.__accessLogStream = rotatingFileStream.createStream(path.basename(accessLog), {
+          size: "50M",
+          interval: "1d",
+          path: path.dirname(accessLog)
+        });
+      }
+
       let app = await this._createApplication();
 
       try {
-        await app.listen(this.getListenPort(), "0.0.0.0");
+        debugger;
+        await app.listen({
+          port: this.getListenPort(),
+          host: "localhost"
+        });
       } catch (err) {
         console.error("Error when starting the server: " + err);
         process.exit(1);
@@ -124,10 +221,23 @@ qx.Class.define("zx.server.WebServer", {
         return this._app;
       }
       let maxFileUploadSize = this._config.uploads?.maxFileUploadSize || 10 * 1024 * 1024;
-      const app = (this._app = require("fastify")({ logger: false }));
-      app.register(require("fastify-cookie"));
+      let options = {
+        logger: false
+      };
+      if (this.isSslEnabled()) {
+        options.https = {
+          key: this.getSslPrivateKey(),
+          cert: this.getSslCertificate()
+        };
+        options.http2 = true;
+      }
+      if (this.isTrustProxy()) {
+        options.trustProxy = true;
+      }
+      const app = (this._app = require("fastify")(options));
+      app.register(require("@fastify/cookie"));
       app.register(require("fastify-prettier"));
-      app.register(require("fastify-multipart"), {
+      app.register(require("@fastify/multipart"), {
         limits: {
           fieldNameSize: 100, // Max field name size in bytes
           fieldSize: 512, // Max field value size in bytes
@@ -159,7 +269,11 @@ qx.Class.define("zx.server.WebServer", {
       }
 
       let databaseConfig = this._config.database.mongo;
-      let manager = new zx.server.SessionManager(databaseConfig.uri, databaseConfig.databaseName, "sessions");
+      let manager = (this.__sessionManager = new zx.server.SessionManager(
+        databaseConfig.uri,
+        databaseConfig.databaseName,
+        "sessions"
+      ));
       manager.set({
         secret: sessionConfig.secret || "yHbUWDFyEKikhuXgqzkgjxj7gBwZ6Ahm",
         cookieName: "zx.cms.sessionId",
@@ -176,30 +290,109 @@ qx.Class.define("zx.server.WebServer", {
     },
 
     /**
+     * Runs the function with a given request context
+     *
+     * @param {AlsRequestContext} context
+     * @param {Function} fn
+     * @return {*}
+     */
+    async runInRequestContext(context, fn) {
+      this._requestContext.set("context", context);
+      let result = await fn();
+      this._requestContext.set("context", null);
+      return result;
+      /*
+      return await this.__alsRequest.run(context, async () => {
+        let tmp = this.__alsRequest.getStore();
+        this.assertTrue(tmp === context);
+        console.log("Start in async context");
+        let result = await fn();
+        console.log("Finished in async context");
+        return result;
+      });
+      */
+    },
+
+    /**
+     * Returns the request context, an object that contains `request` and `reply`
+     *
+     * @returns {AlsRequestContext}
+     */
+    getRequestContext() {
+      //let store = this.__alsRequest.getStore();
+      let store = this._requestContext.get("context");
+      if (!store) {
+        throw new Error("Cannot get request context outside of the request");
+      }
+      return store;
+    },
+
+    /**
+     * Wraps a middleware function so that it can run in a request context and
+     * exeptions are handled gracefully
+     *
+     * @param {Function} fn
+     * @returns {Function} the wrapped function
+     */
+    wrapMiddleware(fn) {
+      return async (req, reply) => {
+        try {
+          return await this.runInRequestContext({ request: req, reply: reply }, () => fn(req, reply));
+        } catch (ex) {
+          if (ex instanceof zx.server.WebServer.HttpError) {
+            if (ex.statusCode < 400 || ex.statusCode >= 500) this.error(`Exception raised:\n${ex}`);
+            await this.sendErrorPage(req, reply, ex.statusCode, ex.message);
+          } else {
+            this.error(`Exception raised:\n${ex}`);
+            await this.sendErrorPage(req, reply, 500, ex.message);
+          }
+        }
+      };
+    },
+
+    /**
      * Initialises the Fastify
      *
      * @param app {Fastify}
      */
     async _initApplication(app) {
-      app.register(require("fastify-formbody"));
+      const { fastifyRequestContextPlugin, requestContext } = require("@fastify/request-context");
+      const fastifyStatic = require("@fastify/static");
 
-      this.__alsRequest = new AsyncLocalStorage();
+      this._requestContext = requestContext;
+      zx.io.remote.NetworkEndpoint.requestContext = requestContext;
 
-      const wrapMiddleware = fn => {
-        return async (req, reply) => {
-          try {
-            return await this.runInRequestContext({ request: req, reply: reply }, () => fn(req, reply));
-          } catch (ex) {
-            if (ex instanceof zx.server.WebServer.HttpError) {
-              if (ex.statusCode < 400 || ex.statusCode >= 500) this.error(`Exception raised:\n${ex}`);
-              await this.sendErrorPage(req, reply, ex.statusCode, ex.message);
-            } else {
-              this.error(`Exception raised:\n${ex}`);
-              await this.sendErrorPage(req, reply, 500, ex.message);
-            }
-          }
-        };
-      };
+      app.register(fastifyRequestContextPlugin, {
+        hook: "preValidation",
+        defaultStoreValues: {
+          user: { id: "system" }
+        }
+      });
+
+      app.register(require("@fastify/formbody"));
+      app.decorateReply("json", function (payload) {
+        this.code(200).header("Content-Type", "application/json; charset=utf-8").send(JSON.stringify(payload, null, 2));
+      });
+      app.decorateReply("text", function (payload) {
+        this.code(200).type("plain/text").send(payload);
+      });
+      app.decorateReply("notFound", function (message) {
+        this.code(404)
+          .type("plain/text")
+          .send(message || "Not found");
+      });
+      app.decorateReply("serverError", function (message) {
+        this.code(500)
+          .type("plain/text")
+          .send(message || "Internal Error");
+      });
+
+      //this.__alsRequest = new AsyncLocalStorage();
+
+      app.addHook("onSend", async (request, reply, payload) => {
+        reply.removeHeader("X-Powered-By");
+        return payload;
+      });
 
       app.addHook("onRequest", async (request, reply) => {
         try {
@@ -211,7 +404,6 @@ qx.Class.define("zx.server.WebServer", {
       });
 
       // Map to Qooxdoo compiled resources
-      let fastifyStatic = require("fastify-static");
       let targets = this._config.targets || {};
       app.register(fastifyStatic, {
         root: path.resolve("compiled", targets.browser || "source"),
@@ -225,20 +417,20 @@ qx.Class.define("zx.server.WebServer", {
 
       app.get(
         "/zx/impersonate/:shortCode",
-        wrapMiddleware(async (req, reply) => await this.__impersonate(req, reply))
+        this.wrapMiddleware(async (req, reply) => await this.__impersonate(req, reply))
       );
       app.get(
         "/zx/shorturl/:shortCode",
-        wrapMiddleware(async (req, reply) => await this.__shortUrl(req, reply))
+        this.wrapMiddleware(async (req, reply) => await this.__shortUrl(req, reply))
       );
       app.get(
         "/zx/blobs/:uuid",
-        wrapMiddleware(async (req, reply) => await this.__blobs(req, reply))
+        this.wrapMiddleware(async (req, reply) => await this.__blobs(req, reply))
       );
 
       app.get(
         "/zx/theme/*",
-        wrapMiddleware(async (req, reply) => await this._renderer.getTheme().middleware(req, reply))
+        this.wrapMiddleware(async (req, reply) => await this._renderer.getTheme().middleware(req, reply))
       );
 
       // REST API
@@ -246,7 +438,7 @@ qx.Class.define("zx.server.WebServer", {
       app.route({
         method: ["GET", "POST"],
         url: ARAS.getEndpoint(),
-        handler: wrapMiddleware(ARAS.middleware)
+        handler: this.wrapMiddleware(ARAS.middleware)
       });
 
       // zx.io.remote
@@ -255,14 +447,14 @@ qx.Class.define("zx.server.WebServer", {
       app.route({
         method: ["GET", "POST"],
         url: "/zx/io/xhr",
-        handler: wrapMiddleware(async (req, reply) => await xhrListener.middleware(req, reply))
+        handler: this.wrapMiddleware(async (req, reply) => await xhrListener.middleware(req, reply))
       });
 
-      await this._initExtraPaths(app, wrapMiddleware);
+      await this._initExtraPaths(app);
 
       app.get(
         "*",
-        wrapMiddleware(async (req, reply) => await this._defaultUrlHandler(req, reply))
+        this.wrapMiddleware(async (req, reply) => await this._defaultUrlHandler(req, reply))
       );
     },
 
@@ -270,9 +462,8 @@ qx.Class.define("zx.server.WebServer", {
      * Called to allow implementations to add extra paths, just before the default catch all is installed
      *
      * @param {Fastify} app
-     * @param {Function} wrapMiddleware function can be optionally used to handle exceptions
      */
-    async _initExtraPaths(app, wrapMiddleware) {
+    async _initExtraPaths(app) {
       // Nothing
     },
 
@@ -306,6 +497,18 @@ qx.Class.define("zx.server.WebServer", {
      * @param {Fastify.Reply} reply
      */
     async _onRequestHook(request, reply) {
+      if (!this.isTrustProxy()) {
+        if (!ip.isPrivate(request.ip)) {
+          reply.code(403);
+          return;
+        }
+      } else {
+        if (!this.__validSubnets.some(subnet => subnet.contains(request.ip))) {
+          reply.code(403);
+          return;
+        }
+      }
+
       let url = request.url.toLowerCase();
       let pos = url.indexOf("?");
       let query = "";
@@ -313,8 +516,11 @@ qx.Class.define("zx.server.WebServer", {
         query = url.substring(pos);
         url = url.substring(0, pos);
       }
-      if (url.length == 0) url = "/index.html";
-      else if (url[url.length - 1] == "/") url += "index.html";
+      if (url.length == 0) {
+        url = "/index.html";
+      } else if (url[url.length - 1] == "/") {
+        url += "index.html";
+      }
 
       const takeActionImpl = async (action, redirectTo, customActionCode) => {
         if (action === null) return;
@@ -346,9 +552,13 @@ qx.Class.define("zx.server.WebServer", {
         let data = this.__urlRules[i];
         let rule = data.rule;
         if (data.type == "exact") {
-          if (url != data.match) continue;
+          if (url != data.match) {
+            continue;
+          }
         } else {
-          if (!data.match.test(url)) continue;
+          if (!data.match.test(url)) {
+            continue;
+          }
         }
 
         // A denied rule is a hard stop
@@ -379,24 +589,36 @@ qx.Class.define("zx.server.WebServer", {
       matches.forEach(rule => {
         if (cachability === null) {
           let tmp = rule.getCachability();
-          if (tmp !== null) cachability = tmp;
+          if (tmp !== null) {
+            cachability = tmp;
+          }
         }
 
         if (cacheRevalidation === null) {
           let tmp = rule.getCacheRevalidation();
-          if (tmp !== null) cacheRevalidation = tmp;
+          if (tmp !== null) {
+            cacheRevalidation = tmp;
+          }
         }
 
         if (maxAge === null) {
           let tmp = rule.getMaxAge();
-          if (tmp !== null) maxAge = tmp;
+          if (tmp !== null) {
+            maxAge = tmp;
+          }
         }
       });
 
       let directives = [];
-      if (cachability !== null) directives.push(cachability);
-      if (cacheRevalidation !== null) directives.push(cacheRevalidation);
-      if (maxAge !== null && maxAge >= 0) directives.push("max-age=" + maxAge);
+      if (cachability !== null) {
+        directives.push(cachability);
+      }
+      if (cacheRevalidation !== null) {
+        directives.push(cacheRevalidation);
+      }
+      if (maxAge !== null && maxAge >= 0) {
+        directives.push("max-age=" + maxAge);
+      }
 
       if (directives.length) {
         reply.header("Cache-Control", directives.join(", "));
@@ -420,8 +642,8 @@ qx.Class.define("zx.server.WebServer", {
 
       let currentUser = await zx.server.auth.User.getUserFromSession(request);
       if (currentUser && currentUser.getUsername().toLowerCase() != data.username.toLowerCase()) {
-        await new qx.Promise(resolve => request.destroySession(resolve));
-        await new qx.Promise(resolve => request.createNewSession(resolve));
+        await this.__sessionManager.disposeSession(request);
+        this.__sessionManager.newSession(request);
         currentUser = null;
       }
 
@@ -500,25 +722,12 @@ qx.Class.define("zx.server.WebServer", {
     },
 
     /**
-     * Returns the request context, an object that contains `request` and `reply`
+     * Returns the session manager
      *
-     * @returns {AlsRequestContext}
+     * @returns {zx.server.SessionManager}
      */
-    getRequestContext() {
-      let store = this.__alsRequest.getStore();
-      if (!store) throw new Error("Cannot get request context outside of the request");
-      return store;
-    },
-
-    /**
-     * Runs the function with a given request context
-     *
-     * @param {AlsRequestContext} context
-     * @param {Function} fn
-     * @return {*}
-     */
-    async runInRequestContext(context, fn) {
-      return await this.__alsRequest.run(context, fn);
+    getSessionManager() {
+      return this.__sessionManager;
     },
 
     /**
@@ -530,19 +739,27 @@ qx.Class.define("zx.server.WebServer", {
      * The handler for urls
      */
     async _defaultUrlHandler(req, reply, url) {
-      if (!url) url = req.url;
+      if (!url) {
+        url = req.url;
+      }
 
       let pos = url.indexOf("?");
-      if (pos > -1) url = url.substring(0, pos);
+      if (pos > -1) {
+        url = url.substring(0, pos);
+      }
 
       // Normalise the path
-      if (url[url.length - 1] == "/") url += "index.html";
+      if (url[url.length - 1] == "/") {
+        url += "index.html";
+      }
 
       // Get the page
       if (url.endsWith(".html")) {
         let dbUrl = (url = "pages" + url.substring(0, url.length - 5));
         let object = await this.getObjectByUrl(dbUrl);
-        if (!object) throw new zx.server.WebServer.HttpError(404, `Cannot find ${url}`);
+        if (!object) {
+          throw new zx.server.WebServer.HttpError(404, `Cannot find ${url}`);
+        }
 
         if (!qx.Class.hasInterface(object.constructor, zx.cms.render.IViewable))
           throw new zx.server.WebServer.HttpError(
@@ -551,12 +768,29 @@ qx.Class.define("zx.server.WebServer", {
           );
 
         let rendering = new zx.cms.render.FastifyRendering(req, reply);
-        await this._renderer.renderViewable(rendering, object);
+        try {
+          await this._renderer.renderViewable(rendering, object);
+        } catch (ex) {
+          throw new zx.server.WebServer.HttpError(500, ex.message);
+        }
         return;
       }
 
       // Oops
       throw new zx.server.WebServer.HttpError(404, `Cannot find ${url}`);
+    },
+
+    /**
+     * Adds an entry to the access log stream, if one is configured; the log is the date/time
+     * plus a comma separated list of arguments
+     */
+    logAccess(...args) {
+      if (this.__accessLogStream) {
+        let dt = new Date();
+        args = args.filter(arg => arg !== undefined).map(arg => (arg === null ? "" : `"${arg}"`));
+        let str = [dt.toUTCString(), ...args].join(",");
+        this.__accessLogStream.write(str + "\n");
+      }
     },
 
     /**
@@ -569,6 +803,15 @@ qx.Class.define("zx.server.WebServer", {
         statusCode,
         message
       });
+    },
+
+    /**
+     * Outputs a console method if debug is enabled
+     */
+    debug(msg) {
+      if (this.isDebug()) {
+        console.log(msg);
+      }
     }
   },
 
@@ -593,6 +836,15 @@ qx.Class.define("zx.server.WebServer", {
      */
     getCurrentReponse() {
       return zx.server.Standalone.getInstance().getRequestContext().response;
+    },
+
+    /**
+     * Returns the session manager
+     *
+     * @returns {zx.server.SessionManager}
+     */
+    getSessionManager() {
+      return zx.server.Standalone.getInstance().getSessionManager();
     }
   },
 

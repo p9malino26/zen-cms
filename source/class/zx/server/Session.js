@@ -27,21 +27,29 @@ qx.Class.define("zx.server.Session", {
   },
 
   properties: {
+    /** When the session will expire */
     expires: {
       init: null,
       check: "Date",
       event: "changeExpires"
     },
 
+    /** The ID assiged to the session */
     sessionId: {
       nullable: false,
       check: "String",
       apply: "_applySessionId"
+    },
+
+    /** Whether the session is supposed to be persisted to the database */
+    saveToDisk: {
+      init: true,
+      check: "Boolean"
     }
   },
 
   members: {
-    /** @type{zx.data.Map} the values storeed in the session */
+    /** @type{zx.data.Map} the values stored in the session */
     __values: null,
 
     /** @type{zx.server.SessionManager} the manager */
@@ -50,11 +58,29 @@ qx.Class.define("zx.server.Session", {
     /** @type{Integer} usage reference count */
     __useCount: null,
 
+    /** @type{String} encrypted version of this.sessionId */
+    __encryptedSessionId: null,
+
+    /**
+     * Sets a value in the session; the value should be a primitive value.  If the
+     * value is null or undefined then it will be deleted from the session (null cannot
+     * be stored)
+     *
+     * @param {String} key
+     * @param {Object?} value
+     */
     set(key, value) {
       if (value === null || value === undefined) this.__values.remove(key);
       else this.__values.put(key, value);
     },
 
+    /**
+     * Returns a value
+     *
+     * @param {String} key
+     * @param {Object?} defaultValue default value in case the named value does not exist
+     * @returns
+     */
     get(key, defaultValue) {
       if (!this.__values.containsKey(key)) {
         this.__values.put(key, defaultValue);
@@ -63,27 +89,51 @@ qx.Class.define("zx.server.Session", {
       return this.__values.get(key);
     },
 
+    /**
+     * Whether there are any values stored
+     *
+     * @returns {Boolean}
+     */
     isEmpty() {
       return this.__values.isEmpty();
     },
 
+    /**
+     * Whether the session has expired
+     *
+     * @returns {Boolean}
+     */
     hasExpired() {
       let dt = this.getExpires();
       return dt && dt <= Date.now();
     },
 
+    /**
+     * Increment reference counter, for use when multiple simultaneous requests
+     * are happening
+     */
     addUse() {
       this.__useCount++;
     },
 
+    /**
+     * Decrement reference counter, for use when multiple simultaneous requests
+     * are happening
+     */
     decUse() {
       this.__useCount--;
     },
 
+    /**
+     * Checks the reference counter to see if there are any requests using it
+     */
     isInUse() {
       return this.__useCount > 0;
     },
 
+    /**
+     * Called to update the expiry date
+     */
     touch() {
       let options = this.__manager.getCookieOptions();
       if (options.maxAge) {
@@ -92,24 +142,45 @@ qx.Class.define("zx.server.Session", {
       }
     },
 
+    /**
+     * Apply for `sessionId`
+     */
     _applySessionId(value) {
       this.__encryptedSessionId = cookieSignature.sign(value, this.__manager.getSecret());
     },
 
+    /**
+     * Returns the encrypted session ID that is given to the client
+     *
+     * @returns {String}
+     */
     getEncryptedSessionId() {
       return this.__encryptedSessionId;
     },
 
+    /**
+     * Generates a new session ID
+     */
     regenerate() {
       this.setSessionId(uid(24));
     },
 
+    /**
+     * Loads session data, eg from the database
+     *
+     * @param {Map} data
+     */
     importSession(data) {
       if (data.sessionId) this.setSessionId(data.sessionId);
       this.setExpires(data.expires || null);
       this.__values.replace(data.values);
     },
 
+    /**
+     * Exports session data, eg to the database
+     *
+     * @returns {Map}
+     */
     exportSession() {
       return {
         sessionId: this.getSessionId(),
@@ -118,6 +189,12 @@ qx.Class.define("zx.server.Session", {
       };
     },
 
+    /**
+     * Returns the Cookie data
+     *
+     * @param {Boolean} secureConnection whether the user is connecting over HTTPS or not (changes what is permitted in the cookie)
+     * @returns {Map}
+     */
     getCookieConfiguration(secureConnection) {
       let cookieOptions = this.__manager.getCookieOptions();
       let secure = cookieOptions.secure;

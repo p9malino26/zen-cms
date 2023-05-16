@@ -41,6 +41,9 @@ qx.Class.define("zx.utils.Debounce", {
   },
 
   members: {
+    /** @type{Function} the function to call */
+    __fn: null,
+
     /** @type{Boolean} that there is a repeated invocation queued */
     __queuedRepeat: false,
 

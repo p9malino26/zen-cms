@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 var helper = {
   tone: function (color) {
@@ -81,7 +80,7 @@ var helper = {
     var color = d[0];
     var state = d[1];
     switch (state) {
-      case "focussed":
+      case "focused":
         return qx.util.ColorUtil.scale(color, {
           lightness: 10,
           saturation: 10
@@ -153,11 +152,11 @@ qx.Theme.define("zx.cms.client.theme.tangible.Color", {
     "text-on-error": helper.onX,
     "primary-hovered": helper.xState,
     "primary-disabled": helper.xState,
-    "primary-focussed": helper.xState,
+    "primary-focused": helper.xState,
     "primary-selected": helper.xState,
     "primary-selected_disabled": helper.xState,
     "primary-inactive": helper.xState,
-    "error-focussed": helper.xState,
+    "error-focused": helper.xState,
 
     // alpha colors
     "primary-alpha-5": helper.setAlpha,

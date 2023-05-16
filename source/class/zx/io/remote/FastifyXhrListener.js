@@ -22,6 +22,10 @@
 qx.Class.define("zx.io.remote.FastifyXhrListener", {
   extend: qx.core.Object,
 
+  /**
+   * Constructor
+   * @param {zx.io.remote.NetworkController} controller
+   */
   construct(controller) {
     this.base(arguments);
     this.__controller = controller;
@@ -36,6 +40,9 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
   },
 
   members: {
+    /** @type{zx.io.remote.NetworkController} */
+    __controller: null,
+
     /**
      * ExpressJS/Fastify middleware for API calls
      *
@@ -59,19 +66,6 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
      * @return zx.io.remote.NetworkEndpoint
      */
     _getOrCreateEndpoint(req) {
-      if (req.session.get("sessionSequenceId") === undefined) {
-        req.session.set("sessionSequenceId", (this.__sessionSequenceId = 0));
-      }
-      if (!this.__sessionSequenceId) this.__sessionSequenceId = 0;
-      if (req.session.get("sessionSequenceId") != this.__sessionSequenceId) {
-        this.warn(
-          ` **** req.session.sessionSequenceId = ${req.session.get("sessionSequenceId")}, this.__sessionSequenceId = ${
-            this.__sessionSequenceId
-          }`
-        );
-      }
-      req.session.set("sessionSequenceId", ++this.__sessionSequenceId);
-
       let sessionValues = req.session.get(this.classname, {});
       if (!sessionValues.endpoints) sessionValues.endpoints = {};
       let endpoints = sessionValues.endpoints;

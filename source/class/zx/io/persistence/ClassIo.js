@@ -151,8 +151,11 @@ qx.Class.define("zx.io.persistence.ClassIo", {
   },
 
   members: {
-    /** {qx.Class} The class */
+    /** @type{qx.Class} The class */
     __clazz: null,
+
+    /** @type{zx.io.persistence.ClassIos} ClassIos instance we're attached to */
+    __classIos: null,
 
     /**
      * @typedef PropertyDef {Object}
@@ -178,14 +181,25 @@ qx.Class.define("zx.io.persistence.ClassIo", {
      */
     async fromJson(endpoint, json, obj) {
       let ctlr = endpoint.getController();
-      if (!obj) obj = ctlr.createObject(this.__clazz, json._uuid);
+      let clazz = this.__clazz;
+      if (json._classname) {
+        let cls = qx.Class.getByName(json._classname);
+        if (!cls)
+          throw new Error(`Cannot create instance of class ${json._classname} because the class does not exist`);
+        if (!qx.Class.isSubClassOf(cls, this.__clazz))
+          throw new Error(
+            `Cannot load instance of class ${json._classname} because the class is not compatible with this class IO ${this.__clazz.classname}`
+          );
+        clazz = cls;
+      }
+      if (!obj) obj = ctlr.createObject(clazz, json._uuid);
 
       let promises = [];
       for (let propertyName in this.__properties) {
         if (json[propertyName] === undefined) continue;
 
         let propertyDef = this.__properties[propertyName];
-        let propertyPath = this.__clazz.classname + "." + propertyName;
+        let propertyPath = clazz.classname + "." + propertyName;
         let annos = propertyDef["@"];
         let check = propertyDef.check;
 
@@ -306,6 +320,18 @@ qx.Class.define("zx.io.persistence.ClassIo", {
       if (value === null || value === undefined) return value;
 
       let check = propertyDef.check;
+      if (value._classname) {
+        let cls = qx.Class.getByName(value._classname);
+        if (!cls)
+          throw new Error(
+            `Cannot create instance of class ${value._classname} because the class does not exist, property=${propertyPath}, class=${check.classname}`
+          );
+        if (check && !qx.Class.isSubClassOf(cls, check))
+          throw new Error(
+            `Cannot load instance of class ${value._classname} because the class is not compatible with the property check ${check}, property=${propertyPath}, class=${check.classname}`
+          );
+        check = cls;
+      }
 
       // If the check is a class which exists, then check will be that class
       if (check && typeof check != "string") {
@@ -320,7 +346,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
             map => new check(map)
           );
         } else if (qx.Class.isSubClassOf(check, qx.core.Object)) {
-          let refIo = propertyDef.refIo || propertyDef.defaultRefIo;
+          let refIo = getRefIo(check);
           if (refIo) {
             value = zx.utils.Promisify.resolveNow(refIo.fromJson(endpoint, value));
           } else {

@@ -1,21 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * @use(zx.server.WebServer)
@@ -50,13 +48,13 @@ qx.Class.define("zx.cli.commands.ServeCommand", {
       let config = new zx.server.Config();
       await config.loadConfig(this.getConfigFilename() || "cms.json");
 
-      let classname = qx.core.Environment.get(
-        "zx.cli.ServeCommand.ServerClassname"
-      );
+      let classname = qx.core.Environment.get("zx.cli.ServeCommand.ServerClassname");
       let clazz = qx.Class.getByName(classname);
       let server = new clazz();
       let port = this.getListenPort() || config.getConfigData().port;
-      if (port) server.setListenPort(port);
+      if (port) {
+        server.setListenPort(port);
+      }
       try {
         await server.start();
         //new zx.test.io.remote.RemoteXhrServer();
@@ -75,8 +73,12 @@ qx.Class.define("zx.cli.commands.ServeCommand", {
         run: async function () {
           let cmd = new zx.cli.commands.ServeCommand();
           let { flags } = this.getValues();
-          if (flags.port) cmd.setListenPort(flags.port);
-          if (flags.config) cmd.setConfigFilename(flags.config);
+          if (flags.port) {
+            cmd.setListenPort(flags.port);
+          }
+          if (flags.config) {
+            cmd.setConfigFilename(flags.config);
+          }
           return await cmd.run();
         }
       });

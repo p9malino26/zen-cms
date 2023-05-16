@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.ui.editor.PersonEditor", {
   extend: zx.ui.editor.FormEditor,
@@ -33,7 +33,7 @@ qx.Class.define("zx.test.ui.editor.PersonEditor", {
   },
 
   members: {
-    _masterValueEditor: true,
+    _masterValueEditor: true, // true by default, set here for clarity
 
     _saveValueImpl() {
       this.base(arguments);
@@ -58,9 +58,7 @@ qx.Class.define("zx.test.ui.editor.PersonEditor", {
             required: true,
             validator: value => {
               value = parseInt(value, 10);
-              return isNaN(value) || value < 18
-                ? "Please enter an age, 18 years or over"
-                : null;
+              return isNaN(value) || value < 18 ? "Please enter an age, 18 years or over" : null;
             }
           });
 

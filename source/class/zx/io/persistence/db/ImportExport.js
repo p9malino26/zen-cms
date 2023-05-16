@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const fs = require("fs-extra");
 const path = require("path");
@@ -60,7 +59,9 @@ qx.Class.define("zx.io.persistence.db.ImportExport", {
             await scan(path.join(dir, file.name), fileUrl);
             continue;
           }
-          if (!file.isFile() || !file.name.endsWith(".json")) continue;
+          if (!file.isFile() || !file.name.endsWith(".json")) {
+            continue;
+          }
 
           let name = file.name.substring(0, file.name.length - 5);
           let fileUrl = (url.length ? url + "/" : "") + name;
@@ -82,8 +83,10 @@ qx.Class.define("zx.io.persistence.db.ImportExport", {
               continue;
             }
 
-            if (json.url && json.url.toLowerCase() != fileUrl.toLowerCase())
+            if (json.url && json.url.toLowerCase() != fileUrl.toLowerCase()) {
               this.warn(`The URL in ${filename} is wrong, found ${json.url} changing to ${fileUrl}`);
+            }
+
             if (!url.endsWith("/_uuids")) {
               json.url = fileUrl;
             } else if (!json._uuid) {

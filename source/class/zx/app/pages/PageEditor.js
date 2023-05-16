@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.app.pages.PageEditor", {
   extend: zx.ui.editor.Editor,
@@ -55,12 +55,7 @@ qx.Class.define("zx.app.pages.PageEditor", {
       if (this.__miniEditor) {
         this.__miniEditor.liveEdited(propertyName, value);
       } else {
-        this.warn(
-          "Piece live edited but no editor available to handle it: uuid=" +
-            pieceUuid +
-            ", value=" +
-            value
-        );
+        this.warn("Piece live edited but no editor available to handle it: uuid=" + pieceUuid + ", value=" + value);
       }
     },
 
@@ -71,20 +66,11 @@ qx.Class.define("zx.app.pages.PageEditor", {
      */
     __onEditorPropertyChanged(evt) {
       let { propertyName, value, oldValue } = evt.getData();
-      let proxy = this.__windowIoController.getUriMapping(
-        "zx.thin.ThinClientApp.remoteControlProxy"
-      );
+      let proxy = this.__windowIoController.getUriMapping("zx.thin.ThinClientApp.remoteControlProxy");
       if (proxy) {
-        proxy.propertyChanged(
-          this.getCurrentPiece().getUuid(),
-          propertyName,
-          value,
-          oldValue
-        );
+        proxy.propertyChanged(this.getCurrentPiece().toUuid(), propertyName, value, oldValue);
       } else {
-        this.warn(
-          "Editor property changed but there is no remote control proxy to apply it"
-        );
+        this.warn("Editor property changed but there is no remote control proxy to apply it");
       }
     },
 
@@ -94,10 +80,7 @@ qx.Class.define("zx.app.pages.PageEditor", {
     _applyValue(value, oldValue) {
       const addNode = (parentNode, piece) => {
         var node;
-        if (
-          piece instanceof zx.cms.content.ContainerPiece ||
-          piece instanceof zx.cms.content.Page
-        ) {
+        if (piece instanceof zx.cms.content.ContainerPiece || piece instanceof zx.cms.content.Page) {
           node = new qx.ui.tree.TreeFolder(piece.describeForLayoutTree()).set({
             icon: "@FontAwesome/folder/16"
           });
@@ -144,10 +127,7 @@ qx.Class.define("zx.app.pages.PageEditor", {
           new zx.io.remote.WindowListener(this.__windowIoController);
 
           let proxy = new zx.app.pages.LiveEditProxy(this);
-          this.__windowIoController.putUriMapping(
-            "zx.app.pages.PageEditor.liveEditProxy",
-            proxy
-          );
+          this.__windowIoController.putUriMapping("zx.app.pages.PageEditor.liveEditProxy", proxy);
         }
 
         let rootNode = addNode(null, value);
@@ -169,11 +149,7 @@ qx.Class.define("zx.app.pages.PageEditor", {
           let ed = (this.__miniEditor = new this.__miniEditorClass());
           ed.setMasterValueAccessor(this);
           this.getQxObject("compMiniEditor").add(ed);
-          ed.addListener(
-            "propertyChanged",
-            this.__onEditorPropertyChanged,
-            this
-          );
+          ed.addListener("propertyChanged", this.__onEditorPropertyChanged, this);
           await ed.setValue(value);
         }
       };
@@ -183,11 +159,7 @@ qx.Class.define("zx.app.pages.PageEditor", {
           let ed = this.__miniEditor;
           this.__miniEditor = null;
           await ed.setValue(null);
-          ed.removeListener(
-            "propertyChanged",
-            this.__onEditorPropertyChanged,
-            this
-          );
+          ed.removeListener("propertyChanged", this.__onEditorPropertyChanged, this);
           this.getQxObject("compMiniEditor").remove(ed);
           ed.dispose();
         }
@@ -247,10 +219,7 @@ qx.Class.define("zx.app.pages.PageEditor", {
           return tb;
 
         case "btnRefresh":
-          var btn = new qx.ui.toolbar.Button(
-            "Refresh",
-            "@FontAwesomeSolid/redo/16"
-          );
+          var btn = new qx.ui.toolbar.Button("Refresh", "@FontAwesomeSolid/redo/16");
           btn.addListener("execute", () => {
             let iframe = this.getQxObject("iframe");
             let url = iframe.getSource();
