@@ -45,7 +45,9 @@ qx.Class.define("zx.server.Standalone", {
   },
 
   destruct() {
-    if (zx.server.Standalone.__instance === this) zx.server.Standalone.__instance = null;
+    if (zx.server.Standalone.__instance === this) {
+      zx.server.Standalone.__instance = null;
+    }
   },
 
   members: {

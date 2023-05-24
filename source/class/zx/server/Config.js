@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const path = require("path");
 
@@ -30,8 +29,7 @@ qx.Class.define("zx.server.Config", {
    */
   construct(data, rootDir) {
     this.base(arguments);
-    if (zx.server.Config.__instance)
-      throw new Error("Multiple instances of zx.server.Config");
+    if (zx.server.Config.__instance) throw new Error("Multiple instances of zx.server.Config");
     zx.server.Config.__instance = this;
     if (data) {
       this._config = data;
@@ -41,8 +39,7 @@ qx.Class.define("zx.server.Config", {
   },
 
   destruct() {
-    if (zx.server.Config.__instance === this)
-      zx.server.Config.__instance = null;
+    if (zx.server.Config.__instance === this) zx.server.Config.__instance = null;
   },
 
   members: {
@@ -55,14 +52,15 @@ qx.Class.define("zx.server.Config", {
      * @param filename {String?} the filename, default is "cms.json"
      */
     async loadConfig(filename) {
-      if (this._config) throw new Error("Cannot load configuration data twice");
-      if (!filename) filename = "cms.json";
+      if (this._config) {
+        throw new Error("Cannot load configuration data twice");
+      }
+      if (!filename) {
+        filename = "cms.json";
+      }
       this._config = await zx.utils.Json.loadJsonAsync(filename);
       let configDir = path.dirname(path.resolve(filename));
-      this._rootDir = path.resolve(
-        configDir,
-        this._config.directory || "website"
-      );
+      this._rootDir = path.resolve(configDir, this._config.directory || "website");
       return this._config;
     },
 
@@ -103,17 +101,13 @@ qx.Class.define("zx.server.Config", {
      * @return {Config} the instance
      */
     getInstance() {
-      if (!zx.server.Config.__instance)
-        throw new Error(
-          "An instance of zx.server.Config has not yet been created"
-        );
+      if (!zx.server.Config.__instance) throw new Error("An instance of zx.server.Config has not yet been created");
       return zx.server.Config.__instance;
     }
   },
 
   defer(statics) {
     // The resource dir is always the same on Qooxdoo v6 with the Qx Compiler
-    statics.RESOURCE_DIR =
-      qx.util.LibraryManager.getInstance().get("qx", "resourceUri") + path.sep;
+    statics.RESOURCE_DIR = qx.util.LibraryManager.getInstance().get("qx", "resourceUri") + path.sep;
   }
 });
