@@ -173,7 +173,6 @@ qx.Class.define("zx.server.WebServer", {
       let app = await this._createApplication();
 
       try {
-        debugger;
         await app.listen({
           port: this.getListenPort(),
           host: "localhost"
@@ -261,19 +260,14 @@ qx.Class.define("zx.server.WebServer", {
      */
     async _initSessions(app) {
       let sessionConfig = this._config.session || {};
-      if (!sessionConfig.secret)
-        this.warn("Using default secret for signing sessions - please set session.secret in the configuration");
+      if (!sessionConfig.secret) this.warn("Using default secret for signing sessions - please set session.secret in the configuration");
       if (sessionConfig.secret.length < 32) {
         this.warn("session.secret in the configuration is too short, it should be at least 32 characters");
         sessionConfig.secret = null;
       }
 
       let databaseConfig = this._config.database.mongo;
-      let manager = (this.__sessionManager = new zx.server.SessionManager(
-        databaseConfig.uri,
-        databaseConfig.databaseName,
-        "sessions"
-      ));
+      let manager = (this.__sessionManager = new zx.server.SessionManager(databaseConfig.uri, databaseConfig.databaseName, "sessions"));
       manager.set({
         secret: sessionConfig.secret || "yHbUWDFyEKikhuXgqzkgjxj7gBwZ6Ahm",
         cookieName: "zx.cms.sessionId",
@@ -762,10 +756,7 @@ qx.Class.define("zx.server.WebServer", {
         }
 
         if (!qx.Class.hasInterface(object.constructor, zx.cms.render.IViewable))
-          throw new zx.server.WebServer.HttpError(
-            500,
-            `Cannot render object for ${url} because it is not viewable, it is ${object.classname}: ${object}`
-          );
+          throw new zx.server.WebServer.HttpError(500, `Cannot render object for ${url} because it is not viewable, it is ${object.classname}: ${object}`);
 
         let rendering = new zx.cms.render.FastifyRendering(req, reply);
         try {

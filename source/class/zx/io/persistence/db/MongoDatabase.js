@@ -32,7 +32,7 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
   },
 
   destruct() {
-    if (this.__mongo) this.close();
+    if (this.__mongoClient) this.close();
   },
 
   members: {
@@ -46,7 +46,7 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
     __collectionName: null,
 
     /** @type{MongoClient} the Mongo client instance */
-    __mongo: null,
+    __mongoClient: null,
 
     /** @type{MongoClient.DB} the Mongo database */
     __db: null,
@@ -62,9 +62,9 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
      */
     async open() {
       const { MongoClient } = require("mongodb");
-      this.__mongo = new MongoClient(this.__uri);
-      await this.__mongo.connect();
-      this.__db = this.__mongo.db(this.__databaseName);
+      this.__mongoClient = new MongoClient(this.__uri);
+      await this.__mongoClient.connect();
+      this.__db = this.__mongoClient.db(this.__databaseName);
       let collections = await this.__db.collections();
       let exists = collections.find(coll => coll.collectionName == this.__collectionName);
       this.__newDatabase = !exists;
@@ -79,6 +79,15 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
      * @returns {MongoClient}
      */
     getMongoClient() {
+      return this.__mongoClient;
+    },
+
+    /**
+     * Returns the mongo client connection
+     *
+     * @returns {MongoClient}
+     */
+    getMongoDb() {
       return this.__db;
     },
 
@@ -95,9 +104,9 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
      * @Override
      */
     async close() {
-      if (this.__mongo) {
-        this.__mongo.close();
-        this.__mongo = null;
+      if (this.__mongoClient) {
+        this.__mongoClient.close();
+        this.__mongoClient = null;
         this.__db = null;
         this.__collection = null;
       }

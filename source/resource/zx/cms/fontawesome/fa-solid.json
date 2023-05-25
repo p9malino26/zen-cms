@@ -1,0 +1,6952 @@
+{
+  "0": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "30"
+  },
+  "1": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "31"
+  },
+  "2": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "32"
+  },
+  "3": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "33"
+  },
+  "4": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "34"
+  },
+  "5": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "35"
+  },
+  "6": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "36"
+  },
+  "7": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "37"
+  },
+  "8": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "38"
+  },
+  "9": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "39"
+  },
+  "a": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "41"
+  },
+  "address-book": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2b9"
+  },
+  "address-card": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2bb"
+  },
+  "align-center": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f037"
+  },
+  "align-justify": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f039"
+  },
+  "align-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f036"
+  },
+  "align-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f038"
+  },
+  "anchor": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f13d"
+  },
+  "anchor-circle-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4aa"
+  },
+  "anchor-circle-exclamation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4ab"
+  },
+  "anchor-circle-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4ac"
+  },
+  "anchor-lock": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4ad"
+  },
+  "angle-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f107"
+  },
+  "angle-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f104"
+  },
+  "angle-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f105"
+  },
+  "angle-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f106"
+  },
+  "angles-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f103"
+  },
+  "angles-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f100"
+  },
+  "angles-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f101"
+  },
+  "angles-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f102"
+  },
+  "ankh": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f644"
+  },
+  "apple-whole": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5d1"
+  },
+  "archway": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f557"
+  },
+  "arrow-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f063"
+  },
+  "arrow-down-1-9": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f162"
+  },
+  "arrow-down-9-1": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f886"
+  },
+  "arrow-down-a-z": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f15d"
+  },
+  "arrow-down-long": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f175"
+  },
+  "arrow-down-short-wide": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f884"
+  },
+  "arrow-down-up-across-line": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4af"
+  },
+  "arrow-down-up-lock": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4b0"
+  },
+  "arrow-down-wide-short": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f160"
+  },
+  "arrow-down-z-a": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f881"
+  },
+  "arrow-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f060"
+  },
+  "arrow-left-long": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f177"
+  },
+  "arrow-pointer": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f245"
+  },
+  "arrow-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f061"
+  },
+  "arrow-right-arrow-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0ec"
+  },
+  "arrow-right-from-bracket": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f08b"
+  },
+  "arrow-right-long": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f178"
+  },
+  "arrow-right-to-bracket": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f090"
+  },
+  "arrow-right-to-city": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4b3"
+  },
+  "arrow-rotate-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0e2"
+  },
+  "arrow-rotate-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f01e"
+  },
+  "arrow-trend-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e097"
+  },
+  "arrow-trend-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e098"
+  },
+  "arrow-turn-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f149"
+  },
+  "arrow-turn-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f148"
+  },
+  "arrow-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f062"
+  },
+  "arrow-up-1-9": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f163"
+  },
+  "arrow-up-9-1": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f887"
+  },
+  "arrow-up-a-z": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f15e"
+  },
+  "arrow-up-from-bracket": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e09a"
+  },
+  "arrow-up-from-ground-water": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4b5"
+  },
+  "arrow-up-from-water-pump": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4b6"
+  },
+  "arrow-up-long": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f176"
+  },
+  "arrow-up-right-dots": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4b7"
+  },
+  "arrow-up-right-from-square": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f08e"
+  },
+  "arrow-up-short-wide": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f885"
+  },
+  "arrow-up-wide-short": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f161"
+  },
+  "arrow-up-z-a": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f882"
+  },
+  "arrows-down-to-line": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4b8"
+  },
+  "arrows-down-to-people": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4b9"
+  },
+  "arrows-left-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f07e"
+  },
+  "arrows-left-right-to-line": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4ba"
+  },
+  "arrows-rotate": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f021"
+  },
+  "arrows-spin": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4bb"
+  },
+  "arrows-split-up-and-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4bc"
+  },
+  "arrows-to-circle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4bd"
+  },
+  "arrows-to-dot": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4be"
+  },
+  "arrows-to-eye": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4bf"
+  },
+  "arrows-turn-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4c0"
+  },
+  "arrows-turn-to-dots": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4c1"
+  },
+  "arrows-up-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f07d"
+  },
+  "arrows-up-down-left-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f047"
+  },
+  "arrows-up-to-line": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4c2"
+  },
+  "asterisk": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "2a"
+  },
+  "at": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "40"
+  },
+  "atom": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5d2"
+  },
+  "audio-description": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f29e"
+  },
+  "austral-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e0a9"
+  },
+  "award": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f559"
+  },
+  "b": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "42"
+  },
+  "baby": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f77c"
+  },
+  "baby-carriage": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f77d"
+  },
+  "backward": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f04a"
+  },
+  "backward-fast": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f049"
+  },
+  "backward-step": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f048"
+  },
+  "bacon": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7e5"
+  },
+  "bacteria": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e059"
+  },
+  "bacterium": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e05a"
+  },
+  "bag-shopping": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f290"
+  },
+  "bahai": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f666"
+  },
+  "baht-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e0ac"
+  },
+  "ban": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f05e"
+  },
+  "ban-smoking": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f54d"
+  },
+  "bandage": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f462"
+  },
+  "bangladeshi-taka-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e2e6"
+  },
+  "barcode": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f02a"
+  },
+  "bars": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0c9"
+  },
+  "bars-progress": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f828"
+  },
+  "bars-staggered": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f550"
+  },
+  "baseball": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f433"
+  },
+  "baseball-bat-ball": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f432"
+  },
+  "basket-shopping": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f291"
+  },
+  "basketball": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f434"
+  },
+  "bath": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2cd"
+  },
+  "battery-empty": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f244"
+  },
+  "battery-full": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f240"
+  },
+  "battery-half": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f242"
+  },
+  "battery-quarter": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f243"
+  },
+  "battery-three-quarters": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f241"
+  },
+  "bed": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f236"
+  },
+  "bed-pulse": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f487"
+  },
+  "beer-mug-empty": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0fc"
+  },
+  "bell": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0f3"
+  },
+  "bell-concierge": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f562"
+  },
+  "bell-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1f6"
+  },
+  "bezier-curve": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f55b"
+  },
+  "bicycle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f206"
+  },
+  "binoculars": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1e5"
+  },
+  "biohazard": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f780"
+  },
+  "bitcoin-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e0b4"
+  },
+  "blender": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f517"
+  },
+  "blender-phone": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6b6"
+  },
+  "blog": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f781"
+  },
+  "bold": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f032"
+  },
+  "bolt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0e7"
+  },
+  "bolt-lightning": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e0b7"
+  },
+  "bomb": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1e2"
+  },
+  "bone": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5d7"
+  },
+  "bong": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f55c"
+  },
+  "book": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f02d"
+  },
+  "book-atlas": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f558"
+  },
+  "book-bible": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f647"
+  },
+  "book-bookmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e0bb"
+  },
+  "book-journal-whills": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f66a"
+  },
+  "book-medical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7e6"
+  },
+  "book-open": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f518"
+  },
+  "book-open-reader": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5da"
+  },
+  "book-quran": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f687"
+  },
+  "book-skull": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6b7"
+  },
+  "book-tanakh": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f827"
+  },
+  "bookmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f02e"
+  },
+  "border-all": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f84c"
+  },
+  "border-none": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f850"
+  },
+  "border-top-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f853"
+  },
+  "bore-hole": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4c3"
+  },
+  "bottle-droplet": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4c4"
+  },
+  "bottle-water": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4c5"
+  },
+  "bowl-food": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4c6"
+  },
+  "bowl-rice": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e2eb"
+  },
+  "bowling-ball": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f436"
+  },
+  "box": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f466"
+  },
+  "box-archive": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f187"
+  },
+  "box-open": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f49e"
+  },
+  "box-tissue": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e05b"
+  },
+  "boxes-packing": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4c7"
+  },
+  "boxes-stacked": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f468"
+  },
+  "braille": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2a1"
+  },
+  "brain": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5dc"
+  },
+  "brazilian-real-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e46c"
+  },
+  "bread-slice": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7ec"
+  },
+  "bridge": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4c8"
+  },
+  "bridge-circle-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4c9"
+  },
+  "bridge-circle-exclamation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4ca"
+  },
+  "bridge-circle-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4cb"
+  },
+  "bridge-lock": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4cc"
+  },
+  "bridge-water": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4ce"
+  },
+  "briefcase": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0b1"
+  },
+  "briefcase-medical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f469"
+  },
+  "broom": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f51a"
+  },
+  "broom-ball": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f458"
+  },
+  "brush": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f55d"
+  },
+  "bucket": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4cf"
+  },
+  "bug": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f188"
+  },
+  "bug-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e490"
+  },
+  "bugs": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4d0"
+  },
+  "building": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1ad"
+  },
+  "building-circle-arrow-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4d1"
+  },
+  "building-circle-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4d2"
+  },
+  "building-circle-exclamation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4d3"
+  },
+  "building-circle-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4d4"
+  },
+  "building-columns": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f19c"
+  },
+  "building-flag": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4d5"
+  },
+  "building-lock": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4d6"
+  },
+  "building-ngo": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4d7"
+  },
+  "building-shield": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4d8"
+  },
+  "building-un": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4d9"
+  },
+  "building-user": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4da"
+  },
+  "building-wheat": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4db"
+  },
+  "bullhorn": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0a1"
+  },
+  "bullseye": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f140"
+  },
+  "burger": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f805"
+  },
+  "burst": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4dc"
+  },
+  "bus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f207"
+  },
+  "bus-simple": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f55e"
+  },
+  "business-time": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f64a"
+  },
+  "c": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "43"
+  },
+  "cable-car": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7da"
+  },
+  "cake-candles": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1fd"
+  },
+  "calculator": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1ec"
+  },
+  "calendar": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f133"
+  },
+  "calendar-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f274"
+  },
+  "calendar-day": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f783"
+  },
+  "calendar-days": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f073"
+  },
+  "calendar-minus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f272"
+  },
+  "calendar-plus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f271"
+  },
+  "calendar-week": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f784"
+  },
+  "calendar-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f273"
+  },
+  "camera": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f030"
+  },
+  "camera-retro": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f083"
+  },
+  "camera-rotate": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e0d8"
+  },
+  "campground": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6bb"
+  },
+  "candy-cane": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f786"
+  },
+  "cannabis": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f55f"
+  },
+  "capsules": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f46b"
+  },
+  "car": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1b9"
+  },
+  "car-battery": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5df"
+  },
+  "car-burst": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5e1"
+  },
+  "car-on": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4dd"
+  },
+  "car-rear": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5de"
+  },
+  "car-side": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5e4"
+  },
+  "car-tunnel": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4de"
+  },
+  "caravan": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f8ff"
+  },
+  "caret-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0d7"
+  },
+  "caret-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0d9"
+  },
+  "caret-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0da"
+  },
+  "caret-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0d8"
+  },
+  "carrot": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f787"
+  },
+  "cart-arrow-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f218"
+  },
+  "cart-flatbed": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f474"
+  },
+  "cart-flatbed-suitcase": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f59d"
+  },
+  "cart-plus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f217"
+  },
+  "cart-shopping": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f07a"
+  },
+  "cash-register": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f788"
+  },
+  "cat": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6be"
+  },
+  "cedi-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e0df"
+  },
+  "cent-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e3f5"
+  },
+  "certificate": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0a3"
+  },
+  "chair": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6c0"
+  },
+  "chalkboard": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f51b"
+  },
+  "chalkboard-user": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f51c"
+  },
+  "champagne-glasses": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f79f"
+  },
+  "charging-station": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5e7"
+  },
+  "chart-area": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1fe"
+  },
+  "chart-bar": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f080"
+  },
+  "chart-column": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e0e3"
+  },
+  "chart-gantt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e0e4"
+  },
+  "chart-line": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f201"
+  },
+  "chart-pie": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f200"
+  },
+  "chart-simple": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e473"
+  },
+  "check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f00c"
+  },
+  "check-double": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f560"
+  },
+  "check-to-slot": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f772"
+  },
+  "cheese": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7ef"
+  },
+  "chess": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f439"
+  },
+  "chess-bishop": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f43a"
+  },
+  "chess-board": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f43c"
+  },
+  "chess-king": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f43f"
+  },
+  "chess-knight": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f441"
+  },
+  "chess-pawn": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f443"
+  },
+  "chess-queen": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f445"
+  },
+  "chess-rook": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f447"
+  },
+  "chevron-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f078"
+  },
+  "chevron-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f053"
+  },
+  "chevron-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f054"
+  },
+  "chevron-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f077"
+  },
+  "child": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1ae"
+  },
+  "child-combatant": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4e0"
+  },
+  "child-dress": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e59c"
+  },
+  "child-reaching": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e59d"
+  },
+  "children": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4e1"
+  },
+  "church": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f51d"
+  },
+  "circle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f111"
+  },
+  "circle-arrow-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0ab"
+  },
+  "circle-arrow-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0a8"
+  },
+  "circle-arrow-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0a9"
+  },
+  "circle-arrow-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0aa"
+  },
+  "circle-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f058"
+  },
+  "circle-chevron-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f13a"
+  },
+  "circle-chevron-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f137"
+  },
+  "circle-chevron-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f138"
+  },
+  "circle-chevron-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f139"
+  },
+  "circle-dollar-to-slot": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4b9"
+  },
+  "circle-dot": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f192"
+  },
+  "circle-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f358"
+  },
+  "circle-exclamation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f06a"
+  },
+  "circle-h": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f47e"
+  },
+  "circle-half-stroke": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f042"
+  },
+  "circle-info": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f05a"
+  },
+  "circle-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f359"
+  },
+  "circle-minus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f056"
+  },
+  "circle-nodes": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4e2"
+  },
+  "circle-notch": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1ce"
+  },
+  "circle-pause": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f28b"
+  },
+  "circle-play": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f144"
+  },
+  "circle-plus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f055"
+  },
+  "circle-question": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f059"
+  },
+  "circle-radiation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7ba"
+  },
+  "circle-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f35a"
+  },
+  "circle-stop": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f28d"
+  },
+  "circle-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f35b"
+  },
+  "circle-user": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2bd"
+  },
+  "circle-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f057"
+  },
+  "city": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f64f"
+  },
+  "clapperboard": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e131"
+  },
+  "clipboard": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f328"
+  },
+  "clipboard-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f46c"
+  },
+  "clipboard-list": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f46d"
+  },
+  "clipboard-question": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4e3"
+  },
+  "clipboard-user": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7f3"
+  },
+  "clock": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f017"
+  },
+  "clock-rotate-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1da"
+  },
+  "clone": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f24d"
+  },
+  "closed-captioning": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f20a"
+  },
+  "cloud": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0c2"
+  },
+  "cloud-arrow-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0ed"
+  },
+  "cloud-arrow-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0ee"
+  },
+  "cloud-bolt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f76c"
+  },
+  "cloud-meatball": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f73b"
+  },
+  "cloud-moon": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6c3"
+  },
+  "cloud-moon-rain": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f73c"
+  },
+  "cloud-rain": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f73d"
+  },
+  "cloud-showers-heavy": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f740"
+  },
+  "cloud-showers-water": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4e4"
+  },
+  "cloud-sun": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6c4"
+  },
+  "cloud-sun-rain": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f743"
+  },
+  "clover": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e139"
+  },
+  "code": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f121"
+  },
+  "code-branch": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f126"
+  },
+  "code-commit": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f386"
+  },
+  "code-compare": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e13a"
+  },
+  "code-fork": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e13b"
+  },
+  "code-merge": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f387"
+  },
+  "code-pull-request": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e13c"
+  },
+  "coins": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f51e"
+  },
+  "colon-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e140"
+  },
+  "comment": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f075"
+  },
+  "comment-dollar": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f651"
+  },
+  "comment-dots": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4ad"
+  },
+  "comment-medical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7f5"
+  },
+  "comment-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4b3"
+  },
+  "comment-sms": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7cd"
+  },
+  "comments": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f086"
+  },
+  "comments-dollar": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f653"
+  },
+  "compact-disc": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f51f"
+  },
+  "compass": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f14e"
+  },
+  "compass-drafting": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f568"
+  },
+  "compress": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f066"
+  },
+  "computer": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4e5"
+  },
+  "computer-mouse": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f8cc"
+  },
+  "cookie": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f563"
+  },
+  "cookie-bite": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f564"
+  },
+  "copy": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0c5"
+  },
+  "copyright": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1f9"
+  },
+  "couch": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4b8"
+  },
+  "cow": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6c8"
+  },
+  "credit-card": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f09d"
+  },
+  "crop": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f125"
+  },
+  "crop-simple": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f565"
+  },
+  "cross": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f654"
+  },
+  "crosshairs": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f05b"
+  },
+  "crow": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f520"
+  },
+  "crown": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f521"
+  },
+  "crutch": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7f7"
+  },
+  "cruzeiro-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e152"
+  },
+  "cube": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1b2"
+  },
+  "cubes": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1b3"
+  },
+  "cubes-stacked": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4e6"
+  },
+  "d": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "44"
+  },
+  "database": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1c0"
+  },
+  "delete-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f55a"
+  },
+  "democrat": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f747"
+  },
+  "desktop": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f390"
+  },
+  "dharmachakra": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f655"
+  },
+  "diagram-next": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e476"
+  },
+  "diagram-predecessor": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e477"
+  },
+  "diagram-project": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f542"
+  },
+  "diagram-successor": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e47a"
+  },
+  "diamond": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f219"
+  },
+  "diamond-turn-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5eb"
+  },
+  "dice": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f522"
+  },
+  "dice-d20": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6cf"
+  },
+  "dice-d6": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6d1"
+  },
+  "dice-five": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f523"
+  },
+  "dice-four": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f524"
+  },
+  "dice-one": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f525"
+  },
+  "dice-six": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f526"
+  },
+  "dice-three": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f527"
+  },
+  "dice-two": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f528"
+  },
+  "disease": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7fa"
+  },
+  "display": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e163"
+  },
+  "divide": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f529"
+  },
+  "dna": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f471"
+  },
+  "dog": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6d3"
+  },
+  "dollar-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "24"
+  },
+  "dolly": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f472"
+  },
+  "dong-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e169"
+  },
+  "door-closed": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f52a"
+  },
+  "door-open": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f52b"
+  },
+  "dove": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4ba"
+  },
+  "down-left-and-up-right-to-center": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f422"
+  },
+  "down-long": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f309"
+  },
+  "download": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f019"
+  },
+  "dragon": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6d5"
+  },
+  "draw-polygon": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5ee"
+  },
+  "droplet": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f043"
+  },
+  "droplet-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5c7"
+  },
+  "drum": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f569"
+  },
+  "drum-steelpan": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f56a"
+  },
+  "drumstick-bite": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6d7"
+  },
+  "dumbbell": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f44b"
+  },
+  "dumpster": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f793"
+  },
+  "dumpster-fire": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f794"
+  },
+  "dungeon": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6d9"
+  },
+  "e": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "45"
+  },
+  "ear-deaf": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2a4"
+  },
+  "ear-listen": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2a2"
+  },
+  "earth-africa": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f57c"
+  },
+  "earth-americas": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f57d"
+  },
+  "earth-asia": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f57e"
+  },
+  "earth-europe": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7a2"
+  },
+  "earth-oceania": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e47b"
+  },
+  "egg": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7fb"
+  },
+  "eject": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f052"
+  },
+  "elevator": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e16d"
+  },
+  "ellipsis": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f141"
+  },
+  "ellipsis-vertical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f142"
+  },
+  "envelope": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0e0"
+  },
+  "envelope-circle-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4e8"
+  },
+  "envelope-open": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2b6"
+  },
+  "envelope-open-text": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f658"
+  },
+  "envelopes-bulk": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f674"
+  },
+  "equals": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "3d"
+  },
+  "eraser": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f12d"
+  },
+  "ethernet": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f796"
+  },
+  "euro-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f153"
+  },
+  "exclamation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "21"
+  },
+  "expand": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f065"
+  },
+  "explosion": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4e9"
+  },
+  "eye": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f06e"
+  },
+  "eye-dropper": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1fb"
+  },
+  "eye-low-vision": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2a8"
+  },
+  "eye-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f070"
+  },
+  "f": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "46"
+  },
+  "face-angry": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f556"
+  },
+  "face-dizzy": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f567"
+  },
+  "face-flushed": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f579"
+  },
+  "face-frown": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f119"
+  },
+  "face-frown-open": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f57a"
+  },
+  "face-grimace": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f57f"
+  },
+  "face-grin": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f580"
+  },
+  "face-grin-beam": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f582"
+  },
+  "face-grin-beam-sweat": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f583"
+  },
+  "face-grin-hearts": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f584"
+  },
+  "face-grin-squint": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f585"
+  },
+  "face-grin-squint-tears": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f586"
+  },
+  "face-grin-stars": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f587"
+  },
+  "face-grin-tears": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f588"
+  },
+  "face-grin-tongue": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f589"
+  },
+  "face-grin-tongue-squint": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f58a"
+  },
+  "face-grin-tongue-wink": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f58b"
+  },
+  "face-grin-wide": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f581"
+  },
+  "face-grin-wink": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f58c"
+  },
+  "face-kiss": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f596"
+  },
+  "face-kiss-beam": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f597"
+  },
+  "face-kiss-wink-heart": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f598"
+  },
+  "face-laugh": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f599"
+  },
+  "face-laugh-beam": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f59a"
+  },
+  "face-laugh-squint": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f59b"
+  },
+  "face-laugh-wink": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f59c"
+  },
+  "face-meh": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f11a"
+  },
+  "face-meh-blank": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5a4"
+  },
+  "face-rolling-eyes": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5a5"
+  },
+  "face-sad-cry": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5b3"
+  },
+  "face-sad-tear": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5b4"
+  },
+  "face-smile": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f118"
+  },
+  "face-smile-beam": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5b8"
+  },
+  "face-smile-wink": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4da"
+  },
+  "face-surprise": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5c2"
+  },
+  "face-tired": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5c8"
+  },
+  "fan": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f863"
+  },
+  "faucet": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e005"
+  },
+  "faucet-drip": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e006"
+  },
+  "fax": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1ac"
+  },
+  "feather": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f52d"
+  },
+  "feather-pointed": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f56b"
+  },
+  "ferry": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4ea"
+  },
+  "file": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f15b"
+  },
+  "file-arrow-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f56d"
+  },
+  "file-arrow-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f574"
+  },
+  "file-audio": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1c7"
+  },
+  "file-circle-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e5a0"
+  },
+  "file-circle-exclamation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4eb"
+  },
+  "file-circle-minus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4ed"
+  },
+  "file-circle-plus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e494"
+  },
+  "file-circle-question": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4ef"
+  },
+  "file-circle-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e5a1"
+  },
+  "file-code": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1c9"
+  },
+  "file-contract": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f56c"
+  },
+  "file-csv": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6dd"
+  },
+  "file-excel": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1c3"
+  },
+  "file-export": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f56e"
+  },
+  "file-image": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1c5"
+  },
+  "file-import": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f56f"
+  },
+  "file-invoice": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f570"
+  },
+  "file-invoice-dollar": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f571"
+  },
+  "file-lines": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f15c"
+  },
+  "file-medical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f477"
+  },
+  "file-pdf": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1c1"
+  },
+  "file-pen": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f31c"
+  },
+  "file-powerpoint": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1c4"
+  },
+  "file-prescription": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f572"
+  },
+  "file-shield": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4f0"
+  },
+  "file-signature": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f573"
+  },
+  "file-video": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1c8"
+  },
+  "file-waveform": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f478"
+  },
+  "file-word": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1c2"
+  },
+  "file-zipper": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1c6"
+  },
+  "fill": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f575"
+  },
+  "fill-drip": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f576"
+  },
+  "film": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f008"
+  },
+  "filter": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0b0"
+  },
+  "filter-circle-dollar": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f662"
+  },
+  "filter-circle-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e17b"
+  },
+  "fingerprint": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f577"
+  },
+  "fire": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f06d"
+  },
+  "fire-burner": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4f1"
+  },
+  "fire-extinguisher": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f134"
+  },
+  "fire-flame-curved": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7e4"
+  },
+  "fire-flame-simple": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f46a"
+  },
+  "fish": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f578"
+  },
+  "fish-fins": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4f2"
+  },
+  "flag": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f024"
+  },
+  "flag-checkered": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f11e"
+  },
+  "flag-usa": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f74d"
+  },
+  "flask": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0c3"
+  },
+  "flask-vial": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4f3"
+  },
+  "floppy-disk": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0c7"
+  },
+  "florin-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e184"
+  },
+  "folder": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f07b"
+  },
+  "folder-closed": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e185"
+  },
+  "folder-minus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f65d"
+  },
+  "folder-open": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f07c"
+  },
+  "folder-plus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f65e"
+  },
+  "folder-tree": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f802"
+  },
+  "font": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f031"
+  },
+  "font-awesome": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2b4"
+  },
+  "football": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f44e"
+  },
+  "forward": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f04e"
+  },
+  "forward-fast": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f050"
+  },
+  "forward-step": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f051"
+  },
+  "franc-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e18f"
+  },
+  "frog": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f52e"
+  },
+  "futbol": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1e3"
+  },
+  "g": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "47"
+  },
+  "gamepad": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f11b"
+  },
+  "gas-pump": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f52f"
+  },
+  "gauge": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f624"
+  },
+  "gauge-high": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f625"
+  },
+  "gauge-simple": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f629"
+  },
+  "gauge-simple-high": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f62a"
+  },
+  "gavel": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0e3"
+  },
+  "gear": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f013"
+  },
+  "gears": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f085"
+  },
+  "gem": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3a5"
+  },
+  "genderless": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f22d"
+  },
+  "ghost": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6e2"
+  },
+  "gift": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f06b"
+  },
+  "gifts": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f79c"
+  },
+  "glass-water": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4f4"
+  },
+  "glass-water-droplet": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4f5"
+  },
+  "glasses": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f530"
+  },
+  "globe": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0ac"
+  },
+  "golf-ball-tee": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f450"
+  },
+  "gopuram": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f664"
+  },
+  "graduation-cap": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f19d"
+  },
+  "greater-than": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "3e"
+  },
+  "greater-than-equal": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f532"
+  },
+  "grip": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f58d"
+  },
+  "grip-lines": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7a4"
+  },
+  "grip-lines-vertical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7a5"
+  },
+  "grip-vertical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f58e"
+  },
+  "group-arrows-rotate": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4f6"
+  },
+  "guarani-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e19a"
+  },
+  "guitar": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7a6"
+  },
+  "gun": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e19b"
+  },
+  "h": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "48"
+  },
+  "hammer": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6e3"
+  },
+  "hamsa": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f665"
+  },
+  "hand": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f256"
+  },
+  "hand-back-fist": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f255"
+  },
+  "hand-dots": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f461"
+  },
+  "hand-fist": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6de"
+  },
+  "hand-holding": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4bd"
+  },
+  "hand-holding-dollar": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4c0"
+  },
+  "hand-holding-droplet": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4c1"
+  },
+  "hand-holding-hand": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4f7"
+  },
+  "hand-holding-heart": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4be"
+  },
+  "hand-holding-medical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e05c"
+  },
+  "hand-lizard": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f258"
+  },
+  "hand-middle-finger": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f806"
+  },
+  "hand-peace": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f25b"
+  },
+  "hand-point-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0a7"
+  },
+  "hand-point-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0a5"
+  },
+  "hand-point-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0a4"
+  },
+  "hand-point-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0a6"
+  },
+  "hand-pointer": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f25a"
+  },
+  "hand-scissors": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f257"
+  },
+  "hand-sparkles": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e05d"
+  },
+  "hand-spock": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f259"
+  },
+  "handcuffs": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4f8"
+  },
+  "hands": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2a7"
+  },
+  "hands-asl-interpreting": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2a3"
+  },
+  "hands-bound": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4f9"
+  },
+  "hands-bubbles": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e05e"
+  },
+  "hands-clapping": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e1a8"
+  },
+  "hands-holding": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4c2"
+  },
+  "hands-holding-child": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4fa"
+  },
+  "hands-holding-circle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4fb"
+  },
+  "hands-praying": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f684"
+  },
+  "handshake": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2b5"
+  },
+  "handshake-angle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4c4"
+  },
+  "handshake-simple": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4c6"
+  },
+  "handshake-simple-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e05f"
+  },
+  "handshake-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e060"
+  },
+  "hanukiah": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6e6"
+  },
+  "hard-drive": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0a0"
+  },
+  "hashtag": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "23"
+  },
+  "hat-cowboy": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f8c0"
+  },
+  "hat-cowboy-side": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f8c1"
+  },
+  "hat-wizard": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6e8"
+  },
+  "head-side-cough": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e061"
+  },
+  "head-side-cough-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e062"
+  },
+  "head-side-mask": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e063"
+  },
+  "head-side-virus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e064"
+  },
+  "heading": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1dc"
+  },
+  "headphones": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f025"
+  },
+  "headphones-simple": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f58f"
+  },
+  "headset": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f590"
+  },
+  "heart": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f004"
+  },
+  "heart-circle-bolt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4fc"
+  },
+  "heart-circle-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4fd"
+  },
+  "heart-circle-exclamation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4fe"
+  },
+  "heart-circle-minus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4ff"
+  },
+  "heart-circle-plus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e500"
+  },
+  "heart-circle-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e501"
+  },
+  "heart-crack": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7a9"
+  },
+  "heart-pulse": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f21e"
+  },
+  "helicopter": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f533"
+  },
+  "helicopter-symbol": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e502"
+  },
+  "helmet-safety": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f807"
+  },
+  "helmet-un": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e503"
+  },
+  "highlighter": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f591"
+  },
+  "hill-avalanche": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e507"
+  },
+  "hill-rockslide": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e508"
+  },
+  "hippo": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6ed"
+  },
+  "hockey-puck": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f453"
+  },
+  "holly-berry": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7aa"
+  },
+  "horse": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6f0"
+  },
+  "horse-head": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7ab"
+  },
+  "hospital": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0f8"
+  },
+  "hospital-user": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f80d"
+  },
+  "hot-tub-person": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f593"
+  },
+  "hotdog": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f80f"
+  },
+  "hotel": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f594"
+  },
+  "hourglass": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f254"
+  },
+  "hourglass-end": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f253"
+  },
+  "hourglass-half": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f252"
+  },
+  "hourglass-start": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f251"
+  },
+  "house": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f015"
+  },
+  "house-chimney": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e3af"
+  },
+  "house-chimney-crack": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6f1"
+  },
+  "house-chimney-medical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7f2"
+  },
+  "house-chimney-user": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e065"
+  },
+  "house-chimney-window": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e00d"
+  },
+  "house-circle-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e509"
+  },
+  "house-circle-exclamation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e50a"
+  },
+  "house-circle-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e50b"
+  },
+  "house-crack": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e3b1"
+  },
+  "house-fire": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e50c"
+  },
+  "house-flag": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e50d"
+  },
+  "house-flood-water": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e50e"
+  },
+  "house-flood-water-circle-arrow-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e50f"
+  },
+  "house-laptop": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e066"
+  },
+  "house-lock": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e510"
+  },
+  "house-medical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e3b2"
+  },
+  "house-medical-circle-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e511"
+  },
+  "house-medical-circle-exclamation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e512"
+  },
+  "house-medical-circle-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e513"
+  },
+  "house-medical-flag": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e514"
+  },
+  "house-signal": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e012"
+  },
+  "house-tsunami": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e515"
+  },
+  "house-user": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e1b0"
+  },
+  "hryvnia-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6f2"
+  },
+  "hurricane": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f751"
+  },
+  "i": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "49"
+  },
+  "i-cursor": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f246"
+  },
+  "ice-cream": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f810"
+  },
+  "icicles": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7ad"
+  },
+  "icons": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f86d"
+  },
+  "id-badge": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2c1"
+  },
+  "id-card": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2c2"
+  },
+  "id-card-clip": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f47f"
+  },
+  "igloo": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7ae"
+  },
+  "image": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f03e"
+  },
+  "image-portrait": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3e0"
+  },
+  "images": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f302"
+  },
+  "inbox": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f01c"
+  },
+  "indent": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f03c"
+  },
+  "indian-rupee-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e1bc"
+  },
+  "industry": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f275"
+  },
+  "infinity": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f534"
+  },
+  "info": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f129"
+  },
+  "italic": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f033"
+  },
+  "j": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "4a"
+  },
+  "jar": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e516"
+  },
+  "jar-wheat": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e517"
+  },
+  "jedi": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f669"
+  },
+  "jet-fighter": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0fb"
+  },
+  "jet-fighter-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e518"
+  },
+  "joint": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f595"
+  },
+  "jug-detergent": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e519"
+  },
+  "k": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "4b"
+  },
+  "kaaba": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f66b"
+  },
+  "key": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f084"
+  },
+  "keyboard": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f11c"
+  },
+  "khanda": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f66d"
+  },
+  "kip-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e1c4"
+  },
+  "kit-medical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f479"
+  },
+  "kitchen-set": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e51a"
+  },
+  "kiwi-bird": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f535"
+  },
+  "l": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "4c"
+  },
+  "land-mine-on": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e51b"
+  },
+  "landmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f66f"
+  },
+  "landmark-dome": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f752"
+  },
+  "landmark-flag": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e51c"
+  },
+  "language": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1ab"
+  },
+  "laptop": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f109"
+  },
+  "laptop-code": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5fc"
+  },
+  "laptop-file": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e51d"
+  },
+  "laptop-medical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f812"
+  },
+  "lari-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e1c8"
+  },
+  "layer-group": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5fd"
+  },
+  "leaf": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f06c"
+  },
+  "left-long": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f30a"
+  },
+  "left-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f337"
+  },
+  "lemon": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f094"
+  },
+  "less-than": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "3c"
+  },
+  "less-than-equal": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f537"
+  },
+  "life-ring": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1cd"
+  },
+  "lightbulb": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0eb"
+  },
+  "lines-leaning": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e51e"
+  },
+  "link": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0c1"
+  },
+  "link-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f127"
+  },
+  "lira-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f195"
+  },
+  "list": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f03a"
+  },
+  "list-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0ae"
+  },
+  "list-ol": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0cb"
+  },
+  "list-ul": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0ca"
+  },
+  "litecoin-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e1d3"
+  },
+  "location-arrow": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f124"
+  },
+  "location-crosshairs": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f601"
+  },
+  "location-dot": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3c5"
+  },
+  "location-pin": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f041"
+  },
+  "location-pin-lock": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e51f"
+  },
+  "lock": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f023"
+  },
+  "lock-open": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3c1"
+  },
+  "locust": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e520"
+  },
+  "lungs": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f604"
+  },
+  "lungs-virus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e067"
+  },
+  "m": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "4d"
+  },
+  "magnet": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f076"
+  },
+  "magnifying-glass": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f002"
+  },
+  "magnifying-glass-arrow-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e521"
+  },
+  "magnifying-glass-chart": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e522"
+  },
+  "magnifying-glass-dollar": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f688"
+  },
+  "magnifying-glass-location": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f689"
+  },
+  "magnifying-glass-minus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f010"
+  },
+  "magnifying-glass-plus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f00e"
+  },
+  "manat-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e1d5"
+  },
+  "map": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f279"
+  },
+  "map-location": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f59f"
+  },
+  "map-location-dot": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5a0"
+  },
+  "map-pin": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f276"
+  },
+  "marker": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5a1"
+  },
+  "mars": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f222"
+  },
+  "mars-and-venus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f224"
+  },
+  "mars-and-venus-burst": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e523"
+  },
+  "mars-double": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f227"
+  },
+  "mars-stroke": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f229"
+  },
+  "mars-stroke-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f22b"
+  },
+  "mars-stroke-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f22a"
+  },
+  "martini-glass": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f57b"
+  },
+  "martini-glass-citrus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f561"
+  },
+  "martini-glass-empty": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f000"
+  },
+  "mask": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6fa"
+  },
+  "mask-face": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e1d7"
+  },
+  "mask-ventilator": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e524"
+  },
+  "masks-theater": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f630"
+  },
+  "mattress-pillow": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e525"
+  },
+  "maximize": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f31e"
+  },
+  "medal": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5a2"
+  },
+  "memory": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f538"
+  },
+  "menorah": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f676"
+  },
+  "mercury": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f223"
+  },
+  "message": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f27a"
+  },
+  "meteor": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f753"
+  },
+  "microchip": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2db"
+  },
+  "microphone": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f130"
+  },
+  "microphone-lines": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3c9"
+  },
+  "microphone-lines-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f539"
+  },
+  "microphone-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f131"
+  },
+  "microscope": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f610"
+  },
+  "mill-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e1ed"
+  },
+  "minimize": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f78c"
+  },
+  "minus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f068"
+  },
+  "mitten": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7b5"
+  },
+  "mobile": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3ce"
+  },
+  "mobile-button": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f10b"
+  },
+  "mobile-retro": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e527"
+  },
+  "mobile-screen": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3cf"
+  },
+  "mobile-screen-button": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3cd"
+  },
+  "money-bill": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0d6"
+  },
+  "money-bill-1": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3d1"
+  },
+  "money-bill-1-wave": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f53b"
+  },
+  "money-bill-transfer": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e528"
+  },
+  "money-bill-trend-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e529"
+  },
+  "money-bill-wave": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f53a"
+  },
+  "money-bill-wheat": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e52a"
+  },
+  "money-bills": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e1f3"
+  },
+  "money-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f53c"
+  },
+  "money-check-dollar": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f53d"
+  },
+  "monument": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5a6"
+  },
+  "moon": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f186"
+  },
+  "mortar-pestle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5a7"
+  },
+  "mosque": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f678"
+  },
+  "mosquito": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e52b"
+  },
+  "mosquito-net": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e52c"
+  },
+  "motorcycle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f21c"
+  },
+  "mound": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e52d"
+  },
+  "mountain": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6fc"
+  },
+  "mountain-city": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e52e"
+  },
+  "mountain-sun": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e52f"
+  },
+  "mug-hot": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7b6"
+  },
+  "mug-saucer": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0f4"
+  },
+  "music": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f001"
+  },
+  "n": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "4e"
+  },
+  "naira-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e1f6"
+  },
+  "network-wired": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6ff"
+  },
+  "neuter": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f22c"
+  },
+  "newspaper": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1ea"
+  },
+  "not-equal": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f53e"
+  },
+  "notdef": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e1fe"
+  },
+  "note-sticky": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f249"
+  },
+  "notes-medical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f481"
+  },
+  "o": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "4f"
+  },
+  "object-group": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f247"
+  },
+  "object-ungroup": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f248"
+  },
+  "oil-can": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f613"
+  },
+  "oil-well": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e532"
+  },
+  "om": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f679"
+  },
+  "otter": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f700"
+  },
+  "outdent": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f03b"
+  },
+  "p": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "50"
+  },
+  "pager": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f815"
+  },
+  "paint-roller": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5aa"
+  },
+  "paintbrush": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1fc"
+  },
+  "palette": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f53f"
+  },
+  "pallet": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f482"
+  },
+  "panorama": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e209"
+  },
+  "paper-plane": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1d8"
+  },
+  "paperclip": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0c6"
+  },
+  "parachute-box": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4cd"
+  },
+  "paragraph": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1dd"
+  },
+  "passport": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5ab"
+  },
+  "paste": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0ea"
+  },
+  "pause": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f04c"
+  },
+  "paw": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1b0"
+  },
+  "peace": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f67c"
+  },
+  "pen": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f304"
+  },
+  "pen-clip": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f305"
+  },
+  "pen-fancy": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5ac"
+  },
+  "pen-nib": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5ad"
+  },
+  "pen-ruler": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5ae"
+  },
+  "pen-to-square": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f044"
+  },
+  "pencil": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f303"
+  },
+  "people-arrows": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e068"
+  },
+  "people-carry-box": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4ce"
+  },
+  "people-group": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e533"
+  },
+  "people-line": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e534"
+  },
+  "people-pulling": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e535"
+  },
+  "people-robbery": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e536"
+  },
+  "people-roof": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e537"
+  },
+  "pepper-hot": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f816"
+  },
+  "percent": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "25"
+  },
+  "person": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f183"
+  },
+  "person-arrow-down-to-line": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e538"
+  },
+  "person-arrow-up-from-line": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e539"
+  },
+  "person-biking": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f84a"
+  },
+  "person-booth": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f756"
+  },
+  "person-breastfeeding": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e53a"
+  },
+  "person-burst": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e53b"
+  },
+  "person-cane": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e53c"
+  },
+  "person-chalkboard": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e53d"
+  },
+  "person-circle-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e53e"
+  },
+  "person-circle-exclamation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e53f"
+  },
+  "person-circle-minus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e540"
+  },
+  "person-circle-plus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e541"
+  },
+  "person-circle-question": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e542"
+  },
+  "person-circle-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e543"
+  },
+  "person-digging": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f85e"
+  },
+  "person-dots-from-line": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f470"
+  },
+  "person-dress": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f182"
+  },
+  "person-dress-burst": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e544"
+  },
+  "person-drowning": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e545"
+  },
+  "person-falling": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e546"
+  },
+  "person-falling-burst": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e547"
+  },
+  "person-half-dress": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e548"
+  },
+  "person-harassing": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e549"
+  },
+  "person-hiking": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6ec"
+  },
+  "person-military-pointing": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e54a"
+  },
+  "person-military-rifle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e54b"
+  },
+  "person-military-to-person": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e54c"
+  },
+  "person-praying": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f683"
+  },
+  "person-pregnant": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e31e"
+  },
+  "person-rays": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e54d"
+  },
+  "person-rifle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e54e"
+  },
+  "person-running": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f70c"
+  },
+  "person-shelter": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e54f"
+  },
+  "person-skating": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7c5"
+  },
+  "person-skiing": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7c9"
+  },
+  "person-skiing-nordic": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7ca"
+  },
+  "person-snowboarding": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7ce"
+  },
+  "person-swimming": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5c4"
+  },
+  "person-through-window": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e5a9"
+  },
+  "person-walking": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f554"
+  },
+  "person-walking-arrow-loop-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e551"
+  },
+  "person-walking-arrow-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e552"
+  },
+  "person-walking-dashed-line-arrow-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e553"
+  },
+  "person-walking-luggage": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e554"
+  },
+  "person-walking-with-cane": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f29d"
+  },
+  "peseta-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e221"
+  },
+  "peso-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e222"
+  },
+  "phone": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f095"
+  },
+  "phone-flip": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f879"
+  },
+  "phone-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3dd"
+  },
+  "phone-volume": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2a0"
+  },
+  "photo-film": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f87c"
+  },
+  "piggy-bank": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4d3"
+  },
+  "pills": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f484"
+  },
+  "pizza-slice": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f818"
+  },
+  "place-of-worship": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f67f"
+  },
+  "plane": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f072"
+  },
+  "plane-arrival": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5af"
+  },
+  "plane-circle-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e555"
+  },
+  "plane-circle-exclamation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e556"
+  },
+  "plane-circle-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e557"
+  },
+  "plane-departure": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5b0"
+  },
+  "plane-lock": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e558"
+  },
+  "plane-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e069"
+  },
+  "plane-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e22d"
+  },
+  "plant-wilt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e5aa"
+  },
+  "plate-wheat": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e55a"
+  },
+  "play": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f04b"
+  },
+  "plug": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1e6"
+  },
+  "plug-circle-bolt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e55b"
+  },
+  "plug-circle-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e55c"
+  },
+  "plug-circle-exclamation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e55d"
+  },
+  "plug-circle-minus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e55e"
+  },
+  "plug-circle-plus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e55f"
+  },
+  "plug-circle-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e560"
+  },
+  "plus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "2b"
+  },
+  "plus-minus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e43c"
+  },
+  "podcast": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2ce"
+  },
+  "poo": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2fe"
+  },
+  "poo-storm": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f75a"
+  },
+  "poop": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f619"
+  },
+  "power-off": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f011"
+  },
+  "prescription": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5b1"
+  },
+  "prescription-bottle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f485"
+  },
+  "prescription-bottle-medical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f486"
+  },
+  "print": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f02f"
+  },
+  "pump-medical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e06a"
+  },
+  "pump-soap": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e06b"
+  },
+  "puzzle-piece": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f12e"
+  },
+  "q": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "51"
+  },
+  "qrcode": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f029"
+  },
+  "question": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "3f"
+  },
+  "quote-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f10d"
+  },
+  "quote-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f10e"
+  },
+  "r": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "52"
+  },
+  "radiation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7b9"
+  },
+  "radio": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f8d7"
+  },
+  "rainbow": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f75b"
+  },
+  "ranking-star": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e561"
+  },
+  "receipt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f543"
+  },
+  "record-vinyl": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f8d9"
+  },
+  "rectangle-ad": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f641"
+  },
+  "rectangle-list": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f022"
+  },
+  "rectangle-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f410"
+  },
+  "recycle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1b8"
+  },
+  "registered": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f25d"
+  },
+  "repeat": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f363"
+  },
+  "reply": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3e5"
+  },
+  "reply-all": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f122"
+  },
+  "republican": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f75e"
+  },
+  "restroom": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7bd"
+  },
+  "retweet": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f079"
+  },
+  "ribbon": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4d6"
+  },
+  "right-from-bracket": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2f5"
+  },
+  "right-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f362"
+  },
+  "right-long": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f30b"
+  },
+  "right-to-bracket": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2f6"
+  },
+  "ring": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f70b"
+  },
+  "road": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f018"
+  },
+  "road-barrier": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e562"
+  },
+  "road-bridge": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e563"
+  },
+  "road-circle-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e564"
+  },
+  "road-circle-exclamation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e565"
+  },
+  "road-circle-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e566"
+  },
+  "road-lock": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e567"
+  },
+  "road-spikes": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e568"
+  },
+  "robot": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f544"
+  },
+  "rocket": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f135"
+  },
+  "rotate": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2f1"
+  },
+  "rotate-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2ea"
+  },
+  "rotate-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2f9"
+  },
+  "route": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4d7"
+  },
+  "rss": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f09e"
+  },
+  "ruble-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f158"
+  },
+  "rug": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e569"
+  },
+  "ruler": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f545"
+  },
+  "ruler-combined": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f546"
+  },
+  "ruler-horizontal": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f547"
+  },
+  "ruler-vertical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f548"
+  },
+  "rupee-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f156"
+  },
+  "rupiah-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e23d"
+  },
+  "s": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "53"
+  },
+  "sack-dollar": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f81d"
+  },
+  "sack-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e56a"
+  },
+  "sailboat": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e445"
+  },
+  "satellite": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7bf"
+  },
+  "satellite-dish": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7c0"
+  },
+  "scale-balanced": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f24e"
+  },
+  "scale-unbalanced": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f515"
+  },
+  "scale-unbalanced-flip": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f516"
+  },
+  "school": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f549"
+  },
+  "school-circle-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e56b"
+  },
+  "school-circle-exclamation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e56c"
+  },
+  "school-circle-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e56d"
+  },
+  "school-flag": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e56e"
+  },
+  "school-lock": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e56f"
+  },
+  "scissors": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0c4"
+  },
+  "screwdriver": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f54a"
+  },
+  "screwdriver-wrench": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7d9"
+  },
+  "scroll": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f70e"
+  },
+  "scroll-torah": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6a0"
+  },
+  "sd-card": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7c2"
+  },
+  "section": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e447"
+  },
+  "seedling": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4d8"
+  },
+  "server": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f233"
+  },
+  "shapes": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f61f"
+  },
+  "share": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f064"
+  },
+  "share-from-square": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f14d"
+  },
+  "share-nodes": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1e0"
+  },
+  "sheet-plastic": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e571"
+  },
+  "shekel-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f20b"
+  },
+  "shield": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f132"
+  },
+  "shield-cat": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e572"
+  },
+  "shield-dog": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e573"
+  },
+  "shield-halved": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3ed"
+  },
+  "shield-heart": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e574"
+  },
+  "shield-virus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e06c"
+  },
+  "ship": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f21a"
+  },
+  "shirt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f553"
+  },
+  "shoe-prints": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f54b"
+  },
+  "shop": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f54f"
+  },
+  "shop-lock": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4a5"
+  },
+  "shop-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e070"
+  },
+  "shower": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2cc"
+  },
+  "shrimp": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e448"
+  },
+  "shuffle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f074"
+  },
+  "shuttle-space": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f197"
+  },
+  "sign-hanging": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4d9"
+  },
+  "signal": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f012"
+  },
+  "signature": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5b7"
+  },
+  "signs-post": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f277"
+  },
+  "sim-card": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7c4"
+  },
+  "sink": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e06d"
+  },
+  "sitemap": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0e8"
+  },
+  "skull": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f54c"
+  },
+  "skull-crossbones": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f714"
+  },
+  "slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f715"
+  },
+  "sleigh": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7cc"
+  },
+  "sliders": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1de"
+  },
+  "smog": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f75f"
+  },
+  "smoking": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f48d"
+  },
+  "snowflake": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2dc"
+  },
+  "snowman": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7d0"
+  },
+  "snowplow": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7d2"
+  },
+  "soap": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e06e"
+  },
+  "socks": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f696"
+  },
+  "solar-panel": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5ba"
+  },
+  "sort": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0dc"
+  },
+  "sort-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0dd"
+  },
+  "sort-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0de"
+  },
+  "spa": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5bb"
+  },
+  "spaghetti-monster-flying": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f67b"
+  },
+  "spell-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f891"
+  },
+  "spider": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f717"
+  },
+  "spinner": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f110"
+  },
+  "splotch": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5bc"
+  },
+  "spoon": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2e5"
+  },
+  "spray-can": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5bd"
+  },
+  "spray-can-sparkles": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5d0"
+  },
+  "square": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0c8"
+  },
+  "square-arrow-up-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f14c"
+  },
+  "square-caret-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f150"
+  },
+  "square-caret-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f191"
+  },
+  "square-caret-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f152"
+  },
+  "square-caret-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f151"
+  },
+  "square-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f14a"
+  },
+  "square-envelope": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f199"
+  },
+  "square-full": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f45c"
+  },
+  "square-h": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0fd"
+  },
+  "square-minus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f146"
+  },
+  "square-nfi": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e576"
+  },
+  "square-parking": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f540"
+  },
+  "square-pen": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f14b"
+  },
+  "square-person-confined": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e577"
+  },
+  "square-phone": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f098"
+  },
+  "square-phone-flip": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f87b"
+  },
+  "square-plus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0fe"
+  },
+  "square-poll-horizontal": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f682"
+  },
+  "square-poll-vertical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f681"
+  },
+  "square-root-variable": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f698"
+  },
+  "square-rss": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f143"
+  },
+  "square-share-nodes": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1e1"
+  },
+  "square-up-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f360"
+  },
+  "square-virus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e578"
+  },
+  "square-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2d3"
+  },
+  "staff-snake": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e579"
+  },
+  "stairs": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e289"
+  },
+  "stamp": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5bf"
+  },
+  "stapler": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e5af"
+  },
+  "star": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f005"
+  },
+  "star-and-crescent": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f699"
+  },
+  "star-half": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f089"
+  },
+  "star-half-stroke": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5c0"
+  },
+  "star-of-david": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f69a"
+  },
+  "star-of-life": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f621"
+  },
+  "sterling-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f154"
+  },
+  "stethoscope": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0f1"
+  },
+  "stop": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f04d"
+  },
+  "stopwatch": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2f2"
+  },
+  "stopwatch-20": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e06f"
+  },
+  "store": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f54e"
+  },
+  "store-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e071"
+  },
+  "street-view": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f21d"
+  },
+  "strikethrough": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0cc"
+  },
+  "stroopwafel": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f551"
+  },
+  "subscript": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f12c"
+  },
+  "suitcase": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0f2"
+  },
+  "suitcase-medical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0fa"
+  },
+  "suitcase-rolling": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5c1"
+  },
+  "sun": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f185"
+  },
+  "sun-plant-wilt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e57a"
+  },
+  "superscript": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f12b"
+  },
+  "swatchbook": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5c3"
+  },
+  "synagogue": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f69b"
+  },
+  "syringe": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f48e"
+  },
+  "t": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "54"
+  },
+  "table": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0ce"
+  },
+  "table-cells": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f00a"
+  },
+  "table-cells-large": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f009"
+  },
+  "table-columns": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0db"
+  },
+  "table-list": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f00b"
+  },
+  "table-tennis-paddle-ball": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f45d"
+  },
+  "tablet": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3fb"
+  },
+  "tablet-button": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f10a"
+  },
+  "tablet-screen-button": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3fa"
+  },
+  "tablets": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f490"
+  },
+  "tachograph-digital": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f566"
+  },
+  "tag": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f02b"
+  },
+  "tags": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f02c"
+  },
+  "tape": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4db"
+  },
+  "tarp": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e57b"
+  },
+  "tarp-droplet": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e57c"
+  },
+  "taxi": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1ba"
+  },
+  "teeth": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f62e"
+  },
+  "teeth-open": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f62f"
+  },
+  "temperature-arrow-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e03f"
+  },
+  "temperature-arrow-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e040"
+  },
+  "temperature-empty": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2cb"
+  },
+  "temperature-full": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2c7"
+  },
+  "temperature-half": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2c9"
+  },
+  "temperature-high": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f769"
+  },
+  "temperature-low": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f76b"
+  },
+  "temperature-quarter": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2ca"
+  },
+  "temperature-three-quarters": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2c8"
+  },
+  "tenge-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7d7"
+  },
+  "tent": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e57d"
+  },
+  "tent-arrow-down-to-line": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e57e"
+  },
+  "tent-arrow-left-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e57f"
+  },
+  "tent-arrow-turn-left": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e580"
+  },
+  "tent-arrows-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e581"
+  },
+  "tents": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e582"
+  },
+  "terminal": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f120"
+  },
+  "text-height": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f034"
+  },
+  "text-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f87d"
+  },
+  "text-width": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f035"
+  },
+  "thermometer": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f491"
+  },
+  "thumbs-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f165"
+  },
+  "thumbs-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f164"
+  },
+  "thumbtack": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f08d"
+  },
+  "ticket": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f145"
+  },
+  "ticket-simple": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3ff"
+  },
+  "timeline": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e29c"
+  },
+  "toggle-off": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f204"
+  },
+  "toggle-on": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f205"
+  },
+  "toilet": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7d8"
+  },
+  "toilet-paper": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f71e"
+  },
+  "toilet-paper-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e072"
+  },
+  "toilet-portable": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e583"
+  },
+  "toilets-portable": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e584"
+  },
+  "toolbox": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f552"
+  },
+  "tooth": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5c9"
+  },
+  "torii-gate": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6a1"
+  },
+  "tornado": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f76f"
+  },
+  "tower-broadcast": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f519"
+  },
+  "tower-cell": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e585"
+  },
+  "tower-observation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e586"
+  },
+  "tractor": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f722"
+  },
+  "trademark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f25c"
+  },
+  "traffic-light": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f637"
+  },
+  "trailer": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e041"
+  },
+  "train": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f238"
+  },
+  "train-subway": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f239"
+  },
+  "train-tram": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e5b4"
+  },
+  "transgender": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f225"
+  },
+  "trash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1f8"
+  },
+  "trash-arrow-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f829"
+  },
+  "trash-can": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2ed"
+  },
+  "trash-can-arrow-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f82a"
+  },
+  "tree": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1bb"
+  },
+  "tree-city": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e587"
+  },
+  "triangle-exclamation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f071"
+  },
+  "trophy": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f091"
+  },
+  "trowel": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e589"
+  },
+  "trowel-bricks": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e58a"
+  },
+  "truck": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0d1"
+  },
+  "truck-arrow-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e58b"
+  },
+  "truck-droplet": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e58c"
+  },
+  "truck-fast": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f48b"
+  },
+  "truck-field": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e58d"
+  },
+  "truck-field-un": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e58e"
+  },
+  "truck-front": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e2b7"
+  },
+  "truck-medical": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0f9"
+  },
+  "truck-monster": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f63b"
+  },
+  "truck-moving": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4df"
+  },
+  "truck-pickup": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f63c"
+  },
+  "truck-plane": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e58f"
+  },
+  "truck-ramp-box": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4de"
+  },
+  "tty": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1e4"
+  },
+  "turkish-lira-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e2bb"
+  },
+  "turn-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3be"
+  },
+  "turn-up": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3bf"
+  },
+  "tv": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f26c"
+  },
+  "u": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "55"
+  },
+  "umbrella": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0e9"
+  },
+  "umbrella-beach": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5ca"
+  },
+  "underline": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0cd"
+  },
+  "universal-access": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f29a"
+  },
+  "unlock": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f09c"
+  },
+  "unlock-keyhole": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f13e"
+  },
+  "up-down": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f338"
+  },
+  "up-down-left-right": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0b2"
+  },
+  "up-long": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f30c"
+  },
+  "up-right-and-down-left-from-center": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f424"
+  },
+  "up-right-from-square": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f35d"
+  },
+  "upload": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f093"
+  },
+  "user": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f007"
+  },
+  "user-astronaut": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4fb"
+  },
+  "user-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4fc"
+  },
+  "user-clock": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4fd"
+  },
+  "user-doctor": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0f0"
+  },
+  "user-gear": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4fe"
+  },
+  "user-graduate": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f501"
+  },
+  "user-group": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f500"
+  },
+  "user-injured": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f728"
+  },
+  "user-large": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f406"
+  },
+  "user-large-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4fa"
+  },
+  "user-lock": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f502"
+  },
+  "user-minus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f503"
+  },
+  "user-ninja": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f504"
+  },
+  "user-nurse": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f82f"
+  },
+  "user-pen": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4ff"
+  },
+  "user-plus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f234"
+  },
+  "user-secret": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f21b"
+  },
+  "user-shield": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f505"
+  },
+  "user-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f506"
+  },
+  "user-tag": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f507"
+  },
+  "user-tie": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f508"
+  },
+  "user-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f235"
+  },
+  "users": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0c0"
+  },
+  "users-between-lines": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e591"
+  },
+  "users-gear": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f509"
+  },
+  "users-line": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e592"
+  },
+  "users-rays": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e593"
+  },
+  "users-rectangle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e594"
+  },
+  "users-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e073"
+  },
+  "users-viewfinder": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e595"
+  },
+  "utensils": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2e7"
+  },
+  "v": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "56"
+  },
+  "van-shuttle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5b6"
+  },
+  "vault": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e2c5"
+  },
+  "vector-square": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5cb"
+  },
+  "venus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f221"
+  },
+  "venus-double": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f226"
+  },
+  "venus-mars": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f228"
+  },
+  "vest": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e085"
+  },
+  "vest-patches": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e086"
+  },
+  "vial": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f492"
+  },
+  "vial-circle-check": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e596"
+  },
+  "vial-virus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e597"
+  },
+  "vials": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f493"
+  },
+  "video": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f03d"
+  },
+  "video-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4e2"
+  },
+  "vihara": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6a7"
+  },
+  "virus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e074"
+  },
+  "virus-covid": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4a8"
+  },
+  "virus-covid-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4a9"
+  },
+  "virus-slash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e075"
+  },
+  "viruses": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e076"
+  },
+  "voicemail": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f897"
+  },
+  "volcano": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f770"
+  },
+  "volleyball": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f45f"
+  },
+  "volume-high": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f028"
+  },
+  "volume-low": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f027"
+  },
+  "volume-off": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f026"
+  },
+  "volume-xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6a9"
+  },
+  "vr-cardboard": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f729"
+  },
+  "w": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "57"
+  },
+  "walkie-talkie": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f8ef"
+  },
+  "wallet": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f555"
+  },
+  "wand-magic": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0d0"
+  },
+  "wand-magic-sparkles": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e2ca"
+  },
+  "wand-sparkles": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f72b"
+  },
+  "warehouse": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f494"
+  },
+  "water": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f773"
+  },
+  "water-ladder": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5c5"
+  },
+  "wave-square": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f83e"
+  },
+  "weight-hanging": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5cd"
+  },
+  "weight-scale": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f496"
+  },
+  "wheat-awn": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e2cd"
+  },
+  "wheat-awn-circle-exclamation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e598"
+  },
+  "wheelchair": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f193"
+  },
+  "wheelchair-move": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e2ce"
+  },
+  "whiskey-glass": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7a0"
+  },
+  "wifi": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1eb"
+  },
+  "wind": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f72e"
+  },
+  "window-maximize": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2d0"
+  },
+  "window-minimize": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2d1"
+  },
+  "window-restore": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2d2"
+  },
+  "wine-bottle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f72f"
+  },
+  "wine-glass": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4e3"
+  },
+  "wine-glass-empty": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5ce"
+  },
+  "won-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f159"
+  },
+  "worm": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e599"
+  },
+  "wrench": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0ad"
+  },
+  "x": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "58"
+  },
+  "x-ray": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f497"
+  },
+  "xmark": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f00d"
+  },
+  "xmarks-lines": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e59a"
+  },
+  "y": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "59"
+  },
+  "yen-sign": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f157"
+  },
+  "yin-yang": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6ad"
+  },
+  "z": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "5a"
+  }
+}

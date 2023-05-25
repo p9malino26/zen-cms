@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * @use(zx.app.pages.LiveEditProxy)
@@ -92,8 +91,7 @@ qx.Class.define("zx.thin.ThinClientApp", {
 
       if (window !== window.parent) {
         // Controller manages the objects and their serialisation
-        let ctlr = (this.__outerFrameController =
-          new zx.io.remote.NetworkController());
+        let ctlr = (this.__outerFrameController = new zx.io.remote.NetworkController());
         ctlr.addListener("uriMapping", evt => {
           let { uri, object } = evt.getData();
           if (uri == "zx.app.pages.PageEditor.liveEditProxy") {
@@ -108,10 +106,7 @@ qx.Class.define("zx.thin.ThinClientApp", {
         await endpoint.open();
         this.__endpointOpen = true;
 
-        ctlr.putUriMapping(
-          "zx.thin.ThinClientApp.remoteControlProxy",
-          new zx.app.pages.RemoteControlProxy()
-        );
+        ctlr.putUriMapping("zx.thin.ThinClientApp.remoteControlProxy", new zx.app.pages.RemoteControlProxy());
       }
 
       this.__readyPromise.resolve();
@@ -136,9 +131,7 @@ qx.Class.define("zx.thin.ThinClientApp", {
     addEditablePiece(uuid, classname, filter) {
       let elements = null;
       if (uuid) {
-        elements = qx.lang.Array.fromCollection(
-          document.querySelectorAll('[data-zx-cms-piece-uuid="' + uuid + '"]')
-        );
+        elements = qx.lang.Array.fromCollection(document.querySelectorAll('[data-zx-cms-piece-uuid="' + uuid + '"]'));
         if (typeof filter == "string") {
           let tmp = [];
           elements.forEach(target => {
@@ -175,10 +168,7 @@ qx.Class.define("zx.thin.ThinClientApp", {
         let uuid = div.getAttribute("data-zx-cms-piece-uuid");
         if (uuid) {
           editable = this.__editablePieces[uuid];
-          if (!editable)
-            throw new Error(
-              `Found piece with UUID ${uuid} but it is not editable`
-            );
+          if (!editable) throw new Error(`Found piece with UUID ${uuid} but it is not editable`);
           return editable;
         }
       }
@@ -201,20 +191,10 @@ qx.Class.define("zx.thin.ThinClientApp", {
      * loaded.  Safe to call multiple times.
      */
     __checkScripts() {
-      if (
-        this.__liveEditProxy &&
-        !this.__scriptLoader &&
-        Object.keys(this.__editablePieces).length
-      ) {
-        this.__scriptLoader = new qx.util.DynamicScriptLoader(
-          "/zx/extra/medium-editor/js/medium-editor.min.js"
-        );
-        qx.bom.Stylesheet.includeFile(
-          "/zx/extra/medium-editor/css/medium-editor.min.css"
-        );
-        qx.bom.Stylesheet.includeFile(
-          "/zx/extra/medium-editor/css/themes/bootstrap.min.css"
-        );
+      if (this.__liveEditProxy && !this.__scriptLoader && Object.keys(this.__editablePieces).length) {
+        this.__scriptLoader = new qx.util.DynamicScriptLoader("/zx/extra/medium-editor/js/medium-editor.min.js");
+        qx.bom.Stylesheet.includeFile("/zx/extra/medium-editor/css/medium-editor.min.css");
+        qx.bom.Stylesheet.includeFile("/zx/extra/medium-editor/css/themes/bootstrap.min.css");
         this.__scriptLoader.start().then(() => this.__onScriptsLoaded());
       }
     },
@@ -227,10 +207,7 @@ qx.Class.define("zx.thin.ThinClientApp", {
       Object.values(this.__editablePieces).forEach(editable => {
         if (!editable.remoteControl) {
           let clazz = qx.Class.getByName(editable.classname);
-          if (!clazz)
-            throw new Error(
-              `Cannot create remote control class ${editable.classname} because it does not exist`
-            );
+          if (!clazz) throw new Error(`Cannot create remote control class ${editable.classname} because it does not exist`);
           editable.remoteControl = new clazz(editable.uuid, editable.elements);
           editable.remoteControl.initialise();
         }
@@ -256,8 +233,7 @@ qx.Class.define("zx.thin.ThinClientApp", {
       this.__netController = new zx.io.remote.NetworkController();
 
       // Connect to the parent window because we know that we are in an iframe created by PeerOne
-      let endpoint = (this.__endpoint =
-        new zx.io.remote.BrowserXhrEndpoint().set({ polling: true }));
+      let endpoint = (this.__endpoint = new zx.io.remote.BrowserXhrEndpoint().set({ polling: true }));
       this.__netController.addEndpoint(endpoint);
       let promise = new qx.Promise();
       await endpoint.open().then(() => {

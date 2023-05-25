@@ -1,0 +1,2337 @@
+{
+  "42-group": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e080"
+  },
+  "500px": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f26e"
+  },
+  "accessible-icon": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f368"
+  },
+  "accusoft": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f369"
+  },
+  "adn": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f170"
+  },
+  "adversal": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f36a"
+  },
+  "affiliatetheme": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f36b"
+  },
+  "airbnb": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f834"
+  },
+  "algolia": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f36c"
+  },
+  "alipay": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f642"
+  },
+  "amazon": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f270"
+  },
+  "amazon-pay": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f42c"
+  },
+  "amilia": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f36d"
+  },
+  "android": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f17b"
+  },
+  "angellist": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f209"
+  },
+  "angrycreative": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f36e"
+  },
+  "angular": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f420"
+  },
+  "app-store": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f36f"
+  },
+  "app-store-ios": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f370"
+  },
+  "apper": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f371"
+  },
+  "apple": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f179"
+  },
+  "apple-pay": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f415"
+  },
+  "artstation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f77a"
+  },
+  "asymmetrik": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f372"
+  },
+  "atlassian": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f77b"
+  },
+  "audible": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f373"
+  },
+  "autoprefixer": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f41c"
+  },
+  "avianex": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f374"
+  },
+  "aviato": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f421"
+  },
+  "aws": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f375"
+  },
+  "bandcamp": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2d5"
+  },
+  "battle-net": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f835"
+  },
+  "behance": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1b4"
+  },
+  "bilibili": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e3d9"
+  },
+  "bimobject": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f378"
+  },
+  "bitbucket": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f171"
+  },
+  "bitcoin": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f379"
+  },
+  "bity": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f37a"
+  },
+  "black-tie": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f27e"
+  },
+  "blackberry": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f37b"
+  },
+  "blogger": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f37c"
+  },
+  "blogger-b": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f37d"
+  },
+  "bluetooth": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f293"
+  },
+  "bluetooth-b": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f294"
+  },
+  "bootstrap": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f836"
+  },
+  "bots": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e340"
+  },
+  "btc": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f15a"
+  },
+  "buffer": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f837"
+  },
+  "buromobelexperte": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f37f"
+  },
+  "buy-n-large": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f8a6"
+  },
+  "buysellads": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f20d"
+  },
+  "canadian-maple-leaf": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f785"
+  },
+  "cc-amazon-pay": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f42d"
+  },
+  "cc-amex": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1f3"
+  },
+  "cc-apple-pay": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f416"
+  },
+  "cc-diners-club": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f24c"
+  },
+  "cc-discover": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1f2"
+  },
+  "cc-jcb": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f24b"
+  },
+  "cc-mastercard": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1f1"
+  },
+  "cc-paypal": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1f4"
+  },
+  "cc-stripe": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1f5"
+  },
+  "cc-visa": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1f0"
+  },
+  "centercode": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f380"
+  },
+  "centos": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f789"
+  },
+  "chrome": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f268"
+  },
+  "chromecast": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f838"
+  },
+  "cloudflare": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e07d"
+  },
+  "cloudscale": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f383"
+  },
+  "cloudsmith": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f384"
+  },
+  "cloudversify": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f385"
+  },
+  "cmplid": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e360"
+  },
+  "codepen": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1cb"
+  },
+  "codiepie": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f284"
+  },
+  "confluence": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f78d"
+  },
+  "connectdevelop": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f20e"
+  },
+  "contao": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f26d"
+  },
+  "cotton-bureau": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f89e"
+  },
+  "cpanel": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f388"
+  },
+  "creative-commons": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f25e"
+  },
+  "creative-commons-by": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4e7"
+  },
+  "creative-commons-nc": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4e8"
+  },
+  "creative-commons-nc-eu": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4e9"
+  },
+  "creative-commons-nc-jp": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4ea"
+  },
+  "creative-commons-nd": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4eb"
+  },
+  "creative-commons-pd": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4ec"
+  },
+  "creative-commons-pd-alt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4ed"
+  },
+  "creative-commons-remix": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4ee"
+  },
+  "creative-commons-sa": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4ef"
+  },
+  "creative-commons-sampling": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4f0"
+  },
+  "creative-commons-sampling-plus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4f1"
+  },
+  "creative-commons-share": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4f2"
+  },
+  "creative-commons-zero": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4f3"
+  },
+  "critical-role": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6c9"
+  },
+  "css3": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f13c"
+  },
+  "css3-alt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f38b"
+  },
+  "cuttlefish": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f38c"
+  },
+  "d-and-d": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f38d"
+  },
+  "d-and-d-beyond": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6ca"
+  },
+  "dailymotion": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e052"
+  },
+  "dashcube": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f210"
+  },
+  "deezer": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e077"
+  },
+  "delicious": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1a5"
+  },
+  "deploydog": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f38e"
+  },
+  "deskpro": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f38f"
+  },
+  "dev": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6cc"
+  },
+  "deviantart": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1bd"
+  },
+  "dhl": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f790"
+  },
+  "diaspora": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f791"
+  },
+  "digg": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1a6"
+  },
+  "digital-ocean": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f391"
+  },
+  "discord": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f392"
+  },
+  "discourse": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f393"
+  },
+  "dochub": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f394"
+  },
+  "docker": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f395"
+  },
+  "draft2digital": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f396"
+  },
+  "dribbble": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f17d"
+  },
+  "dropbox": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f16b"
+  },
+  "drupal": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1a9"
+  },
+  "dyalog": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f399"
+  },
+  "earlybirds": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f39a"
+  },
+  "ebay": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4f4"
+  },
+  "edge": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f282"
+  },
+  "edge-legacy": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e078"
+  },
+  "elementor": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f430"
+  },
+  "ello": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5f1"
+  },
+  "ember": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f423"
+  },
+  "empire": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1d1"
+  },
+  "envira": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f299"
+  },
+  "erlang": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f39d"
+  },
+  "ethereum": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f42e"
+  },
+  "etsy": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2d7"
+  },
+  "evernote": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f839"
+  },
+  "expeditedssl": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f23e"
+  },
+  "facebook": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f09a"
+  },
+  "facebook-f": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f39e"
+  },
+  "facebook-messenger": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f39f"
+  },
+  "fantasy-flight-games": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f6dc"
+  },
+  "fedex": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f797"
+  },
+  "fedora": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f798"
+  },
+  "figma": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f799"
+  },
+  "firefox": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f269"
+  },
+  "firefox-browser": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e007"
+  },
+  "first-order": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2b0"
+  },
+  "first-order-alt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f50a"
+  },
+  "firstdraft": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3a1"
+  },
+  "flickr": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f16e"
+  },
+  "flipboard": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f44d"
+  },
+  "fly": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f417"
+  },
+  "font-awesome": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2b4"
+  },
+  "fonticons": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f280"
+  },
+  "fonticons-fi": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3a2"
+  },
+  "fort-awesome": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f286"
+  },
+  "fort-awesome-alt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3a3"
+  },
+  "forumbee": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f211"
+  },
+  "foursquare": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f180"
+  },
+  "free-code-camp": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2c5"
+  },
+  "freebsd": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3a4"
+  },
+  "fulcrum": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f50b"
+  },
+  "galactic-republic": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f50c"
+  },
+  "galactic-senate": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f50d"
+  },
+  "get-pocket": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f265"
+  },
+  "gg": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f260"
+  },
+  "gg-circle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f261"
+  },
+  "git": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1d3"
+  },
+  "git-alt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f841"
+  },
+  "github": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f09b"
+  },
+  "github-alt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f113"
+  },
+  "gitkraken": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3a6"
+  },
+  "gitlab": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f296"
+  },
+  "gitter": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f426"
+  },
+  "glide": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2a5"
+  },
+  "glide-g": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2a6"
+  },
+  "gofore": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3a7"
+  },
+  "golang": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e40f"
+  },
+  "goodreads": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3a8"
+  },
+  "goodreads-g": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3a9"
+  },
+  "google": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1a0"
+  },
+  "google-drive": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3aa"
+  },
+  "google-pay": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e079"
+  },
+  "google-play": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3ab"
+  },
+  "google-plus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2b3"
+  },
+  "google-plus-g": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0d5"
+  },
+  "google-wallet": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1ee"
+  },
+  "gratipay": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f184"
+  },
+  "grav": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2d6"
+  },
+  "gripfire": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3ac"
+  },
+  "grunt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3ad"
+  },
+  "guilded": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e07e"
+  },
+  "gulp": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3ae"
+  },
+  "hacker-news": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1d4"
+  },
+  "hackerrank": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5f7"
+  },
+  "hashnode": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e499"
+  },
+  "hips": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f452"
+  },
+  "hire-a-helper": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3b0"
+  },
+  "hive": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e07f"
+  },
+  "hooli": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f427"
+  },
+  "hornbill": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f592"
+  },
+  "hotjar": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3b1"
+  },
+  "houzz": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f27c"
+  },
+  "html5": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f13b"
+  },
+  "hubspot": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3b2"
+  },
+  "ideal": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e013"
+  },
+  "imdb": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2d8"
+  },
+  "instagram": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f16d"
+  },
+  "instalod": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e081"
+  },
+  "intercom": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7af"
+  },
+  "internet-explorer": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f26b"
+  },
+  "invision": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7b0"
+  },
+  "ioxhost": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f208"
+  },
+  "itch-io": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f83a"
+  },
+  "itunes": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3b4"
+  },
+  "itunes-note": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3b5"
+  },
+  "java": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4e4"
+  },
+  "jedi-order": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f50e"
+  },
+  "jenkins": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3b6"
+  },
+  "jira": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7b1"
+  },
+  "joget": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3b7"
+  },
+  "joomla": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1aa"
+  },
+  "js": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3b8"
+  },
+  "jsfiddle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1cc"
+  },
+  "kaggle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5fa"
+  },
+  "keybase": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4f5"
+  },
+  "keycdn": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3ba"
+  },
+  "kickstarter": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3bb"
+  },
+  "kickstarter-k": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3bc"
+  },
+  "korvue": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f42f"
+  },
+  "laravel": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3bd"
+  },
+  "lastfm": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f202"
+  },
+  "leanpub": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f212"
+  },
+  "less": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f41d"
+  },
+  "line": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3c0"
+  },
+  "linkedin": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f08c"
+  },
+  "linkedin-in": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0e1"
+  },
+  "linode": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2b8"
+  },
+  "linux": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f17c"
+  },
+  "lyft": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3c3"
+  },
+  "magento": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3c4"
+  },
+  "mailchimp": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f59e"
+  },
+  "mandalorian": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f50f"
+  },
+  "markdown": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f60f"
+  },
+  "mastodon": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4f6"
+  },
+  "maxcdn": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f136"
+  },
+  "mdb": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f8ca"
+  },
+  "medapps": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3c6"
+  },
+  "medium": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f23a"
+  },
+  "medrt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3c8"
+  },
+  "meetup": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2e0"
+  },
+  "megaport": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5a3"
+  },
+  "mendeley": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7b3"
+  },
+  "meta": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e49b"
+  },
+  "microblog": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e01a"
+  },
+  "microsoft": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3ca"
+  },
+  "mix": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3cb"
+  },
+  "mixcloud": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f289"
+  },
+  "mixer": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e056"
+  },
+  "mizuni": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3cc"
+  },
+  "modx": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f285"
+  },
+  "monero": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3d0"
+  },
+  "napster": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3d2"
+  },
+  "neos": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f612"
+  },
+  "nfc-directional": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e530"
+  },
+  "nfc-symbol": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e531"
+  },
+  "nimblr": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5a8"
+  },
+  "node": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f419"
+  },
+  "node-js": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3d3"
+  },
+  "npm": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3d4"
+  },
+  "ns8": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3d5"
+  },
+  "nutritionix": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3d6"
+  },
+  "octopus-deploy": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e082"
+  },
+  "odnoklassniki": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f263"
+  },
+  "odysee": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e5c6"
+  },
+  "old-republic": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f510"
+  },
+  "opencart": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f23d"
+  },
+  "openid": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f19b"
+  },
+  "opera": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f26a"
+  },
+  "optin-monster": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f23c"
+  },
+  "orcid": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f8d2"
+  },
+  "osi": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f41a"
+  },
+  "padlet": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e4a0"
+  },
+  "page4": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3d7"
+  },
+  "pagelines": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f18c"
+  },
+  "palfed": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3d8"
+  },
+  "patreon": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3d9"
+  },
+  "paypal": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1ed"
+  },
+  "perbyte": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e083"
+  },
+  "periscope": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3da"
+  },
+  "phabricator": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3db"
+  },
+  "phoenix-framework": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3dc"
+  },
+  "phoenix-squadron": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f511"
+  },
+  "php": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f457"
+  },
+  "pied-piper": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2ae"
+  },
+  "pied-piper-alt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1a8"
+  },
+  "pied-piper-hat": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4e5"
+  },
+  "pied-piper-pp": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1a7"
+  },
+  "pinterest": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0d2"
+  },
+  "pinterest-p": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f231"
+  },
+  "pix": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e43a"
+  },
+  "playstation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3df"
+  },
+  "product-hunt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f288"
+  },
+  "pushed": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3e1"
+  },
+  "python": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3e2"
+  },
+  "qq": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1d6"
+  },
+  "quinscape": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f459"
+  },
+  "quora": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2c4"
+  },
+  "r-project": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4f7"
+  },
+  "raspberry-pi": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7bb"
+  },
+  "ravelry": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2d9"
+  },
+  "react": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f41b"
+  },
+  "reacteurope": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f75d"
+  },
+  "readme": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4d5"
+  },
+  "rebel": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1d0"
+  },
+  "red-river": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3e3"
+  },
+  "reddit": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1a1"
+  },
+  "reddit-alien": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f281"
+  },
+  "redhat": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7bc"
+  },
+  "renren": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f18b"
+  },
+  "replyd": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3e6"
+  },
+  "researchgate": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4f8"
+  },
+  "resolving": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3e7"
+  },
+  "rev": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5b2"
+  },
+  "rocketchat": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3e8"
+  },
+  "rockrms": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3e9"
+  },
+  "rust": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e07a"
+  },
+  "safari": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f267"
+  },
+  "salesforce": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f83b"
+  },
+  "sass": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f41e"
+  },
+  "schlix": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3ea"
+  },
+  "screenpal": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e570"
+  },
+  "scribd": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f28a"
+  },
+  "searchengin": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3eb"
+  },
+  "sellcast": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2da"
+  },
+  "sellsy": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f213"
+  },
+  "servicestack": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3ec"
+  },
+  "shirtsinbulk": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f214"
+  },
+  "shopify": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e057"
+  },
+  "shopware": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5b5"
+  },
+  "simplybuilt": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f215"
+  },
+  "sistrix": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3ee"
+  },
+  "sith": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f512"
+  },
+  "sitrox": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e44a"
+  },
+  "sketch": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7c6"
+  },
+  "skyatlas": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f216"
+  },
+  "skype": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f17e"
+  },
+  "slack": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f198"
+  },
+  "slideshare": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1e7"
+  },
+  "snapchat": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2ab"
+  },
+  "soundcloud": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1be"
+  },
+  "sourcetree": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7d3"
+  },
+  "space-awesome": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e5ac"
+  },
+  "speakap": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3f3"
+  },
+  "speaker-deck": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f83c"
+  },
+  "spotify": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1bc"
+  },
+  "square-behance": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1b5"
+  },
+  "square-dribbble": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f397"
+  },
+  "square-facebook": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f082"
+  },
+  "square-font-awesome": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e5ad"
+  },
+  "square-font-awesome-stroke": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f35c"
+  },
+  "square-git": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1d2"
+  },
+  "square-github": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f092"
+  },
+  "square-gitlab": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e5ae"
+  },
+  "square-google-plus": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0d4"
+  },
+  "square-hacker-news": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3af"
+  },
+  "square-instagram": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e055"
+  },
+  "square-js": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3b9"
+  },
+  "square-lastfm": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f203"
+  },
+  "square-odnoklassniki": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f264"
+  },
+  "square-pied-piper": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e01e"
+  },
+  "square-pinterest": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f0d3"
+  },
+  "square-reddit": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1a2"
+  },
+  "square-snapchat": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2ad"
+  },
+  "square-steam": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1b7"
+  },
+  "square-tumblr": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f174"
+  },
+  "square-twitter": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f081"
+  },
+  "square-viadeo": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2aa"
+  },
+  "square-vimeo": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f194"
+  },
+  "square-whatsapp": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f40c"
+  },
+  "square-xing": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f169"
+  },
+  "square-youtube": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f431"
+  },
+  "squarespace": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5be"
+  },
+  "stack-exchange": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f18d"
+  },
+  "stack-overflow": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f16c"
+  },
+  "stackpath": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f842"
+  },
+  "staylinked": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3f5"
+  },
+  "steam": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1b6"
+  },
+  "steam-symbol": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3f6"
+  },
+  "sticker-mule": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3f7"
+  },
+  "strava": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f428"
+  },
+  "stripe": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f429"
+  },
+  "stripe-s": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f42a"
+  },
+  "stubber": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e5c7"
+  },
+  "studiovinari": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3f8"
+  },
+  "stumbleupon": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1a4"
+  },
+  "stumbleupon-circle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1a3"
+  },
+  "superpowers": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2dd"
+  },
+  "supple": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3f9"
+  },
+  "suse": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7d6"
+  },
+  "swift": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f8e1"
+  },
+  "symfony": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f83d"
+  },
+  "teamspeak": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f4f9"
+  },
+  "telegram": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2c6"
+  },
+  "tencent-weibo": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1d5"
+  },
+  "the-red-yeti": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f69d"
+  },
+  "themeco": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5c6"
+  },
+  "themeisle": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2b2"
+  },
+  "think-peaks": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f731"
+  },
+  "tiktok": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e07b"
+  },
+  "trade-federation": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f513"
+  },
+  "trello": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f181"
+  },
+  "tumblr": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f173"
+  },
+  "twitch": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1e8"
+  },
+  "twitter": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f099"
+  },
+  "typo3": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f42b"
+  },
+  "uber": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f402"
+  },
+  "ubuntu": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7df"
+  },
+  "uikit": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f403"
+  },
+  "umbraco": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f8e8"
+  },
+  "uncharted": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e084"
+  },
+  "uniregistry": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f404"
+  },
+  "unity": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e049"
+  },
+  "unsplash": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e07c"
+  },
+  "untappd": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f405"
+  },
+  "ups": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7e0"
+  },
+  "usb": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f287"
+  },
+  "usps": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7e1"
+  },
+  "ussunnah": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f407"
+  },
+  "vaadin": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f408"
+  },
+  "viacoin": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f237"
+  },
+  "viadeo": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2a9"
+  },
+  "viber": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f409"
+  },
+  "vimeo": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f40a"
+  },
+  "vimeo-v": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f27d"
+  },
+  "vine": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1ca"
+  },
+  "vk": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f189"
+  },
+  "vnv": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f40b"
+  },
+  "vuejs": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f41f"
+  },
+  "watchman-monitoring": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e087"
+  },
+  "waze": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f83f"
+  },
+  "weebly": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5cc"
+  },
+  "weibo": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f18a"
+  },
+  "weixin": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1d7"
+  },
+  "whatsapp": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f232"
+  },
+  "whmcs": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f40d"
+  },
+  "wikipedia-w": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f266"
+  },
+  "windows": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f17a"
+  },
+  "wirsindhandwerk": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e2d0"
+  },
+  "wix": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f5cf"
+  },
+  "wizards-of-the-coast": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f730"
+  },
+  "wodu": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "e088"
+  },
+  "wolf-pack-battalion": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f514"
+  },
+  "wordpress": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f19a"
+  },
+  "wordpress-simple": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f411"
+  },
+  "wpbeginner": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f297"
+  },
+  "wpexplorer": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2de"
+  },
+  "wpforms": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f298"
+  },
+  "wpressr": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f3e4"
+  },
+  "xbox": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f412"
+  },
+  "xing": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f168"
+  },
+  "y-combinator": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f23b"
+  },
+  "yahoo": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f19e"
+  },
+  "yammer": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f840"
+  },
+  "yandex": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f413"
+  },
+  "yandex-international": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f414"
+  },
+  "yarn": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f7e3"
+  },
+  "yelp": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f1e9"
+  },
+  "yoast": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f2b1"
+  },
+  "youtube": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f167"
+  },
+  "zhihu": {
+    "advanceWidth": 512,
+    "advanceHeight": 512,
+    "codePoint": "f63f"
+  }
+}

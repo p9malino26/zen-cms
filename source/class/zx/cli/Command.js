@@ -84,6 +84,10 @@ qx.Class.define("zx.cli.Command", {
      * @param {zx.cli.Command} cmd
      */
     addSubcommand(cmd) {
+      let current = this.__subcommands.find(tmp => tmp.getName() == cmd.getName());
+      if (current) {
+        qx.lang.Array.remove(this.__subcommands, current);
+      }
       this.__subcommands.push(cmd);
       cmd.__parent = this;
     },
@@ -136,8 +140,7 @@ qx.Class.define("zx.cli.Command", {
     getArgument(name) {
       if (typeof name == "string") {
         name = qx.lang.String.camelCase(name);
-        for (let i = 0; i < this.__arguments.length; i++)
-          if (this.__arguments[i].getName() == name) return this.__arguments[i];
+        for (let i = 0; i < this.__arguments.length; i++) if (this.__arguments[i].getName() == name) return this.__arguments[i];
         return null;
       }
       return this.__arguments[name] || null;
@@ -263,8 +266,7 @@ qx.Class.define("zx.cli.Command", {
         result.flags[flag.getName()] = result.flags[flag.getHyphenatedName()] = flag.getValue();
       });
       this.__arguments.forEach(argument => {
-        if (argument.getName())
-          result.arguments[argument.getName()] = result.arguments[argument.getHyphenatedName()] = argument.getValue();
+        if (argument.getName()) result.arguments[argument.getName()] = result.arguments[argument.getHyphenatedName()] = argument.getValue();
         result.arguments.push(argument.getValue());
       });
       return result;

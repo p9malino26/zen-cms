@@ -33,6 +33,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
     this.__receiveQueue = new zx.utils.Queue(packets => this._receivePacketsImpl(packets));
 
     zx.io.remote.NetworkEndpoint.__allEndpoints[this.__uuid] = this;
+    if (qx.core.Environment.get("zx.io.remote.NetworkEndpoint.server") === undefined) {
+      throw new Error("You must set `zx.io.remote.NetworkEndpoint.server` as an environment variable in `compile.json` and recompile with `--clean`");
+    }
   },
 
   destruct() {
@@ -48,7 +51,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
     "zx.io.remote.NetworkEndpoint.traceSessions": false,
 
     /** @type{Boolean} is this the server?  Set to true when compiling, so that remote methods are executed in the right place */
-    "zx.io.remote.NetworkEndpoint.server": false
+    "zx.io.remote.NetworkEndpoint.server": undefined
   },
 
   members: {
@@ -204,9 +207,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
             uuid
           };
         } else if (arg instanceof qx.core.Object) {
-          throw new Error(
-            `Cannot call ${methodName} with argument ${arg} because it is ${arg.classname} which is not capable of being sent remotely`
-          );
+          throw new Error(`Cannot call ${methodName} with argument ${arg} because it is ${arg.classname} which is not capable of being sent remotely`);
         } else {
           args[i] = {
             value: arg
@@ -470,14 +471,22 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
 
     async _serializeReturnValue(value) {
       const controller = this.getController();
-      if (!controller) return null;
+      if (!controller) {
+        return null;
+      }
 
       const serializeValue = async value => {
-        if (value === null || value === undefined) return value;
-        if (value instanceof qx.data.Array) value = value.toArray();
+        if (value === null || value === undefined) {
+          return value;
+        }
+        if (value instanceof qx.data.Array) {
+          value = value.toArray();
+        }
         if (qx.lang.Type.isArray(value)) {
           value = qx.lang.Array.clone(value);
-          for (let i = 0; i < value.length; i++) value[i] = await serializeValue(value[i]);
+          for (let i = 0; i < value.length; i++) {
+            value[i] = await serializeValue(value[i]);
+          }
           return value;
         }
         if (controller.isCompatibleObject(value)) {
@@ -491,11 +500,11 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
             _classname: value.classname
           };
         } else if (value instanceof qx.core.Object) {
-          throw new Error(
-            `Cannot return ${value} because it is ${value.classname} which is not capable of being sent remotely`
-          );
+          throw new Error(`Cannot return ${value} because it is ${value.classname} which is not capable of being sent remotely`);
         }
-        return value;
+        return {
+          $$rawObject: value
+        };
       };
 
       let result = await serializeValue(value);
@@ -504,13 +513,21 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
 
     async _deserializeReturnValue(value) {
       const deserializeValue = async value => {
-        if (value === null || value === undefined) return value;
-        if (qx.lang.Type.isArray(value)) {
-          for (let i = 0; i < value.length; i++) value[i] = await deserializeValue(value[i]);
+        if (value === null || value === undefined) {
           return value;
         }
-        if (typeof value._uuid == "string" && typeof value._classname == "string")
+        if (qx.lang.Type.isArray(value)) {
+          for (let i = 0; i < value.length; i++) {
+            value[i] = await deserializeValue(value[i]);
+          }
+          return value;
+        }
+        if (typeof value._uuid == "string" && typeof value._classname == "string") {
           value = await this.getController().getByUuid(value._uuid);
+        }
+        if (value.$$rawObject !== undefined) {
+          return value.$$rawObject;
+        }
         return value;
       };
 
@@ -539,9 +556,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           let obj = await qx.Promise.resolve(this.getController().getByUuidNoWait(packet.uuid, true));
           if (obj) {
             if (this.__sentUuids[packet.uuid] && this.__sentUuids[packet.uuid] !== "receiving") {
-              this.error(
-                `Received sendObject multiple times for UUID ${packet.uuid}, status=${this.__sentUuids[packet.uuid]}`
-              );
+              this.error(`Received sendObject multiple times for UUID ${packet.uuid}, status=${this.__sentUuids[packet.uuid]}`);
             }
             this.__sentUuids[packet.uuid] = "received";
             zx.io.remote.NetworkEndpoint.setEndpointFor(obj, this);
@@ -596,11 +611,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
             let str = packet.originPacketId;
             let pos = str.indexOf(":");
             let hash = str.substring(0, pos);
-            if (hash != this.toHashCode())
-              throw new Error(`Received packet ID for wrong end point, found ${hash} expected ${this.toHashCode()}`);
+            if (hash != this.toHashCode()) throw new Error(`Received packet ID for wrong end point, found ${hash} expected ${this.toHashCode()}`);
             let index = parseInt(str.substring(pos + 1), 10);
-            if (isNaN(index) || index < 1 || index > this.__lastPacketId)
-              throw new Error("Received invalid index in packet ID");
+            if (isNaN(index) || index < 1 || index > this.__lastPacketId) throw new Error("Received invalid index in packet ID");
           }
 
           let promise = this._pendingPromises[packet.originPacketId];
@@ -632,11 +645,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
         } else if (packet.type == "open") {
           if (qx.core.Environment.get("qx.debug")) {
             if (packet.uuid != this.getUuid())
-              throw new Error(
-                `Open received unexpected UUID, LOCAL hash=${this.toHashCode()}, LOCAL uuid=${this.getUuid()}, REMOTE hash=${
-                  packet.hash
-                }, REMOTE uuid=${packet.uuid}`
-              );
+              throw new Error(`Open received unexpected UUID, LOCAL hash=${this.toHashCode()}, LOCAL uuid=${this.getUuid()}, REMOTE hash=${packet.hash}, REMOTE uuid=${packet.uuid}`);
           }
           if (this.__sentOpened) this.error(`Unexpected open after opened has been sent`);
           this.__openOriginPacketId = packet.packetId;
@@ -774,8 +783,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
         qx.log.Logger.error("Cannot initialise remote class because it is not derived from zx.io.persistence.Object");
         return;
       }
-      for (let tmp = clazz; tmp && tmp != zx.io.persistence.Object; tmp = tmp.superclass)
-        zx.io.remote.NetworkEndpoint.__initialiseRemoteClassImpl(tmp);
+      for (let tmp = clazz; tmp && tmp != zx.io.persistence.Object; tmp = tmp.superclass) zx.io.remote.NetworkEndpoint.__initialiseRemoteClassImpl(tmp);
     },
 
     /**
@@ -891,10 +899,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
       if (hasWithRequest) {
         let classAnnos = qx.Annotation.getClass(clazz, zx.io.remote.anno.Class);
         let anno = classAnnos.length ? classAnnos[classAnnos.length - 1] : null;
-        if (anno && anno.getProxy() != "always")
-          throw new Error(
-            `Class ${clazz.classname} has withRequest methods but this is incompatible with classes which are not proxied`
-          );
+        if (anno && anno.getProxy() != "always") throw new Error(`Class ${clazz.classname} has withRequest methods but this is incompatible with classes which are not proxied`);
       }
     },
 
@@ -907,16 +912,10 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      */
     __createRemoteMethod(clazz, methodName) {
       if (qx.core.Environment.get("zx.io.remote.NetworkEndpoint.server")) {
-        throw new Error(
-          "zx.io.remote.NetworkEndpoint.__createRemoteMethod is not supported on the server (use a specific endpoint instead)"
-        );
+        throw new Error("zx.io.remote.NetworkEndpoint.__createRemoteMethod is not supported on the server (use a specific endpoint instead)");
       } else {
         return function () {
-          return zx.io.remote.NetworkEndpoint.callRemoteMethod(
-            this,
-            methodName,
-            qx.lang.Array.fromArguments(arguments)
-          );
+          return zx.io.remote.NetworkEndpoint.callRemoteMethod(this, methodName, qx.lang.Array.fromArguments(arguments));
         };
       }
     },
@@ -935,9 +934,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           let args = qx.lang.Array.fromArguments(arguments);
           let result = originalMethod.apply(this, args);
           if (result && typeof result.then != "function") {
-            this.error(
-              `The method ${clazz.classname}.${name} did not return a promise, but it is a remote function and will always be promisified on the client`
-            );
+            this.error(`The method ${clazz.classname}.${name} did not return a promise, but it is a remote function and will always be promisified on the client`);
           }
           return result;
         };
@@ -965,16 +962,12 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
         } else {
           let result = object.constructor.prototype[name].$$zxIo?.originalMethod.call(object, ...varargs);
           if (result && typeof result.then != "function") {
-            this.error(
-              `The method ${object.classname}.${name} did not return a promise, but it is a remote function and will be promisified when used remotely`
-            );
+            this.error(`The method ${object.classname}.${name} did not return a promise, but it is a remote function and will be promisified when used remotely`);
           }
           return await result;
         }
       } else {
-        throw new Error(
-          "zx.io.remote.NetworkEndpoint.callRemoteMethod is not supported on the server (use a specific endpoint instead)"
-        );
+        throw new Error("zx.io.remote.NetworkEndpoint.callRemoteMethod is not supported on the server (use a specific endpoint instead)");
       }
     }
   },

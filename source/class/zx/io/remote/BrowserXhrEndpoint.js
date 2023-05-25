@@ -52,7 +52,8 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
   },
 
   environment: {
-    "zx.io.remote.BrowserXhrEndpoint.traceIo": false
+    "zx.io.remote.BrowserXhrEndpoint.traceIo": false,
+    "zx.io.remote.BrowserXhrEndpoint.sessionTracing": false
   },
 
   members: {

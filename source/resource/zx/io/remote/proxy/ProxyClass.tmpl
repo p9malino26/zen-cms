@@ -64,7 +64,7 @@ qx.Class.define("{{= it.classname }}", {
         {{= method.code }},
       {{??}}
         {{= method.name}}() { 
-          throw new Error("This object does not exist on the server yet, so remote method invocationm is not possible");
+          throw new Error("This object does not exist on the server yet, so remote method invocation is not possible");
         },
       {{?}}
     {{~}}

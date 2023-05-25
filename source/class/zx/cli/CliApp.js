@@ -32,9 +32,23 @@ qx.Class.define("zx.cli.CliApp", {
   members: {
     async main() {
       qx.log.appender.Native;
+      await this.runCli();
     },
 
+    /**
+     * Called to run the command line
+     */
     async runCli() {
+      let rootCmd = this._createRootCommand();
+      await rootCmd.execute();
+    },
+
+    /**
+     * Creates the command for parsing the command line
+     *
+     * @returns {zx.cli.Command}
+     */
+    _createRootCommand() {
       let rootCmd = new zx.cli.Command("*");
       rootCmd.addSubcommand(zx.cli.commands.ServeCommand.createCliCommand());
       rootCmd.addSubcommand(zx.cli.commands.DbCommand.createCliCommand());
@@ -44,8 +58,7 @@ qx.Class.define("zx.cli.CliApp", {
       rootCmd.addSubcommand(zx.test.cli.TestCommand.createCliCommand());
       rootCmd.addSubcommand(zx.cli.commands.ShortenCommand.createCliCommand());
       rootCmd.addSubcommand(zx.cli.commands.LicenseCommand.createCliCommand());
-
-      await rootCmd.execute();
+      return rootCmd;
     }
   }
 });

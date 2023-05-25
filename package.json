@@ -53,6 +53,7 @@
     "fastify-static": "^4.2.2",
     "fs-extra": "^8.1.0",
     "glob": "^7.1.6",
+    "js-yaml": "^4.1.0",
     "jsdom": "^15.2.0",
     "medium-editor": "^5.23.3",
     "mime-types": "^2.1.26",

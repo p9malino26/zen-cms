@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const fs = zx.utils.Promisify.fs;
 const path = require("path");
@@ -64,8 +63,9 @@ qx.Class.define("zx.cms.render.Resolver", {
       let classname = null;
       const findTemplate = (...args) => {
         let filename = path.join(...args);
-        if (fs.existsSync(filename))
+        if (fs.existsSync(filename)) {
           return new zx.cms.render.FileTemplate(filename, classname, name);
+        }
         return null;
       };
 
@@ -76,23 +76,25 @@ qx.Class.define("zx.cms.render.Resolver", {
         classname = ctlr.getViewableClass().classname;
         let vcp = ctlr.getViewableClass().classname;
 
-        template = findTemplate(
-          webRootDir,
-          "_cms/templates",
-          vcp,
-          name + ".html"
-        );
-        if (!template && isIndex)
+        template = findTemplate(webRootDir, "_cms/templates", vcp, name + ".html");
+        if (!template && isIndex) {
           template = findTemplate(webRootDir, "_cms/templates", vcp + ".html");
+        }
 
         // Ask theme for Viewable's Template
         //  Looks in `Website/_cms/themes/<Theme>` and in resources under `<Theme>`
-        if (!template) template = await theme.getTemplate(ctlr, name);
+        if (!template) {
+          template = await theme.getTemplate(ctlr, name);
+        }
 
         // Ask Controller for Viewable’s Template
-        if (!template) template = await ctlr.getTemplate(name);
+        if (!template) {
+          template = await ctlr.getTemplate(name);
+        }
 
-        if (template) return template;
+        if (template) {
+          return template;
+        }
       }
 
       // If at the global level
@@ -109,20 +111,14 @@ qx.Class.define("zx.cms.render.Resolver", {
       if (!isIndex) {
         // Ask Local for Template
         //  Looks in Website/_cms/templates/global
-        if (!template)
-          template = findTemplate(
-            webRootDir,
-            "_cms/templates/global",
-            name + ".html"
-          );
+        if (!template) {
+          template = findTemplate(webRootDir, "_cms/templates/global", name + ".html");
+        }
       }
 
-      if (!template)
-        qx.log.Logger.error(
-          `Cannot find a view for ${
-            ctlr ? ctlr.getViewableClass().classname : "(no controller)"
-          } called ${name} because there is no such file`
-        );
+      if (!template) {
+        qx.log.Logger.error(`Cannot find a view for ${ctlr ? ctlr.getViewableClass().classname : "(no controller)"} called ${name} because there is no such file`);
+      }
       return template;
     }
   }

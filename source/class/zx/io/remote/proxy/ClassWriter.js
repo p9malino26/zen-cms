@@ -87,7 +87,9 @@ qx.Class.define("zx.io.remote.proxy.ClassWriter", {
           }
 
           annos = allAnnos.filter(anno => qx.Class.isSubClassOf(anno.constructor, zx.io.remote.anno.Property));
-          if (!annos.length) continue;
+          if (!annos.length) {
+            continue;
+          }
 
           let refType = null;
           if (info.check) {
@@ -123,9 +125,7 @@ qx.Class.define("zx.io.remote.proxy.ClassWriter", {
         reset: true
       };
 
-      let names = Object.keys(clazz.prototype).filter(
-        v => typeof clazz.prototype[v] == "function" && v != "constructor" && v != "destruct"
-      );
+      let names = Object.keys(clazz.prototype).filter(v => typeof clazz.prototype[v] == "function" && v != "constructor" && v != "destruct");
       names.forEach(name => {
         // Exclude any methods which are property accessors
         let pos = -1;

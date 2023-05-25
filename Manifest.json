@@ -20,44 +20,38 @@
     "class": "source/class",
     "resource": "source/resource",
     "translation": "source/translation",
-    "webfonts": [
-      {
-        "name": "FontAwesomeBrands",
+    "fonts": {
+      "FontAwesomeBrands": {
         "defaultSize": 32,
         "comparisonString": "\\uf26e\\uf368",
-        "mapping": "zx/cms/fontawesome/fa-brands.map",
-        "resources": [
-          "zx/cms/fontawesome/fa-brands-400.eot",
-          "zx/cms/fontawesome/fa-brands-400.woff2",
-          "zx/cms/fontawesome/fa-brands-400.woff",
-          "zx/cms/fontawesome/fa-brands-400.ttf"
-        ]
+        "fontFaces": [
+          {
+            "paths": ["zx/cms/fontawesome/fa-brands-400.eot", "zx/cms/fontawesome/fa-brands-400.woff2", "zx/cms/fontawesome/fa-brands-400.woff", "zx/cms/fontawesome/fa-brands-400.ttf"]
+          }
+        ],
+        "glyphs": "zx/cms/fontawesome/fa-brands.json"
       },
-      {
-        "name": "FontAwesome",
+      "FontAwesome": {
         "defaultSize": 32,
         "comparisonString": "\\uf2b9\\uf2bb",
-        "mapping": "zx/cms/fontawesome/fa-regular.map",
-        "resources": [
-          "zx/cms/fontawesome/fa-regular-400.eot",
-          "zx/cms/fontawesome/fa-regular-400.woff2",
-          "zx/cms/fontawesome/fa-regular-400.woff",
-          "zx/cms/fontawesome/fa-regular-400.ttf"
-        ]
+        "fontFaces": [
+          {
+            "paths": ["zx/cms/fontawesome/fa-regular-400.eot", "zx/cms/fontawesome/fa-regular-400.woff2", "zx/cms/fontawesome/fa-regular-400.woff", "zx/cms/fontawesome/fa-regular-400.ttf"]
+          }
+        ],
+        "glyphs": "zx/cms/fontawesome/fa-regular.json"
       },
-      {
-        "name": "FontAwesomeSolid",
+      "FontAwesomeSolid": {
         "defaultSize": 32,
         "comparisonString": "\\uf2b9\\uf2bb",
-        "mapping": "zx/cms/fontawesome/fa-solid.map",
-        "resources": [
-          "zx/cms/fontawesome/fa-solid-900.eot",
-          "zx/cms/fontawesome/fa-solid-900.woff2",
-          "zx/cms/fontawesome/fa-solid-900.woff",
-          "zx/cms/fontawesome/fa-solid-900.ttf"
-        ]
+        "fontFaces": [
+          {
+            "paths": ["zx/cms/fontawesome/fa-solid-900.eot", "zx/cms/fontawesome/fa-solid-900.woff2", "zx/cms/fontawesome/fa-solid-900.woff", "zx/cms/fontawesome/fa-solid-900.ttf"]
+          }
+        ],
+        "glyphs": "zx/cms/fontawesome/fa-solid.json"
       }
-    ]
+    }
   },
   "requires": {
     "@qooxdoo/framework": "^7.0.0-beta"

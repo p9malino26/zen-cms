@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const fs = zx.utils.Promisify.fs;
 const path = require("path");
@@ -31,15 +30,12 @@ qx.Class.define("zx.cms.render.Theme", {
 
   construct(themeName) {
     this.base(arguments);
-    if (!themeName) themeName = this.classname;
+    if (!themeName) {
+      themeName = this.classname;
+    }
     this.__themeName = themeName;
-    this.__localDir = zx.server.Config.getInstance().resolve(
-      path.join("_cms/themes", themeName)
-    );
-    this.__resourceDir = path.join(
-      zx.server.Config.RESOURCE_DIR,
-      themeName.split(".").join("/")
-    );
+    this.__localDir = zx.server.Config.getInstance().resolve(path.join("_cms/themes", themeName));
+    this.__resourceDir = path.join(zx.server.Config.RESOURCE_DIR, themeName.split(".").join("/"));
   },
 
   members: {
@@ -71,11 +67,14 @@ qx.Class.define("zx.cms.render.Theme", {
         let vcp = ctlr.getViewableClass().classname;
 
         arrPaths.push(path.join(this.__localDir, vcp, name + ".html"));
-        if (isIndex) arrPaths.push(path.join(this.__localDir, vcp + ".html"));
+        if (isIndex) {
+          arrPaths.push(path.join(this.__localDir, vcp + ".html"));
+        }
 
         arrPaths.push(path.join(this.__resourceDir, vcp, name + ".html"));
-        if (isIndex)
+        if (isIndex) {
           arrPaths.push(path.join(this.__resourceDir, vcp + ".html"));
+        }
       }
 
       if (!isIndex) {
@@ -85,11 +84,7 @@ qx.Class.define("zx.cms.render.Theme", {
 
       for (let i = 0; i < arrPaths.length; i++) {
         if (await fs.existsAsync(arrPaths[i])) {
-          return new zx.cms.render.FileTemplate(
-            arrPaths[i],
-            ctlr.getViewableClass().classname,
-            name
-          );
+          return new zx.cms.render.FileTemplate(arrPaths[i], ctlr.getViewableClass().classname, name);
         }
       }
 
@@ -104,9 +99,13 @@ qx.Class.define("zx.cms.render.Theme", {
      */
     async resolve(filename) {
       let tmp = path.join(this.__localDir, filename);
-      if (await fs.existsAsync(tmp)) return tmp;
+      if (await fs.existsAsync(tmp)) {
+        return tmp;
+      }
       tmp = path.join(this.__resourceDir, filename);
-      if (await fs.existsAsync(tmp)) return tmp;
+      if (await fs.existsAsync(tmp)) {
+        return tmp;
+      }
       return null;
     },
 
@@ -118,9 +117,13 @@ qx.Class.define("zx.cms.render.Theme", {
      */
     resolveSync(filename) {
       let tmp = path.join(this.__localDir, filename);
-      if (fs.existsSync(tmp)) return tmp;
+      if (fs.existsSync(tmp)) {
+        return tmp;
+      }
       tmp = path.join(this.__resourceDir, filename);
-      if (fs.existsSync(tmp)) return tmp;
+      if (fs.existsSync(tmp)) {
+        return tmp;
+      }
       return null;
     },
 
@@ -139,19 +142,16 @@ qx.Class.define("zx.cms.render.Theme", {
       }
       url = url.substring("/zx/theme".length);
       let pos = url.indexOf("?");
-      if (pos > -1) url = url.substring(0, pos);
+      if (pos > -1) {
+        url = url.substring(0, pos);
+      }
       let filename = path.resolve(path.join(this.__localDir, url));
       if (!filename.startsWith(this.__localDir) || !fs.existsSync(filename)) {
         filename = path.resolve(path.join(this.__resourceDir, url));
 
-        if (
-          !filename.startsWith(this.__resourceDir) ||
-          !fs.existsSync(filename)
-        )
-          throw new zx.server.WebServer.HttpError(
-            404,
-            `Cannot find theme file ${url}`
-          );
+        if (!filename.startsWith(this.__resourceDir) || !fs.existsSync(filename)) {
+          throw new zx.server.WebServer.HttpError(404, `Cannot find theme file ${url}`);
+        }
       }
 
       return reply.sendFile(path.basename(filename), path.dirname(filename));
@@ -176,20 +176,19 @@ qx.Class.define("zx.cms.render.Theme", {
       });
       watcher.on("error", err => {
         if (err.code == "ENOSPC") {
-          this.error(
-            "ENOSPC error occured - try increasing fs.inotify.max_user_watches"
-          );
+          this.error("ENOSPC error occured - try increasing fs.inotify.max_user_watches");
           return;
         }
-        this.error(
-          `Error occured while watching files - file modifications may not be detected; error: ${err}`
-        );
+        this.error(`Error occured while watching files - file modifications may not be detected; error: ${err}`);
       });
 
       const onFileChange = (type, filename) => {
         if (filename.match(/\.scss$/i)) {
-          if (path.basename(filename)[0] == "_") queueRebuildAllSass();
-          else queueRebuildSass(filename);
+          if (path.basename(filename)[0] == "_") {
+            queueRebuildAllSass();
+          } else {
+            queueRebuildSass(filename);
+          }
         }
       };
 
@@ -222,9 +221,7 @@ qx.Class.define("zx.cms.render.Theme", {
             rebuildAll = false;
             rebuildSass = {};
             sassFiles = await glob(path.join(this.__localDir, "**.scss"));
-            sassFiles = sassFiles.filter(
-              filename => path.basename(filename)[0] != "_"
-            );
+            sassFiles = sassFiles.filter(filename => path.basename(filename)[0] != "_");
           } else {
             sassFiles = Object.keys(rebuildSass);
             rebuildSass = {};
@@ -236,18 +233,10 @@ qx.Class.define("zx.cms.render.Theme", {
             let outFilename = path.join(info.dir, info.name + ".css");
             let scssFile = new zx.cms.util.ScssFile(this, srcFilename);
             await scssFile.compile(outFilename);
-            for (
-              let i = 0, files = scssFile.getSourceFilenames();
-              i < files.length;
-              i++
-            ) {
+            for (let i = 0, files = scssFile.getSourceFilenames(); i < files.length; i++) {
               let sourceFile = files[i];
               sourceFile = await zx.utils.Path.correctCase(sourceFile);
-              if (
-                sourceFile.startsWith(localDir) ||
-                sourceFile.startsWith(resourceDir)
-              )
-                return;
+              if (sourceFile.startsWith(localDir) || sourceFile.startsWith(resourceDir)) return;
               if (!dependentFiles[sourceFile]) {
                 dependentFiles[sourceFile] = true;
                 watcher.add(sourceFile);

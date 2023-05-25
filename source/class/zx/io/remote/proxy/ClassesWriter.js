@@ -90,11 +90,17 @@ qx.Class.define("zx.io.remote.proxy.ClassesWriter", {
     },
 
     async writeProxiedClassesFor(classnames) {
-      if (!this._db) await this._initialise();
+      if (!this._db) {
+        await this._initialise();
+      }
 
-      if (!qx.lang.Type.isArray(classnames)) classnames = [classnames];
+      if (!qx.lang.Type.isArray(classnames)) {
+        classnames = [classnames];
+      }
 
-      if (this.isVerbose()) this.info(`Generating classes to ${path.resolve(this.getOutputPath())}`);
+      if (this.isVerbose()) {
+        this.info(`Generating classes to ${path.resolve(this.getOutputPath())}`);
+      }
 
       let classes = {};
 
@@ -125,11 +131,15 @@ qx.Class.define("zx.io.remote.proxy.ClassesWriter", {
           try {
             await fs.promises.unlink(filename);
           } catch (ex) {
-            if (ex.code != "ENOENT") throw ex;
+            if (ex.code != "ENOENT") {
+              throw ex;
+            }
           }
           continue;
         }
-        if (this.isVerbose()) this.info(`Writing class ${clazz.classname}`);
+        if (this.isVerbose()) {
+          this.info(`Writing class ${clazz.classname}`);
+        }
         let writer = new zx.io.remote.proxy.ClassWriter(this, clazz);
         let str = await writer.getProxyClassCode();
 
@@ -138,7 +148,9 @@ qx.Class.define("zx.io.remote.proxy.ClassesWriter", {
 
         if (fs.existsSync(filename)) {
           let current = await fs.promises.readFile(filename, "utf8");
-          if (current == str) continue;
+          if (current == str) {
+            continue;
+          }
         }
         await fs.promises.writeFile(filename, str, "utf8");
       }

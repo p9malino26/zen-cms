@@ -20,8 +20,9 @@ qx.Class.define("zx.app.AbstractClientApp", {
 
   construct() {
     this.base(arguments);
-    if (!zx.app.AbstractClientApp.__INSTANCE) zx.app.AbstractClientApp.__INSTANCE = this;
-    else {
+    if (!zx.app.AbstractClientApp.__INSTANCE) {
+      zx.app.AbstractClientApp.__INSTANCE = this;
+    } else {
       debugger;
       throw new Error("Application created multiple times!");
     }
@@ -60,7 +61,9 @@ qx.Class.define("zx.app.AbstractClientApp", {
         timeout: 60000,
         polling: true
       }));
-      if (!endpoint.isPolling()) this.warn(" *************** POLLING TURNED OFF IN CODE ********* ");
+      if (!endpoint.isPolling()) {
+        this.warn(" *************** POLLING TURNED OFF IN CODE ********* ");
+      }
       this.__netController.addEndpoint(endpoint);
       await endpoint.open();
 
@@ -88,17 +91,7 @@ qx.Class.define("zx.app.AbstractClientApp", {
             var file = evt.getTarget();
             var uploadedSize = evt.getData();
 
-            this.debug(
-              "Upload " +
-                file.getFilename() +
-                ": " +
-                uploadedSize +
-                " / " +
-                file.getSize() +
-                " - " +
-                Math.round((uploadedSize / file.getSize()) * 100) +
-                "%"
-            );
+            this.debug("Upload " + file.getFilename() + ": " + uploadedSize + " / " + file.getSize() + " - " + Math.round((uploadedSize / file.getSize()) * 100) + "%");
           });
         });
       }

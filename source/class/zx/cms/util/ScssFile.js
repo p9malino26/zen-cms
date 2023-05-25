@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * @ignore(require)
@@ -25,12 +24,12 @@
 const fs = zx.utils.Promisify.fs;
 const path = require("upath");
 
+/* global loadSass */
 /**
  * @external(qx/tool/loadsass.js)
  * @ignore(loadSass)
  */
-/* global loadSass */
-const sass = loadSass();
+const sass = window.loadSass();
 
 /**
  * Compiles a SCSS file into CSS, and supports
@@ -105,30 +104,13 @@ qx.Class.define("zx.cms.util.ScssFile", {
           },
           (error, result) => {
             if (error) {
-              this.error(
-                "Error status " +
-                  error.status +
-                  " in " +
-                  this.__filename +
-                  "[" +
-                  error.line +
-                  "," +
-                  error.column +
-                  "]: " +
-                  error.message
-              );
+              this.error("Error status " + error.status + " in " + this.__filename + "[" + error.line + "," + error.column + "]: " + error.message);
               resolve(error); // NOT reject
               return;
             }
 
             fs.writeFileAsync(outputFilename, result.css.toString(), "utf8")
-              .then(() =>
-                fs.writeFileAsync(
-                  outputFilename + ".map",
-                  result.map.toString(),
-                  "utf8"
-                )
-              )
+              .then(() => fs.writeFileAsync(outputFilename + ".map", result.map.toString(), "utf8"))
               .then(() => resolve(null))
               .catch(reject);
           }
@@ -146,12 +128,16 @@ qx.Class.define("zx.cms.util.ScssFile", {
         let info = path.parse(filename);
         if (!info.ext) {
           filename += ".scss";
-          if (fs.existsSync(filename)) return filename;
+          if (fs.existsSync(filename)) {
+            return filename;
+          }
         } else if (info.ext != ".scss") {
           return null;
         }
         filename = path.join(info.dir, "_" + info.name + ".scss");
-        if (fs.existsSync(filename)) return filename;
+        if (fs.existsSync(filename)) {
+          return filename;
+        }
         return null;
       };
 
@@ -178,22 +164,18 @@ qx.Class.define("zx.cms.util.ScssFile", {
         filename = findFile(filename);
         if (filename) {
           if (!filename.startsWith(path.resolve(this.__theme.getLocalDir()))) {
-            this.error(
-              `Cannot resolve ${url} because it is outside of the theme local directory`
-            );
+            this.error(`Cannot resolve ${url} because it is outside of the theme local directory`);
             return null;
           }
         } else {
           filename = path.resolve(this.__theme.getResourceDir(), relUrl);
           filename = findFile(filename);
-          if (filename) return null;
+          if (!filename) {
+            return null;
+          }
 
-          if (
-            !filename.startsWith(path.resolve(this.__theme.getResourceDir()))
-          ) {
-            this.error(
-              `Cannot resolve ${url} because it is outside of the theme resource directory`
-            );
+          if (!filename.startsWith(path.resolve(this.__theme.getResourceDir()))) {
+            this.error(`Cannot resolve ${url} because it is outside of the theme resource directory`);
             return null;
           }
         }
@@ -210,9 +192,7 @@ qx.Class.define("zx.cms.util.ScssFile", {
         let foundFilename = findFile(filename);
         if (foundFilename) {
           if (!foundFilename.startsWith(path.resolve(webRoot))) {
-            this.error(
-              `Cannot resolve ${url} because it is outside of the web root directory`
-            );
+            this.error(`Cannot resolve ${url} because it is outside of the web root directory`);
             return null;
           }
         }
@@ -232,24 +212,15 @@ qx.Class.define("zx.cms.util.ScssFile", {
 
       let externalUrl = null;
       if (filename.startsWith(path.resolve(this.__theme.getLocalDir()))) {
-        externalUrl =
-          "/zx/theme/" + path.relative(this.__theme.getLocalDir(), filename);
-      } else if (
-        filename.startsWith(path.resolve(this.__theme.getResourceDir()))
-      ) {
-        externalUrl =
-          "/zx/theme/" + path.relative(this.__theme.getResourceDir(), filename);
+        externalUrl = "/zx/theme/" + path.relative(this.__theme.getLocalDir(), filename);
+      } else if (filename.startsWith(path.resolve(this.__theme.getResourceDir()))) {
+        externalUrl = "/zx/theme/" + path.relative(this.__theme.getResourceDir(), filename);
       } else if (filename.startsWith(path.resolve(webRoot))) {
         externalUrl = "/" + path.relative(webRoot, filename);
-      } else if (
-        filename.startsWith(path.resolve(zx.server.Config.RESOURCE_DIR))
-      ) {
-        externalUrl =
-          "/" + path.relative(zx.server.Config.RESOURCE_DIR, filename);
+      } else if (filename.startsWith(path.resolve(zx.server.Config.RESOURCE_DIR))) {
+        externalUrl = "/" + path.relative(zx.server.Config.RESOURCE_DIR, filename);
       } else {
-        this.error(
-          `Cannot resolve ${url} because it is outside of the allowed directories`
-        );
+        this.error(`Cannot resolve ${url} because it is outside of the allowed directories`);
         return null;
       }
 
@@ -294,53 +265,41 @@ qx.Class.define("zx.cms.util.ScssFile", {
 
       let contents = await fs.readFileAsync(absFilename, "utf8");
       let promises = [];
-      contents = contents.replace(
-        /@import\s+["']([^;]+)["']/gi,
-        (match, p1, offset) => {
-          let pathInfo = this._analyseFilename(p1, absFilename);
-          if (!pathInfo) {
-            this.error(
-              `Cannot find file to import, url=${p1} in file ${absFilename}`
-            );
-            return null;
-          }
-          if (pathInfo.filename) {
-            promises.push(this.loadSource(pathInfo.filename));
-            return (
-              '@import "' +
-              path.relative(process.cwd(), pathInfo.filename) +
-              '"'
-            );
-          }
+      contents = contents.replace(/@import\s+["']([^;]+)["']/gi, (match, p1, offset) => {
+        let pathInfo = this._analyseFilename(p1, absFilename);
+        if (!pathInfo) {
+          this.error(`Cannot find file to import, url=${p1} in file ${absFilename}`);
+          return null;
+        }
+        if (pathInfo.filename) {
+          promises.push(this.loadSource(pathInfo.filename));
+          return '@import "' + path.relative(process.cwd(), pathInfo.filename) + '"';
+        }
+        if (pathInfo.externalUrl) {
+          return '@import "' + pathInfo.externalUrl + '"';
+        }
+        return match;
+      });
+
+      contents = contents.replace(/\burl\s*\(\s*([^\)]+)*\)/gi, (match, url) => {
+        let c = url[0];
+        if (c === "'" || c === '"') {
+          url = url.substring(1);
+        }
+        c = url[url.length - 1];
+        if (c === "'" || c === '"') {
+          url = url.substring(0, url.length - 1);
+        }
+        let pathInfo = this._analyseFilename(url, filename);
+
+        if (pathInfo) {
           if (pathInfo.externalUrl) {
-            return '@import "' + pathInfo.externalUrl + '"';
+            return `url("${pathInfo.externalUrl}")`;
           }
-          return match;
         }
-      );
 
-      contents = contents.replace(
-        /\burl\s*\(\s*([^\)]+)*\)/gi,
-        (match, url) => {
-          let c = url[0];
-          if (c === "'" || c === '"') {
-            url = url.substring(1);
-          }
-          c = url[url.length - 1];
-          if (c === "'" || c === '"') {
-            url = url.substring(0, url.length - 1);
-          }
-          let pathInfo = this._analyseFilename(url, filename);
-
-          if (pathInfo) {
-            if (pathInfo.externalUrl) {
-              return `url("${pathInfo.externalUrl}")`;
-            }
-          }
-
-          return `url("${url}")`;
-        }
-      );
+        return `url("${url}")`;
+      });
 
       this.__sourceFiles[absFilename] = contents;
       this.__importAs[filename] = absFilename;
