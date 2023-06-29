@@ -1,21 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.cli.commands.UserCommand", {
   extend: qx.core.Object,
@@ -75,11 +73,7 @@ qx.Class.define("zx.cli.commands.UserCommand", {
       let server = new zx.server.Standalone();
       await server.start();
       try {
-        let security = await server.findOneObjectByType(
-          zx.server.auth.Security,
-          null,
-          true
-        );
+        let security = await server.findOneObjectByType(zx.server.auth.Security, null, true);
         let perm = security.getPermissions().lookup(shortCode);
         if (!perm) {
           this.info(`Creating a permission with shortCode ${shortCode}`);
@@ -118,11 +112,7 @@ qx.Class.define("zx.cli.commands.UserCommand", {
           return;
         }
 
-        let security = await server.findOneObjectByType(
-          zx.server.auth.Security,
-          null,
-          true
-        );
+        let security = await server.findOneObjectByType(zx.server.auth.Security, null, true);
         let perm = security.getPermissions().lookup(shortCode);
         if (!perm) {
           this.error(`Cannot find a permission with shortCode ${shortCode}`);
@@ -153,11 +143,7 @@ qx.Class.define("zx.cli.commands.UserCommand", {
           return;
         }
 
-        let security = await server.findOneObjectByType(
-          zx.server.auth.Security,
-          null,
-          true
-        );
+        let security = await server.findOneObjectByType(zx.server.auth.Security, null, true);
         let perm = security.getPermissions().lookup(shortCode);
         if (!perm) {
           this.error(`Cannot find a permission with shortCode ${shortCode}`);
@@ -186,7 +172,7 @@ qx.Class.define("zx.cli.commands.UserCommand", {
       sub = new zx.cli.Command("create").set({
         description: `Creates a user account`,
         run: async function () {
-          const { arguments, flags } = this.getValues();
+          const { args, flags } = this.getValues();
           let cmd = new zx.cli.commands.UserCommand();
           let password = flags.password;
           if (!password)
@@ -197,11 +183,7 @@ qx.Class.define("zx.cli.commands.UserCommand", {
             console.log("Cannot create a user without a password");
             process.exit(1);
           }
-          return cmd.createUser(
-            arguments["username"],
-            arguments["full-name"] || null,
-            password
-          );
+          return cmd.createUser(args["username"], args["full-name"] || null, password);
         }
       });
       sub.addArgument(
@@ -218,8 +200,7 @@ qx.Class.define("zx.cli.commands.UserCommand", {
       sub.addFlag(
         new zx.cli.Flag("password").set({
           shortCode: "p",
-          description:
-            "password to use (if not provided then the terminal is prompted)"
+          description: "password to use (if not provided then the terminal is prompted)"
         })
       );
       cmd.addSubcommand(sub);
@@ -230,12 +211,9 @@ qx.Class.define("zx.cli.commands.UserCommand", {
       sub = new zx.cli.Command("create-permission").set({
         description: `Creates a permission`,
         run: async function () {
-          const { arguments, flags } = this.getValues();
+          const { args, flags } = this.getValues();
           let cmd = new zx.cli.commands.UserCommand();
-          cmd.createPermission(
-            arguments["short-code"],
-            arguments["description"]
-          );
+          cmd.createPermission(args["short-code"], args["description"]);
         }
       });
       sub.addArgument(
@@ -257,9 +235,9 @@ qx.Class.define("zx.cli.commands.UserCommand", {
       sub = new zx.cli.Command("add-permission").set({
         description: `Adds a permission to a user account`,
         run: async function () {
-          const { arguments, flags } = this.getValues();
+          const { args, flags } = this.getValues();
           let cmd = new zx.cli.commands.UserCommand();
-          cmd.addPermission(arguments["username"], arguments["permission"]);
+          cmd.addPermission(args["username"], args["permission"]);
         }
       });
       sub.addArgument(
@@ -282,9 +260,9 @@ qx.Class.define("zx.cli.commands.UserCommand", {
       sub = new zx.cli.Command("remove-permission").set({
         description: `Removes a permission from a user account`,
         run: async function () {
-          const { arguments, flags } = this.getValues();
+          const { args, flags } = this.getValues();
           let cmd = new zx.cli.commands.UserCommand();
-          cmd.removePermission(arguments["username"], arguments["permission"]);
+          cmd.removePermission(args["username"], args["permission"]);
         }
       });
       sub.addArgument(
@@ -307,7 +285,7 @@ qx.Class.define("zx.cli.commands.UserCommand", {
       sub = new zx.cli.Command("set-password").set({
         description: `Sets a users password`,
         run: async function () {
-          const { arguments, flags } = this.getValues();
+          const { args, flags } = this.getValues();
           let cmd = new zx.cli.commands.UserCommand();
           let password = flags.password;
           if (!password)
@@ -318,7 +296,7 @@ qx.Class.define("zx.cli.commands.UserCommand", {
             console.log("Cannot create a user without a password");
             process.exit(1);
           }
-          return await cmd.setPassword(arguments["username"], password);
+          return await cmd.setPassword(args["username"], password);
         }
       });
       sub.addArgument(
@@ -330,8 +308,7 @@ qx.Class.define("zx.cli.commands.UserCommand", {
       sub.addFlag(
         new zx.cli.Flag("password").set({
           shortCode: "p",
-          description:
-            "password to use (if not provided then the terminal is prompted)",
+          description: "password to use (if not provided then the terminal is prompted)",
           type: "string"
         })
       );

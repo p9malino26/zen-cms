@@ -1,21 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.cli.commands.GetCommand", {
   extend: qx.core.Object,
@@ -45,12 +43,8 @@ qx.Class.define("zx.cli.commands.GetCommand", {
           return -1;
         }
 
-        if (
-          !qx.Class.hasInterface(object.constructor, zx.cms.render.IViewable)
-        ) {
-          this.error(
-            `Cannot render object for ${url} because it is not viewable, it is ${object.classname}: ${object}`
-          );
+        if (!qx.Class.hasInterface(object.constructor, zx.cms.render.IViewable)) {
+          this.error(`Cannot render object for ${url} because it is not viewable, it is ${object.classname}: ${object}`);
           return -1;
         }
 
@@ -76,10 +70,8 @@ qx.Class.define("zx.cli.commands.GetCommand", {
       let cmd = new zx.cli.Command("get").set({
         description: "Gets the resource as the web server would render it",
         run: async function () {
-          let { arguments } = this.getValues();
-          return await new zx.cli.commands.GetCommand(
-            arguments["url-path"]
-          ).run();
+          let { args } = this.getValues();
+          return await new zx.cli.commands.GetCommand(args["url-path"]).run();
         }
       });
       cmd.addArgument(

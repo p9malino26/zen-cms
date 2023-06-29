@@ -59,7 +59,7 @@ qx.Class.define("zx.cli.commands.CreateProxiesCommand", {
       let cmd = new zx.cli.Command("create-proxies").set({
         description: "Creates the proxies",
         run: async function () {
-          const { arguments, flags } = this.getValues();
+          const { args, flags } = this.getValues();
           let cmd = new zx.cli.commands.CreateProxiesCommand(flags["compiler-target-dir"], flags["output-dir"], flags["classname"]);
           return await cmd.run();
         }

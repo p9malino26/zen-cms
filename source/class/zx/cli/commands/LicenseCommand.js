@@ -79,11 +79,7 @@ qx.Class.define("zx.cli.commands.LicenseCommand", {
           }
         }
         if (headerComment) {
-          if (
-            !headerComment.match(/\bcopyright\b/i) &&
-            !headerComment.match(/\blicense\b/i) &&
-            !headerComment.match(/\bauthor\b/i)
-          ) {
+          if (!headerComment.match(/\bcopyright\b/i) && !headerComment.match(/\blicense\b/i) && !headerComment.match(/\bauthor\b/i)) {
             src = headerComment + "\n" + src;
             headerComment = null;
           }
@@ -124,8 +120,8 @@ qx.Class.define("zx.cli.commands.LicenseCommand", {
       let cmd = new zx.cli.Command("license").set({
         description: "Edits the license header on source files",
         run: async function () {
-          let { arguments, flags } = this.getValues();
-          let cmd = new zx.cli.commands.LicenseCommand(flags["template"], arguments["files"]);
+          let { args, flags } = this.getValues();
+          let cmd = new zx.cli.commands.LicenseCommand(flags["template"], args["files"]);
           cmd.set({
             dryRun: !!flags["dry-run"],
             replace: !!flags["replace"]
