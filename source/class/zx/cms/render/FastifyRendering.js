@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Simple wrapper for Fastify that implements IRendering
@@ -61,7 +60,9 @@ qx.Class.define("zx.cms.render.FastifyRendering", {
     setStatus(statusCode, message) {
       this.__reply.code(statusCode);
       this.__statusCode = statusCode;
-      if (message) this.__reply.send(message);
+      if (message) {
+        this.__reply.send(message);
+      }
     },
 
     /*
@@ -75,7 +76,9 @@ qx.Class.define("zx.cms.render.FastifyRendering", {
      * @Override
      */
     send(body) {
-      if (!this.__statusCode) this.__reply.code(200);
+      if (!this.__statusCode) {
+        this.__reply.code(200);
+      }
       this.__reply.type("text/html; charset=utf-8").send(body);
     },
 

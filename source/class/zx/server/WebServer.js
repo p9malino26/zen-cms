@@ -295,16 +295,6 @@ qx.Class.define("zx.server.WebServer", {
       let result = await fn();
       this._requestContext.set("context", null);
       return result;
-      /*
-      return await this.__alsRequest.run(context, async () => {
-        let tmp = this.__alsRequest.getStore();
-        this.assertTrue(tmp === context);
-        console.log("Start in async context");
-        let result = await fn();
-        console.log("Finished in async context");
-        return result;
-      });
-      */
     },
 
     /**
@@ -331,7 +321,9 @@ qx.Class.define("zx.server.WebServer", {
     wrapMiddleware(fn) {
       return async (req, reply) => {
         try {
-          return await this.runInRequestContext({ request: req, reply: reply }, () => fn(req, reply));
+          let result = await this.runInRequestContext({ request: req, reply: reply }, () => fn(req, reply));
+          await reply;
+          return result;
         } catch (ex) {
           if (ex instanceof zx.server.WebServer.HttpError) {
             if (ex.statusCode < 400 || ex.statusCode >= 500) this.error(`Exception raised:\n${ex}`);
@@ -350,9 +342,8 @@ qx.Class.define("zx.server.WebServer", {
      * @param app {Fastify}
      */
     async _initApplication(app) {
-      const { fastifyRequestContextPlugin, requestContext } = require("@fastify/request-context");
       const fastifyStatic = require("@fastify/static");
-
+      const { fastifyRequestContextPlugin, requestContext } = require("@fastify/request-context");
       this._requestContext = requestContext;
       zx.io.remote.NetworkEndpoint.requestContext = requestContext;
 

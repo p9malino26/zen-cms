@@ -199,16 +199,15 @@ qx.Class.define("zx.server.SessionManager", {
     async _onSend(request, reply, payload) {
       const session = request.session;
       if (!session || !session.getSessionId() || !this.__shouldSaveSession(request)) {
-        return;
+        return payload;
       }
 
       let json = session.exportSession();
-      await this.__collection.replaceOne({ sessionId: session.getSessionId() }, json, { upsert: true });
-      reply.setCookie(
-        this.getCookieName(),
-        session.getEncryptedSessionId(),
-        session.getCookieConfiguration(this.__isConnectionSecure(request))
-      );
+      let sessionId = session.getSessionId();
+      await this.__collection.replaceOne({ sessionId: sessionId }, json, { upsert: true });
+      reply.setCookie(this.getCookieName(), session.getEncryptedSessionId(), session.getCookieConfiguration(this.__isConnectionSecure(request)));
+
+      return payload;
     },
 
     /**
