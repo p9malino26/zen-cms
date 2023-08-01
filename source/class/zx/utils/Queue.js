@@ -37,6 +37,10 @@ qx.Class.define("zx.utils.Queue", {
     }
   },
 
+  events: {
+    empty: "qx.event.type.Event"
+  },
+
   members: {
     /** @type{Object[]} the queue */
     __queue: null,
@@ -57,6 +61,7 @@ qx.Class.define("zx.utils.Queue", {
       };
       this.__queue.push(data);
       if (!this.__running) {
+        this.__running = true;
         zx.utils.Queue.__NEXTTICK(() => this._run());
       }
       return data.promise;
@@ -66,7 +71,6 @@ qx.Class.define("zx.utils.Queue", {
      * Processes all items in the queue
      */
     async _run() {
-      this.__running = true;
       while (this.__queue.length) {
         let data = this.__queue.shift();
         let handler = this.getHandler();
@@ -89,7 +93,10 @@ qx.Class.define("zx.utils.Queue", {
    * @ignore(process)
    */
   defer(statics) {
-    if (typeof process !== "undefined") statics.__NEXTTICK = process.nextTick;
-    else statics.__NEXTTICK = fn => setTimeout(fn, 0);
+    if (typeof process !== "undefined") {
+      statics.__NEXTTICK = process.nextTick;
+    } else {
+      statics.__NEXTTICK = fn => setTimeout(fn, 0);
+    }
   }
 });
