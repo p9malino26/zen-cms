@@ -1,21 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.cli.commands.ShortenCommand", {
   extend: qx.core.Object,
@@ -25,8 +23,8 @@ qx.Class.define("zx.cli.commands.ShortenCommand", {
       let cmd = new zx.cli.Command("url-shorten").set({
         description: "Shortens a string",
         run: async function () {
-          let { arguments } = this.getValues();
-          let result = zx.cms.system.ShortUrl.shorten(arguments["value"]);
+          let { args } = this.getValues();
+          let result = zx.cms.system.ShortUrl.shorten(args["value"]);
           console.log("Shorted to: " + result);
         }
       });

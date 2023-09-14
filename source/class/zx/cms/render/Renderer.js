@@ -67,11 +67,7 @@ qx.Class.define("zx.cms.render.Renderer", {
       let ctlr = zx.cms.render.Controller.getController(viewable);
       let templateName = ctlr.getTemplateName(viewable);
       let template = await zx.cms.render.Resolver.resolveTemplate(ctlr, this.getTheme(), templateName);
-      if (!template)
-        throw new zx.server.WebServer.HttpError(
-          404,
-          `Cannot find template called ${templateName} for ${viewable.classname} instance ${viewable}`
-        );
+      if (!template) throw new zx.server.WebServer.HttpError(404, `Cannot find template called ${templateName} for ${viewable.classname} instance ${viewable}`);
 
       /*
        * TODO this assumes that the template must be Nunjucks, but that is not necessarily the case in the future.
@@ -124,7 +120,9 @@ qx.Class.define("zx.cms.render.Renderer", {
         .forEach(child => addNav(context.zx.site.navigation, child));
 
       await viewable.prepareContext(context, rendering);
-      if (rendering.isStopped()) return;
+      if (rendering.isStopped()) {
+        return;
+      }
       await view.render(rendering, viewable, context);
     },
 
@@ -146,11 +144,7 @@ qx.Class.define("zx.cms.render.Renderer", {
       let ctlr = zx.cms.render.Controller.getController(pieceClassname);
 
       let template = await zx.cms.render.Resolver.resolveTemplate(ctlr, this.getTheme(), templateName);
-      if (!template)
-        throw new zx.server.WebServer.HttpError(
-          404,
-          `Cannot find template called ${templateName} for ${pieceClassname}`
-        );
+      if (!template) throw new zx.server.WebServer.HttpError(404, `Cannot find template called ${templateName} for ${pieceClassname}`);
 
       let view = new zx.cms.render.NunjucksView(template);
       context = context || {};
@@ -219,9 +213,7 @@ qx.Class.define("zx.cms.render.Renderer", {
         let themeName = this.getThemeName();
         let clazz = themeName ? qx.Class.getByName(themeName) : null;
         if (!clazz) {
-          this.warn(
-            `Cannot find a Javascript theme class named ${themeName} - this is normal unless you are writing a theme in code`
-          );
+          this.warn(`Cannot find a Javascript theme class named ${themeName} - this is normal unless you are writing a theme in code`);
           clazz = zx.cms.render.Theme;
         }
         this.__theme = new clazz(themeName);
