@@ -29,21 +29,29 @@ qx.Class.define("zx.server.Config", {
    */
   construct(data, rootDir) {
     this.base(arguments);
-    if (zx.server.Config.__instance) throw new Error("Multiple instances of zx.server.Config");
+    if (zx.server.Config.__instance) {
+      throw new Error("Multiple instances of zx.server.Config");
+    }
     zx.server.Config.__instance = this;
     if (data) {
       this._config = data;
-      if (data.directory) this._rootDir = data.directory;
-      else this._rootDir = data.directory || rootDir || "website";
+      if (data.directory) {
+        this._rootDir = data.directory;
+      } else {
+        this._rootDir = data.directory || rootDir || "website";
+      }
     }
   },
 
   destruct() {
-    if (zx.server.Config.__instance === this) zx.server.Config.__instance = null;
+    if (zx.server.Config.__instance === this) {
+      zx.server.Config.__instance = null;
+    }
   },
 
   members: {
     _config: null,
+
     _rootDir: null,
 
     /**
@@ -101,7 +109,9 @@ qx.Class.define("zx.server.Config", {
      * @return {Config} the instance
      */
     getInstance() {
-      if (!zx.server.Config.__instance) throw new Error("An instance of zx.server.Config has not yet been created");
+      if (!zx.server.Config.__instance) {
+        throw new Error("An instance of zx.server.Config has not yet been created");
+      }
       return zx.server.Config.__instance;
     }
   },

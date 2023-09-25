@@ -150,11 +150,11 @@ qx.Class.define("zx.cms.render.Theme", {
         filename = path.resolve(path.join(this.__resourceDir, url));
 
         if (!filename.startsWith(this.__resourceDir) || !fs.existsSync(filename)) {
-          throw new zx.server.WebServer.HttpError(404, `Cannot find theme file ${url}`);
+          throw new zx.utils.Http.HttpError(404, `Cannot find theme file ${url}`);
         }
       }
 
-      return reply.sendFile(path.basename(filename), path.dirname(filename));
+      return await reply.sendFile(path.basename(filename), path.dirname(filename));
     },
 
     /**

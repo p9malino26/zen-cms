@@ -57,11 +57,11 @@ qx.Class.define("zx.cms.render.FastifyRendering", {
     /*
      * @Override
      */
-    setStatus(statusCode, message) {
+    async setStatus(statusCode, message) {
       this.__reply.code(statusCode);
       this.__statusCode = statusCode;
       if (message) {
-        this.__reply.send(message);
+        await this.__reply.send(message);
       }
     },
 
@@ -75,18 +75,18 @@ qx.Class.define("zx.cms.render.FastifyRendering", {
     /*
      * @Override
      */
-    send(body) {
+    async send(body) {
       if (!this.__statusCode) {
         this.__reply.code(200);
       }
-      this.__reply.type("text/html; charset=utf-8").send(body);
+      await this.__reply.type("text/html; charset=utf-8").send(body);
     },
 
     /*
      * @Override
      */
-    sendFile(filename, options) {
-      this.__reply.sendFile(filename, options);
+    async sendFile(filename, options) {
+      await this.__reply.sendFile(filename, options);
     },
 
     /**

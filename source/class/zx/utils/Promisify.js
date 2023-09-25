@@ -22,6 +22,10 @@ qx.Class.define("zx.utils.Promisify", {
     IGNORED_PROPS: /^(?:length|name|arguments|caller|callee|prototype|__isPromisified__)$/,
     PromisePool: null,
 
+    waitFor(timeout) {
+      return new Promise(resolve => setTimeout(resolve, timeout));
+    },
+
     promisifyAll: function (target, fn) {
       const CUSTOM_PROMISIFIED_SYMBOL = zx.utils.Promisify.CUSTOM_PROMISIFIED_SYMBOL;
       Object.getOwnPropertyNames(target).forEach(key => {
@@ -282,8 +286,7 @@ qx.Class.define("zx.utils.Promisify", {
      * @returns whatever `cb` returns, or a promise if `value` is a promise
      */
     allNow(arr, cb, cberr) {
-      if (arr.some(value => qx.Promise.isPromise(value)))
-        return zx.utils.Promisify.chain(qx.Promise.all(arr), cb, cberr);
+      if (arr.some(value => qx.Promise.isPromise(value))) return zx.utils.Promisify.chain(qx.Promise.all(arr), cb, cberr);
       return cb ? cb(arr) : arr;
     },
 

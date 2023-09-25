@@ -38,8 +38,12 @@ qx.Class.define("zx.cli.commands.CreateProxiesCommand", {
       if (!proxiesOutputPath || !compilerTargetPath) {
         let data = await fs.promises.readFile("cms.json", "utf8");
         data = JSON.parse(data);
-        if (!proxiesOutputPath) proxiesOutputPath = data.createProxies?.outputPath;
-        if (!compilerTargetPath) compilerTargetPath = data.createProxies?.compilerTargetPath;
+        if (!proxiesOutputPath) {
+          proxiesOutputPath = data.createProxies?.outputPath;
+        }
+        if (!compilerTargetPath) {
+          compilerTargetPath = data.createProxies?.compilerTargetPath;
+        }
       }
       let ctlr = new zx.io.remote.proxy.ClassesWriter().set({
         outputPath: proxiesOutputPath,

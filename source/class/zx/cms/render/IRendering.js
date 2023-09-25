@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Instances of IRendering are a way to wrap up the copnversation between the client and the server,
@@ -56,7 +55,7 @@ qx.Interface.define("zx.cms.render.IRendering", {
      * @param errorCode {Integer} the error code
      * @param message {String?} optional error message
      */
-    setStatus(statusCode, message) {},
+    async setStatus(statusCode, message) {},
 
     /**
      * Sets a response header value
@@ -71,7 +70,7 @@ qx.Interface.define("zx.cms.render.IRendering", {
      *
      * @param body {String|Buffer|Object|Array}
      */
-    send(body) {},
+    async send(body) {},
 
     /**
      * Sends a file as the response; follows the semantics of Fastify `reply.sendFile`
@@ -79,7 +78,7 @@ qx.Interface.define("zx.cms.render.IRendering", {
      * @param filename {String}
      * @param options {Map?}
      */
-    sendFile(filename, options) {},
+    async sendFile(filename, options) {},
 
     /**
      * Called to abort rendering and prevent any further output

@@ -5,9 +5,10 @@
       "type": "source",
       "application-types": ["browser"],
       "outputPath": "compiled/source",
+
       "proxySourcePath": "source/proxies",
       "babelOptions": {
-        "targets": "Chrome >= 72, Firefox >= 64, edge >= 18"
+        "targets": "Chrome >= 100, Firefox >= 100, edge >= 18"
       },
       "environment": {
         "qx.buildType": "source",
@@ -19,10 +20,11 @@
     },
     {
       "type": "source",
-      "outputPath": "compiled/source-node",
       "application-types": ["node"],
+      "outputPath": "compiled/source-node",
+
       "babelOptions": {
-        "targets": "node >= 14"
+        "targets": "node >= 16"
       },
       "environment": {
         "qx.buildType": "source",
@@ -37,9 +39,10 @@
       "type": "build",
       "application-types": ["browser"],
       "outputPath": "compiled/build",
+
       "proxySourcePath": "source/proxies",
       "babelOptions": {
-        "targets": "Chrome >= 72, Firefox >= 64, edge >= 18"
+        "targets": "Chrome >= 100, Firefox >= 100, edge >= 18"
       },
       "environment": {
         "zx.io.remote.NetworkEndpoint.server": false,
@@ -49,10 +52,11 @@
     },
     {
       "type": "build",
-      "outputPath": "compiled/build-node",
       "application-types": ["node"],
+      "outputPath": "compiled/build-node",
+
       "babelOptions": {
-        "targets": "node >= 14"
+        "targets": "node >= 16"
       },
       "environment": {
         "qx.buildType": "build",
@@ -86,8 +90,16 @@
       "class": "zx.cli.CliApp",
       "type": "node",
       "name": "cli"
+    },
+    {
+      "title": "Zen Puppeteer Server",
+      "description": "Server app that runs inside the littlejohnuk/zx-puppeteer-server Docker container",
+      "class": "zx.cli.PuppeteerServerApp",
+      "type": "node",
+      "name": "puppeteer-server"
     }
   ],
+
   "sass": {
     "compiler": "latest",
     "copyOriginal": true

@@ -1,1 +1,46 @@
-"{"status":"ok","result":{"result":"ok","out":{"aborted":false,"arr":[{"rowIndex":7,"lineCode":4853,"dbRdcPrice":14.07,"eanDesc":"SPAR Rich Roast Coffee Granules","status":"Already On Promotion","errors":"","warnings":"Database already has correct pro
+    async run() {
+      try {
+        /*
+        let chromium = new zx.server.puppeteer.ChromiumDocker(9000);
+        await chromium.createContainer();
+        await chromium.start();
+        console.log("ChromiumDocker created");
+        */
+
+        let chromium = await zx.server.puppeteer.ChromiumDocker.acquire();
+        let puppeteer = new zx.server.puppeteer.PuppeteerClient().set({
+          url: this.getUrl(),
+          chromiumEndpoint: chromium.getEndpoint()
+        });
+        console.log("Puppeteer client created");
+
+        await puppeteer.start();
+        console.log("Puppeteer client started");
+
+        let buffer = await puppeteer.screenshot(this.getFilename());
+        console.log("Screenshot taken");
+
+        await puppeteer.stop();
+        puppeteer.dispose();
+        console.log("Puppeteer client stopped");
+
+        await chromium.destroyContainer();
+        chromium.dispose();
+        console.log("Chromium released");
+
+        //await zx.server.puppeteer.ChromiumDocker.shutdownAll();
+        console.log("Shutdown complete");
+
+        //await zx.server.puppeteer.ChromiumDocker.cleanupOldContainers();
+        //console.log("Old containers cleaned up");
+      } catch (ex) {
+        console.error("Exception in client: " + (ex.stack || ex));
+      }
+    }
+  },
+
+
+
+
+
+

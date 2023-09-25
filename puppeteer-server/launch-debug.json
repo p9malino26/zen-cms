@@ -1,0 +1,5 @@
+{
+  "debug": "inspect",
+  "mounts": ["compiled/source-node:/home/pptruser/app"],
+  "imageName": "littlejohnuk/zx-puppeteer-server-base"
+}

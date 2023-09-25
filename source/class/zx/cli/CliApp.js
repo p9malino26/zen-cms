@@ -32,6 +32,7 @@ qx.Class.define("zx.cli.CliApp", {
   members: {
     async main() {
       qx.log.appender.Native;
+      await zx.utils.LogFilter.loadFiltersAutoDetect();
       await this.runCli();
     },
 
@@ -58,6 +59,7 @@ qx.Class.define("zx.cli.CliApp", {
       rootCmd.addSubcommand(zx.test.cli.TestCommand.createCliCommand());
       rootCmd.addSubcommand(zx.cli.commands.ShortenCommand.createCliCommand());
       rootCmd.addSubcommand(zx.cli.commands.LicenseCommand.createCliCommand());
+      rootCmd.addSubcommand(zx.cli.puppeteer.PuppeteerCommand.createCliCommand());
       return rootCmd;
     }
   }
