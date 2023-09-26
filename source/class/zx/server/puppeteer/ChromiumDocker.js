@@ -21,6 +21,11 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
     }
   },
 
+  events: {
+    /** Fired when chromium is no longer running (unexpectedly) */
+    chromiumNotRunning: qx.event.type.Event
+  },
+
   members: {
     /** @type{Integer} the port number that the docker container is exposed on */
     portNumber: null,
@@ -30,6 +35,9 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
 
     /** @type{Boolean?} running, null means not yet created */
     __running: null,
+
+    /** @type{zx.utils.Timeout} the watchdog timer, to detect when chromium is shutdown */
+    __watchdog: null,
 
     /**
      * Returns the Port number; will be null if the container has not yet been created
@@ -128,8 +136,9 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
         }
       }
 
+      // This is for debugging our web server in the docker container from the host
       if (appConfig.debug) {
-        let debugPortNumber = 9229 + (config.minPort - this.__portNumber);
+        let debugPortNumber = 9329 + (config.minPort - this.__portNumber);
         let str = typeof appConfig.debug == "string" ? appConfig.debug : "inspect:" + debugPortNumber;
         let segs = str.split(":");
         let type = segs[0];
@@ -137,6 +146,13 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
         containerConfig.Env.push(`ZX_NODE_INSPECT=--${type}=0.0.0.0`);
         containerConfig.HostConfig.PortBindings["9229/tcp"] = [{ HostPort: hostPort }];
         containerConfig.ExposedPorts["9229/tcp"] = {};
+      }
+
+      // This is for debugging the chromium page in the docker container from the host
+      if (appConfig.debug) {
+        let debugPortNumber = 9429 + (config.minPort - this.__portNumber);
+        containerConfig.HostConfig.PortBindings["9001/tcp"] = [{ HostPort: "" + debugPortNumber }];
+        containerConfig.ExposedPorts["9001/tcp"] = {};
       }
 
       if (appConfig.extraHosts) {
@@ -214,6 +230,15 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
           }
           await zx.utils.Promisify.waitFor(3000);
         }
+
+        this.__watchdog = new zx.utils.Timeout(1000, () => {
+          if (!this.isContainerRunning()) {
+            this.fireEvent("chromiumNotRunning");
+            this.__watchdog.killTimer();
+          }
+        }).set({
+          recurring: true
+        });
         this.info("Chromium started: " + JSON.stringify(this.__chromiumJson, null, 2));
       }
     },
@@ -233,6 +258,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
         this.__running = false;
         await this.__container.stop();
       }
+      await zx.server.puppeteer.ChromiumDocker.release(this);
     },
 
     /**
@@ -242,8 +268,8 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
       if (this.__running) {
         this.__running = false;
         await this.__container.kill();
-        await zx.server.puppeteer.ChromiumDocker.release(this);
       }
+      await zx.server.puppeteer.ChromiumDocker.release(this);
     },
 
     /**

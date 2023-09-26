@@ -87,6 +87,12 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
     allowHeadfull: {
       init: false,
       check: "Boolean"
+    },
+
+    /** Whether to wait for the debugger before loading a page */
+    debugOnStartup: {
+      init: false,
+      check: "Boolean"
     }
   },
 
@@ -132,13 +138,13 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         }
       };
 
-      if (this.isDebug() && this.isAllowHeadfull()) {
+      if (true || (this.isDebug() && this.isAllowHeadfull())) {
         opts.headless = false;
         opts.slowMo = 200;
         opts.devtools = true;
       }
 
-      opts.args = ["--no-sandbox", "--disable-setuid-sandbox", "--remote-debugging-port=9231", "--remote-debugging-address=0.0.0.0"];
+      opts.args = ["--no-sandbox", "--disable-setuid-sandbox"];
 
       let startupPromise = new qx.Promise((resolve, reject) => {
         let pass = 0;
@@ -178,7 +184,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         var authHeader = new Buffer.from(username + ":" + password).toString("base64");
         if (url.indexOf("?") > -1) url += "&";
         else url += "?";
-        url += "X-Authorization=Basic%20" + authHeader;
+        url += "X-Authorization=Basic%20" + authHeader + "&X-Auth-Login=true";
         console.log("Setting auth header Basic " + authHeader);
         /*
         await page.setExtraHTTPHeaders({
@@ -270,6 +276,18 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
 
       this.__readyPromise = new qx.Promise();
 
+      if (this.isDebugOnStartup()) {
+        /*
+        await page.evaluate(() => {
+          window.DEBUG_ON_STARTUP = true;
+          while (window.DEBUG_ON_STARTUP) {
+            debugger;
+          }
+        });
+        */
+        url += url.indexOf("?") > -1 ? "&" : "?";
+        url += "DEBUG_ON_STARTUP=true";
+      }
       console.log("Going to " + url);
       let response = await page.goto(url, {
         //waitUntil: "networkidle2",
@@ -304,6 +322,9 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
       if (this.__closed) {
         return;
       }
+      if (this.__readyPromise != null) {
+        this.__readyPromise.reject(new Error("Aborted"));
+      }
       this.__closed = true;
       let callbacks = this.__returnCallbacks;
       this.__returnCallbacks = null;
@@ -313,7 +334,9 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
           clearTimeout(pending.timeoutId);
           pending.timeoutId = null;
         }
-        if (pending.exceptionCallback) pending.exceptionCallback(new Error("Closing the puppeteer connection"));
+        if (pending.exceptionCallback) {
+          pending.exceptionCallback(new Error("Closing the puppeteer connection"));
+        }
       });
     },
 
@@ -323,7 +346,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
     async stop() {
       this._page = null;
       try {
-        await this._browser.close();
+        await this._browser.disconnect();
       } catch (ex) {
         this.error("Error while closing browser during stop: " + ex);
       }
@@ -402,6 +425,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
       const SUFFIX = "[[__ZX_PUPPETEER_END__]]";
 
       let str = msg.text();
+      str = str.replace(/\[\[__GRASSHOPPER/g, "[[__ZX_PUPPETEER");
       if (str.startsWith(PREFIX)) {
         if (!str.endsWith(SUFFIX)) {
           this.error("Cannot interpret console message: " + str);
