@@ -110,7 +110,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
         Image: appConfig.imageName,
         name: "puppeteer-" + this.__portNumber,
         Labels: {
-          "zx.services.type": "chromium-docker"
+          "zx.services.type": "zx-chromium-docker"
         },
 
         Env: ["CONNECTION_TIMEOUT=-1"],
@@ -352,12 +352,20 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
       });
 
       for (let containerInfo of containers) {
-        if (containerInfo.Labels && containerInfo.Labels["zx.services.type"] == "chromium-docker") {
+        if (containerInfo.Labels && containerInfo.Labels["zx.services.type"] == "zx-chromium-docker") {
           let container = CD.__docker.getContainer(containerInfo.Id);
           if (containerInfo.State == "running") {
-            await container.kill();
+            try {
+              await container.kill();
+            } catch (ex) {
+              // Nothing
+            }
           }
-          await container.remove();
+          try {
+            await container.remove();
+          } catch (ex) {
+            // Nothing
+          }
         }
       }
     },
@@ -429,7 +437,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
           },
 
           log(message, logLevel) {
-            qx.log.Logger.log(`${logLevel}: ${message}`);
+            qx.log.Logger.warn(`${logLevel}: ${message}`);
           },
 
           min: 1,
