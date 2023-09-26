@@ -116,7 +116,7 @@ qx.Class.define("zx.thin.puppeteer.HeadlessPage", {
       //  output and not via postMesssage (because that will cause an infinite loop)
       if (window === window.parent) {
         ///if (this.__lastSource === window) {
-        console.log(zx.server.puppeteer.HeadlessPage.PREFIX + JSON.stringify(data) + zx.server.puppeteer.HeadlessPage.SUFFIX);
+        console.log(zx.thin.puppeteer.HeadlessPage.PREFIX + JSON.stringify(data) + zx.thin.puppeteer.HeadlessPage.SUFFIX);
       } else {
         if (this.__lastSource && this.__lastSource !== window.parent) {
           throw new Error("Multiple sources for messages!");
