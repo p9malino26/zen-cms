@@ -470,6 +470,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
     },
 
     async _serializeReturnValue(value) {
+      const bson = require("bson");
       const controller = this.getController();
       if (!controller) {
         return null;
@@ -478,6 +479,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
       const serializeValue = async value => {
         if (value === null || value === undefined) {
           return value;
+        }
+        if (value instanceof bson.Decimal128) {
+          return 0 + value.toString();
         }
         if (value instanceof qx.data.Array) {
           value = value.toArray();
