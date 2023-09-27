@@ -1,0 +1,6 @@
+{
+  "debug": "inspect",
+  "mounts": ["compiled/source-node:/home/pptruser/app"],
+  "imageName": "littlejohnuk/zx-puppeteer-server-base",
+  "extraHosts": ["cs.spar.co.uk.my:host-gateway"]
+}

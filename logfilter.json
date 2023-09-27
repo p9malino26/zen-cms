@@ -1,0 +1,8 @@
+{
+  "default": {
+    "qx.log.appender.Console": {
+      "^qx\\.ui": "info",
+      "^zx\\.": "warn"
+    }
+  }
+}

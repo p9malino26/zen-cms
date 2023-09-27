@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Provides a wrapper for remote API calls - see RestApiClientBrowser and RestApiClientNode
@@ -37,8 +36,9 @@
  *
  * The function returns a `qx.Promise` with the result of the function returned by the server
  */
-qx.Class.define("zx.thin.api.AbstractRestApiClient", {
+qx.Class.define("zx.server.rest.RestApiClient", {
   extend: qx.core.Object,
+  type: "abstract",
 
   /**
    * Constructor
@@ -52,8 +52,7 @@ qx.Class.define("zx.thin.api.AbstractRestApiClient", {
 
     if (methods) {
       const install = (httpMethod, localName, remoteName) => {
-        this[localName] = (...args) =>
-          this._callApi(httpMethod, remoteName, ...args);
+        this[localName] = (...args) => this._callApi(httpMethod, remoteName, ...args);
       };
       Object.keys(methods).forEach(localName => {
         let value = methods[localName];
@@ -101,16 +100,14 @@ qx.Class.define("zx.thin.api.AbstractRestApiClient", {
       if (params) {
         if (qx.lang.Type.isArray(params)) {
           url += "?" + params.map(str => encodeURIComponent(str)).join("&");
-        } else if (typeof params == "string")
-          url += "?" + encodeURIComponent(params);
+        } else if (typeof params == "string") url += "?" + encodeURIComponent(params);
         else if (qx.lang.Type.isObject(params)) {
           url +=
             "?" +
             Object.keys(params)
               .map(key => {
                 let value = params[str];
-                if (value !== null && value !== undefined)
-                  return key + "=" + encodeURIComponent(value);
+                if (value !== null && value !== undefined) return key + "=" + encodeURIComponent(value);
                 return key;
               })
               .join("&");
@@ -127,35 +124,18 @@ qx.Class.define("zx.thin.api.AbstractRestApiClient", {
           cookieStore,
           data => {
             if (data.status == "ok") resolve(data.result);
-            else if (data.status == "error")
-              reject(
-                zx.cms.util.Error.create(
-                  data.message || "An unknown error was reported by the server"
-                )
-              );
-            else
-              reject(
-                zx.cms.util.Error.create(
-                  "An unrecognised status '${data.status}' was reported by the server"
-                )
-              );
+            else if (data.status == "error") reject(zx.cms.util.Error.create(data.message || "An unknown error was reported by the server"));
+            else reject(zx.cms.util.Error.create("An unrecognised status '${data.status}' was reported by the server"));
           },
           err => {
-            reject(
-              zx.cms.util.Error.create(
-                `API: ${httpMethod} ${this._apiName}.${remoteName} failed (${err})`,
-                { params, body }
-              )
-            );
+            reject(zx.cms.util.Error.create(`API: ${httpMethod} ${this._apiName}.${remoteName} failed (${err})`, { params, body }));
           }
         );
       });
     },
 
     _callApiImpl(httpMethod, url, body, cookieStore, onSuccess, onError) {
-      throw new Error(
-        "No implementation for " + this.classname + "._callApiImpl"
-      );
+      throw new Error("No implementation for " + this.classname + "._callApiImpl");
     }
   }
 });

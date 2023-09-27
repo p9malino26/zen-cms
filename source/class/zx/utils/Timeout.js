@@ -31,8 +31,12 @@ qx.Class.define("zx.utils.Timeout", {
   construct(duration, callback, context) {
     this.base(arguments);
     this.__onTimeoutBound = this._onTimeout.bind(this);
-    if (duration) this.setDuration(duration);
-    if (callback) this.addListener("timeout", callback, context);
+    if (duration) {
+      this.setDuration(duration);
+    }
+    if (callback) {
+      this.addListener("timeout", callback, context);
+    }
   },
 
   /**
@@ -87,7 +91,9 @@ qx.Class.define("zx.utils.Timeout", {
      * Apply method for various properties
      */
     _applyXxxx() {
-      if (this.__timerId) this.resetTimer();
+      if (this.__timerId) {
+        this.resetTimer();
+      }
     },
 
     /**
@@ -144,7 +150,9 @@ qx.Class.define("zx.utils.Timeout", {
       this.__timerId = null;
       if (this.isEnabled()) {
         await this.fire();
-        if (this.isEnabled() && this.isRecurring()) this.startTimer();
+        if (this.isEnabled() && this.isRecurring()) {
+          this.startTimer();
+        }
       }
     }
   }

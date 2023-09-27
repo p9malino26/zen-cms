@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const path = require("upath");
 
@@ -74,25 +73,26 @@ qx.Class.define("zx.cms.render.MemoryRendering", {
      * @Override
      */
     setResponseHeader(key, value) {
-      if (value === null || value === undefined)
-        delete this.__responseHeaders[key];
+      if (value === null || value === undefined) delete this.__responseHeaders[key];
       else this.__responseHeaders[key] = value;
     },
 
     /*
      * @Override
      */
-    send(body) {
+    async send(body) {
       this.__body = body;
     },
 
     /*
      * @Override
      */
-    sendFile(filename, options) {
-      if (options && options.root)
+    async sendFile(filename, options) {
+      if (options && options.root) {
         this.__srcFilename = path.resolve(options.root, filename);
-      else this.__srcFilename = path.resolve(filename);
+      } else {
+        this.__srcFilename = path.resolve(filename);
+      }
     },
 
     /**

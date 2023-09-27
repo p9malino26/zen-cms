@@ -5,6 +5,26 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Puppeteer Screenshot",
+      "program": "${workspaceFolder}/zx",
+      "args": [ "puppeteer", "screenshot", "--config=./puppeteer-server/launch-debug.json", "--filename=x.png", "http://cs.spar.co.uk.my:8080/private/ci/nightly-summary.jssp?X-Authorization=Basic%20Y3NiYWNrZ3JvdW5kdGFza3NAc3Bhci5jby51azplMWMyZWU2YS01ODEwLTQ5MDMtODJlZS02YTU4MTAwOTAzNzc=&X-Auth-Login=true" ],
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    },
+    {
+      "name": "Puppeteer Hold",
+      "program": "${workspaceFolder}/zx",
+      "args": [ "puppeteer", "hold", "--config=./puppeteer-server/launch-debug.json" ],
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    },
+    {
       "name": "Fix Headers",
       "program": "${workspaceFolder}/bin/fix-headers.js",
       "args": [
@@ -16,12 +36,12 @@
         "${workspaceFolder}/zx",
         "**/polyfill.js"
       ],
-      "type": "pwa-node"
+      "type": "node"
     },
     {
       "name": "ZX: Run Node Tests",
       "program": "${workspaceFolder}/projects/tests/compiled/source-node/nodeUnitTests/index.js",
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
       "skipFiles": [
         "<node_internals>/**",

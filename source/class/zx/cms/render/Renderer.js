@@ -67,7 +67,7 @@ qx.Class.define("zx.cms.render.Renderer", {
       let ctlr = zx.cms.render.Controller.getController(viewable);
       let templateName = ctlr.getTemplateName(viewable);
       let template = await zx.cms.render.Resolver.resolveTemplate(ctlr, this.getTheme(), templateName);
-      if (!template) throw new zx.server.WebServer.HttpError(404, `Cannot find template called ${templateName} for ${viewable.classname} instance ${viewable}`);
+      if (!template) throw new zx.utils.Http.HttpError(404, `Cannot find template called ${templateName} for ${viewable.classname} instance ${viewable}`);
 
       /*
        * TODO this assumes that the template must be Nunjucks, but that is not necessarily the case in the future.
@@ -144,7 +144,7 @@ qx.Class.define("zx.cms.render.Renderer", {
       let ctlr = zx.cms.render.Controller.getController(pieceClassname);
 
       let template = await zx.cms.render.Resolver.resolveTemplate(ctlr, this.getTheme(), templateName);
-      if (!template) throw new zx.server.WebServer.HttpError(404, `Cannot find template called ${templateName} for ${pieceClassname}`);
+      if (!template) throw new zx.utils.Http.HttpError(404, `Cannot find template called ${templateName} for ${pieceClassname}`);
 
       let view = new zx.cms.render.NunjucksView(template);
       context = context || {};
@@ -164,9 +164,13 @@ qx.Class.define("zx.cms.render.Renderer", {
       let filename = await this.resolveSystemPage(name + ".html");
       if (!filename) {
         let statusCode = parseInt(name, 10);
-        if (isNaN(statusCode) || statusCode != name) statusCode = 0;
-        rendering.setStatus(statusCode || 500);
-        rendering.send("Cannot find system page " + name + ".html");
+        if (isNaN(statusCode) || statusCode != name) {
+          statusCode = 0;
+        }
+        let message = context.message || JSON.stringify(context, null, 2);
+        this.warn(`System Page: ${statusCode}: ${message}`);
+        await rendering.setStatus(statusCode || 500);
+        await rendering.send("Cannot find system page " + name + ".html; " + message);
       } else {
         let template = new zx.cms.render.FileTemplate(filename, null, name);
         let view = new zx.cms.render.NunjucksView(template);

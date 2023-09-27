@@ -141,6 +141,14 @@ qx.Class.define("zx.server.WebServer", {
     },
 
     /**
+     * @Override
+     */
+    async stop() {
+      this._app.close();
+      await super.stop();
+    },
+
+    /**
      * Creates and starts the web server
      * @ignore(process)
      */
@@ -175,7 +183,7 @@ qx.Class.define("zx.server.WebServer", {
       try {
         await app.listen({
           port: this.getListenPort(),
-          host: "localhost"
+          host: "0.0.0.0"
         });
       } catch (err) {
         console.error("Error when starting the server: " + err);
@@ -223,6 +231,20 @@ qx.Class.define("zx.server.WebServer", {
       let options = {
         logger: false
       };
+      if (this._config.logging) {
+        options.logger = qx.lang.Object.mergeWith(
+          {
+            transport: {
+              target: "pino-pretty",
+              options: {
+                translateTime: "HH:MM:ss Z",
+                ignore: "pid,hostname"
+              }
+            }
+          },
+          this._config.logging
+        );
+      }
       if (this.isSslEnabled()) {
         options.https = {
           key: this.getSslPrivateKey(),
@@ -292,8 +314,14 @@ qx.Class.define("zx.server.WebServer", {
      */
     async runInRequestContext(context, fn) {
       this._requestContext.set("context", context);
-      let result = await fn();
-      this._requestContext.set("context", null);
+      let result;
+      try {
+        result = await fn();
+      } catch (ex) {
+        this.error("Unhandled exception: " + ex.stack);
+      } finally {
+        this._requestContext.set("context", null);
+      }
       return result;
     },
 
@@ -323,16 +351,18 @@ qx.Class.define("zx.server.WebServer", {
         try {
           let result = await this.runInRequestContext({ request: req, reply: reply }, () => fn(req, reply));
           await reply;
-          return result;
         } catch (ex) {
-          if (ex instanceof zx.server.WebServer.HttpError) {
-            if (ex.statusCode < 400 || ex.statusCode >= 500) this.error(`Exception raised:\n${ex}`);
+          if (ex instanceof zx.utils.Http.HttpError) {
+            if (ex.statusCode < 400 || ex.statusCode >= 500) {
+              this.error(`Exception raised:\n${ex}`);
+            }
             await this.sendErrorPage(req, reply, ex.statusCode, ex.message);
           } else {
             this.error(`Exception raised:\n${ex}`);
             await this.sendErrorPage(req, reply, 500, ex.message);
           }
         }
+        return reply;
       };
     },
 
@@ -357,19 +387,29 @@ qx.Class.define("zx.server.WebServer", {
       app.register(require("@fastify/formbody"));
       app.decorateReply("json", function (payload) {
         this.code(200).header("Content-Type", "application/json; charset=utf-8").send(JSON.stringify(payload, null, 2));
+        return this;
       });
       app.decorateReply("text", function (payload) {
         this.code(200).type("plain/text").send(payload);
+        return this;
       });
       app.decorateReply("notFound", function (message) {
         this.code(404)
           .type("plain/text")
           .send(message || "Not found");
+        return this;
       });
       app.decorateReply("serverError", function (message) {
         this.code(500)
           .type("plain/text")
           .send(message || "Internal Error");
+        return this;
+      });
+
+      const send = require("@fastify/send");
+      app.decorateReply("sendFileAbsolute", function (filename) {
+        send(this.request.raw, filename).pipe(this.raw);
+        return this;
       });
 
       //this.__alsRequest = new AsyncLocalStorage();
@@ -419,7 +459,7 @@ qx.Class.define("zx.server.WebServer", {
       );
 
       // REST API
-      const ARAS = zx.thin.api.AbstractRestApiServer;
+      const ARAS = zx.server.rest.RestApiServer;
       app.route({
         method: ["GET", "POST"],
         url: ARAS.getEndpoint(),
@@ -743,23 +783,23 @@ qx.Class.define("zx.server.WebServer", {
         let dbUrl = (url = "pages" + url.substring(0, url.length - 5));
         let object = await this.getObjectByUrl(dbUrl);
         if (!object) {
-          throw new zx.server.WebServer.HttpError(404, `Cannot find ${url}`);
+          throw new zx.utils.Http.HttpError(404, `Cannot find ${url}`);
         }
 
         if (!qx.Class.hasInterface(object.constructor, zx.cms.render.IViewable))
-          throw new zx.server.WebServer.HttpError(500, `Cannot render object for ${url} because it is not viewable, it is ${object.classname}: ${object}`);
+          throw new zx.utils.Http.HttpError(500, `Cannot render object for ${url} because it is not viewable, it is ${object.classname}: ${object}`);
 
         let rendering = new zx.cms.render.FastifyRendering(req, reply);
         try {
           await this._renderer.renderViewable(rendering, object);
         } catch (ex) {
-          throw new zx.server.WebServer.HttpError(500, ex.message);
+          throw new zx.utils.Http.HttpError(500, ex.message);
         }
         return;
       }
 
       // Oops
-      throw new zx.server.WebServer.HttpError(404, `Cannot find ${url}`);
+      throw new zx.utils.Http.HttpError(404, `Cannot find ${url}`);
     },
 
     /**
@@ -779,7 +819,9 @@ qx.Class.define("zx.server.WebServer", {
      * Sends an error page
      */
     async sendErrorPage(req, reply, statusCode, message) {
-      if (statusCode == 200) throw new Error("Invalid status code 200!");
+      if (statusCode == 200) {
+        throw new Error("Invalid status code 200!");
+      }
       let rendering = new zx.cms.render.FastifyRendering(req, reply);
       await this._renderer.renderSystemPage(rendering, statusCode, {
         statusCode,
@@ -798,8 +840,6 @@ qx.Class.define("zx.server.WebServer", {
   },
 
   statics: {
-    HttpError: null,
-
     /**
      * Returns the request currently being processed.  This will throw an
      * exception if called outside of a request
@@ -828,25 +868,5 @@ qx.Class.define("zx.server.WebServer", {
     getSessionManager() {
       return zx.server.Standalone.getInstance().getSessionManager();
     }
-  },
-
-  defer(statics) {
-    class HttpError extends Error {
-      constructor(statusCode, message) {
-        super(message);
-        if (typeof statusCode == "string") {
-          let tmp = parseInt(statusCode, 10);
-          if (isNaN(tmp)) {
-            message = statusCode;
-            statusCode = 500;
-          } else {
-            statusCode = tmp;
-          }
-        }
-        this.statusCode = statusCode || 500;
-      }
-    }
-
-    statics.HttpError = HttpError;
   }
 });

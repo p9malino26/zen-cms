@@ -260,14 +260,16 @@ qx.Class.define("zx.cli.Command", {
     getValues() {
       let result = {
         flags: {},
-        arguments: []
+        args: []
       };
       this.__flags.forEach(flag => {
         result.flags[flag.getName()] = result.flags[flag.getHyphenatedName()] = flag.getValue();
       });
       this.__arguments.forEach(argument => {
-        if (argument.getName()) result.arguments[argument.getName()] = result.arguments[argument.getHyphenatedName()] = argument.getValue();
-        result.arguments.push(argument.getValue());
+        if (argument.getName()) {
+          result.args[argument.getName()] = result.args[argument.getHyphenatedName()] = argument.getValue();
+        }
+        result.args.push(argument.getValue());
       });
       return result;
     },
