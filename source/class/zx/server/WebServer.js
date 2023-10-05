@@ -786,14 +786,28 @@ qx.Class.define("zx.server.WebServer", {
           throw new zx.utils.Http.HttpError(404, `Cannot find ${url}`);
         }
 
-        if (!qx.Class.hasInterface(object.constructor, zx.cms.render.IViewable))
+        if (qx.Class.hasInterface(object.constructor, zx.cms.render.IViewable)) {
+          let rendering = new zx.cms.render.FastifyRendering(req, reply);
+          try {
+            await this._renderer.renderViewable(rendering, object);
+          } catch (ex) {
+            throw new zx.utils.Http.HttpError(500, ex.message);
+          }
+        } else {
           throw new zx.utils.Http.HttpError(500, `Cannot render object for ${url} because it is not viewable, it is ${object.classname}: ${object}`);
+        }
+        return;
+      } else if (url.endsWith(".csv")) {
+        let dbUrl = (url = "pages" + url.substring(0, url.length - 4));
+        let object = await this.getObjectByUrl(dbUrl);
+        if (!object) {
+          throw new zx.utils.Http.HttpError(404, `Cannot find ${url}`);
+        }
 
-        let rendering = new zx.cms.render.FastifyRendering(req, reply);
-        try {
-          await this._renderer.renderViewable(rendering, object);
-        } catch (ex) {
-          throw new zx.utils.Http.HttpError(500, ex.message);
+        if (qx.Class.hasInterface(object.constructor, zx.cms.render.IRawViewable)) {
+          await object.generate(req, reply);
+        } else {
+          throw new zx.utils.Http.HttpError(500, `Cannot render object for ${url} because it is not viewable, it is ${object.classname}: ${object}`);
         }
         return;
       }
