@@ -308,17 +308,18 @@ qx.Class.define("zx.server.WebServer", {
     /**
      * Runs the function with a given request context
      *
+     * The caller of this method MUST catch exceptions, which may be an instanceof zx.utils.Http.HttpError
+     *
      * @param {AlsRequestContext} context
      * @param {Function} fn
      * @return {*}
+     * @throws {zx.utils.Http.HttpError}
      */
     async runInRequestContext(context, fn) {
       this._requestContext.set("context", context);
       let result;
       try {
         result = await fn();
-      } catch (ex) {
-        this.error("Unhandled exception: " + ex.stack);
       } finally {
         this._requestContext.set("context", null);
       }
