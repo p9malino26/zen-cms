@@ -29,6 +29,15 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
   },
 
   properties: {
+    /**
+     * Whether this page is to share its connection with other pages - setting to false
+     * will allow multiple tabs on a browser to operate independently
+     */
+    shareConnection: {
+      init: true,
+      check: "Boolean"
+    },
+
     /** How often to poll the server if there is no other I/O */
     pollFrequency: {
       init: 1000,
@@ -36,6 +45,7 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
       check: "Integer"
     },
 
+    /** Whether to poll the server */
     polling: {
       init: false,
       check: "Boolean",
@@ -255,6 +265,7 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
 
         headers["X-Zx-Io-Remote-ClientTime"] = new Date().getTime();
         headers["X-Zx-Io-Remote-SessionUuid"] = this.getUuid();
+        headers["X-Zx-Io-Remote-Share-Connection"] = this.getShareConnection();
         headers["X-Zx-Io-Remote-ApplicationName"] = qx.core.Environment.get("qx.compiler.applicationName");
         if (firstRequest) {
           headers["X-Zx-Io-Remote-FirstRequest"] = true;

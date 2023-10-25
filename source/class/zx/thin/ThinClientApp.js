@@ -233,7 +233,10 @@ qx.Class.define("zx.thin.ThinClientApp", {
       this.__netController = new zx.io.remote.NetworkController();
 
       // Connect to the parent window because we know that we are in an iframe created by PeerOne
-      let endpoint = (this.__endpoint = new zx.io.remote.BrowserXhrEndpoint().set({ polling: true }));
+      let endpoint = (this.__endpoint = new zx.io.remote.BrowserXhrEndpoint().set({
+        polling: false,
+        shareConnection: false
+      }));
       this.__netController.addEndpoint(endpoint);
       let promise = new qx.Promise();
       await endpoint.open().then(() => {

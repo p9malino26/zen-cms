@@ -97,7 +97,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      * Called to open the connection
      */
     async open() {
-      if (this.isOpen()) throw new Error("Cannot open an already open end point");
+      if (this.isOpen()) {
+        throw new Error("Cannot open an already open end point");
+      }
       //this.debug(`Opening new endpoint, hash=${this.toHashCode()} uuid=${this.getUuid()}`);
       await this._startup();
       this.__open = true;
@@ -173,7 +175,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      * @Override
      */
     getDataFromUuid(uuid) {
-      if (!this.__availableJson[uuid]) return null;
+      if (!this.__availableJson[uuid]) {
+        return null;
+      }
       return {
         json: this.__availableJson[uuid]
       };
@@ -188,7 +192,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      * @return {Object?} returns whatever the method does
      */
     async callRemoteMethod(uuid, methodName, ...args) {
-      if (!this.isOpen()) throw new Error("Cannot call a method via a closed end point");
+      if (!this.isOpen()) {
+        throw new Error("Cannot call a method via a closed end point");
+      }
       if (!this.__sentUuids[uuid]) {
         this.error("Cannot call remote method because it is not known");
         return;
@@ -549,7 +555,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
       });
 
       let waitForAll = async () => {
-        await this.getController().waitForAll();
+        if (this.getController()) {
+          await this.getController().waitForAll();
+        }
       };
       let watcher = this.getController().getSharedWatcher();
 
@@ -622,7 +630,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
 
           let promise = this._pendingPromises[packet.originPacketId];
           delete this._pendingPromises[packet.originPacketId];
-          if (!promise) throw new Error("No promise to return to!");
+          if (!promise) {
+            throw new Error("No promise to return to!");
+          }
 
           let result = this._deserializeReturnValue(packet.result);
 
@@ -695,6 +705,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
         }
       });
 
+      if (!this.getController()) {
+        return [];
+      }
       await this.getController().flush();
       let responses = this.__takeQueuedPackets() || [];
       if (qx.core.Environment.get("zx.io.remote.NetworkEndpoint.traceIo")) {

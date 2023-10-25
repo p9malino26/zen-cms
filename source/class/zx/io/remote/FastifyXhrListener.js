@@ -67,7 +67,9 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
      */
     _getOrCreateEndpoint(req) {
       let sessionValues = req.session.get(this.classname, {});
-      if (!sessionValues.endpoints) sessionValues.endpoints = {};
+      if (!sessionValues.endpoints) {
+        sessionValues.endpoints = {};
+      }
       let endpoints = sessionValues.endpoints;
 
       // localSessionId is just a unique identifier that we use to index into datasource endpoints, because datasource
@@ -82,14 +84,16 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
       //  a thick client Desktop app
       let remoteSessionId = req.headers["x-zx-io-remote-sessionuuid"];
       let remoteAppName = req.headers["x-zx-io-remote-applicationname"];
+      let shareConnection = req.headers["x-zx-io-remote-share-connection"] === "true";
+      if (!shareConnection) {
+        remoteAppName += ":" + remoteSessionId;
+      }
       let requestIndex = -1;
       if (qx.core.Environment.get("zx.io.remote.BrowserXhrEndpoint.sessionTracing")) {
         requestIndex = req.headers["x-zx-io-remote-requestindex"];
       }
       if (qx.core.Environment.get("zx.io.remote.FastifyXhrListener.sessionTracing")) {
-        console.log(
-          `localSessionId=${localSessionId}, remoteSessionId=${remoteSessionId}, remoteAppName=${remoteAppName}`
-        );
+        console.log(`localSessionId=${localSessionId}, remoteSessionId=${remoteSessionId}, remoteAppName=${remoteAppName}`);
         this.debug(`RECEIVE START: remoteSessionId=${remoteSessionId}, requestIndex=${requestIndex}`);
       }
 
@@ -121,19 +125,13 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
         } else {
           this.debug(`endpoints[${remoteAppName}] is undefined`);
         }
-        this.debug(
-          `endpoint=${
-            endpoint ? endpoint.getUuid() : "(null)"
-          }, localSessionId=${localSessionId}, indexes=${JSON.stringify(this.__controller.getEndpointIndexes())}`
-        );
+        this.debug(`endpoint=${endpoint ? endpoint.getUuid() : "(null)"}, localSessionId=${localSessionId}, indexes=${JSON.stringify(this.__controller.getEndpointIndexes())}`);
       }
 
       // Close the endpoint if this is resetting the endpoint (ie first request)
       if (endpoint && firstRequest) {
         if (qx.core.Environment.get("zx.io.remote.FastifyXhrListener.sessionTracing")) {
-          this.debug(
-            `Closing existing endpoint uuid=${endpoint.getUuid()} (${endpoint.toHashCode()}) remoteSessionId=${remoteSessionId}}`
-          );
+          this.debug(`Closing existing endpoint uuid=${endpoint.getUuid()} (${endpoint.toHashCode()}) remoteSessionId=${remoteSessionId}}`);
         }
         // Because we reuse endpoint IDs, and closing an endpoint is async, then we MUST remove the endpoint now
         //  and then allow it to close
@@ -146,17 +144,14 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
       // If no endpoint, then create one
       if (!endpoint) {
         endpoint = new zx.io.remote.FastifyXhrEndpoint("Xhr:" + localSessionId + ":" + remoteAppName, remoteSessionId);
-        this.debug(
-          `Opening new endpoint localSessionId=${localSessionId}, remoteAppName=${remoteAppName}, remoteSessionId=${remoteSessionId} (${endpoint.toHashCode()})`
-        );
+        this.debug(`Opening new endpoint localSessionId=${localSessionId}, remoteAppName=${remoteAppName}, remoteSessionId=${remoteSessionId} (${endpoint.toHashCode()})`);
         endpoint.open();
         this.__controller.addEndpoint(endpoint);
         this.fireDataEvent("addEndpoint", { endpoint });
         endpoint.addListenerOnce("close", () =>
           setTimeout(() => {
             // Remove it from the controller if we have not already done it above
-            if (qx.lang.Array.contains(this.__controller.getEndpoints(), endpoint))
-              this.__controller.removeEndpoint(endpoint);
+            if (qx.lang.Array.contains(this.__controller.getEndpoints(), endpoint)) this.__controller.removeEndpoint(endpoint);
             endpoint.dispose();
           }, 1)
         );
@@ -178,9 +173,7 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
             expiredEndpoint.CLOSING = true;
 
             if (qx.core.Environment.get("zx.io.remote.FastifyXhrListener.sessionTracing")) {
-              this.debug(
-                `Closing expired end point key=${key}, expiredEndpoint=${expiredEndpoint} (${expiredEndpoint.toHashCode()})`
-              );
+              this.debug(`Closing expired end point key=${key}, expiredEndpoint=${expiredEndpoint} (${expiredEndpoint.toHashCode()})`);
             }
             expiredEndpoint.close();
           }
@@ -212,9 +205,7 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
         this.debug(
           `RECEIVE END: remoteSessionId=${remoteSessionId} endpoints[${remoteAppName}].remoteSessionId=${
             endpoints[remoteAppName].remoteSessionId
-          } (${endpoint.toHashCode()}), localSessionId=${localSessionId}, indexes=${JSON.stringify(
-            this.__controller.getEndpointIndexes()
-          )}`
+          } (${endpoint.toHashCode()}), localSessionId=${localSessionId}, indexes=${JSON.stringify(this.__controller.getEndpointIndexes())}`
         );
       }
       return result;
