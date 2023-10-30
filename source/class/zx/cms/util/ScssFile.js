@@ -188,10 +188,11 @@ qx.Class.define("zx.cms.util.ScssFile", {
 
       // It's either absolute to the website (i.e. begins with a slash)
       if (url[0] == "/") {
-        let filename = path.resolve(path.join(webRoot, url));
+        let filename = zx.server.Config.getInstance().resolveApp(url);
         let foundFilename = findFile(filename);
         if (foundFilename) {
-          if (!foundFilename.startsWith(path.resolve(webRoot))) {
+          let baseDir = zx.server.Config.getInstance().resolveApp(".");
+          if (!foundFilename.startsWith(baseDir)) {
             this.error(`Cannot resolve ${url} because it is outside of the web root directory`);
             return null;
           }

@@ -3,7 +3,7 @@
 Themes allow a complete set of styling to be swapped in and out for a website, and can exist either as an integrated
 part of your source code, with assets etc inside your `source/resources` directory and any code in your `source/class`
 directory, or a theme can use the default implementation for code and use a directory inside your website inside the
-special `_cms/themes/` directory.
+special `website/themes/` directory.
 
 Every theme needs a name, which must be a typical Javascript identifier, like "website.MyTheme" or
 "com.mycorp.cms.themes.MyTheme" - the theme name is used to identify classes to load and the directory to search
@@ -14,13 +14,13 @@ of the resources and path names, but especially if you are creating a CMS websit
 to not create one.
 
 The assets which make up your theme can be either in your `source/resources` directory, or in the resources directory
-of one of your packages, or in the `_cms/themes/<themename>` directory. The only thing you need to consider is that
+of one of your packages, or in the `website/themes/<themename>` directory. The only thing you need to consider is that
 if your assets are stored in a `resources` directory, you must declare an `@asset(...)` JSDOC comment somewhere to
 make sure that the resources are compiled (ie just like any other kind of resource).
 
 While this allows themes to be distributed as packages which can be installed with `qx package install...`, for one-off
 themes for a single website, it's simpler to just pick a name like `myproject.MyWebsiteTheme` and store files in
-a directory under `_cms/themes` (eg in `_cms/themes/myproject/MyWebsiteTheme`)
+a directory under `website/themes` (eg in `website/themes/myproject/MyWebsiteTheme`)
 
 ## SCSS / SASS files
 
@@ -34,7 +34,7 @@ However, there is a difference depending on where your .scss file is located - i
 then the compiler will compile it as part of `qx compile`, and then the only file still available is the
 generated .css file.
 
-If your file is inside the `_cms/themes/<themename>` directory, the CMS runtime will monitor that directory for
+If your file is inside the `website/themes/<themename>` directory, the CMS runtime will monitor that directory for
 changes to .scss files and recompile as necessary - at runtime. Normally, the Qooxdoo compiler will automatically
 compile your .scss to .css, but that means that the original .scss file is not available in the resources. This is
 fine if you only use your own .scss files, but if you want to use .scss files from Qooxdoo (eg the Materials
@@ -64,12 +64,12 @@ CMS server application.
 
 In each directory, the template name is a flattened classname - for example, if a theme wanted to provide its own
 layout for the `zx.cms.content.ContentPiece` class, then it could create a file called
-`zx.cms.content.ContentPiece.html` inside your theme directory (eg `website/_cms/themes/myproject.MyWebsiteTheme/zx.cms.content.ContentPiece.html`)
+`zx.cms.content.ContentPiece.html` inside your theme directory (eg `website/website/themes/myproject.MyWebsiteTheme/zx.cms.content.ContentPiece.html`)
 
 The directories which are searched for a template file are:
 
 - `_cms/templates/zx.cms.content.ContentPiece.html`
-- `_cms/themes/myproject.MyWebsiteTheme/zx.cms.content.ContentPiece.html`
+- `website/themes/myproject.MyWebsiteTheme/zx.cms.content.ContentPiece.html`
 - The resources directory for the theme, eg `resources/myproject/MyWebsiteTheme/zx.cms.content.ContentPiece.html`
 - The resources directory root, eg `resources/zx/cms/content/ContentPiece.html`
 

@@ -2,7 +2,7 @@
 	"version": 3,
 	"file": "theme.css",
 	"sources": [
-		"website/_cms/themes/themes.CmsPlainTheme/theme.scss",
+		"website/website/themes/themes.CmsPlainTheme/theme.scss",
 		"compiled/source-node/resource/zx/thin/theme/materials/_theme.scss"
 	],
 	"names": [],

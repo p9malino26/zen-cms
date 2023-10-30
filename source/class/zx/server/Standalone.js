@@ -74,7 +74,7 @@ qx.Class.define("zx.server.Standalone", {
      */
     async start() {
       let config = zx.server.Config.getInstance();
-      this._config = config.getConfigData();
+      this._config = await zx.server.Config.getConfig();
       await this._openDatabase();
       await this._initSite();
       await this._initRenderer();
@@ -123,7 +123,8 @@ qx.Class.define("zx.server.Standalone", {
 
       this._dbController.addEndpoint(this._db);
       if (database.statusFile) {
-        this._dbController.setStatusFile(database.statusFile);
+        let directory = this._config.directory || ".";
+        this._dbController.setStatusFile(path.join(directory, database.statusFile));
       }
       await this._db.open();
 
@@ -181,8 +182,7 @@ qx.Class.define("zx.server.Standalone", {
      */
     async _initRenderer() {
       let themeName = this._config.theme || qx.core.Environment.get("zx.cms.client.theme") || "website.myTheme";
-      if (themeName.match(/[^a-z0-9-_.]/i))
-        throw new Error(`The Theme Name must be alpha-numeric, dot or underscore characters only`);
+      if (themeName.match(/[^a-z0-9-_.]/i)) throw new Error(`The Theme Name must be alpha-numeric, dot or underscore characters only`);
       this._renderer = this._createRenderer();
       this._renderer.set({ themeName });
       return this._renderer;
@@ -208,8 +208,10 @@ qx.Class.define("zx.server.Standalone", {
      */
     getBlobFilename(uuid) {
       let blobConfig = this._config?.database?.blobs;
-      if (!blobConfig || !blobConfig.directory) throw new Error("Configuration does not support blobs");
-      let filename = path.join(blobConfig.directory, zx.server.Standalone.getUuidAsPath(uuid));
+      if (!blobConfig || !blobConfig.directory) {
+        throw new Error("Configuration does not support blobs");
+      }
+      let filename = path.join(this._config?.directory || ".", blobConfig.directory, zx.server.Standalone.getUuidAsPath(uuid));
       return filename;
     },
 

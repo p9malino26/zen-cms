@@ -123,6 +123,7 @@ qx.Class.define("zx.server.WebServer", {
     async start() {
       await super.start();
       if (this._config.createProxies) {
+        let appDirectory = this._config.appDirectory || ".";
         let proxiesOutputPath = this._config.createProxies?.outputPath;
         if (proxiesOutputPath) {
           let compilerTargetPath = this._config.createProxies?.compilerTargetPath;
@@ -130,8 +131,8 @@ qx.Class.define("zx.server.WebServer", {
             throw new Error("Missing compilerTargetPath in cms.json/createProxies");
           }
           let ctlr = new zx.io.remote.proxy.ClassesWriter().set({
-            outputPath: proxiesOutputPath,
-            compilerTargetPath: compilerTargetPath
+            outputPath: path.join(appDirectory, proxiesOutputPath),
+            compilerTargetPath: path.join(appDirectory, compilerTargetPath)
           });
           await ctlr.writeAllProxiedClasses();
         }
@@ -432,11 +433,11 @@ qx.Class.define("zx.server.WebServer", {
       // Map to Qooxdoo compiled resources
       let targets = this._config.targets || {};
       app.register(fastifyStatic, {
-        root: path.resolve("compiled", targets.browser || "source"),
+        root: zx.server.Config.resolveApp("compiled", targets.browser || "source"),
         prefix: "/zx/code"
       });
       app.register(fastifyStatic, {
-        root: path.resolve("node_modules/medium-editor/dist"),
+        root: zx.server.Config.resolveApp("node_modules/medium-editor/dist"),
         prefix: "/zx/extra/medium-editor",
         decorateReply: false
       });
@@ -727,7 +728,7 @@ qx.Class.define("zx.server.WebServer", {
       if (url.startsWith("/zx/code/")) {
         let targets = this._config.targets || {};
         let tmp = url.substring(9);
-        tmp = path.join(path.resolve("compiled", targets.browser || "source"), tmp);
+        tmp = zx.server.Config.resolveApp("compiled", targets.browser || "source", tmp);
         return addHash(tmp);
       } else if (url.startsWith("/zx/theme/")) {
         let tmp = url.substring(10);

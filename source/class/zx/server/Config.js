@@ -21,55 +21,71 @@ qx.Class.define("zx.server.Config", {
   extend: qx.core.Object,
 
   /**
-   * Constructor; optionally sets the configuration data (assuming that it will
-   * not be loaded via `loadConfig`)
-   *
-   * @param data {Object?} the configuration settings
-   * @param rootDir {String?} path to the root directory for the CMS database (default is pwd)
+   * Constructor
    */
-  construct(data, rootDir) {
+  construct() {
     this.base(arguments);
-    if (zx.server.Config.__instance) {
-      throw new Error("Multiple instances of zx.server.Config");
-    }
-    zx.server.Config.__instance = this;
-    if (data) {
-      this._config = data;
-      if (data.directory) {
-        this._rootDir = data.directory;
-      } else {
-        this._rootDir = data.directory || rootDir || "website";
-      }
-    }
   },
 
+  /**
+   * Destructor
+   */
   destruct() {
     if (zx.server.Config.__instance === this) {
       zx.server.Config.__instance = null;
     }
   },
 
+  environment: {
+    /** @type{Class?} the class to use to load the config; null means to use zx.server.Config */
+    "zx.server.Config.ConfigLoaderClass": null
+  },
+
   members: {
+    /** @type{Object} the configuration */
     _config: null,
 
+    /** @type{String} the root directory from the config data, resolved as an absolute path */
     _rootDir: null,
 
     /**
-     * Loads configuration file
+     * Loads configuration file, but will only do it once
      *
-     * @param filename {String?} the filename, default is "cms.json"
+     * @return {Object} the configuration
      */
-    async loadConfig(filename) {
+    async loadConfig() {
       if (this._config) {
-        throw new Error("Cannot load configuration data twice");
+        return this._config;
       }
-      if (!filename) {
-        filename = "cms.json";
-      }
-      this._config = await zx.utils.Json.loadJsonAsync(filename);
-      let configDir = path.dirname(path.resolve(filename));
-      this._rootDir = path.resolve(configDir, this._config.directory || "website");
+      let loadedData = await this._loadConfigImpl();
+      this._config = loadedData.config;
+      this._rootDir = path.resolve(loadedData.baseDir, this._config.directory || "website");
       return this._config;
+    },
+
+    /**
+     * @typedef {Object} LoadConfigImplResult
+     * @property {Object} config the loaded JSON configuration
+     * @property {String} baseDir the base directory used to resolve relative paths, typically
+     *  the directory of the config file
+     *
+     * @returns {LoadConfigImplResult}
+     */
+    async _loadConfigImpl() {
+      let filename = this._getConfigFilename();
+      return {
+        config: await zx.utils.Json.loadJsonAsync(filename),
+        baseDir: path.dirname(path.resolve(filename))
+      };
+    },
+
+    /**
+     * Returns the filename to load (this exists to be overridden
+     *
+     * @returns {String}
+     */
+    _getConfigFilename() {
+      return "cms.json";
     },
 
     /**
@@ -89,10 +105,17 @@ qx.Class.define("zx.server.Config", {
     },
 
     /**
-     * Helper method to resolve a filename relative to the root directory
+     * Helper method to resolve a filename relative to the application directory
      */
-    resolve(filename) {
-      return path.resolve(this._rootDir, filename);
+    resolveApp(...args) {
+      return path.resolve(path.join(this._config.appDirectory || ".", ...args));
+    },
+
+    /**
+     * Helper method to resolve a filename relative to the data directory
+     */
+    resolveData(...args) {
+      return path.resolve(path.join(this._config.appDirectory || ".", ...args));
     }
   },
 
@@ -110,9 +133,36 @@ qx.Class.define("zx.server.Config", {
      */
     getInstance() {
       if (!zx.server.Config.__instance) {
-        throw new Error("An instance of zx.server.Config has not yet been created");
+        let classname = qx.core.Environment.get("zx.server.Config.ConfigLoaderClass");
+        let clazz = classname ? qx.Class.getByName(classname) : zx.server.Config;
+        zx.server.Config.__instance = new clazz();
       }
       return zx.server.Config.__instance;
+    },
+
+    /**
+     * Shortcut to getInstance().resolveApp
+     * @returns {String}
+     */
+    resolveApp(...args) {
+      return this.getInstance().resolveApp(...args);
+    },
+
+    /**
+     * Shortcut to getInstance().resolveData
+     * @returns {String}
+     */
+    resolveData(...args) {
+      return this.getInstance().resolveData(...args);
+    },
+
+    /**
+     * Shortcut that gets a singleton instance and loads the config if necessary
+     * 
+     * @returns {Object} the raw config data
+     */
+    async getConfig() {
+      return await zx.server.Config.getInstance().loadConfig();
     }
   },
 

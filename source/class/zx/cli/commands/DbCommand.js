@@ -26,24 +26,15 @@ qx.Class.define("zx.cli.commands.DbCommand", {
   extend: qx.core.Object,
 
   members: {
-    _config: null,
     _db: null,
     _isNewDatabase: false,
 
-    async _getConfig() {
-      if (this._config) return this._config;
-
-      this._config = new zx.server.Config();
-      await this._config.loadConfig("cms.json");
-      return this._config;
-    },
-
     async _openDatabase() {
-      await this._getConfig();
-      let database = this._config.getConfigData().database;
+      let config = await zx.server.Config.getConfig();
+      let database = config.database;
       switch (database.type || "null") {
         case "nedb":
-          let dbDir = this._config.resolve(database.nedb.directory || "_cms/db/nedb");
+          let dbDir = zx.server.Config.getInstance().resolveData(database.nedb.directory || "_cms/db/nedb");
           this._isNewDatabase = !(await fs.exists(dbDir));
 
           await fs.ensureDir(dbDir);
@@ -68,8 +59,7 @@ qx.Class.define("zx.cli.commands.DbCommand", {
     },
 
     async importDatabase() {
-      await this._getConfig();
-      let database = this._config.getConfigData().database;
+      let database = (await zx.server.Config.getConfig()).database;
       if (!database || !database["import"]) {
         this.error(`Cannot import database without \`database.import\` in the configuration`);
         return;
@@ -78,7 +68,7 @@ qx.Class.define("zx.cli.commands.DbCommand", {
 
       await this._openDatabase();
 
-      let impDirs = imp.from || [this._config.resolve("_cms/db/template")];
+      let impDirs = imp.from || [zx.server.Config.getInstance().resolveApp("_cms/db/template")];
       for (let i = 0; i < impDirs.length; i++) {
         let filename = zx.utils.Path.locateFile(impDirs[i], {
           mustExist: true

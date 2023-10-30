@@ -185,14 +185,20 @@ qx.Class.define("zx.cms.render.Renderer", {
      * @return {String} the filename, throws an exception if nothing can be found
      */
     async resolveSystemPage(name) {
-      let filename = zx.server.Config.getInstance().resolve("system-pages", name);
-      if (await fs.existsAsync(filename)) return filename;
+      let filename = zx.server.Config.getInstance().resolveApp("system-pages", name);
+      if (await fs.existsAsync(filename)) {
+        return filename;
+      }
 
       filename = this.getTheme().resolve(name);
-      if (filename != null) return filename;
+      if (filename != null) {
+        return filename;
+      }
 
       filename = zx.server.Config.RESOURCE_DIR + "zx/cms/system-pages/" + name;
-      if (await fs.existsAsync(filename)) return filename;
+      if (await fs.existsAsync(filename)) {
+        return filename;
+      }
 
       if (name != "404.html") {
         this.error(`Cannot find system page ${name}`);

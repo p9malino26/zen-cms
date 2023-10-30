@@ -27,8 +27,7 @@ qx.Class.define("zx.cli.commands.GetCommand", {
     __url: null,
 
     async run() {
-      let config = new zx.server.Config();
-      await config.loadConfig("cms.json");
+      let config = await zx.server.Config.getConfig();
 
       let server = new zx.server.Standalone();
       await server.start();

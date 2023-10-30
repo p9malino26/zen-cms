@@ -144,7 +144,9 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
       // If no endpoint, then create one
       if (!endpoint) {
         endpoint = new zx.io.remote.FastifyXhrEndpoint("Xhr:" + localSessionId + ":" + remoteAppName, remoteSessionId);
-        this.debug(`Opening new endpoint localSessionId=${localSessionId}, remoteAppName=${remoteAppName}, remoteSessionId=${remoteSessionId} (${endpoint.toHashCode()})`);
+        this.debug(
+          `Opening new endpoint localSessionId=${localSessionId}, remoteAppName=${remoteAppName}, remoteSessionId=${remoteSessionId} (${endpoint.toHashCode()}) req.sessionId=${req.session.getSessionId()}`
+        );
         endpoint.open();
         this.__controller.addEndpoint(endpoint);
         this.fireDataEvent("addEndpoint", { endpoint });

@@ -24,12 +24,6 @@ qx.Class.define("zx.cli.commands.ServeCommand", {
   extend: qx.core.Object,
 
   properties: {
-    configFilename: {
-      init: null,
-      nullable: true,
-      check: "String"
-    },
-
     listenPort: {
       init: null,
       nullable: true,
@@ -45,13 +39,12 @@ qx.Class.define("zx.cli.commands.ServeCommand", {
     __url: null,
 
     async run() {
-      let config = new zx.server.Config();
-      await config.loadConfig(this.getConfigFilename() || "cms.json");
+      let config = await zx.server.Config.getConfig();
 
       let classname = qx.core.Environment.get("zx.cli.ServeCommand.ServerClassname");
       let clazz = qx.Class.getByName(classname);
       let server = new clazz();
-      let port = this.getListenPort() || config.getConfigData().port;
+      let port = this.getListenPort() || config.port;
       if (port) {
         server.setListenPort(port);
       }

@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.cli.TestCommand", {
   extend: qx.core.Object,
@@ -39,8 +38,7 @@ qx.Class.define("zx.test.cli.TestCommand", {
       await zx.test.TestRunner.runAll(zx.test.cms.TestTemplates);
       */
 
-      let config = new zx.server.Config();
-      await config.loadConfig("cms.json");
+      let config = await zx.server.Config.getConfig();
 
       let server = new zx.server.Standalone();
       await server.start();
@@ -54,8 +52,7 @@ qx.Class.define("zx.test.cli.TestCommand", {
   statics: {
     createCliCommand() {
       return new zx.cli.Command("test").set({
-        description:
-          "Runs some unit tests (this is only expected to work in the zx.cms directory)",
+        description: "Runs some unit tests (this is only expected to work in the zx.cms directory)",
         run: async () => {
           return await new zx.test.cli.TestCommand().run();
         }

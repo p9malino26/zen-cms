@@ -22,9 +22,9 @@ const path = require("path");
  * Locates templates based on template name and the place in the hierarchy.
  *
  * When resolving a template name, we generally follow the principal that given a viewable's
- * class name and template name, it is predictable which template will be located.  That is to
+ * class name plus a template name, it is predictable which template will be located.  That is to
  * say, that `mypackage.MyClass:somelayout.html` is always the same and does not vary based on
- * scope of other transient concepts.  This is essential for compilation and caching in Nunjucks.
+ * scope of other transient contexts.  This is essential for compilation and caching in Nunjucks.
  *
  * However, bearing that in mind, there is still a heirachy of search orders, and it varies
  * depending on what you're trying to find a template for.
@@ -41,7 +41,7 @@ const path = require("path");
  * However on a practical level, "extend"-ing or "include"-ing a file tends to work intuitively (provided
  * name collisions are avoided).
  *
- * Note that this approach means that the current directory has no special privilege - and this is
+ * Note that this approach means that the current directory has no special meaning - and this is
  * important if class:name is to be deterministic.
  */
 qx.Class.define("zx.cms.render.Resolver", {
@@ -57,7 +57,6 @@ qx.Class.define("zx.cms.render.Resolver", {
      * @return {Template} the template, null if not found
      */
     async resolveTemplate(ctlr, theme, name) {
-      const webRootDir = zx.server.Config.getInstance().getRootDir();
       const isIndex = name == "index";
 
       let classname = null;
@@ -76,13 +75,15 @@ qx.Class.define("zx.cms.render.Resolver", {
         classname = ctlr.getViewableClass().classname;
         let vcp = ctlr.getViewableClass().classname;
 
-        template = findTemplate(webRootDir, "_cms/templates", vcp, name + ".html");
+        let webdataTemplatesDir = zx.server.Config.getInstance().resolveData("_cms/templates");
+
+        template = findTemplate(webdataTemplatesDir, vcp, name + ".html");
         if (!template && isIndex) {
-          template = findTemplate(webRootDir, "_cms/templates", vcp + ".html");
+          template = findTemplate(webdataTemplatesDir, vcp + ".html");
         }
 
         // Ask theme for Viewable's Template
-        //  Looks in `Website/_cms/themes/<Theme>` and in resources under `<Theme>`
+        //  Looks in `Website/website/themes/<Theme>` and in resources under `<Theme>`
         if (!template) {
           template = await theme.getTemplate(ctlr, name);
         }
@@ -112,7 +113,8 @@ qx.Class.define("zx.cms.render.Resolver", {
         // Ask Local for Template
         //  Looks in Website/_cms/templates/global
         if (!template) {
-          template = findTemplate(webRootDir, "_cms/templates/global", name + ".html");
+          let webdataGlobalsDir = zx.server.Config.getInstance().resolveData("_cms/templates/globals");
+          template = findTemplate(webdataGlobalsDir, name + ".html");
         }
       }
 

@@ -20,8 +20,7 @@ qx.Class.define("zx.cli.commands.UserCommand", {
 
   members: {
     async createUser(username, fullName, password) {
-      let config = new zx.server.Config();
-      await config.loadConfig("cms.json");
+      let config = await zx.server.Config.getConfig();
 
       let server = new zx.server.Standalone();
       await server.start();
@@ -46,8 +45,7 @@ qx.Class.define("zx.cli.commands.UserCommand", {
     },
 
     async setPassword(username, password) {
-      let config = new zx.server.Config();
-      await config.loadConfig("cms.json");
+      let config = await zx.server.Config.getConfig();
 
       let server = new zx.server.Standalone();
       await server.start();
@@ -67,8 +65,7 @@ qx.Class.define("zx.cli.commands.UserCommand", {
     },
 
     async createPermission(shortCode, description) {
-      let config = new zx.server.Config();
-      await config.loadConfig("cms.json");
+      let config = await zx.server.Config.getConfig();
 
       let server = new zx.server.Standalone();
       await server.start();
@@ -99,8 +96,7 @@ qx.Class.define("zx.cli.commands.UserCommand", {
     },
 
     async addPermission(username, shortCode) {
-      let config = new zx.server.Config();
-      await config.loadConfig("cms.json");
+      let config = await zx.server.Config.getConfig();
 
       let server = new zx.server.Standalone();
       await server.start();
@@ -130,8 +126,7 @@ qx.Class.define("zx.cli.commands.UserCommand", {
     },
 
     async removePermission(username, shortCode) {
-      let config = new zx.server.Config();
-      await config.loadConfig("cms.json");
+      let config = await zx.server.Config.getConfig();
 
       let server = new zx.server.Standalone();
       await server.start();

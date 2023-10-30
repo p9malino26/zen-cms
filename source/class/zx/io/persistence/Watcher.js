@@ -80,6 +80,7 @@ qx.Class.define("zx.io.persistence.Watcher", {
         let filename = this.getStatusFile();
         const fs = require("fs");
 
+        await zx.utils.Path.makeParentDir(filename);
         await fs.promises.writeFile(filename, JSON.stringify(this.__status, null, 2), "utf8");
       }
     },
@@ -212,10 +213,7 @@ qx.Class.define("zx.io.persistence.Watcher", {
       let properties = io.getProperties();
       let propertyDef = properties[propertyName];
 
-      if (
-        qx.Class.isSubClassOf(propertyDef.check, qx.data.Array) ||
-        qx.Class.isSubClassOf(propertyDef.check, zx.data.Map)
-      ) {
+      if (qx.Class.isSubClassOf(propertyDef.check, qx.data.Array) || qx.Class.isSubClassOf(propertyDef.check, zx.data.Map)) {
         const onArrayOrMapChange = evt => {
           let data = evt.getData();
           this._onPropertyChange(object, propertyName);
@@ -244,11 +242,7 @@ qx.Class.define("zx.io.persistence.Watcher", {
           info.listenerIds.push(info.arrayChangeListenerId);
         }
       } else {
-        let listenerId = object.addListener(
-          "change" + qx.lang.String.firstUp(propertyName),
-          this.__onSimplePropertyChangeEvent,
-          this
-        );
+        let listenerId = object.addListener("change" + qx.lang.String.firstUp(propertyName), this.__onSimplePropertyChangeEvent, this);
         info.listenerIds.push(listenerId);
       }
     },
@@ -262,9 +256,7 @@ qx.Class.define("zx.io.persistence.Watcher", {
       let object = evt.getTarget();
       let eventName = evt.getType();
       if (qx.core.Environment.get("qx.debug")) {
-        this.assertTrue(
-          eventName.startsWith("change") && eventName.length > 6 && qx.lang.String.isUpperCase(eventName[6])
-        );
+        this.assertTrue(eventName.startsWith("change") && eventName.length > 6 && qx.lang.String.isUpperCase(eventName[6]));
       }
       let propertyName = qx.lang.String.firstLow(eventName.substring(6));
       return await this._onPropertyChange(object, propertyName);

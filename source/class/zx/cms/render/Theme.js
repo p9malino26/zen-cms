@@ -34,7 +34,7 @@ qx.Class.define("zx.cms.render.Theme", {
       themeName = this.classname;
     }
     this.__themeName = themeName;
-    this.__localDir = zx.server.Config.getInstance().resolve(path.join("_cms/themes", themeName));
+    this.__localDir = zx.server.Config.getInstance().resolveApp(path.join("website/themes", themeName));
     this.__resourceDir = path.join(zx.server.Config.RESOURCE_DIR, themeName.split(".").join("/"));
   },
 

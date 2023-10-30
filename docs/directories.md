@@ -29,10 +29,10 @@ to preload it from a form that is easily editable in any text editor.
 
 [Read more about CMS Database](database.md)
 
-## The `website/_cms/themes` directory
+## The `website/themes` directory
 
 Themes are stored either under the `resources` directory of your code or a package, or they are stored
-in the `website/_cms/themes` directory. Each theme name must follow the naming rules of a typical Qooxdoo
+in the `website/themes` directory. Each theme name must follow the naming rules of a typical Qooxdoo
 class identifier, for example `themes.MyTheme`
 
 [Read more about CMS Theming](theming.md)
