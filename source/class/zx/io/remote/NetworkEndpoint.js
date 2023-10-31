@@ -487,7 +487,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           return value;
         }
         if (value instanceof bson.Decimal128) {
-          return 0 + value.toString();
+          return new BigNumber(value.toString());
         }
         if (value instanceof qx.data.Array) {
           value = value.toArray();
@@ -499,6 +499,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           }
           return value;
         }
+        const TYPEOF_PRIMITIVES = { string: 1, number: 1, boolean: 1 };
         if (controller.isCompatibleObject(value)) {
           let uuid = value.toUuid();
           if (!uuid || !this.hasObject(uuid)) {
@@ -511,6 +512,14 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           };
         } else if (value instanceof qx.core.Object) {
           throw new Error(`Cannot return ${value} because it is ${value.classname} which is not capable of being sent remotely`);
+        } else if (value instanceof Date || TYPEOF_PRIMITIVES[typeof value]) {
+          return value;
+        } else if (qx.lang.Type.isObject(value)) {
+          let result = {};
+          for (let key in value) {
+            result[key] = await serializeValue(value[key]);
+          }
+          return result;
         }
         return {
           $$rawObject: value
