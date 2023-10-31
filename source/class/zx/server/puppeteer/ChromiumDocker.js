@@ -23,7 +23,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
 
   events: {
     /** Fired when chromium is no longer running (unexpectedly) */
-    chromiumNotRunning: qx.event.type.Event
+    chromiumNotRunning: "qx.event.type.Event"
   },
 
   members: {
@@ -172,7 +172,12 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
 
       this.debug("Creating container: " + JSON.stringify(containerConfig, null, 2));
       zx.server.puppeteer.ChromiumDocker.initialise();
-      this.__container = await zx.server.puppeteer.ChromiumDocker.__docker.createContainer(containerConfig);
+      try {
+        this.__container = await zx.server.puppeteer.ChromiumDocker.__docker.createContainer(containerConfig);
+      } catch (ex) {
+        console.error("Cannot create container: " + (ex.stack || ex));
+        throw ex;
+      }
 
       this.__running = false;
     },
@@ -219,7 +224,8 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
 
         while (true) {
           try {
-            let json = await zx.utils.Http.httpGet("http://localhost:" + this.__portNumber + "/json/version");
+            let get = await zx.utils.Http.httpGet("http://localhost:" + this.__portNumber + "/json/version");
+            let json = get.body;
             if (json) {
               this.__chromiumJson = json;
               this.setEndpoint(json.webSocketDebuggerUrl.replace(/localhost:9000/, "localhost:" + this.__portNumber));
@@ -312,7 +318,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
       maxPool: 10,
       minPort: 9000,
       maxPort: 9100,
-      imageName: "littlejohnuk/zx-puppeteer-server:latest"
+      imageName: "zenesisuk/zx-puppeteer-server:latest"
     },
 
     /**
@@ -367,6 +373,18 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
             // Nothing
           }
         }
+      }
+    },
+
+    /**
+     * Removes all known containers in the pool
+     */
+    async cleanupPooledContainers() {
+      const CD = zx.server.puppeteer.ChromiumDocker;
+      if (CD.__pool) {
+        let pool = CD.__pool;
+        CD.__pool = null;
+        await pool.destroy();
       }
     },
 
@@ -441,7 +459,11 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
           },
 
           min: 1,
-          max: zx.server.puppeteer.ChromiumDocker.__configuration.maxPool
+          max: zx.server.puppeteer.ChromiumDocker.__configuration.maxPool,
+          destroyTimeoutMillis: 30000,
+          //acquireTimeoutMillis: 3000000,
+          //createTimeoutMillis: 3000000,
+          propagateCreateError: true
         });
       }
 

@@ -60,7 +60,8 @@ qx.Class.define("zx.server.puppeteer.WebServer", {
         this.__browser = await puppeteer.launch(options);
         console.log("Chrome launched on port " + chromePort);
 
-        let jsonVersion = await zx.utils.Http.httpGet(`http://localhost:${chromePort}/json/version`);
+        let get = await zx.utils.Http.httpGet(`http://localhost:${chromePort}/json/version`);
+        let jsonVersion = get.body;
         console.log("Chrome configuration: \n" + JSON.stringify(jsonVersion, null, 2));
 
         let upstreamDebuggerUrl = jsonVersion.webSocketDebuggerUrl;

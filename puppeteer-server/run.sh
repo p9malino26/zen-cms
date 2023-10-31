@@ -5,10 +5,10 @@ set -x
 
 docker run --rm --cap-add=SYS_ADMIN \
   --env ZX_AUTO_RESTART=true \
-  --env ZX_NODE_INSPECT=--inspect=0.0.0.0 \
+  --env ZX_NODE_INSPECT=--inspect-brk=0.0.0.0 \
   -p 9000:9000 \
   -p 9230:9229 \
   -v "$(cd .. ; pwd)/compiled/source-node:/home/pptruser/app" \
   -it \
-  littlejohnuk/zx-puppeteer-server-base "$@"
+  zenesisuk/zx-puppeteer-server-base "$@"
 

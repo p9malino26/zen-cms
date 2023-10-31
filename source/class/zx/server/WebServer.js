@@ -269,6 +269,22 @@ qx.Class.define("zx.server.WebServer", {
           headerPairs: 2000 // Max number of header key=>value pairs
         }
       });
+
+      app.addContentTypeParser("application/json", { parseAs: "string" }, function (req, body, done) {
+        try {
+          var json = zx.utils.Json.parseJson(body);
+          done(null, json);
+        } catch (err) {
+          err.statusCode = 400;
+          done(err, undefined);
+        }
+      });
+
+      app.setReplySerializer(function (payload, statusCode) {
+        let str = zx.utils.Json.stringifyJson(payload, null, 2);
+        return str;
+      });
+
       await this._initSessions(app);
       await this._initApplication(app);
       await this._initApis();

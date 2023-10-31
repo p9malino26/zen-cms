@@ -27,6 +27,7 @@ const path = require("path");
  * @use(zx.cms.content.ThinClientCodePiece)
  * @use(zx.cms.content.FeaturePiece)
  * @use(zx.cms.system.Site)
+ * @use(zx.utils.BigNumber)
  *
  * @asset(zx/thin/theme/materials/*)
  * @asset(zx/db/template/*)

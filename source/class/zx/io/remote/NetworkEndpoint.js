@@ -18,6 +18,8 @@
 /**
  * Represents a connection on the server to a client; this object MUST be disposed of
  *
+ * @use(zx.utils.BigNumber)
+ * @ignore(BigNumber)
  */
 qx.Class.define("zx.io.remote.NetworkEndpoint", {
   extend: zx.io.persistence.Endpoint,

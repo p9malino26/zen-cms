@@ -50,6 +50,7 @@ qx.Class.define("zx.io.remote.FastifyXhrEndpoint", {
       } else {
         let body = (req.body && JSON.parse(req.body)) || null;
         let responses = await this._receivePackets(req, reply, body);
+        // responses is POJO, and Fastify will convert to JSON
         await reply.send(responses);
       }
     }

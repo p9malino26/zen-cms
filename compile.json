@@ -93,7 +93,7 @@
     },
     {
       "title": "Zen Puppeteer Server",
-      "description": "Server app that runs inside the littlejohnuk/zx-puppeteer-server Docker container",
+      "description": "Server app that runs inside the zenesisuk/zx-puppeteer-server Docker container",
       "class": "zx.cli.PuppeteerServerApp",
       "type": "node",
       "name": "puppeteer-server"

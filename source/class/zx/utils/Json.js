@@ -1,36 +1,103 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const fs = zx.utils.Promisify.fs;
 
 qx.Class.define("zx.utils.Json", {
   statics: {
+    __JSON_PREFIX: "[__ZX_JSON__[",
+    __JSON_SUFFIX: "]]",
+
     /**
-     * Parses JSON string into an object
+     * Parses JSON string into an object, taking care of Dates and BigNumbers encoded by stringifyJson()
+     *
      * @param str {String} the data to parse
+     * @param reviver {Function?} optional reviver function
      * @return {Object}
+     *
      * @todo similar to qx.tool.cli.commands.Command.parseJsonFile()
      */
-    parseJson: function (str) {
+    parseJson(str, reviver) {
       if (str === null || !str.trim()) {
         return null;
       }
-      return JSON.parse(str);
+      const PREFIX = zx.utils.Json.__JSON_PREFIX;
+      const SUFFIX = zx.utils.Json.__JSON_SUFFIX;
+
+      function reviverImpl(key, value) {
+        if (typeof value === "string" && value.substring(0, PREFIX.length) === PREFIX && value.slice(-SUFFIX.length) === SUFFIX) {
+          let str = value.slice(PREFIX.length, -SUFFIX.length);
+          if (str.slice(0, 5) == "Date(" && str.slice(-1) == ")") {
+            let strDt = str.slice(5, -1);
+            let dt = zx.utils.Dates.parseISO(strDt);
+            if (qx.core.Environment.get("qx.debug")) {
+              if (dt && zx.utils.Dates.formatISO(dt) != strDt) {
+                qx.log.Logger.error("date parsing (iso), str=" + str + ", strDt=" + strDt + ", dt=" + dt + ", iso=" + zx.utils.Dates.formatISO(dt));
+              }
+            }
+
+            return dt;
+          } else if (str.slice(0, 10) == "BigNumber(") {
+            let strNumber = str.slice(10, -1);
+            let value = new BigNumber(strNumber);
+            return value;
+          }
+        }
+        if (typeof reviver == "function") {
+          return reviver(key, value);
+        }
+        return value;
+      }
+
+      try {
+        let result = JSON.parse(str, reviverImpl);
+        return result;
+      } catch (ex) {
+        qx.log.Logger.error("============= failed to parse:\n" + str + "\n======================\nException: " + (ex.stack || ex));
+        throw ex;
+      }
+    },
+
+    /**
+     * Converts a POJO to a JSON string, encoding dates and BigNumbers
+     *
+     * @param {Object} obj
+     * @param {Function?} replacer
+     * @param {Number?} space
+     * @returns {String}
+     */
+    stringifyJson(obj, replacer, space) {
+      const PREFIX = zx.utils.Json.__JSON_PREFIX;
+      const SUFFIX = zx.utils.Json.__JSON_SUFFIX;
+
+      function replacerImpl(key, value) {
+        if (this[key] instanceof Date) {
+          value = PREFIX + "Date(" + zx.utils.Dates.formatISO(this[key]) + ")" + SUFFIX;
+        } else if (this[key] instanceof BigNumber) {
+          value = PREFIX + "BigNumber(" + this[key] + ")" + SUFFIX;
+        }
+        if (typeof replacer == "function") {
+          value = replacer(key, value);
+        }
+        return value;
+      }
+
+      var result = JSON.stringify(obj, replacerImpl, space);
+      return result;
     },
 
     /**
@@ -67,9 +134,7 @@ qx.Class.define("zx.utils.Json", {
           format: "cli",
           indent: 2
         });
-        console.warn(
-          "JSON data does not validate against " + schema.$id + ":\n" + message
-        );
+        console.warn("JSON data does not validate against " + schema.$id + ":\n" + message);
         return false;
       }
       // throw fatal error
@@ -152,11 +217,7 @@ qx.Class.define("zx.utils.Json", {
      */
     saveJsonAsync: async function (filename, data) {
       if (data !== null) {
-        await fs.writeFileAsync(
-          filename,
-          JSON.stringify(data, null, 2),
-          "utf8"
-        );
+        await fs.writeFileAsync(filename, JSON.stringify(data, null, 2), "utf8");
       } else if (await fs.existsAsync(filename)) {
         fs.unlinkAsync(filename);
       }
