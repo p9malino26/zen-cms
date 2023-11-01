@@ -5,101 +5,135 @@
       "type": "source",
       "application-types": ["browser"],
       "outputPath": "compiled/source",
-
       "proxySourcePath": "source/proxies",
       "babelOptions": {
-        "targets": "Chrome >= 100, Firefox >= 100, edge >= 18"
+        "targets": "Chrome >= 72, Firefox >= 64, edge >= 18"
       },
       "environment": {
         "qx.buildType": "source",
         "zx.io.remote.NetworkEndpoint.server": false
       },
-      "writeCompileInfo": true,
-      "addTimestampsToUrls": false,
-      "addCreatedAt": true
+      "writeCompileInfo": true
     },
     {
       "type": "source",
-      "application-types": ["node"],
       "outputPath": "compiled/source-node",
-
+      "application-types": ["node"],
       "babelOptions": {
-        "targets": "node >= 16"
+        "targets": "node >= 14"
       },
       "environment": {
         "qx.buildType": "source",
         "zx.cms.thinClientTargetPath": "compiled/source",
         "zx.io.remote.NetworkEndpoint.server": true
       },
-      "writeCompileInfo": true,
-      "addTimestampsToUrls": false,
-      "addCreatedAt": true
+      "writeCompileInfo": true
     },
     {
       "type": "build",
       "application-types": ["browser"],
       "outputPath": "compiled/build",
-
       "proxySourcePath": "source/proxies",
       "babelOptions": {
-        "targets": "Chrome >= 100, Firefox >= 100, edge >= 18"
+        "targets": "Chrome >= 72, Firefox >= 64, edge >= 18"
       },
       "environment": {
         "zx.io.remote.NetworkEndpoint.server": false,
         "qx.buildType": "build"
-      },
-      "addTimestampsToUrls": false
+      }
     },
     {
       "type": "build",
-      "application-types": ["node"],
       "outputPath": "compiled/build-node",
-
+      "application-types": ["node"],
       "babelOptions": {
-        "targets": "node >= 16"
+        "targets": "node >= 14"
       },
       "environment": {
         "qx.buildType": "build",
         "zx.cms.thinClientTargetPath": "compiled/build",
         "zx.io.remote.NetworkEndpoint.server": true
-      },
-      "addTimestampsToUrls": false
+      }
     }
   ],
   "defaultTarget": "source",
   "locales": ["en"],
+  "libraries": [".", "../qxl.widgetbrowser", "../qxl.formdemo", "../qxl.versionlabel", "../UploadMgr"],
   "environment": {
     "qx.icontheme": "Tango",
     "zx.cms.client.theme": "zx.cms.client.theme.Simple",
     "zx.io.remote.Endpoint.traceIo": false,
-    "zx.io.remote.BrowserXhrEndpoint.traceIo": false,
-    "zx.io.remote.FastifyXhrListener.sessionTracing": false
+    "zx.io.remote.BrowserXhrEndpoint.traceIo": false
   },
-  "libraries": [".", "../../Qooxdoo/qxl.widgetbrowser", "../../Qooxdoo/qxl.formdemo", "../../Qooxdoo/qxl.versionlabel"],
   "applications": [
     {
-      "title": "Node Unit Tests",
-      "description": "Node Unit Tests",
-      "class": "zx.test.NodeUnitTestsApp",
-      "type": "node",
-      "name": "node-tests"
+      "title": "CMS Administrators Control Panel",
+      "class": "zx.cms.client.AdminApp",
+      "theme": "zx.cms.client.theme.tangible.Theme",
+      "name": "adminApp",
+      "group": "serve"
     },
     {
-      "title": "Zen CLI",
-      "description": "Command Line app (`zx`) used for managing and running the Zen CMS",
+      "title": "ZX Server Command Line app",
+      "description": "Command Line app (`zx`) used for managing and running the server infrastructure (including the CMS); this version is compiled with the `zx.test.TestsAppServer` class to support the unit tests and demonstrators provided by the `browserTests` application",
       "class": "zx.cli.CliApp",
       "type": "node",
-      "name": "cli"
+      "name": "cli",
+      "group": ["serve", "cli"],
+      "include": ["zx.test.TestsAppServer"],
+      "environment": {
+        "zx.cli.ServeCommand.ServerClassname": "zx.test.TestsAppServer"
+      }
     },
     {
-      "title": "Zen Puppeteer Server",
+      "title": "Zx Puppeteer Server",
       "description": "Server app that runs inside the zenesisuk/zx-puppeteer-server Docker container",
       "class": "zx.cli.PuppeteerServerApp",
       "type": "node",
       "name": "puppeteer-server"
+    },
+    {
+      "title": "Tests Suite - Desktop Application",
+      "description": "Desktop application for browsing and running tests and demonstrators; also needs thinclient and a CLI built with the `zx.test.TestsAppServer` main class",
+      "class": "zx.test.TestsAppBrowser",
+      "theme": "zx.cms.client.theme.tangible.Theme",
+      "name": "browserTests",
+      "group": ["tests"]
+    },
+    {
+      "title": "Tests Suite - Thin Client Application",
+      "description": "Thin Client application with tests and demonstrators; used by `zx.test.TestsAppBrowser`",
+      "class": "zx.test.TestsAppThinClient",
+      "name": "thinclient",
+      "exclude": ["qx.ui.*"],
+      "type": "browser",
+      "group": ["serve", "tests"]
+    },
+    {
+      "title": "Tests - Additional Tests for Node.JS",
+      "description": "Standalone Node.JS application with various unit tests",
+      "class": "zx.test.NodeUnitTestsApp",
+      "name": "nodeUnitTests",
+      "exclude": ["qx.ui.*"],
+      "type": "node"
+    },
+    {
+      "title": "Tests - PeerOne",
+      "description": "Simple peer demo app for `zx.io.persistence` when calling between windows; must be paired with `PeerTwo`",
+      "class": "zx.test.io.remote.PeerOne",
+      "theme": "zx.cms.client.theme.tangible.Theme",
+      "name": "peerone",
+      "group": ["tests"]
+    },
+    {
+      "title": "Tests - PeerTwo",
+      "description": "Simple peer demo app for `zx.io.persistence` when calling between windows; must be paired with `PeerOne`",
+      "class": "zx.test.io.remote.PeerTwo",
+      "theme": "zx.cms.client.theme.tangible.Theme",
+      "name": "peertwo",
+      "group": ["tests"]
     }
   ],
-
   "sass": {
     "compiler": "latest",
     "copyOriginal": true

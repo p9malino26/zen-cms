@@ -1,0 +1,8 @@
+{
+  "$schema": "../../source/resource/zx/cms/schema/cms-1-0-0.json",
+
+  "createProxies": {
+    "outputPath": "source/proxies",
+    "compilerTargetPath": "compiled/source-node"
+  }
+}

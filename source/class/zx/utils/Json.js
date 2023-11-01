@@ -17,6 +17,10 @@
 
 const fs = zx.utils.Promisify.fs;
 
+/**
+ * @ignore(BigNumber)
+ * @use(zx.utils.BigNumber)
+ */
 qx.Class.define("zx.utils.Json", {
   statics: {
     __JSON_PREFIX: "[__ZX_JSON__[",

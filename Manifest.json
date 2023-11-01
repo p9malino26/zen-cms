@@ -50,7 +50,35 @@
           }
         ],
         "glyphs": "zx/cms/fontawesome/fa-solid.json"
-      }
+      },
+
+      "Montserrat": {
+        "defaultSize": 32,
+        "comparisonString": "\\uf2b9\\uf2bb",
+        "fontFaces": [
+          {
+            "family": "Montserrat",
+            "paths": ["zx/cms/Montserrat/Montserrat-Light.woff2", "zx/cms/Montserrat/Montserrat-Light.woff", "zx/cms/Montserrat/Montserrat-Light.ttf"]
+          },
+          {
+            "family": "Montserrat",
+            "fontStyle": "italic",
+            "paths": [
+              "zx/cms/Montserrat/Montserrat-LightItalic.eot",
+              "zx/cms/Montserrat/Montserrat-LightItalic.woff2",
+              "zx/cms/Montserrat/Montserrat-LightItalic.woff",
+              "zx/cms/Montserrat/Montserrat-LightItalic.ttf"
+            ]
+          },
+          {
+            "family": "Montserrat",
+            "fontWeight": "bold",
+            "paths": ["zx/cms/Montserrat/Montserrat-Medium.eot", "zx/cms/Montserrat/Montserrat-Medium.woff2", "zx/cms/Montserrat/Montserrat-Medium.woff", "zx/cms/Montserrat/Montserrat-Medium.ttf"]
+          }
+        ]
+      },
+
+      "Roboto Mono": {}
     }
   },
   "requires": {
