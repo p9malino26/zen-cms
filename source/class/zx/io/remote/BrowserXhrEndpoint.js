@@ -127,7 +127,7 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
 
       const onComplete = async options => {
         if (options.statusCode == 200) {
-          let packets = JSON.parse(options.content);
+          let packets = zx.utils.Json.parseJson(options.content);
           await this._receive(packets);
         } else await this._error(options.statusCode);
 

@@ -237,6 +237,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
       // NOTE:: you cannot await on `packet.promise`, because it will be deleted and then the result
       //  will always be `undefined`; this sounds like a bug, but WTH.  The fix is to get the promise
       //  into a local variable first and then await it.
+      // ! see #__takeQueuedPackets for cause of deletion
       let result = await promise;
       return result;
     },
