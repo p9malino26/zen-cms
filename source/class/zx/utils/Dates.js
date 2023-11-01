@@ -272,6 +272,7 @@ qx.Class.define("zx.utils.Dates", {
      * @return Date the date, or null if str was null
      */
     parseISO(str) {
+      // return  str ? new Date(str) : null; // should work in all browsers/versions w/ babel transpile
       /*
 			if (!str)
 				return null;

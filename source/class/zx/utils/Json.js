@@ -39,22 +39,40 @@ qx.Class.define("zx.utils.Json", {
       const SUFFIX = zx.utils.Json.__JSON_SUFFIX;
 
       function reviverImpl(key, value) {
-        if (typeof value === "string" && value.substring(0, PREFIX.length) === PREFIX && value.slice(-SUFFIX.length) === SUFFIX) {
-          let str = value.slice(PREFIX.length, -SUFFIX.length);
-          if (str.slice(0, 5) == "Date(" && str.slice(-1) == ")") {
-            let strDt = str.slice(5, -1);
-            let dt = zx.utils.Dates.parseISO(strDt);
-            if (qx.core.Environment.get("qx.debug")) {
-              if (dt && zx.utils.Dates.formatISO(dt) != strDt) {
-                qx.log.Logger.error("date parsing (iso), str=" + str + ", strDt=" + strDt + ", dt=" + dt + ", iso=" + zx.utils.Dates.formatISO(dt));
+        if (typeof value === "string" && value.startsWith(PREFIX) && value.endsWith(SUFFIX)) {
+          let str = value.slice(PREFIX.length, -SUFFIX.length /* subtract 1 to strip trailing `)` */ - 1);
+          const [constructorName, argumentStr] = str.split("(");
+          switch (constructorName) {
+            case "Date": {
+              return new Date(argumentStr);
+              // the above should work in all browsers/versions w/ babel transpile. Original implementation kept below for reference/posterity:
+              /*
+              let dt = zx.utils.Dates.parseISO(argumentStr);
+              if (qx.core.Environment.get("qx.debug")) {
+                if (dt && zx.utils.Dates.formatISO(dt) !== argumentStr) {
+                  qx.log.Logger.error("date parsing (iso), str=" + str + ", strDt=" + argumentStr + ", dt=" + dt + ", iso=" + zx.utils.Dates.formatISO(dt));
+                }
               }
+              return dt;
+              */
             }
-
-            return dt;
-          } else if (str.slice(0, 10) == "BigNumber(") {
-            let strNumber = str.slice(10, -1);
-            let value = new BigNumber(strNumber);
-            return value;
+            case "BigNumber": {
+              return new BigNumber(argumentStr);
+            }
+            default: {
+              if (typeof reviver == "function") {
+                try {
+                  const result = reviver(key, value);
+                  if (result) return result;
+                } catch (e) {
+                  // errors here simply mean the reviver was not equipped to handle this value
+                  // this error effectively bubbles to the lines below
+                }
+              }
+              const eMsg = "Unknown constructor " + constructorName;
+              if (qx.core.Environment.get("qx.debug")) qx.log.Logger.error(eMsg);
+              return new Error(eMsg);
+            }
           }
         }
         if (typeof reviver == "function") {
