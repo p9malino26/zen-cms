@@ -23,7 +23,12 @@
  * @ignore(self)
  */
 qx.Class.define("zx.utils.BigNumber", {
-  extend: qx.core.Object
+  extend: qx.core.Object,
+  statics: {
+    compare(a, b) {
+      return a === b || (a && b && a.toString() == b.toString());
+    }
+  }
 });
 (function (globalObject) {
   "use strict";
