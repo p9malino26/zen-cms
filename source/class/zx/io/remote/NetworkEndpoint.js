@@ -544,8 +544,11 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           }
           return value;
         }
-        if (typeof value._uuid == "string" && typeof value._classname == "string") {
-          value = await this.getController().getByUuid(value._uuid);
+        if (typeof value._uuid == "string" && typeof value._classname == "string" && qx.Class.getByName(value._classname)) {
+          let obj = await this.getController().getByUuid(value._uuid);
+          if (obj) {
+            value = obj;
+          }
         }
         if (value.$$rawObject !== undefined) {
           return value.$$rawObject;
@@ -648,8 +651,11 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
 
           let result = this._deserializeReturnValue(packet.result);
 
-          if (result === undefined) promise.resolve();
-          else promise.resolve(result);
+          if (result === undefined) {
+            promise.resolve();
+          } else {
+            promise.resolve(result);
+          }
 
           // Upload
         } else if (packet.type == "upload") {
