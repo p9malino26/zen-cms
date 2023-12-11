@@ -110,7 +110,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
         Image: appConfig.imageName,
         name: "puppeteer-" + this.__portNumber,
         Labels: {
-          "zx.services.type": "zx-chromium-docker"
+          "zx.services.type": appConfig.label
         },
 
         Env: ["CONNECTION_TIMEOUT=-1"],
@@ -312,6 +312,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
      */
     __configuration: {
       debug: false,
+      label: "zx-chromium-docker",
       env: {
         ZX_AUTO_RESTART: true
       },
@@ -358,7 +359,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
       });
 
       for (let containerInfo of containers) {
-        if (containerInfo.Labels && containerInfo.Labels["zx.services.type"] == "zx-chromium-docker") {
+        if (containerInfo.Labels && containerInfo.Labels["zx.services.type"] == CD.__configuration.label) {
           let container = CD.__docker.getContainer(containerInfo.Id);
           if (containerInfo.State == "running") {
             try {

@@ -157,14 +157,20 @@ qx.Class.define("zx.io.persistence.Controller", {
     getByUuidNoWait(uuid, allowIncomplete) {
       let knownObject = this._knownObjectsByUuid[uuid];
       if (knownObject) {
-        if (knownObject.complete === "error") throw new knownObject.exceptionThrown();
+        if (knownObject.complete === "error") {
+          throw new knownObject.exceptionThrown();
+        }
         if (knownObject.complete === "success" || (allowIncomplete && knownObject.obj)) {
           // No way to know if the bject has changed on disk
-          if (!knownObject.isStale) return knownObject.obj;
+          if (!knownObject.isStale) {
+            return knownObject.obj;
+          }
 
           return zx.utils.Promisify.resolveNow(knownObject.isStale(), stale => {
             // Object has not changed on disk
-            if (!stale) return knownObject.obj;
+            if (!stale) {
+              return knownObject.obj;
+            }
 
             // Try and reload
             knownObject.isStale = undefined;
@@ -202,19 +208,23 @@ qx.Class.define("zx.io.persistence.Controller", {
           return null;
         }
 
-        if (data.isStale) knownObject.isStale = data.isStale;
+        if (data.isStale) {
+          knownObject.isStale = data.isStale;
+        }
 
-        if (!data.json._classname)
+        if (!data.json._classname) {
           throw new Error(`Cannot create object with UUID ${uuid} because it does not contain type information`);
+        }
         let clz = qx.Class.getByName(data.json._classname);
-        if (!clz)
-          throw new Error(
-            `Cannot create object with UUID ${uuid} because the class ${data.json._classname} does not exist`
-          );
+        if (!clz) {
+          throw new Error(`Cannot create object with UUID ${uuid} because the class ${data.json._classname} does not exist`);
+        }
 
         let io = this.__classIos.getClassIo(clz);
         return zx.utils.Promisify.resolveNow(io.fromJson(endpoint, data.json), () => {
-          if (knownObject.status == "success") return knownObject.obj;
+          if (knownObject.status == "success") {
+            return knownObject.obj;
+          }
           return knownObject.promise;
         });
       });
@@ -250,9 +260,7 @@ qx.Class.define("zx.io.persistence.Controller", {
         knownObject = this._knownObjectsByUuid[uuid];
         if (knownObject && knownObject.obj) {
           if (knownObject.reloading) return knownObject.obj;
-          throw new Error(
-            `Cannot create an object twice during load for the same uuid (${uuid} for class ${clazz.classname})`
-          );
+          throw new Error(`Cannot create an object twice during load for the same uuid (${uuid} for class ${clazz.classname})`);
         }
       }
 
@@ -312,9 +320,7 @@ qx.Class.define("zx.io.persistence.Controller", {
             if (!knownObject.notified) {
               if (qx.Class.hasInterface(knownObject.obj.constructor, zx.io.persistence.IObjectNotifications)) {
                 knownObject.notified = true;
-                let p = knownObject.obj.receiveDataNotification(
-                  zx.io.persistence.IObjectNotifications.DATA_LOAD_COMPLETE
-                );
+                let p = knownObject.obj.receiveDataNotification(zx.io.persistence.IObjectNotifications.DATA_LOAD_COMPLETE);
                 result.push(zx.utils.Promisify.resolveNow(p, () => knownObject));
               }
             }

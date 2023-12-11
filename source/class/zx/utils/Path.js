@@ -84,27 +84,30 @@ qx.Class.define("zx.utils.Path", {
         filename = path.join(qx.util.LibraryManager.getInstance().get("qx", "resourceUri"), filename);
         if (options.mustExist) {
           let stat = fs.statSync(filename, { throwIfNoEntry: false });
-          if (!stat) throw new Error(`Cannot locate the file for ${uri}`);
+          if (!stat) {
+            throw new Error(`Cannot locate the file for ${uri}`);
+          }
         }
         return filename;
       }
 
-      if (uri.startsWith("resource:")) return locateFromResources(uri.substring("resource:".length));
+      if (uri.startsWith("resource:")) {
+        return locateFromResources(uri.substring("resource:".length));
+      }
 
       let pos = uri.indexOf(":");
       if (pos > -1) {
         let ns = uri.substring(0, pos);
-        if (!qx.util.LibraryManager.getInstance().has(ns))
-          throw new Error(`Cannot locate the file for ${uri} because there is no such library`);
-        this.warn(
-          "Using a library prefix to locate a resource works, but there is no such thing as library-specific prefixes any more; try using 'resource:' as a prefix"
-        );
+        if (!qx.util.LibraryManager.getInstance().has(ns)) {throw new Error(`Cannot locate the file for ${uri} because there is no such library`);}
+        this.warn("Using a library prefix to locate a resource works, but there is no such thing as library-specific prefixes any more; try using 'resource:' as a prefix");
         return locateFromResources(uri.substring(pos + 1));
       }
 
       if (options.mustExist) {
         let stat = fs.statSync(uri, { throwIfNoEntry: false });
-        if (!stat) throw new Error(`Cannot locate the file for ${uri}`);
+        if (!stat) {
+          throw new Error(`Cannot locate the file for ${uri}`);
+        }
       }
 
       return uri;

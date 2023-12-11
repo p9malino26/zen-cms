@@ -16,6 +16,7 @@
  * ************************************************************************ */
 
 const path = require("path");
+const fs = require("fs");
 
 qx.Class.define("zx.server.Config", {
   extend: qx.core.Object,
@@ -73,8 +74,14 @@ qx.Class.define("zx.server.Config", {
      */
     async _loadConfigImpl() {
       let filename = this._getConfigFilename();
+      let config = await zx.utils.Json.loadJsonAsync(filename);
+      let localFilename = "local" + qx.lang.String.firstUp(filename);
+      if (fs.existsSync(localFilename)) {
+        let tmp = await zx.utils.Json.loadJsonAsync(localFilename);
+        qx.lang.Object.mergeWith(config, tmp, true);
+      }
       return {
-        config: await zx.utils.Json.loadJsonAsync(filename),
+        config: config,
         baseDir: path.dirname(path.resolve(filename))
       };
     },
@@ -158,7 +165,7 @@ qx.Class.define("zx.server.Config", {
 
     /**
      * Shortcut that gets a singleton instance and loads the config if necessary
-     * 
+     *
      * @returns {Object} the raw config data
      */
     async getConfig() {

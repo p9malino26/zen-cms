@@ -32,7 +32,9 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
   },
 
   destruct() {
-    if (this.__mongoClient) this.close();
+    if (this.__mongoClient) {
+      this.close();
+    }
   },
 
   members: {
@@ -162,7 +164,9 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
      */
     async getDataFromUuid(uuid) {
       let data = await this.findOne({ _id: uuid });
-      if (!data) return null;
+      if (!data) {
+        return null;
+      }
       return {
         json: data
       };

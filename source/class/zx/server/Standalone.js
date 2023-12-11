@@ -76,6 +76,12 @@ qx.Class.define("zx.server.Standalone", {
     async start() {
       let config = zx.server.Config.getInstance();
       this._config = await zx.server.Config.getConfig();
+      if (this._config.docker) {
+        let dockerConfig = zx.server.puppeteer.ChromiumDocker.getConfiguration();
+        qx.lang.Object.mergeWith(dockerConfig, this._config.docker, true);
+
+        await zx.server.puppeteer.ChromiumDocker.cleanupOldContainers();
+      }
       await this._openDatabase();
       await this._initSite();
       await this._initRenderer();
@@ -183,7 +189,9 @@ qx.Class.define("zx.server.Standalone", {
      */
     async _initRenderer() {
       let themeName = this._config.theme || qx.core.Environment.get("zx.cms.client.theme") || "website.myTheme";
-      if (themeName.match(/[^a-z0-9-_.]/i)) throw new Error(`The Theme Name must be alpha-numeric, dot or underscore characters only`);
+      if (themeName.match(/[^a-z0-9-_.]/i)) {
+        throw new Error(`The Theme Name must be alpha-numeric, dot or underscore characters only`);
+      }
       this._renderer = this._createRenderer();
       this._renderer.set({ themeName });
       return this._renderer;
@@ -227,11 +235,15 @@ qx.Class.define("zx.server.Standalone", {
           return object;
         }
       }
-      if (url.endsWith(".html")) url = url.substring(0, url.length - 5);
+      if (url.endsWith(".html")) {
+        url = url.substring(0, url.length - 5);
+      }
 
       let data = await this._db.findOne({ url }, { _uuid: 1 });
       uuid = (data && data._uuid) || null;
-      if (!uuid) return null;
+      if (!uuid) {
+        return null;
+      }
       let object = await this._dbController.getByUuid(uuid);
       if (object) {
         this._objectsUrlsToId[url] = uuid;
@@ -311,9 +323,13 @@ qx.Class.define("zx.server.Standalone", {
         .limit(limit || 0)
         .map(async data => {
           let uuid = (data && data._uuid) || null;
-          if (!uuid) return null;
+          if (!uuid) {
+            return null;
+          }
           let object = zx.io.persistence.ObjectCaches.getInstance().findObjectByUuid(uuid);
-          if (object) return object;
+          if (object) {
+            return object;
+          }
 
           object = await this._dbController.getByUuid(uuid);
           return object;
@@ -332,15 +348,22 @@ qx.Class.define("zx.server.Standalone", {
      * @returns {Map<String,Object>} the clone
      */
     __createCorrectedQuery(query) {
-      if (query === null || query === undefined) return {};
-      if (qx.core.Environment.get("qx.debug")) this.assertTrue(qx.lang.Type.isObject(query));
+      if (query === null || query === undefined) {
+        return {};
+      }
+      if (qx.core.Environment.get("qx.debug")) {
+        this.assertTrue(qx.lang.Type.isObject(query));
+      }
 
       const scan = obj => {
         Object.getOwnPropertyNames(obj).forEach(name => {
           let value = obj[name];
           if (value) {
-            if (qx.lang.Type.isDate(value)) obj[name] = value.toISOString();
-            else if (qx.lang.Type.isObject(value)) scan(value);
+            if (qx.lang.Type.isDate(value)) {
+              obj[name] = value.toISOString();
+            } else if (qx.lang.Type.isObject(value)) {
+              scan(value);
+            }
           }
         });
       };
@@ -368,7 +391,9 @@ qx.Class.define("zx.server.Standalone", {
     async deleteObjectsByType(clazz, query) {
       query = this.__createCorrectedQuery(query);
       let properties = query ? qx.lang.Object.clone(query) : {};
-      if (!query) query = {};
+      if (!query) {
+        query = {};
+      }
       query._classname = clazz.classname;
 
       await this._db.findAndRemove(query);

@@ -114,10 +114,11 @@ qx.Class.define("zx.cms.render.Renderer", {
         arr.push(data);
         navItem.getChildren().forEach(child => addNav(data.children, child));
       }
-      site
-        .getRootNavigation()
-        .getChildren()
-        .forEach(child => addNav(context.zx.site.navigation, child));
+
+      let children = site.getRootNavigation()?.getChildren();
+      if (children) {
+        children.forEach(child => addNav(context.zx.site.navigation, child));
+      }
 
       await viewable.prepareContext(context, rendering);
       if (rendering.isStopped()) {

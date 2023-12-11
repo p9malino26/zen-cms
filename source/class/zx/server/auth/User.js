@@ -136,7 +136,9 @@ qx.Class.define("zx.server.auth.User", {
      */
     async grantPermission(shortCode) {
       let perm = await zx.server.auth.Security.findPermission(shortCode);
-      if (!perm) throw new Error(`Cannot find permission to grant from ${shortCode}`);
+      if (!perm) {
+        throw new Error(`Cannot find permission to grant from ${shortCode}`);
+      }
       if (!this.getPermissions().lookup(shortCode)) {
         this.getPermissions().push(perm);
         await this.save();
@@ -153,7 +155,9 @@ qx.Class.define("zx.server.auth.User", {
      */
     async removePermission(shortCode) {
       let perm = await zx.server.auth.Security.findPermission(shortCode);
-      if (!perm) throw new Error(`Cannot find permission to remove from ${shortCode}`);
+      if (!perm) {
+        throw new Error(`Cannot find permission to remove from ${shortCode}`);
+      }
       if (this.getPermissions().remove(perm)) {
         await this.save();
         return true;
@@ -165,7 +169,9 @@ qx.Class.define("zx.server.auth.User", {
      * Transform for `username`
      */
     _transformUsername(value) {
-      if (value) value = value.toLowerCase();
+      if (value) {
+        value = value.toLowerCase();
+      }
       return value;
     },
 
@@ -173,7 +179,9 @@ qx.Class.define("zx.server.auth.User", {
      * Transform for `permissions`
      */
     _transformPermissions(value, oldValue) {
-      if (!oldValue) return value;
+      if (!oldValue) {
+        return value;
+      }
       oldValue.replace(value || []);
       return oldValue;
     },
@@ -182,10 +190,16 @@ qx.Class.define("zx.server.auth.User", {
      * Transform for `roles`
      */
     _transformRoles(value, oldValue) {
-      if (!oldValue) return value;
+      if (!oldValue) {
+        return value;
+      }
       oldValue.replace(value || []);
       return oldValue;
     }
+  },
+
+  environment: {
+    "zx.server.auth.User.classname": null
   },
 
   statics: {
@@ -206,10 +220,13 @@ qx.Class.define("zx.server.auth.User", {
      */
     getUserClass() {
       let classname = qx.core.Environment.get("zx.server.auth.User.classname");
-      if (classname == null) return zx.server.auth.User;
+      if (classname == null) {
+        return zx.server.auth.User;
+      }
       let clazz = qx.Class.getByName(classname);
-      if (!clazz || !qx.Class.isSubClassOf(clazz, zx.server.auth.User))
+      if (!clazz || !qx.Class.isSubClassOf(clazz, zx.server.auth.User)) {
         throw new Error(`Invalid class for User objects - expected ${classname} but found ${clazz}`);
+      }
       return clazz;
     },
 
@@ -224,7 +241,9 @@ qx.Class.define("zx.server.auth.User", {
       if (!req) req = zx.server.WebServer.getCurrentRequest();
       let classname = qx.core.Environment.get("zx.server.auth.User.classname") || zx.server.auth.User.classname;
       let data = req.session.get(classname);
-      if (!data || !data.userUuid) return null;
+      if (!data || !data.userUuid) {
+        return null;
+      }
       let server = zx.server.Standalone.getInstance();
       let clazz = zx.server.auth.User.getUserClass();
       let user = await server.findOneObjectByType(clazz, {
