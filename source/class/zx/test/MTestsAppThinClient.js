@@ -26,6 +26,10 @@
  * @use(zx.test.thin.DemoSelection)
  * @use(zx.test.thin.DemoTextField)
  * @use(zx.test.thin.DemoUtilsMessage)
+ *
+ * @usefont(FontAwesome)
+ * @usefont(FontAwesomeBrands)
+ * @usefont(FontAwesomeSolid)
  */
 qx.Mixin.define("zx.test.MTestsAppThinClient", {
   construct() {

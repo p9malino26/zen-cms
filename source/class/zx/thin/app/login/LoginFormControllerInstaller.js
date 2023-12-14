@@ -24,7 +24,7 @@ qx.Class.define("zx.thin.app.login.LoginFormControllerInstaller", {
         this.assertTrue(qx.Class.isSubClassOf(clazz, zx.thin.app.login.LoginForm));
       }
       let ctlr = zx.thin.app.login.LoginController.getInstance();
-      if (options.options.redirectTo) {
+      if (options.options?.redirectTo) {
         ctlr.setRedirectTo(options.options.redirectTo);
       }
       return ctlr.getQxObject("loginForm");

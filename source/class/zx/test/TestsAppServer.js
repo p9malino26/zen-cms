@@ -15,6 +15,14 @@
  *
  * ************************************************************************ */
 
+/**
+ * @usefont(FontAwesome)
+ * @usefont(FontAwesomeBrands)
+ * @usefont(FontAwesomeSolid)
+ * @usefont(Montserrat)
+ * @use(zx.cms.content.ContentPiece)
+ * @use(zx.test.thin.DemoButtons)
+ */
 qx.Class.define("zx.test.TestsAppServer", {
   extend: zx.server.WebServer
 });

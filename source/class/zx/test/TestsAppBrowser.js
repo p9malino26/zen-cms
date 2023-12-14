@@ -38,7 +38,7 @@ qx.Class.define("zx.test.TestsAppBrowser", {
     },
 
     loadDemos(runner) {
-      runner.addDemonstrator(new zx.app.demo.ThinDemonstrator("/zx/app/login/login.html"));
+      runner.addDemonstrator(new zx.app.demo.ThinDemonstrator("/tests/app/login/login.html"));
       runner.addDemonstrator(new zx.app.demo.ThinDemonstrator("/thin-ui/demo-button.html"));
 
       runner.addDemonstrator(new zx.test.app.pages.DemoPageEditor());

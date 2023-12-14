@@ -4,7 +4,7 @@
   "pieces": [
     {
       "_classname": "zx.cms.content.FeaturePiece",
-      "featureName": "zx.thin.app.login.LoginFormFeature"
+      "featureName": "zx.cms.app.auth.LoginFormFeature"
     }
   ]
 }
