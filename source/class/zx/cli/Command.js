@@ -19,7 +19,7 @@ qx.Class.define("zx.cli.Command", {
   extend: qx.core.Object,
 
   construct(name) {
-    this.base(arguments);
+    super();
     this.setName(name);
     this.__subcommands = [];
     this.__flags = [];
@@ -118,7 +118,11 @@ qx.Class.define("zx.cli.Command", {
      */
     getFlag(name) {
       name = qx.lang.String.camelCase(name);
-      for (let i = 0; i < this.__flags.length; i++) if (this.__flags[i].getName() == name) return this.__flags[i];
+      for (let i = 0; i < this.__flags.length; i++) {
+        if (this.__flags[i].getName() == name) {
+          return this.__flags[i];
+        }
+      }
       return null;
     },
 
@@ -140,7 +144,11 @@ qx.Class.define("zx.cli.Command", {
     getArgument(name) {
       if (typeof name == "string") {
         name = qx.lang.String.camelCase(name);
-        for (let i = 0; i < this.__arguments.length; i++) if (this.__arguments[i].getName() == name) return this.__arguments[i];
+        for (let i = 0; i < this.__arguments.length; i++) {
+          if (this.__arguments[i].getName() == name) {
+            return this.__arguments[i];
+          }
+        }
         return null;
       }
       return this.__arguments[name] || null;
@@ -166,14 +174,20 @@ qx.Class.define("zx.cli.Command", {
 
       let exe = argv[0];
       let pos = exe.lastIndexOf("/");
-      if (pos > -1) exe = exe.substring(pos + 1);
+      if (pos > -1) {
+        exe = exe.substring(pos + 1);
+      }
       this.setName(exe);
 
       let argvIndex = 1;
       function fnGetMore(index, rebase) {
         let value = null;
-        if (argv.length > index + argvIndex) value = argv[index + argvIndex];
-        if (rebase) argvIndex += index;
+        if (argv.length > index + argvIndex) {
+          value = argv[index + argvIndex];
+        }
+        if (rebase) {
+          argvIndex += index;
+        }
         return value;
       }
 
@@ -203,13 +217,21 @@ qx.Class.define("zx.cli.Command", {
       }
 
       let verbs = [];
-      for (let tmp = this; tmp; tmp = tmp.getParent()) verbs.unshift(qx.lang.String.hyphenate(tmp.getName()));
+      for (let tmp = this; tmp; tmp = tmp.getParent()) {
+        verbs.unshift(qx.lang.String.hyphenate(tmp.getName()));
+      }
 
       println("USAGE:");
       print(`   ${verbs.join(" ")}`);
-      if (this.__flags.length > 0) print(` [FLAGS]`);
-      if (this.__subcommands.length > 0) print(` [COMMAND]`);
-      if (this.__arguments.length > 0) print(` [ARGUMENTS]`);
+      if (this.__flags.length > 0) {
+        print(` [FLAGS]`);
+      }
+      if (this.__subcommands.length > 0) {
+        print(` [COMMAND]`);
+      }
+      if (this.__arguments.length > 0) {
+        print(` [ARGUMENTS]`);
+      }
       println();
       if (this.__flags.length > 0) {
         println();
@@ -243,8 +265,12 @@ qx.Class.define("zx.cli.Command", {
     _quickUsage() {
       let str = this.getName();
       str = qx.lang.String.hyphenate(str);
-      if (this.__subcommands.length) str += " (...)";
-      if (this.getDescription()) str += "  ::  " + this.getDescription();
+      if (this.__subcommands.length) {
+        str += " (...)";
+      }
+      if (this.getDescription()) {
+        str += "  ::  " + this.getDescription();
+      }
       return str;
     },
 
@@ -262,6 +288,7 @@ qx.Class.define("zx.cli.Command", {
         flags: {},
         args: []
       };
+
       this.__flags.forEach(flag => {
         result.flags[flag.getName()] = result.flags[flag.getHyphenatedName()] = flag.getValue();
       });
@@ -280,7 +307,9 @@ qx.Class.define("zx.cli.Command", {
      * @param {String} msg
      */
     _error(msg) {
-      if (!this.__errors) this.__errors = [];
+      if (!this.__errors) {
+        this.__errors = [];
+      }
       this.__errors.push(msg);
     },
 
@@ -314,8 +343,12 @@ qx.Class.define("zx.cli.Command", {
       let argvIndex = 0;
       function nextCmdName() {
         let value = fnGetMore(argvIndex++);
-        if (value && value[0] == "-") value = null;
-        if (value === null) argvIndex--;
+        if (value && value[0] == "-") {
+          value = null;
+        }
+        if (value === null) {
+          argvIndex--;
+        }
         return value;
       }
 
@@ -347,7 +380,9 @@ qx.Class.define("zx.cli.Command", {
         arg = qx.lang.String.camelCase(arg);
         for (let arr = this.__subcommands, i = 0; i < arr.length; i++) {
           let cmd = arr[i];
-          if (cmd.is(arg)) return cmd;
+          if (cmd.is(arg)) {
+            return cmd;
+          }
         }
         return null;
       };
@@ -355,7 +390,9 @@ qx.Class.define("zx.cli.Command", {
       const findFlag = arg => {
         for (let i = 0; i < this.__flags.length; i++) {
           let flag = this.__flags[i];
-          if (flag.is(arg)) return flag;
+          if (flag.is(arg)) {
+            return flag;
+          }
         }
         return null;
       };
@@ -366,7 +403,9 @@ qx.Class.define("zx.cli.Command", {
       let scanningForArguments = false;
       while (!done) {
         let value = fnGetMore(argvIndex++);
-        if (!value) break;
+        if (!value) {
+          break;
+        }
 
         // Once we hit "--", then it's positional arguments only thereafter
         if (value == "--") {
@@ -382,18 +421,24 @@ qx.Class.define("zx.cli.Command", {
         // Is it a flag?
         if (value[0] == "-") {
           let flag = findFlag(value);
-          if (!flag) throw Error(`Unrecognised flag ${value} passed to ${this}`);
+          if (!flag) {
+            throw Error(`Unrecognised flag ${value} passed to ${this}`);
+          }
           parseFlag(flag, value);
         } else {
           if (!scanningForArguments) {
             // Sub command processing
             let subcommand = findSubcommand(value);
-            if (subcommand) finalCommand = subcommand.parse(value, fnGetMoreForChildren);
+            if (subcommand) {
+              finalCommand = subcommand.parse(value, fnGetMoreForChildren);
+            }
 
             // After a sub command, any argv that the subcommand has not consumed now
             //  belongs to our positional arguments
             scanningForArguments = true;
-            if (subcommand) continue;
+            if (subcommand) {
+              continue;
+            }
           }
 
           // Positional arguments
@@ -417,7 +462,9 @@ qx.Class.define("zx.cli.Command", {
 
         // Check for missing mandatory flags
         Object.values(this.__flags).forEach(flag => {
-          if (flag.isRequired() && flag.getValue() === null) this._error(`Missing value for ${flag}`);
+          if (flag.isRequired() && flag.getValue() === null) {
+            this._error(`Missing value for ${flag}`);
+          }
         });
       }
 

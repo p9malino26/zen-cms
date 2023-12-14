@@ -1,25 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.app.auth.UserEditor", {
   extend: zx.ui.editor.FormEditor,
 
   construct() {
-    this.base(arguments);
+    super();
     this._setLayout(new qx.ui.layout.VBox());
     this._add(this.getQxObject("grpBasic"));
   },
@@ -43,7 +43,7 @@ qx.Class.define("zx.app.auth.UserEditor", {
           return new qx.ui.form.TextField().set({ liveUpdate: true });
       }
 
-      return this.base(arguments, id);
+      return super._createQxObjectImpl(id);
     }
   }
 });

@@ -70,8 +70,9 @@ qx.Class.define("zx.server.Session", {
      * @param {Object?} value
      */
     set(key, value) {
-      if (value === null || value === undefined) this.__values.remove(key);
-      else this.__values.put(key, value);
+      if (value === null || value === undefined) {
+        this.__values.remove(key);
+      } else this.__values.put(key, value);
     },
 
     /**
@@ -171,7 +172,9 @@ qx.Class.define("zx.server.Session", {
      * @param {Map} data
      */
     importSession(data) {
-      if (data.sessionId) this.setSessionId(data.sessionId);
+      if (data.sessionId) {
+        this.setSessionId(data.sessionId);
+      }
       this.setExpires(data.expires || null);
       this.__values.replace(data.values);
     },

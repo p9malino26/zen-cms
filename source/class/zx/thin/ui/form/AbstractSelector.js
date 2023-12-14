@@ -1,28 +1,29 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.thin.ui.form.AbstractSelector", {
   extend: qx.html.Element,
   type: "abstract",
 
   construct(caption, icon) {
-    this.base(arguments);
-    if (caption) this.setCaption(caption);
+    super();
+    if (caption) {
+      this.setCaption(caption);
+    }
     this.initValue();
 
     this._createInput();
@@ -109,14 +110,13 @@ qx.Class.define("zx.thin.ui.form.AbstractSelector", {
     _createQxObjectImpl(id) {
       switch (id) {
         case "input":
-          throw new Error(
-            `No implementation of widget with qxObjectId ${id} in ${this.classname}`
-          );
+          throw new Error(`No implementation of widget with qxObjectId ${id} in ${this.classname}`);
 
         case "caption":
           return <label></label>;
       }
-      return this.base(arguments, id);
+
+      return super._createQxObjectImpl(id);
     }
   }
 });

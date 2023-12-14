@@ -1,26 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.thin.ui.basic.Image", {
   extend: qx.html.Element,
 
   construct() {
-    this.base(arguments);
+    super();
   },
 
   properties: {
@@ -59,7 +58,9 @@ qx.Class.define("zx.thin.ui.basic.Image", {
     _useNodeImpl(domNode, htmlChildren) {
       this._connectDomNode(domNode);
       if (htmlChildren.length) {
-        if (this._child) this._child.useNode;
+        if (this._child) {
+          this._child.useNode;
+        }
         this._deleteChild();
         this.add(htmlChildren[0]);
         this._child = htmlChildren[0];
@@ -82,13 +83,13 @@ qx.Class.define("zx.thin.ui.basic.Image", {
           child.removeAll();
           child.removeAllClasses();
           child.addClass("font-" + fontName);
-          var charCode =
-            qx.util.ResourceManager.getInstance().fromFontUriToCharCode(source);
+          var charCode = qx.util.ResourceManager.getInstance().fromFontUriToCharCode(source);
           child.setText(String.fromCharCode(charCode));
           child.setStyles({
             display: "table-cell",
             textAlign: "center"
           });
+
           if (fontSize) {
             child.setStyles({
               fontSize: fontSize + "px"
@@ -117,8 +118,9 @@ qx.Class.define("zx.thin.ui.basic.Image", {
 
     _getChild(nodeName) {
       if (this._child) {
-        if (nodeName != this._child.getNodeName().toLowerCase())
+        if (nodeName != this._child.getNodeName().toLowerCase()) {
           this._deleteChild();
+        }
       }
       if (!this._child) {
         this._child = new qx.html.Image(nodeName);

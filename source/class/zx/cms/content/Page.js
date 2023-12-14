@@ -25,13 +25,10 @@ qx.Class.define("zx.cms.content.Page", {
   extend: zx.io.persistence.Object,
   implement: [zx.cms.render.IViewable, zx.io.remote.IProxied],
   include: [zx.server.MObjectLastModified],
-  "@": [
-    new zx.io.remote.anno.Class().set({ clientMixins: "zx.cms.content.MPage" }),
-    zx.server.anno.LastModified.DEFAULT
-  ],
+  "@": [new zx.io.remote.anno.Class().set({ clientMixins: "zx.cms.content.MPage" }), zx.server.anno.LastModified.DEFAULT],
 
   construct() {
-    this.base(arguments);
+    super();
     this.setPieces(new qx.data.Array());
     this.setDecorators(new qx.data.Array());
   },
@@ -125,6 +122,7 @@ qx.Class.define("zx.cms.content.Page", {
         pieces: [],
         cssClass: this.getCssClass()
       };
+
       context.uuid = this.toUuid();
       for (let i = 0, arr = this.getDecorators(); i < arr.getLength(); i++) {
         let name = arr.getItem(i);

@@ -42,7 +42,7 @@ qx.Mixin.define("zx.server.auth.MUser", {
      * @Override
      */
     toString() {
-      return this.base(arguments) + "::" + this.getUsername();
+      return super.toString() + "::" + this.getUsername();
     }
   }
 });

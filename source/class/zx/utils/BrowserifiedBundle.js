@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.utils.BrowserifiedBundle", {
   extend: qx.core.Object,
@@ -38,8 +38,12 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
       if (!n[i]) {
         if (!e[i]) {
           var c = "function" == typeof require && require;
-          if (!f && c) return c(i, !0);
-          if (u) return u(i, !0);
+          if (!f && c) {
+            return c(i, !0);
+          }
+          if (u) {
+            return u(i, !0);
+          }
           var a = new Error("Cannot find module '" + i + "'");
           throw ((a.code = "MODULE_NOT_FOUND"), a);
         }
@@ -60,7 +64,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
       }
       return n[i].exports;
     }
-    for (var u = "function" == typeof require && require, i = 0; i < t.length; i++) o(t[i]);
+    for (var u = "function" == typeof require && require, i = 0; i < t.length; i++) {
+      o(t[i]);
+    }
     return o;
   }
   return r;
@@ -94,6 +100,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
       },
       {}
     ],
+
     2: [
       function (require, module, exports) {
         /* eslint-disable node/no-deprecated-api */
@@ -161,6 +168,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
       },
       { buffer: 13 }
     ],
+
     3: [
       function (require, module, exports) {
         var Buffer = require("safe-buffer").Buffer;
@@ -247,13 +255,16 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
       },
       { "safe-buffer": 2 }
     ],
+
     4: [
       function (require, module, exports) {
         var exports = (module.exports = function SHA(algorithm) {
           algorithm = algorithm.toLowerCase();
 
           var Algorithm = exports[algorithm];
-          if (!Algorithm) throw new Error(algorithm + " is not supported (we accept pull requests)");
+          if (!Algorithm) {
+            throw new Error(algorithm + " is not supported (we accept pull requests)");
+          }
 
           return new Algorithm();
         });
@@ -267,6 +278,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
       },
       { "./sha": 5, "./sha1": 6, "./sha224": 7, "./sha256": 8, "./sha384": 9, "./sha512": 10 }
     ],
+
     5: [
       function (require, module, exports) {
         /*
@@ -313,8 +325,12 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
         }
 
         function ft(s, b, c, d) {
-          if (s === 0) return (b & c) | (~b & d);
-          if (s === 2) return (b & c) | (b & d) | (c & d);
+          if (s === 0) {
+            return (b & c) | (~b & d);
+          }
+          if (s === 2) {
+            return (b & c) | (b & d) | (c & d);
+          }
           return b ^ c ^ d;
         }
 
@@ -327,8 +343,12 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
           var d = this._d | 0;
           var e = this._e | 0;
 
-          for (var i = 0; i < 16; ++i) W[i] = M.readInt32BE(i * 4);
-          for (; i < 80; ++i) W[i] = W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16];
+          for (var i = 0; i < 16; ++i) {
+            W[i] = M.readInt32BE(i * 4);
+          }
+          for (; i < 80; ++i) {
+            W[i] = W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16];
+          }
 
           for (var j = 0; j < 80; ++j) {
             var s = ~~(j / 20);
@@ -364,6 +384,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
       },
       { "./hash": 3, inherits: 1, "safe-buffer": 2 }
     ],
+
     6: [
       function (require, module, exports) {
         /*
@@ -415,8 +436,12 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
         }
 
         function ft(s, b, c, d) {
-          if (s === 0) return (b & c) | (~b & d);
-          if (s === 2) return (b & c) | (b & d) | (c & d);
+          if (s === 0) {
+            return (b & c) | (~b & d);
+          }
+          if (s === 2) {
+            return (b & c) | (b & d) | (c & d);
+          }
           return b ^ c ^ d;
         }
 
@@ -429,8 +454,12 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
           var d = this._d | 0;
           var e = this._e | 0;
 
-          for (var i = 0; i < 16; ++i) W[i] = M.readInt32BE(i * 4);
-          for (; i < 80; ++i) W[i] = rotl1(W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16]);
+          for (var i = 0; i < 16; ++i) {
+            W[i] = M.readInt32BE(i * 4);
+          }
+          for (; i < 80; ++i) {
+            W[i] = rotl1(W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16]);
+          }
 
           for (var j = 0; j < 80; ++j) {
             var s = ~~(j / 20);
@@ -466,6 +495,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
       },
       { "./hash": 3, inherits: 1, "safe-buffer": 2 }
     ],
+
     7: [
       function (require, module, exports) {
         /**
@@ -524,6 +554,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
       },
       { "./hash": 3, "./sha256": 8, inherits: 1, "safe-buffer": 2 }
     ],
+
     8: [
       function (require, module, exports) {
         /**
@@ -539,14 +570,11 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
         var Buffer = require("safe-buffer").Buffer;
 
         var K = [
-          0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98,
-          0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786,
-          0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8,
-          0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13,
-          0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819,
-          0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a,
-          0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7,
-          0xc67178f2
+          0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7,
+          0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147,
+          0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819,
+          0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
+          0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
         ];
 
         var W = new Array(64);
@@ -610,8 +638,12 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
           var g = this._g | 0;
           var h = this._h | 0;
 
-          for (var i = 0; i < 16; ++i) W[i] = M.readInt32BE(i * 4);
-          for (; i < 64; ++i) W[i] = (gamma1(W[i - 2]) + W[i - 7] + gamma0(W[i - 15]) + W[i - 16]) | 0;
+          for (var i = 0; i < 16; ++i) {
+            W[i] = M.readInt32BE(i * 4);
+          }
+          for (; i < 64; ++i) {
+            W[i] = (gamma1(W[i - 2]) + W[i - 7] + gamma0(W[i - 15]) + W[i - 16]) | 0;
+          }
 
           for (var j = 0; j < 64; ++j) {
             var T1 = (h + sigma1(e) + ch(e, f, g) + K[j] + W[j]) | 0;
@@ -656,6 +688,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
       },
       { "./hash": 3, inherits: 1, "safe-buffer": 2 }
     ],
+
     9: [
       function (require, module, exports) {
         var inherits = require("inherits");
@@ -718,6 +751,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
       },
       { "./hash": 3, "./sha512": 10, inherits: 1, "safe-buffer": 2 }
     ],
+
     10: [
       function (require, module, exports) {
         var inherits = require("inherits");
@@ -725,24 +759,17 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
         var Buffer = require("safe-buffer").Buffer;
 
         var K = [
-          0x428a2f98, 0xd728ae22, 0x71374491, 0x23ef65cd, 0xb5c0fbcf, 0xec4d3b2f, 0xe9b5dba5, 0x8189dbbc, 0x3956c25b,
-          0xf348b538, 0x59f111f1, 0xb605d019, 0x923f82a4, 0xaf194f9b, 0xab1c5ed5, 0xda6d8118, 0xd807aa98, 0xa3030242,
-          0x12835b01, 0x45706fbe, 0x243185be, 0x4ee4b28c, 0x550c7dc3, 0xd5ffb4e2, 0x72be5d74, 0xf27b896f, 0x80deb1fe,
-          0x3b1696b1, 0x9bdc06a7, 0x25c71235, 0xc19bf174, 0xcf692694, 0xe49b69c1, 0x9ef14ad2, 0xefbe4786, 0x384f25e3,
-          0x0fc19dc6, 0x8b8cd5b5, 0x240ca1cc, 0x77ac9c65, 0x2de92c6f, 0x592b0275, 0x4a7484aa, 0x6ea6e483, 0x5cb0a9dc,
-          0xbd41fbd4, 0x76f988da, 0x831153b5, 0x983e5152, 0xee66dfab, 0xa831c66d, 0x2db43210, 0xb00327c8, 0x98fb213f,
-          0xbf597fc7, 0xbeef0ee4, 0xc6e00bf3, 0x3da88fc2, 0xd5a79147, 0x930aa725, 0x06ca6351, 0xe003826f, 0x14292967,
-          0x0a0e6e70, 0x27b70a85, 0x46d22ffc, 0x2e1b2138, 0x5c26c926, 0x4d2c6dfc, 0x5ac42aed, 0x53380d13, 0x9d95b3df,
-          0x650a7354, 0x8baf63de, 0x766a0abb, 0x3c77b2a8, 0x81c2c92e, 0x47edaee6, 0x92722c85, 0x1482353b, 0xa2bfe8a1,
-          0x4cf10364, 0xa81a664b, 0xbc423001, 0xc24b8b70, 0xd0f89791, 0xc76c51a3, 0x0654be30, 0xd192e819, 0xd6ef5218,
-          0xd6990624, 0x5565a910, 0xf40e3585, 0x5771202a, 0x106aa070, 0x32bbd1b8, 0x19a4c116, 0xb8d2d0c8, 0x1e376c08,
-          0x5141ab53, 0x2748774c, 0xdf8eeb99, 0x34b0bcb5, 0xe19b48a8, 0x391c0cb3, 0xc5c95a63, 0x4ed8aa4a, 0xe3418acb,
-          0x5b9cca4f, 0x7763e373, 0x682e6ff3, 0xd6b2b8a3, 0x748f82ee, 0x5defb2fc, 0x78a5636f, 0x43172f60, 0x84c87814,
-          0xa1f0ab72, 0x8cc70208, 0x1a6439ec, 0x90befffa, 0x23631e28, 0xa4506ceb, 0xde82bde9, 0xbef9a3f7, 0xb2c67915,
-          0xc67178f2, 0xe372532b, 0xca273ece, 0xea26619c, 0xd186b8c7, 0x21c0c207, 0xeada7dd6, 0xcde0eb1e, 0xf57d4f7f,
-          0xee6ed178, 0x06f067aa, 0x72176fba, 0x0a637dc5, 0xa2c898a6, 0x113f9804, 0xbef90dae, 0x1b710b35, 0x131c471b,
-          0x28db77f5, 0x23047d84, 0x32caab7b, 0x40c72493, 0x3c9ebe0a, 0x15c9bebc, 0x431d67c4, 0x9c100d4c, 0x4cc5d4be,
-          0xcb3e42b6, 0x597f299c, 0xfc657e2a, 0x5fcb6fab, 0x3ad6faec, 0x6c44198c, 0x4a475817
+          0x428a2f98, 0xd728ae22, 0x71374491, 0x23ef65cd, 0xb5c0fbcf, 0xec4d3b2f, 0xe9b5dba5, 0x8189dbbc, 0x3956c25b, 0xf348b538, 0x59f111f1, 0xb605d019, 0x923f82a4, 0xaf194f9b, 0xab1c5ed5,
+          0xda6d8118, 0xd807aa98, 0xa3030242, 0x12835b01, 0x45706fbe, 0x243185be, 0x4ee4b28c, 0x550c7dc3, 0xd5ffb4e2, 0x72be5d74, 0xf27b896f, 0x80deb1fe, 0x3b1696b1, 0x9bdc06a7, 0x25c71235,
+          0xc19bf174, 0xcf692694, 0xe49b69c1, 0x9ef14ad2, 0xefbe4786, 0x384f25e3, 0x0fc19dc6, 0x8b8cd5b5, 0x240ca1cc, 0x77ac9c65, 0x2de92c6f, 0x592b0275, 0x4a7484aa, 0x6ea6e483, 0x5cb0a9dc,
+          0xbd41fbd4, 0x76f988da, 0x831153b5, 0x983e5152, 0xee66dfab, 0xa831c66d, 0x2db43210, 0xb00327c8, 0x98fb213f, 0xbf597fc7, 0xbeef0ee4, 0xc6e00bf3, 0x3da88fc2, 0xd5a79147, 0x930aa725,
+          0x06ca6351, 0xe003826f, 0x14292967, 0x0a0e6e70, 0x27b70a85, 0x46d22ffc, 0x2e1b2138, 0x5c26c926, 0x4d2c6dfc, 0x5ac42aed, 0x53380d13, 0x9d95b3df, 0x650a7354, 0x8baf63de, 0x766a0abb,
+          0x3c77b2a8, 0x81c2c92e, 0x47edaee6, 0x92722c85, 0x1482353b, 0xa2bfe8a1, 0x4cf10364, 0xa81a664b, 0xbc423001, 0xc24b8b70, 0xd0f89791, 0xc76c51a3, 0x0654be30, 0xd192e819, 0xd6ef5218,
+          0xd6990624, 0x5565a910, 0xf40e3585, 0x5771202a, 0x106aa070, 0x32bbd1b8, 0x19a4c116, 0xb8d2d0c8, 0x1e376c08, 0x5141ab53, 0x2748774c, 0xdf8eeb99, 0x34b0bcb5, 0xe19b48a8, 0x391c0cb3,
+          0xc5c95a63, 0x4ed8aa4a, 0xe3418acb, 0x5b9cca4f, 0x7763e373, 0x682e6ff3, 0xd6b2b8a3, 0x748f82ee, 0x5defb2fc, 0x78a5636f, 0x43172f60, 0x84c87814, 0xa1f0ab72, 0x8cc70208, 0x1a6439ec,
+          0x90befffa, 0x23631e28, 0xa4506ceb, 0xde82bde9, 0xbef9a3f7, 0xb2c67915, 0xc67178f2, 0xe372532b, 0xca273ece, 0xea26619c, 0xd186b8c7, 0x21c0c207, 0xeada7dd6, 0xcde0eb1e, 0xf57d4f7f,
+          0xee6ed178, 0x06f067aa, 0x72176fba, 0x0a637dc5, 0xa2c898a6, 0x113f9804, 0xbef90dae, 0x1b710b35, 0x131c471b, 0x28db77f5, 0x23047d84, 0x32caab7b, 0x40c72493, 0x3c9ebe0a, 0x15c9bebc,
+          0x431d67c4, 0x9c100d4c, 0x4cc5d4be, 0xcb3e42b6, 0x597f299c, 0xfc657e2a, 0x5fcb6fab, 0x3ad6faec, 0x6c44198c, 0x4a475817
         ];
 
         var W = new Array(160);
@@ -961,6 +988,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
       },
       { "./hash": 3, inherits: 1, "safe-buffer": 2 }
     ],
+
     11: [
       function (require, module, exports) {
         zx.utils.BrowserifiedBundle.initialise({
@@ -971,6 +999,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
       },
       { buffer: 13, "safe-buffer": 2, "sha.js": 4 }
     ],
+
     12: [
       function (require, module, exports) {
         "use strict";
@@ -1004,7 +1033,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
           // Trim off extra bytes after placeholder bytes are found
           // See: https://github.com/beatgammit/base64-js/issues/42
           var validLen = b64.indexOf("=");
-          if (validLen === -1) validLen = len;
+          if (validLen === -1) {
+            validLen = len;
+          }
 
           var placeHoldersLen = validLen === len ? 0 : 4 - (validLen % 4);
 
@@ -1038,11 +1069,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
 
           var i;
           for (i = 0; i < len; i += 4) {
-            tmp =
-              (revLookup[b64.charCodeAt(i)] << 18) |
-              (revLookup[b64.charCodeAt(i + 1)] << 12) |
-              (revLookup[b64.charCodeAt(i + 2)] << 6) |
-              revLookup[b64.charCodeAt(i + 3)];
+            tmp = (revLookup[b64.charCodeAt(i)] << 18) | (revLookup[b64.charCodeAt(i + 1)] << 12) | (revLookup[b64.charCodeAt(i + 2)] << 6) | revLookup[b64.charCodeAt(i + 3)];
             arr[curByte++] = (tmp >> 16) & 0xff;
             arr[curByte++] = (tmp >> 8) & 0xff;
             arr[curByte++] = tmp & 0xff;
@@ -1054,10 +1081,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
           }
 
           if (placeHoldersLen === 1) {
-            tmp =
-              (revLookup[b64.charCodeAt(i)] << 10) |
-              (revLookup[b64.charCodeAt(i + 1)] << 4) |
-              (revLookup[b64.charCodeAt(i + 2)] >> 2);
+            tmp = (revLookup[b64.charCodeAt(i)] << 10) | (revLookup[b64.charCodeAt(i + 1)] << 4) | (revLookup[b64.charCodeAt(i + 2)] >> 2);
             arr[curByte++] = (tmp >> 8) & 0xff;
             arr[curByte++] = tmp & 0xff;
           }
@@ -1066,9 +1090,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
         }
 
         function tripletToBase64(num) {
-          return (
-            lookup[(num >> 18) & 0x3f] + lookup[(num >> 12) & 0x3f] + lookup[(num >> 6) & 0x3f] + lookup[num & 0x3f]
-          );
+          return lookup[(num >> 18) & 0x3f] + lookup[(num >> 12) & 0x3f] + lookup[(num >> 6) & 0x3f] + lookup[num & 0x3f];
         }
 
         function encodeChunk(uint8, start, end) {
@@ -1107,6 +1129,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
       },
       {}
     ],
+
     13: [
       function (require, module, exports) {
         (function (Buffer) {
@@ -1148,10 +1171,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             Buffer.TYPED_ARRAY_SUPPORT = typedArraySupport();
 
             if (!Buffer.TYPED_ARRAY_SUPPORT && typeof console !== "undefined" && typeof console.error === "function") {
-              console.error(
-                "This browser lacks typed array (Uint8Array) support which is required by " +
-                  "`buffer` v5.x. Use `buffer` v4.x if you require old browser support."
-              );
+              console.error("This browser lacks typed array (Uint8Array) support which is required by " + "`buffer` v5.x. Use `buffer` v4.x if you require old browser support.");
             }
 
             function typedArraySupport() {
@@ -1160,10 +1180,11 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
                 var arr = new Uint8Array(1);
                 arr.__proto__ = {
                   __proto__: Uint8Array.prototype,
-                  foo: function () {
+                  foo() {
                     return 42;
                   }
                 };
+
                 return arr.foo() === 42;
               } catch (e) {
                 return false;
@@ -1172,16 +1193,20 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
 
             Object.defineProperty(Buffer.prototype, "parent", {
               enumerable: true,
-              get: function () {
-                if (!Buffer.isBuffer(this)) return undefined;
+              get() {
+                if (!Buffer.isBuffer(this)) {
+                  return undefined;
+                }
                 return this.buffer;
               }
             });
 
             Object.defineProperty(Buffer.prototype, "offset", {
               enumerable: true,
-              get: function () {
-                if (!Buffer.isBuffer(this)) return undefined;
+              get() {
+                if (!Buffer.isBuffer(this)) {
+                  return undefined;
+                }
                 return this.byteOffset;
               }
             });
@@ -1239,11 +1264,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
               }
 
               if (value == null) {
-                throw TypeError(
-                  "The first argument must be one of type string, Buffer, ArrayBuffer, Array, " +
-                    "or Array-like Object. Received type " +
-                    typeof value
-                );
+                throw TypeError("The first argument must be one of type string, Buffer, ArrayBuffer, Array, " + "or Array-like Object. Received type " + typeof value);
               }
 
               if (isInstance(value, ArrayBuffer) || (value && isInstance(value.buffer, ArrayBuffer))) {
@@ -1260,21 +1281,15 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
               }
 
               var b = fromObject(value);
-              if (b) return b;
+              if (b) {
+                return b;
+              }
 
-              if (
-                typeof Symbol !== "undefined" &&
-                Symbol.toPrimitive != null &&
-                typeof value[Symbol.toPrimitive] === "function"
-              ) {
+              if (typeof Symbol !== "undefined" && Symbol.toPrimitive != null && typeof value[Symbol.toPrimitive] === "function") {
                 return Buffer.from(value[Symbol.toPrimitive]("string"), encodingOrOffset, length);
               }
 
-              throw new TypeError(
-                "The first argument must be one of type string, Buffer, ArrayBuffer, Array, " +
-                  "or Array-like Object. Received type " +
-                  typeof value
-              );
+              throw new TypeError("The first argument must be one of type string, Buffer, ArrayBuffer, Array, " + "or Array-like Object. Received type " + typeof value);
             }
 
             /**
@@ -1311,9 +1326,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
                 // Only pay attention to encoding if it's a string. This
                 // prevents accidentally sending in a number that would
                 // be interpretted as a start offset.
-                return typeof encoding === "string"
-                  ? createBuffer(size).fill(fill, encoding)
-                  : createBuffer(size).fill(fill);
+                return typeof encoding === "string" ? createBuffer(size).fill(fill, encoding) : createBuffer(size).fill(fill);
               }
               return createBuffer(size);
             }
@@ -1429,9 +1442,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
               // Note: cannot use `length < K_MAX_LENGTH` here because that fails when
               // length is NaN (which is otherwise coerced to zero.)
               if (length >= K_MAX_LENGTH) {
-                throw new RangeError(
-                  "Attempt to allocate Buffer larger than maximum " + "size: 0x" + K_MAX_LENGTH.toString(16) + " bytes"
-                );
+                throw new RangeError("Attempt to allocate Buffer larger than maximum " + "size: 0x" + K_MAX_LENGTH.toString(16) + " bytes");
               }
               return length | 0;
             }
@@ -1449,13 +1460,19 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             };
 
             Buffer.compare = function compare(a, b) {
-              if (isInstance(a, Uint8Array)) a = Buffer.from(a, a.offset, a.byteLength);
-              if (isInstance(b, Uint8Array)) b = Buffer.from(b, b.offset, b.byteLength);
+              if (isInstance(a, Uint8Array)) {
+                a = Buffer.from(a, a.offset, a.byteLength);
+              }
+              if (isInstance(b, Uint8Array)) {
+                b = Buffer.from(b, b.offset, b.byteLength);
+              }
               if (!Buffer.isBuffer(a) || !Buffer.isBuffer(b)) {
                 throw new TypeError('The "buf1", "buf2" arguments must be one of type Buffer or Uint8Array');
               }
 
-              if (a === b) return 0;
+              if (a === b) {
+                return 0;
+              }
 
               var x = a.length;
               var y = b.length;
@@ -1468,8 +1485,12 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
                 }
               }
 
-              if (x < y) return -1;
-              if (y < x) return 1;
+              if (x < y) {
+                return -1;
+              }
+              if (y < x) {
+                return 1;
+              }
               return 0;
             };
 
@@ -1533,16 +1554,14 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
                 return string.byteLength;
               }
               if (typeof string !== "string") {
-                throw new TypeError(
-                  'The "string" argument must be one of type string, Buffer, or ArrayBuffer. ' +
-                    "Received type " +
-                    typeof string
-                );
+                throw new TypeError('The "string" argument must be one of type string, Buffer, or ArrayBuffer. ' + "Received type " + typeof string);
               }
 
               var len = string.length;
               var mustMatch = arguments.length > 2 && arguments[2] === true;
-              if (!mustMatch && len === 0) return 0;
+              if (!mustMatch && len === 0) {
+                return 0;
+              }
 
               // Use a for loop to avoid recursion
               var loweredCase = false;
@@ -1610,7 +1629,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
                 return "";
               }
 
-              if (!encoding) encoding = "utf8";
+              if (!encoding) {
+                encoding = "utf8";
+              }
 
               while (true) {
                 switch (encoding) {
@@ -1638,7 +1659,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
                     return utf16leSlice(this, start, end);
 
                   default:
-                    if (loweredCase) throw new TypeError("Unknown encoding: " + encoding);
+                    if (loweredCase) {
+                      throw new TypeError("Unknown encoding: " + encoding);
+                    }
                     encoding = (encoding + "").toLowerCase();
                     loweredCase = true;
                 }
@@ -1698,16 +1721,24 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
 
             Buffer.prototype.toString = function toString() {
               var length = this.length;
-              if (length === 0) return "";
-              if (arguments.length === 0) return utf8Slice(this, 0, length);
+              if (length === 0) {
+                return "";
+              }
+              if (arguments.length === 0) {
+                return utf8Slice(this, 0, length);
+              }
               return slowToString.apply(this, arguments);
             };
 
             Buffer.prototype.toLocaleString = Buffer.prototype.toString;
 
             Buffer.prototype.equals = function equals(b) {
-              if (!Buffer.isBuffer(b)) throw new TypeError("Argument must be a Buffer");
-              if (this === b) return true;
+              if (!Buffer.isBuffer(b)) {
+                throw new TypeError("Argument must be a Buffer");
+              }
+              if (this === b) {
+                return true;
+              }
               return Buffer.compare(this, b) === 0;
             };
 
@@ -1717,7 +1748,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
               str = this.toString("hex", 0, max)
                 .replace(/(.{2})/g, "$1 ")
                 .trim();
-              if (this.length > max) str += " ... ";
+              if (this.length > max) {
+                str += " ... ";
+              }
               return "<Buffer " + str + ">";
             };
 
@@ -1726,9 +1759,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
                 target = Buffer.from(target, target.offset, target.byteLength);
               }
               if (!Buffer.isBuffer(target)) {
-                throw new TypeError(
-                  'The "target" argument must be one of type Buffer or Uint8Array. ' + "Received type " + typeof target
-                );
+                throw new TypeError('The "target" argument must be one of type Buffer or Uint8Array. ' + "Received type " + typeof target);
               }
 
               if (start === undefined) {
@@ -1763,7 +1794,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
               thisStart >>>= 0;
               thisEnd >>>= 0;
 
-              if (this === target) return 0;
+              if (this === target) {
+                return 0;
+              }
 
               var x = thisEnd - thisStart;
               var y = end - start;
@@ -1780,8 +1813,12 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
                 }
               }
 
-              if (x < y) return -1;
-              if (y < x) return 1;
+              if (x < y) {
+                return -1;
+              }
+              if (y < x) {
+                return 1;
+              }
               return 0;
             };
 
@@ -1796,7 +1833,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             // - dir - true for indexOf, false for lastIndexOf
             function bidirectionalIndexOf(buffer, val, byteOffset, encoding, dir) {
               // Empty buffer means no match
-              if (buffer.length === 0) return -1;
+              if (buffer.length === 0) {
+                return -1;
+              }
 
               // Normalize byteOffset
               if (typeof byteOffset === "string") {
@@ -1814,13 +1853,17 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
               }
 
               // Normalize byteOffset: negative offsets start from the end of the buffer
-              if (byteOffset < 0) byteOffset = buffer.length + byteOffset;
+              if (byteOffset < 0) {
+                byteOffset = buffer.length + byteOffset;
+              }
               if (byteOffset >= buffer.length) {
-                if (dir) return -1;
-                else byteOffset = buffer.length - 1;
+                if (dir) {
+                  return -1;
+                } else byteOffset = buffer.length - 1;
               } else if (byteOffset < 0) {
-                if (dir) byteOffset = 0;
-                else return -1;
+                if (dir) {
+                  byteOffset = 0;
+                } else return -1;
               }
 
               // Normalize val
@@ -1881,15 +1924,23 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
                 var foundIndex = -1;
                 for (i = byteOffset; i < arrLength; i++) {
                   if (read(arr, i) === read(val, foundIndex === -1 ? 0 : i - foundIndex)) {
-                    if (foundIndex === -1) foundIndex = i;
-                    if (i - foundIndex + 1 === valLength) return foundIndex * indexSize;
+                    if (foundIndex === -1) {
+                      foundIndex = i;
+                    }
+                    if (i - foundIndex + 1 === valLength) {
+                      return foundIndex * indexSize;
+                    }
                   } else {
-                    if (foundIndex !== -1) i -= i - foundIndex;
+                    if (foundIndex !== -1) {
+                      i -= i - foundIndex;
+                    }
                     foundIndex = -1;
                   }
                 }
               } else {
-                if (byteOffset + valLength > arrLength) byteOffset = arrLength - valLength;
+                if (byteOffset + valLength > arrLength) {
+                  byteOffset = arrLength - valLength;
+                }
                 for (i = byteOffset; i >= 0; i--) {
                   var found = true;
                   for (var j = 0; j < valLength; j++) {
@@ -1898,7 +1949,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
                       break;
                     }
                   }
-                  if (found) return i;
+                  if (found) {
+                    return i;
+                  }
                 }
               }
 
@@ -1936,7 +1989,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
               }
               for (var i = 0; i < length; ++i) {
                 var parsed = parseInt(string.substr(i * 2, 2), 16);
-                if (numberIsNaN(parsed)) return i;
+                if (numberIsNaN(parsed)) {
+                  return i;
+                }
                 buf[offset + i] = parsed;
               }
               return i;
@@ -1978,7 +2033,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
                 offset = offset >>> 0;
                 if (isFinite(length)) {
                   length = length >>> 0;
-                  if (encoding === undefined) encoding = "utf8";
+                  if (encoding === undefined) {
+                    encoding = "utf8";
+                  }
                 } else {
                   encoding = length;
                   length = undefined;
@@ -1988,13 +2045,17 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
               }
 
               var remaining = this.length - offset;
-              if (length === undefined || length > remaining) length = remaining;
+              if (length === undefined || length > remaining) {
+                length = remaining;
+              }
 
               if ((string.length > 0 && (length < 0 || offset < 0)) || offset > this.length) {
                 throw new RangeError("Attempt to write outside buffer bounds");
               }
 
-              if (!encoding) encoding = "utf8";
+              if (!encoding) {
+                encoding = "utf8";
+              }
 
               var loweredCase = false;
               for (;;) {
@@ -2024,7 +2085,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
                     return ucs2Write(this, string, offset, length);
 
                   default:
-                    if (loweredCase) throw new TypeError("Unknown encoding: " + encoding);
+                    if (loweredCase) {
+                      throw new TypeError("Unknown encoding: " + encoding);
+                    }
                     encoding = ("" + encoding).toLowerCase();
                     loweredCase = true;
                 }
@@ -2089,11 +2152,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
                       thirdByte = buf[i + 2];
                       fourthByte = buf[i + 3];
                       if ((secondByte & 0xc0) === 0x80 && (thirdByte & 0xc0) === 0x80 && (fourthByte & 0xc0) === 0x80) {
-                        tempCodePoint =
-                          ((firstByte & 0xf) << 0x12) |
-                          ((secondByte & 0x3f) << 0xc) |
-                          ((thirdByte & 0x3f) << 0x6) |
-                          (fourthByte & 0x3f);
+                        tempCodePoint = ((firstByte & 0xf) << 0x12) | ((secondByte & 0x3f) << 0xc) | ((thirdByte & 0x3f) << 0x6) | (fourthByte & 0x3f);
                         if (tempCodePoint > 0xffff && tempCodePoint < 0x110000) {
                           codePoint = tempCodePoint;
                         }
@@ -2163,8 +2222,12 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             function hexSlice(buf, start, end) {
               var len = buf.length;
 
-              if (!start || start < 0) start = 0;
-              if (!end || end < 0 || end > len) end = len;
+              if (!start || start < 0) {
+                start = 0;
+              }
+              if (!end || end < 0 || end > len) {
+                end = len;
+              }
 
               var out = "";
               for (var i = start; i < end; ++i) {
@@ -2189,19 +2252,25 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
 
               if (start < 0) {
                 start += len;
-                if (start < 0) start = 0;
+                if (start < 0) {
+                  start = 0;
+                }
               } else if (start > len) {
                 start = len;
               }
 
               if (end < 0) {
                 end += len;
-                if (end < 0) end = 0;
+                if (end < 0) {
+                  end = 0;
+                }
               } else if (end > len) {
                 end = len;
               }
 
-              if (end < start) end = start;
+              if (end < start) {
+                end = start;
+              }
 
               var newBuf = this.subarray(start, end);
               // Return an augmented `Uint8Array` instance
@@ -2213,14 +2282,20 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
              * Need to make sure that buffer isn't trying to write out of bounds.
              */
             function checkOffset(offset, ext, length) {
-              if (offset % 1 !== 0 || offset < 0) throw new RangeError("offset is not uint");
-              if (offset + ext > length) throw new RangeError("Trying to access beyond buffer length");
+              if (offset % 1 !== 0 || offset < 0) {
+                throw new RangeError("offset is not uint");
+              }
+              if (offset + ext > length) {
+                throw new RangeError("Trying to access beyond buffer length");
+              }
             }
 
             Buffer.prototype.readUIntLE = function readUIntLE(offset, byteLength, noAssert) {
               offset = offset >>> 0;
               byteLength = byteLength >>> 0;
-              if (!noAssert) checkOffset(offset, byteLength, this.length);
+              if (!noAssert) {
+                checkOffset(offset, byteLength, this.length);
+              }
 
               var val = this[offset];
               var mul = 1;
@@ -2250,32 +2325,42 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
 
             Buffer.prototype.readUInt8 = function readUInt8(offset, noAssert) {
               offset = offset >>> 0;
-              if (!noAssert) checkOffset(offset, 1, this.length);
+              if (!noAssert) {
+                checkOffset(offset, 1, this.length);
+              }
               return this[offset];
             };
 
             Buffer.prototype.readUInt16LE = function readUInt16LE(offset, noAssert) {
               offset = offset >>> 0;
-              if (!noAssert) checkOffset(offset, 2, this.length);
+              if (!noAssert) {
+                checkOffset(offset, 2, this.length);
+              }
               return this[offset] | (this[offset + 1] << 8);
             };
 
             Buffer.prototype.readUInt16BE = function readUInt16BE(offset, noAssert) {
               offset = offset >>> 0;
-              if (!noAssert) checkOffset(offset, 2, this.length);
+              if (!noAssert) {
+                checkOffset(offset, 2, this.length);
+              }
               return (this[offset] << 8) | this[offset + 1];
             };
 
             Buffer.prototype.readUInt32LE = function readUInt32LE(offset, noAssert) {
               offset = offset >>> 0;
-              if (!noAssert) checkOffset(offset, 4, this.length);
+              if (!noAssert) {
+                checkOffset(offset, 4, this.length);
+              }
 
               return (this[offset] | (this[offset + 1] << 8) | (this[offset + 2] << 16)) + this[offset + 3] * 0x1000000;
             };
 
             Buffer.prototype.readUInt32BE = function readUInt32BE(offset, noAssert) {
               offset = offset >>> 0;
-              if (!noAssert) checkOffset(offset, 4, this.length);
+              if (!noAssert) {
+                checkOffset(offset, 4, this.length);
+              }
 
               return this[offset] * 0x1000000 + ((this[offset + 1] << 16) | (this[offset + 2] << 8) | this[offset + 3]);
             };
@@ -2283,7 +2368,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             Buffer.prototype.readIntLE = function readIntLE(offset, byteLength, noAssert) {
               offset = offset >>> 0;
               byteLength = byteLength >>> 0;
-              if (!noAssert) checkOffset(offset, byteLength, this.length);
+              if (!noAssert) {
+                checkOffset(offset, byteLength, this.length);
+              }
 
               var val = this[offset];
               var mul = 1;
@@ -2293,7 +2380,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
               }
               mul *= 0x80;
 
-              if (val >= mul) val -= Math.pow(2, 8 * byteLength);
+              if (val >= mul) {
+                val -= Math.pow(2, 8 * byteLength);
+              }
 
               return val;
             };
@@ -2301,7 +2390,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             Buffer.prototype.readIntBE = function readIntBE(offset, byteLength, noAssert) {
               offset = offset >>> 0;
               byteLength = byteLength >>> 0;
-              if (!noAssert) checkOffset(offset, byteLength, this.length);
+              if (!noAssert) {
+                checkOffset(offset, byteLength, this.length);
+              }
 
               var i = byteLength;
               var mul = 1;
@@ -2311,74 +2402,102 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
               }
               mul *= 0x80;
 
-              if (val >= mul) val -= Math.pow(2, 8 * byteLength);
+              if (val >= mul) {
+                val -= Math.pow(2, 8 * byteLength);
+              }
 
               return val;
             };
 
             Buffer.prototype.readInt8 = function readInt8(offset, noAssert) {
               offset = offset >>> 0;
-              if (!noAssert) checkOffset(offset, 1, this.length);
-              if (!(this[offset] & 0x80)) return this[offset];
+              if (!noAssert) {
+                checkOffset(offset, 1, this.length);
+              }
+              if (!(this[offset] & 0x80)) {
+                return this[offset];
+              }
               return (0xff - this[offset] + 1) * -1;
             };
 
             Buffer.prototype.readInt16LE = function readInt16LE(offset, noAssert) {
               offset = offset >>> 0;
-              if (!noAssert) checkOffset(offset, 2, this.length);
+              if (!noAssert) {
+                checkOffset(offset, 2, this.length);
+              }
               var val = this[offset] | (this[offset + 1] << 8);
               return val & 0x8000 ? val | 0xffff0000 : val;
             };
 
             Buffer.prototype.readInt16BE = function readInt16BE(offset, noAssert) {
               offset = offset >>> 0;
-              if (!noAssert) checkOffset(offset, 2, this.length);
+              if (!noAssert) {
+                checkOffset(offset, 2, this.length);
+              }
               var val = this[offset + 1] | (this[offset] << 8);
               return val & 0x8000 ? val | 0xffff0000 : val;
             };
 
             Buffer.prototype.readInt32LE = function readInt32LE(offset, noAssert) {
               offset = offset >>> 0;
-              if (!noAssert) checkOffset(offset, 4, this.length);
+              if (!noAssert) {
+                checkOffset(offset, 4, this.length);
+              }
 
               return this[offset] | (this[offset + 1] << 8) | (this[offset + 2] << 16) | (this[offset + 3] << 24);
             };
 
             Buffer.prototype.readInt32BE = function readInt32BE(offset, noAssert) {
               offset = offset >>> 0;
-              if (!noAssert) checkOffset(offset, 4, this.length);
+              if (!noAssert) {
+                checkOffset(offset, 4, this.length);
+              }
 
               return (this[offset] << 24) | (this[offset + 1] << 16) | (this[offset + 2] << 8) | this[offset + 3];
             };
 
             Buffer.prototype.readFloatLE = function readFloatLE(offset, noAssert) {
               offset = offset >>> 0;
-              if (!noAssert) checkOffset(offset, 4, this.length);
+              if (!noAssert) {
+                checkOffset(offset, 4, this.length);
+              }
               return ieee754.read(this, offset, true, 23, 4);
             };
 
             Buffer.prototype.readFloatBE = function readFloatBE(offset, noAssert) {
               offset = offset >>> 0;
-              if (!noAssert) checkOffset(offset, 4, this.length);
+              if (!noAssert) {
+                checkOffset(offset, 4, this.length);
+              }
               return ieee754.read(this, offset, false, 23, 4);
             };
 
             Buffer.prototype.readDoubleLE = function readDoubleLE(offset, noAssert) {
               offset = offset >>> 0;
-              if (!noAssert) checkOffset(offset, 8, this.length);
+              if (!noAssert) {
+                checkOffset(offset, 8, this.length);
+              }
               return ieee754.read(this, offset, true, 52, 8);
             };
 
             Buffer.prototype.readDoubleBE = function readDoubleBE(offset, noAssert) {
               offset = offset >>> 0;
-              if (!noAssert) checkOffset(offset, 8, this.length);
+              if (!noAssert) {
+                checkOffset(offset, 8, this.length);
+              }
               return ieee754.read(this, offset, false, 52, 8);
             };
 
             function checkInt(buf, value, offset, ext, max, min) {
-              if (!Buffer.isBuffer(buf)) throw new TypeError('"buffer" argument must be a Buffer instance');
-              if (value > max || value < min) throw new RangeError('"value" argument is out of bounds');
-              if (offset + ext > buf.length) throw new RangeError("Index out of range");
+              if (!Buffer.isBuffer(buf)) {
+                throw new TypeError('"buffer" argument must be a Buffer instance');
+              }
+              if (value > max || value < min) {
+                throw new RangeError('"value" argument is out of bounds');
+              }
+              if (offset + ext > buf.length) {
+                throw new RangeError("Index out of range");
+              }
             }
 
             Buffer.prototype.writeUIntLE = function writeUIntLE(value, offset, byteLength, noAssert) {
@@ -2422,7 +2541,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             Buffer.prototype.writeUInt8 = function writeUInt8(value, offset, noAssert) {
               value = +value;
               offset = offset >>> 0;
-              if (!noAssert) checkInt(this, value, offset, 1, 0xff, 0);
+              if (!noAssert) {
+                checkInt(this, value, offset, 1, 0xff, 0);
+              }
               this[offset] = value & 0xff;
               return offset + 1;
             };
@@ -2430,7 +2551,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             Buffer.prototype.writeUInt16LE = function writeUInt16LE(value, offset, noAssert) {
               value = +value;
               offset = offset >>> 0;
-              if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0);
+              if (!noAssert) {
+                checkInt(this, value, offset, 2, 0xffff, 0);
+              }
               this[offset] = value & 0xff;
               this[offset + 1] = value >>> 8;
               return offset + 2;
@@ -2439,7 +2562,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             Buffer.prototype.writeUInt16BE = function writeUInt16BE(value, offset, noAssert) {
               value = +value;
               offset = offset >>> 0;
-              if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0);
+              if (!noAssert) {
+                checkInt(this, value, offset, 2, 0xffff, 0);
+              }
               this[offset] = value >>> 8;
               this[offset + 1] = value & 0xff;
               return offset + 2;
@@ -2448,7 +2573,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             Buffer.prototype.writeUInt32LE = function writeUInt32LE(value, offset, noAssert) {
               value = +value;
               offset = offset >>> 0;
-              if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0);
+              if (!noAssert) {
+                checkInt(this, value, offset, 4, 0xffffffff, 0);
+              }
               this[offset + 3] = value >>> 24;
               this[offset + 2] = value >>> 16;
               this[offset + 1] = value >>> 8;
@@ -2459,7 +2586,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             Buffer.prototype.writeUInt32BE = function writeUInt32BE(value, offset, noAssert) {
               value = +value;
               offset = offset >>> 0;
-              if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0);
+              if (!noAssert) {
+                checkInt(this, value, offset, 4, 0xffffffff, 0);
+              }
               this[offset] = value >>> 24;
               this[offset + 1] = value >>> 16;
               this[offset + 2] = value >>> 8;
@@ -2516,8 +2645,12 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             Buffer.prototype.writeInt8 = function writeInt8(value, offset, noAssert) {
               value = +value;
               offset = offset >>> 0;
-              if (!noAssert) checkInt(this, value, offset, 1, 0x7f, -0x80);
-              if (value < 0) value = 0xff + value + 1;
+              if (!noAssert) {
+                checkInt(this, value, offset, 1, 0x7f, -0x80);
+              }
+              if (value < 0) {
+                value = 0xff + value + 1;
+              }
               this[offset] = value & 0xff;
               return offset + 1;
             };
@@ -2525,7 +2658,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             Buffer.prototype.writeInt16LE = function writeInt16LE(value, offset, noAssert) {
               value = +value;
               offset = offset >>> 0;
-              if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000);
+              if (!noAssert) {
+                checkInt(this, value, offset, 2, 0x7fff, -0x8000);
+              }
               this[offset] = value & 0xff;
               this[offset + 1] = value >>> 8;
               return offset + 2;
@@ -2534,7 +2669,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             Buffer.prototype.writeInt16BE = function writeInt16BE(value, offset, noAssert) {
               value = +value;
               offset = offset >>> 0;
-              if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000);
+              if (!noAssert) {
+                checkInt(this, value, offset, 2, 0x7fff, -0x8000);
+              }
               this[offset] = value >>> 8;
               this[offset + 1] = value & 0xff;
               return offset + 2;
@@ -2543,7 +2680,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             Buffer.prototype.writeInt32LE = function writeInt32LE(value, offset, noAssert) {
               value = +value;
               offset = offset >>> 0;
-              if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000);
+              if (!noAssert) {
+                checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000);
+              }
               this[offset] = value & 0xff;
               this[offset + 1] = value >>> 8;
               this[offset + 2] = value >>> 16;
@@ -2554,8 +2693,12 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             Buffer.prototype.writeInt32BE = function writeInt32BE(value, offset, noAssert) {
               value = +value;
               offset = offset >>> 0;
-              if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000);
-              if (value < 0) value = 0xffffffff + value + 1;
+              if (!noAssert) {
+                checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000);
+              }
+              if (value < 0) {
+                value = 0xffffffff + value + 1;
+              }
               this[offset] = value >>> 24;
               this[offset + 1] = value >>> 16;
               this[offset + 2] = value >>> 8;
@@ -2564,8 +2707,12 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             };
 
             function checkIEEE754(buf, value, offset, ext, max, min) {
-              if (offset + ext > buf.length) throw new RangeError("Index out of range");
-              if (offset < 0) throw new RangeError("Index out of range");
+              if (offset + ext > buf.length) {
+                throw new RangeError("Index out of range");
+              }
+              if (offset < 0) {
+                throw new RangeError("Index out of range");
+              }
             }
 
             function writeFloat(buf, value, offset, littleEndian, noAssert) {
@@ -2606,26 +2753,48 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
 
             // copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
             Buffer.prototype.copy = function copy(target, targetStart, start, end) {
-              if (!Buffer.isBuffer(target)) throw new TypeError("argument should be a Buffer");
-              if (!start) start = 0;
-              if (!end && end !== 0) end = this.length;
-              if (targetStart >= target.length) targetStart = target.length;
-              if (!targetStart) targetStart = 0;
-              if (end > 0 && end < start) end = start;
+              if (!Buffer.isBuffer(target)) {
+                throw new TypeError("argument should be a Buffer");
+              }
+              if (!start) {
+                start = 0;
+              }
+              if (!end && end !== 0) {
+                end = this.length;
+              }
+              if (targetStart >= target.length) {
+                targetStart = target.length;
+              }
+              if (!targetStart) {
+                targetStart = 0;
+              }
+              if (end > 0 && end < start) {
+                end = start;
+              }
 
               // Copy 0 bytes; we're done
-              if (end === start) return 0;
-              if (target.length === 0 || this.length === 0) return 0;
+              if (end === start) {
+                return 0;
+              }
+              if (target.length === 0 || this.length === 0) {
+                return 0;
+              }
 
               // Fatal error conditions
               if (targetStart < 0) {
                 throw new RangeError("targetStart out of bounds");
               }
-              if (start < 0 || start >= this.length) throw new RangeError("Index out of range");
-              if (end < 0) throw new RangeError("sourceEnd out of bounds");
+              if (start < 0 || start >= this.length) {
+                throw new RangeError("Index out of range");
+              }
+              if (end < 0) {
+                throw new RangeError("sourceEnd out of bounds");
+              }
 
               // Are we oob?
-              if (end > this.length) end = this.length;
+              if (end > this.length) {
+                end = this.length;
+              }
               if (target.length - targetStart < end - start) {
                 end = target.length - targetStart + start;
               }
@@ -2691,7 +2860,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
               start = start >>> 0;
               end = end === undefined ? this.length : end >>> 0;
 
-              if (!val) val = 0;
+              if (!val) {
+                val = 0;
+              }
 
               var i;
               if (typeof val === "number") {
@@ -2723,7 +2894,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
               // Node strips out invalid characters like \n and \t from the string, base64-js does not
               str = str.trim().replace(INVALID_BASE64_RE, "");
               // Node converts strings with length < 2 to ''
-              if (str.length < 2) return "";
+              if (str.length < 2) {
+                return "";
+              }
               // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
               while (str.length % 4 !== 0) {
                 str = str + "=";
@@ -2732,7 +2905,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             }
 
             function toHex(n) {
-              if (n < 16) return "0" + n.toString(16);
+              if (n < 16) {
+                return "0" + n.toString(16);
+              }
               return n.toString(16);
             }
 
@@ -2753,11 +2928,15 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
                     // no lead yet
                     if (codePoint > 0xdbff) {
                       // unexpected trail
-                      if ((units -= 3) > -1) bytes.push(0xef, 0xbf, 0xbd);
+                      if ((units -= 3) > -1) {
+                        bytes.push(0xef, 0xbf, 0xbd);
+                      }
                       continue;
                     } else if (i + 1 === length) {
                       // unpaired lead
-                      if ((units -= 3) > -1) bytes.push(0xef, 0xbf, 0xbd);
+                      if ((units -= 3) > -1) {
+                        bytes.push(0xef, 0xbf, 0xbd);
+                      }
                       continue;
                     }
 
@@ -2769,7 +2948,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
 
                   // 2 leads in a row
                   if (codePoint < 0xdc00) {
-                    if ((units -= 3) > -1) bytes.push(0xef, 0xbf, 0xbd);
+                    if ((units -= 3) > -1) {
+                      bytes.push(0xef, 0xbf, 0xbd);
+                    }
                     leadSurrogate = codePoint;
                     continue;
                   }
@@ -2778,29 +2959,34 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
                   codePoint = (((leadSurrogate - 0xd800) << 10) | (codePoint - 0xdc00)) + 0x10000;
                 } else if (leadSurrogate) {
                   // valid bmp char, but last char was a lead
-                  if ((units -= 3) > -1) bytes.push(0xef, 0xbf, 0xbd);
+                  if ((units -= 3) > -1) {
+                    bytes.push(0xef, 0xbf, 0xbd);
+                  }
                 }
 
                 leadSurrogate = null;
 
                 // encode utf8
                 if (codePoint < 0x80) {
-                  if ((units -= 1) < 0) break;
+                  if ((units -= 1) < 0) {
+                    break;
+                  }
                   bytes.push(codePoint);
                 } else if (codePoint < 0x800) {
-                  if ((units -= 2) < 0) break;
+                  if ((units -= 2) < 0) {
+                    break;
+                  }
                   bytes.push((codePoint >> 0x6) | 0xc0, (codePoint & 0x3f) | 0x80);
                 } else if (codePoint < 0x10000) {
-                  if ((units -= 3) < 0) break;
+                  if ((units -= 3) < 0) {
+                    break;
+                  }
                   bytes.push((codePoint >> 0xc) | 0xe0, ((codePoint >> 0x6) & 0x3f) | 0x80, (codePoint & 0x3f) | 0x80);
                 } else if (codePoint < 0x110000) {
-                  if ((units -= 4) < 0) break;
-                  bytes.push(
-                    (codePoint >> 0x12) | 0xf0,
-                    ((codePoint >> 0xc) & 0x3f) | 0x80,
-                    ((codePoint >> 0x6) & 0x3f) | 0x80,
-                    (codePoint & 0x3f) | 0x80
-                  );
+                  if ((units -= 4) < 0) {
+                    break;
+                  }
+                  bytes.push((codePoint >> 0x12) | 0xf0, ((codePoint >> 0xc) & 0x3f) | 0x80, ((codePoint >> 0x6) & 0x3f) | 0x80, (codePoint & 0x3f) | 0x80);
                 } else {
                   throw new Error("Invalid code point");
                 }
@@ -2822,7 +3008,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
               var c, hi, lo;
               var byteArray = [];
               for (var i = 0; i < str.length; ++i) {
-                if ((units -= 2) < 0) break;
+                if ((units -= 2) < 0) {
+                  break;
+                }
 
                 c = str.charCodeAt(i);
                 hi = c >> 8;
@@ -2840,7 +3028,9 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
 
             function blitBuffer(src, dst, offset, length) {
               for (var i = 0; i < length; ++i) {
-                if (i + offset >= dst.length || i >= src.length) break;
+                if (i + offset >= dst.length || i >= src.length) {
+                  break;
+                }
                 dst[i + offset] = src[i];
               }
               return i;
@@ -2850,13 +3040,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
             // the `instanceof` check but they should be treated as of that type.
             // See: https://github.com/feross/buffer/issues/166
             function isInstance(obj, type) {
-              return (
-                obj instanceof type ||
-                (obj != null &&
-                  obj.constructor != null &&
-                  obj.constructor.name != null &&
-                  obj.constructor.name === type.name)
-              );
+              return obj instanceof type || (obj != null && obj.constructor != null && obj.constructor.name != null && obj.constructor.name === type.name);
             }
             function numberIsNaN(obj) {
               // For IE11 support
@@ -2867,6 +3051,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
       },
       { "base64-js": 12, buffer: 13, ieee754: 14 }
     ],
+
     14: [
       function (require, module, exports) {
         /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
@@ -2958,6 +3143,7 @@ qx.Class.define("zx.utils.BrowserifiedBundle", {
       {}
     ]
   },
+
   {},
   [11]
 );

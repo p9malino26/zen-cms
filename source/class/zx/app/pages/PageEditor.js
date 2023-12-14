@@ -19,7 +19,7 @@ qx.Class.define("zx.app.pages.PageEditor", {
   extend: zx.ui.editor.Editor,
 
   construct() {
-    this.base(arguments);
+    super();
     this._setLayout(new qx.ui.layout.Grow());
     this._add(this.getQxObject("splitter"));
   },
@@ -84,6 +84,7 @@ qx.Class.define("zx.app.pages.PageEditor", {
           node = new qx.ui.tree.TreeFolder(piece.describeForLayoutTree()).set({
             icon: "@FontAwesome/folder/16"
           });
+
           piece.getPieces().forEach(piece => addNode(node, piece));
         } else {
           node = new qx.ui.tree.TreeFile(piece.describeForLayoutTree()).set({
@@ -91,7 +92,9 @@ qx.Class.define("zx.app.pages.PageEditor", {
           });
         }
         node.setModel(piece);
-        if (parentNode) parentNode.add(node);
+        if (parentNode) {
+          parentNode.add(node);
+        }
         node.setOpen(true);
         return node;
       };
@@ -167,11 +170,14 @@ qx.Class.define("zx.app.pages.PageEditor", {
 
       if (value) {
         let editorClass = value.getMiniEditorClass();
-        if (editorClass != this.__miniEditorClass) await disposeEditor();
+        if (editorClass != this.__miniEditorClass) {
+          await disposeEditor();
+        }
         this.__miniEditorClass = editorClass;
         if (editorClass) {
-          if (!this.__miniEditor) await createEditor();
-          else await this.__miniEditor.setValue(value);
+          if (!this.__miniEditor) {
+            await createEditor();
+          } else await this.__miniEditor.setValue(value);
         }
       } else {
         await disposeEditor();
@@ -232,7 +238,7 @@ qx.Class.define("zx.app.pages.PageEditor", {
           return new qx.ui.embed.Iframe("about:blank");
       }
 
-      return this.base(arguments, id);
+      return super._createQxObjectImpl(id);
     }
   }
 });

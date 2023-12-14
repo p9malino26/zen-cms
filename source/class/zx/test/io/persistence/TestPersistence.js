@@ -28,6 +28,7 @@ qx.Class.define("zx.test.io.persistence.TestPersistence", {
         title: "My New Title",
         lastModified: dt
       });
+
       pg.getPieces().push(new zx.test.io.persistence.Piece().set({ content: "content-one" }));
       pg.getPieces().push(new zx.test.io.persistence.Piece().set({ content: "content-two" }));
       let io = ctlr.getClassIos().getClassIo(pg.constructor);
@@ -104,9 +105,11 @@ qx.Class.define("zx.test.io.persistence.TestPersistence", {
       let ref1 = new zx.test.io.persistence.DemoReferences().set({
         title: "One"
       });
+
       let ref2 = new zx.test.io.persistence.DemoReferences().set({
         title: "Two"
       });
+
       ref1.setOther(ref2);
 
       await db.put(ref2);
@@ -167,6 +170,7 @@ qx.Class.define("zx.test.io.persistence.TestPersistence", {
         let child = new zx.test.io.persistence.DemoReferences().set({
           title: "Child " + (i + 1)
         });
+
         children.push(child);
         children.push(child);
       }
@@ -204,9 +208,11 @@ qx.Class.define("zx.test.io.persistence.TestPersistence", {
         myArray: new qx.data.Array(),
         myMap: new zx.data.Map()
       });
+
       let child = new zx.test.io.persistence.DemoReferences().set({
         title: "Child"
       });
+
       parent.getMyArray().push(child);
       let values = parent.getMyMap();
       values.put("a", "one");

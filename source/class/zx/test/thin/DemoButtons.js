@@ -1,26 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.thin.DemoButtons", {
   extend: zx.thin.ui.container.Window,
 
   construct() {
-    this.base(arguments);
+    super();
     this.setCaption("Demo Buttons");
     let body = this.getBody();
     body.add(<h2>Demo of the various button styles</h2>);
@@ -55,6 +54,7 @@ qx.Class.define("zx.test.thin.DemoButtons", {
           var btn = new zx.thin.ui.form.Button("Button One").set({
             buttonStyle: "contained"
           });
+
           btn.addListener("execute", () => {
             this.info("Button One");
           });
@@ -65,6 +65,7 @@ qx.Class.define("zx.test.thin.DemoButtons", {
             buttonStyle: "contained",
             icon: "@FontAwesomeSolid/heart"
           });
+
           btn.addListener("execute", () => {
             this.info("Button One");
           });
@@ -74,6 +75,7 @@ qx.Class.define("zx.test.thin.DemoButtons", {
           var btn = new zx.thin.ui.form.Button("Button Three").set({
             buttonStyle: "outlined"
           });
+
           btn.addListener("execute", () => {
             this.info("Button Three");
           });
@@ -84,6 +86,7 @@ qx.Class.define("zx.test.thin.DemoButtons", {
             buttonStyle: "text",
             icon: "@FontAwesomeSolid/heart"
           });
+
           btn.addListener("execute", () => {
             this.info("Button Four");
           });
@@ -95,6 +98,7 @@ qx.Class.define("zx.test.thin.DemoButtons", {
             icon: "@FontAwesomeSolid/heart",
             loadingStyle: "ball-clip-rotate-multiple"
           });
+
           btn.addListener("execute", () => {
             this.info("Button Loading");
             btn.setLoading(true);
@@ -107,7 +111,8 @@ qx.Class.define("zx.test.thin.DemoButtons", {
           });
           return btn;
       }
-      return this.base(arguments, id);
+
+      return super._createQxObjectImpl(id);
     }
   }
 });

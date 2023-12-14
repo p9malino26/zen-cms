@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Loads an image from a URL, and provides a promise which
@@ -30,7 +29,7 @@ qx.Class.define("zx.thin.util.ImageLoader", {
    * @param url {String} the url to download from
    */
   construct(url) {
-    this.base(arguments);
+    super();
     this.loadCount = 0;
 
     this._promise = new Promise((resolve, reject) => {
@@ -90,16 +89,8 @@ qx.Class.define("zx.thin.util.ImageLoader", {
       var stats = zx.thin.util.ImageLoader;
 
       if (!image.height || !image.width) {
-        console.error(
-          "Image loaded but not ready, height=" +
-            image.height +
-            ", width=" +
-            image.width +
-            ", loadCount=" +
-            this.loadCount +
-            ", url=" +
-            url
-        );
+        console.error("Image loaded but not ready, height=" + image.height + ", width=" + image.width + ", loadCount=" + this.loadCount + ", url=" + url);
+
         this.loadCount++;
         if (this.loadCount < 10) {
           setTimeout(() => this._onLoad(), 100);
@@ -174,7 +165,7 @@ qx.Class.define("zx.thin.util.ImageLoader", {
     /**
      * Helper method to unbind DOM event handlers
      */
-    _unbindEvents: function () {
+    _unbindEvents() {
       this.__image.onload = null;
       this.__image.onerror = null;
       this.__image.onabort = null;

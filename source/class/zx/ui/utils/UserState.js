@@ -13,7 +13,9 @@ qx.Class.define("zx.ui.utils.UserState", {
   construct(values) {
     super();
     this.__targetData = {};
-    if (values) this.setValues(values);
+    if (values) {
+      this.setValues(values);
+    }
   },
 
   properties: {
@@ -194,7 +196,9 @@ qx.Class.define("zx.ui.utils.UserState", {
      * @returns {zx.ui.utils.state.TargetState}
      */
     getStateFor(target) {
-      if (!zx.ui.utils.UserState.getInstance()) return null;
+      if (!zx.ui.utils.UserState.getInstance()) {
+        return null;
+      }
 
       return zx.ui.utils.UserState.getInstance().getStateFor(target);
     }

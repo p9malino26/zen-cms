@@ -18,12 +18,16 @@ qx.Class.define("zx.ui.utils.state.ControllerState", {
     this._addListenerFor("afterApplyModel", () => (this.__inChangeModel = false));
     this._addListenerFor("changeModel", this._changeModel);
     let model = ctlr.getModel();
-    if (model) this.copyStateToSelection();
+    if (model) {
+      this.copyStateToSelection();
+    }
   },
 
   destruct() {
     let sel = this.getTarget().getSelection();
-    if (sel) sel.removeListener("change", this._changeSelectionContents, this);
+    if (sel) {
+      sel.removeListener("change", this._changeSelectionContents, this);
+    }
   },
 
   members: {
@@ -37,7 +41,9 @@ qx.Class.define("zx.ui.utils.state.ControllerState", {
      */
     _changeModel(evt) {
       let model = evt.getData();
-      if (model) this.copyStateToSelection();
+      if (model) {
+        this.copyStateToSelection();
+      }
     },
 
     /**
@@ -48,7 +54,9 @@ qx.Class.define("zx.ui.utils.state.ControllerState", {
     _changeSelection(evt) {
       if (!this.__inChangeModel) {
         let oldSelection = evt.getOldData();
-        if (oldSelection) oldSelection.removeListener("change", this._changeSelectionContents, this);
+        if (oldSelection) {
+          oldSelection.removeListener("change", this._changeSelectionContents, this);
+        }
         this._attachSelection();
         this.copySelectionToState();
       }
@@ -59,7 +67,9 @@ qx.Class.define("zx.ui.utils.state.ControllerState", {
      */
     _attachSelection() {
       let selection = this.getTarget().getSelection();
-      if (selection) selection.addListener("change", this._changeSelectionContents, this);
+      if (selection) {
+        selection.addListener("change", this._changeSelectionContents, this);
+      }
     },
 
     /**
@@ -78,10 +88,14 @@ qx.Class.define("zx.ui.utils.state.ControllerState", {
      */
     copyStateToSelection() {
       let id = this.getTargetId();
-      if (!id) return;
+      if (!id) {
+        return;
+      }
 
       let model = this.getTarget().getModel();
-      if (!model) return;
+      if (!model) {
+        return;
+      }
 
       let valueIds = {};
       (this._get(id) || []).forEach(valueId => (valueIds[valueId] = true));
@@ -94,7 +108,9 @@ qx.Class.define("zx.ui.utils.state.ControllerState", {
      */
     copySelectionToState() {
       let id = this.getTargetId();
-      if (!id) return;
+      if (!id) {
+        return;
+      }
 
       let selection = this.getTarget().getSelection();
       let ids = selection.toArray().map(item => this._getIdOfItem(item));

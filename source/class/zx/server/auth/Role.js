@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.server.auth.Role", {
   extend: zx.server.Object,
@@ -27,10 +27,7 @@ qx.Class.define("zx.server.auth.Role", {
       nullable: false,
       check: "String",
       event: "changeShortCode",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** Human readable title */
@@ -39,10 +36,7 @@ qx.Class.define("zx.server.auth.Role", {
       nullable: false,
       check: "String",
       event: "changeTitle",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** List of permissions in this role */
@@ -52,10 +46,7 @@ qx.Class.define("zx.server.auth.Role", {
       check: "zx.data.IndexedArray",
       event: "changePermissions",
       transform: "_transformPermissions",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** Notes for the user */
@@ -64,10 +55,7 @@ qx.Class.define("zx.server.auth.Role", {
       nullable: true,
       check: "String",
       event: "changeNotes",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     }
   },
 
@@ -76,7 +64,9 @@ qx.Class.define("zx.server.auth.Role", {
      * Transform for `permissions`
      */
     _transformPermissions(value, oldValue) {
-      if (!oldValue) return value;
+      if (!oldValue) {
+        return value;
+      }
       oldValue.replace(value || []);
       return oldValue;
     },
@@ -88,11 +78,10 @@ qx.Class.define("zx.server.auth.Role", {
      * @returns
      */
     hasPermission(shortCode) {
-      if (shortCode instanceof zx.server.auth.Permission)
+      if (shortCode instanceof zx.server.auth.Permission) {
         shortCode = shortCode.getShortCode();
-      return !this.getPermissions().find(
-        perm => perm.getShortCode() == shortCode
-      );
+      }
+      return !this.getPermissions().find(perm => perm.getShortCode() == shortCode);
     }
   }
 });

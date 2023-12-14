@@ -32,15 +32,17 @@ qx.Class.define("zx.server.auth.User", {
    * @param {Boolean} virtualUser whether this user is virtual, ie created from remote auth and not to be persisted
    */
   construct(virtualUser) {
-    this.base(arguments);
+    super();
     this.__virtualUser = !!virtualUser;
     this.set({
       permissions: new zx.data.IndexedArray().set({
         keyGenerator: perm => perm.getShortCode()
       }),
+
       roles: new zx.data.IndexedArray().set({
         keyGenerator: role => role.getShortCode()
       }),
+
       state: new zx.data.Map()
     });
   },
@@ -269,7 +271,9 @@ qx.Class.define("zx.server.auth.User", {
      * @return {zx.server.auth.User}
      */
     async getUserFromSession(req) {
-      if (!req) req = zx.server.WebServer.getCurrentRequest();
+      if (!req) {
+        req = zx.server.WebServer.getCurrentRequest();
+      }
       let classname = qx.core.Environment.get("zx.server.auth.User.classname") || zx.server.auth.User.classname;
       let data = req.session.get(classname);
       if (!data || !data.userUuid) {
@@ -280,6 +284,7 @@ qx.Class.define("zx.server.auth.User", {
       let user = await server.findOneObjectByType(clazz, {
         _uuid: data.userUuid
       });
+
       return user;
     }
   }

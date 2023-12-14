@@ -1,26 +1,26 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.tree.column.View", {
   extend: qx.core.Object,
   implement: [zx.ui.tree.IView],
 
-  construct: function () {
-    this.base(arguments);
+  construct() {
+    super();
     this.__columns = new qx.data.Array();
     this.__columns.addListener("change", this.__onColumnsChange, this);
   },
@@ -75,54 +75,49 @@ qx.Class.define("zx.ui.tree.column.View", {
     /**
      * get for columns psuedo property
      */
-    getColumns: function () {
+    getColumns() {
       return this.__columns;
     },
 
     /**
      * set for columns psuedo property
      */
-    setColumns: function (value) {
+    setColumns(value) {
       this.__columns.replace(value ? value : []);
     },
 
     /**
      * reset for columns psuedo property
      */
-    resetColumns: function () {
+    resetColumns() {
       this.__columns.removeAll();
     },
 
     /**
      * Returns the columns applicable for a specific row
      */
-    getColumnsForRow: function (row) {
+    getColumnsForRow(row) {
       return this.getColumns();
     },
 
     /**
      * Called to check if the cell can be edited
      */
-    startEditing: function (node, column) {
-      return this.fireDataEvent(
-        "beforeEditCell",
-        { node: node, column: column },
-        null,
-        true
-      );
+    startEditing(node, column) {
+      return this.fireDataEvent("beforeEditCell", { node: node, column: column }, null, true);
     },
 
     /**
      * Called when editing has finished
      */
-    finishEditing: function (node, column) {
+    finishEditing(node, column) {
       this.fireDataEvent("afterEditCell", { node: node, column: column }, null);
     },
 
     /**
      * Event handler for changes to the columns
      */
-    __onColumnsChange: function (evt) {
+    __onColumnsChange(evt) {
       var data = evt.getData();
       var t = this;
 
@@ -137,24 +132,27 @@ qx.Class.define("zx.ui.tree.column.View", {
     /**
      * Apply for tree property
      */
-    _applyTree: function (value, oldValue) {
-      if (oldValue)
-        throw new Error(
-          "Cannot change value of " + this.classname + ".tree once set"
-        );
+    _applyTree(value, oldValue) {
+      if (oldValue) {
+        throw new Error("Cannot change value of " + this.classname + ".tree once set");
+      }
     },
 
     /*
      * @Override
      */
-    createRow: function (node) {
+    createRow(node) {
       var clz = this.getRowClass();
       var row = new clz(this.getTree());
       var app = this.getRowAppearance();
-      if (app) row.setAppearance(app);
+      if (app) {
+        row.setAppearance(app);
+      }
       var layout = row.getLayout();
       var clz = this.getLayoutClass();
-      if (!(layout instanceof clz)) row.setLayout(new clz());
+      if (!(layout instanceof clz)) {
+        row.setLayout(new clz());
+      }
 
       return row;
     },
@@ -162,24 +160,23 @@ qx.Class.define("zx.ui.tree.column.View", {
     /*
      * @Override
      */
-    createDropCaretRow: function (tree) {
+    createDropCaretRow(tree) {
       return new zx.ui.tree.column.DropCaretRow(tree).set({ controller: this });
     },
 
     /*
      * @Override
      */
-    applyContentNode: function (widget, node, oldNode, dropCaret) {
-      if (!dropCaret)
-        throw new Error(
-          "Unexpected call to " + this.classname + ".applyContentNode"
-        );
+    applyContentNode(widget, node, oldNode, dropCaret) {
+      if (!dropCaret) {
+        throw new Error("Unexpected call to " + this.classname + ".applyContentNode");
+      }
     },
 
     /*
      * @Override
      */
-    getDropIndentOffset: function () {
+    getDropIndentOffset() {
       return null;
     }
   }

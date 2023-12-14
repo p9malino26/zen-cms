@@ -20,7 +20,7 @@ qx.Class.define("zx.cms.app.auth.LogoutFeature", {
   implement: [zx.cms.content.IFeature],
 
   construct() {
-    this.base(arguments, zx.thin.app.login.LoginForm);
+    super(zx.thin.app.login.LoginForm);
   },
 
   members: {

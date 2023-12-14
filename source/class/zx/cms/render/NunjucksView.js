@@ -22,7 +22,7 @@ qx.Class.define("zx.cms.render.NunjucksView", {
   extend: zx.cms.render.View,
 
   construct(template) {
-    this.base(arguments);
+    super();
     this.__template = template;
   },
 

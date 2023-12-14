@@ -182,8 +182,9 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
       let password = this.getPassword();
       if (username && password) {
         var authHeader = new Buffer.from(username + ":" + password).toString("base64");
-        if (url.indexOf("?") > -1) url += "&";
-        else url += "?";
+        if (url.indexOf("?") > -1) {
+          url += "&";
+        } else url += "?";
         url += "X-Authorization=Basic%20" + authHeader + "&X-Auth-Login=true";
         console.log("Setting auth header Basic " + authHeader);
         /*
@@ -237,8 +238,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
       ].forEach(name => {
         page.on(name, () => console.log("Page " + name));
       });
-
-      */
+       */
 
       /*
       await page.setRequestInterception(true);
@@ -293,6 +293,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         //waitUntil: "networkidle2",
         timeout: 0
       });
+
       console.log(" ********** At " + url);
 
       if (response.status() != 200) {
@@ -490,7 +491,9 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
               this.error("Uncaught exception returned from " + pending.data.methodName);
             }
           } else {
-            if (pending.returnCallback) result = pending.returnCallback(data.value);
+            if (pending.returnCallback) {
+              result = pending.returnCallback(data.value);
+            }
           }
         }
       } else if (data.type == "event") {

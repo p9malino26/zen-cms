@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * @asset(zx/demo/image/*)
@@ -23,12 +22,12 @@ qx.Class.define("zx.app.demo.DemoRunner", {
   extend: qx.ui.core.Widget,
 
   construct() {
-    this.base(arguments);
+    super();
     let arr = (this.__selectedDemos = new qx.data.Array());
     arr.addListener("change", () => {
-      if (arr.getLength() && !arr.contains(this.getCurrentDemo()))
+      if (arr.getLength() && !arr.contains(this.getCurrentDemo())) {
         this.setCurrentDemo(arr.getItem(0));
-      else this.setCurrentDemo(null);
+      } else this.setCurrentDemo(null);
     });
     this.__selectedDemoResults = new qx.data.Array();
     this.__demoResults = new qx.data.Array();
@@ -94,20 +93,24 @@ qx.Class.define("zx.app.demo.DemoRunner", {
         if (uiRoot === undefined) {
           firstTime = true;
           uiRoot = this.__demoUiRoots[value.toHashCode()] = value.getUiRoot();
-          if (uiRoot) demoStack.add(uiRoot);
+          if (uiRoot) {
+            demoStack.add(uiRoot);
+          }
         }
-        if (uiRoot) demoStack.setSelection([uiRoot]);
-        else demoStack.setSelection([]);
+        if (uiRoot) {
+          demoStack.setSelection([uiRoot]);
+        } else demoStack.setSelection([]);
         value.setActive(true);
         value.addListener("log", this.__updateDemonstratorLog, this);
-        if (firstTime) await value.initialise();
+        if (firstTime) {
+          await value.initialise();
+        }
       } else {
         demoStack.setSelection([]);
       }
       this.__updateDemonstratorLog();
-      this.getQxObject("btnReset").setEnabled(
-        !!value && value.getSupportsReset()
-      );
+      this.getQxObject("btnReset").setEnabled(!!value && value.getSupportsReset());
+
       this.__updateUi();
     },
 
@@ -118,14 +121,14 @@ qx.Class.define("zx.app.demo.DemoRunner", {
       async function findAsync(arr, fn) {
         for (let i = 0; i < arr.length; i++) {
           let match = await fn(arr[i]);
-          if (match) return arr[i];
+          if (match) {
+            return arr[i];
+          }
         }
         return null;
       }
-      let hasTests = !!findAsync(
-        this.__selectedDemos.toArray(),
-        demo => demo.getTestNames().length > 0
-      );
+      let hasTests = !!findAsync(this.__selectedDemos.toArray(), demo => demo.getTestNames().length > 0);
+
       this.getQxObject("btnRunTests").setEnabled(hasTests);
     },
 
@@ -195,9 +198,7 @@ qx.Class.define("zx.app.demo.DemoRunner", {
      * Apply method
      */
     _applyCurrentTestName(value) {
-      this.getQxObject("btnRunTests").setEnabled(
-        !!this.getCurrentDemo() && !!value
-      );
+      this.getQxObject("btnRunTests").setEnabled(!!this.getCurrentDemo() && !!value);
     },
 
     /**
@@ -212,20 +213,18 @@ qx.Class.define("zx.app.demo.DemoRunner", {
       let lastNode = this.getQxObject("rootNode");
       for (let i = 0; i < segs.length; i++) {
         let seg = segs[i];
-        if (i) segPath += ".";
+        if (i) {
+          segPath += ".";
+        }
         segPath += seg;
         let node = this.__nodesByPath[segPath];
         if (!node) {
-          let iconUrl =
-            i == segs.length - 1
-              ? "zx/demo/image/package18.gif"
-              : "zx/demo/image/class18.gif";
-          this.__nodesByPath[segPath] = node = new qx.ui.tree.TreeFolder(
-            seg
-          ).set({
+          let iconUrl = i == segs.length - 1 ? "zx/demo/image/package18.gif" : "zx/demo/image/class18.gif";
+          this.__nodesByPath[segPath] = node = new qx.ui.tree.TreeFolder(seg).set({
             icon: iconUrl,
             openSymbolMode: "always"
           });
+
           lastNode.add(node);
         }
         lastNode = node;
@@ -238,6 +237,7 @@ qx.Class.define("zx.app.demo.DemoRunner", {
             icon: "zx/demo/image/method_public18.gif",
             openSymbolMode: "always"
           });
+
           node.setUserData("demo", demo);
           node.setUserData("testName", name);
           this.__nodesByPath[segPath + "." + name] = node;
@@ -251,7 +251,9 @@ qx.Class.define("zx.app.demo.DemoRunner", {
      */
     allDemosLoaded() {
       let nodePath = qx.bom.Cookie.get(this.classname + ".selectedNodePath");
-      if (!nodePath) return;
+      if (!nodePath) {
+        return;
+      }
       this.__changingTreeSelection = true;
       nodePath = nodePath.split(".");
       let node = this.getQxObject("rootNode");
@@ -260,8 +262,9 @@ qx.Class.define("zx.app.demo.DemoRunner", {
         let children = node.getChildren();
         let name = nodePath[i].toLowerCase();
         let tmp = children.find(node => node.getLabel().toLowerCase() == name);
-        if (tmp) node = tmp;
-        else break;
+        if (tmp) {
+          node = tmp;
+        } else break;
       }
       if (node) {
         let tree = this.getQxObject("tree");
@@ -274,11 +277,11 @@ qx.Class.define("zx.app.demo.DemoRunner", {
      * Runs the selected tests
      */
     async _runTests() {
-      this.getQxObject("tabview").setSelection([
-        this.getQxObject("pgTestResults")
-      ]);
-      for (let arr = this.__selectedDemos, i = 0; i < arr.getLength(); i++)
+      this.getQxObject("tabview").setSelection([this.getQxObject("pgTestResults")]);
+
+      for (let arr = this.__selectedDemos, i = 0; i < arr.getLength(); i++) {
         await this._runTest(arr.getItem(i));
+      }
     },
 
     /**
@@ -300,17 +303,17 @@ qx.Class.define("zx.app.demo.DemoRunner", {
       }
       results = this.__demoResultsByDemoHash[hash] = [];
       let names = await demonstrator.getTestNames();
-      if (this.getCurrentTestName())
+      if (this.getCurrentTestName()) {
         names = names.filter(name => name == this.getCurrentTestName());
+      }
       for (var i = 0; i < names.length; i++) {
         let result = demonstrator.runTest(names[i]);
         results.push(result);
         this.__demoResults.push(result);
         this.__selectedDemoResults.push(result);
 
-        let id = result.addListener("log", evt =>
-          this._logFromTest(evt.getData())
-        );
+        let id = result.addListener("log", evt => this._logFromTest(evt.getData()));
+
         await result.promiseComplete();
         result.removeListenerById(id);
       }
@@ -323,9 +326,7 @@ qx.Class.define("zx.app.demo.DemoRunner", {
         this.getQxObject("btnAccount").setMenu(this.getQxObject("mnuLoggedIn"));
         this.getQxObject("mniUsername").setLabel(user.getUsername());
       } else {
-        this.getQxObject("btnAccount").setMenu(
-          this.getQxObject("mnuLoggedOut")
-        );
+        this.getQxObject("btnAccount").setMenu(this.getQxObject("mnuLoggedOut"));
       }
     },
 
@@ -335,26 +336,20 @@ qx.Class.define("zx.app.demo.DemoRunner", {
     _createQxObjectImpl(id) {
       switch (id) {
         case "header":
-          var header = new qx.ui.container.Composite(
-            new qx.ui.layout.HBox()
-          ).set({
+          var header = new qx.ui.container.Composite(new qx.ui.layout.HBox()).set({
             appearance: "app-header"
           });
+
           header.add(this.getQxObject("btnAccount"));
-          header.add(
-            new qx.ui.basic.Label("ZenServer - Demonstrators and Unit Tests")
-          );
-          qx.core.Init.getApplication().addListener("changeUser", () =>
-            this.__updateUser()
-          );
+          header.add(new qx.ui.basic.Label("ZenServer - Demonstrators and Unit Tests"));
+
+          qx.core.Init.getApplication().addListener("changeUser", () => this.__updateUser());
+
           this.__updateUser();
           return header;
 
         case "btnAccount":
-          return new qx.ui.form.MenuButton(
-            "My Account",
-            "@FontAwesomeSolid/user-circle/32"
-          ).set({
+          return new qx.ui.form.MenuButton("My Account", "@FontAwesomeSolid/user-circle/32").set({
             show: "icon"
           });
 
@@ -374,10 +369,8 @@ qx.Class.define("zx.app.demo.DemoRunner", {
           return btn;
 
         case "mniLogin":
-          var btn = new qx.ui.menu.Button(
-            "Login",
-            "@FontAwesomeSolid/sign-in-alt/16"
-          );
+          var btn = new qx.ui.menu.Button("Login", "@FontAwesomeSolid/sign-in-alt/16");
+
           btn.addListener("execute", async () => {
             let dlg = new zx.app.utils.LoginFormDlg();
             dlg.open();
@@ -385,14 +378,10 @@ qx.Class.define("zx.app.demo.DemoRunner", {
           return btn;
 
         case "mniLogout":
-          var btn = new qx.ui.menu.Button(
-            "Logout",
-            "@FontAwesomeSolid/sign-out-alt/16"
-          );
+          var btn = new qx.ui.menu.Button("Logout", "@FontAwesomeSolid/sign-out-alt/16");
+
           btn.addListener("execute", async () => {
-            let loginApi = await qx.core.Init.getApplication()
-              .getNetController()
-              .getUriMapping("zx.server.auth.LoginApi");
+            let loginApi = await qx.core.Init.getApplication().getNetController().getUriMapping("zx.server.auth.LoginApi");
             await loginApi.logout();
             qx.core.Init.getApplication().setUser(null);
           });
@@ -418,21 +407,14 @@ qx.Class.define("zx.app.demo.DemoRunner", {
           return tb;
 
         case "btnReset":
-          var btn = new qx.ui.toolbar.Button(
-            "Reset",
-            "@FontAwesomeSolid/sync-alt/16"
-          );
-          btn.addListener(
-            "execute",
-            async () => await this.getCurrentDemo().resetDemo()
-          );
+          var btn = new qx.ui.toolbar.Button("Reset", "@FontAwesomeSolid/sync-alt/16");
+
+          btn.addListener("execute", async () => await this.getCurrentDemo().resetDemo());
+
           return btn;
 
         case "btnRunTests":
-          var btn = new qx.ui.toolbar.Button(
-            "Run Tests",
-            "@FontAwesomeSolid/running/16"
-          ).set({ enabled: false });
+          var btn = new qx.ui.toolbar.Button("Run Tests", "@FontAwesomeSolid/running/16").set({ enabled: false });
           btn.addListener("execute", () => this._runTests());
           return btn;
 
@@ -457,34 +439,33 @@ qx.Class.define("zx.app.demo.DemoRunner", {
               const scan = node => {
                 node.getChildren().forEach(child => {
                   let demo = child.getUserData("demo") || null;
-                  if (demo) demos.push(demo);
-                  else scan(child);
+                  if (demo) {
+                    demos.push(demo);
+                  } else scan(child);
                 });
               };
               scan(node);
             }
             if (!this.__changingTreeSelection) {
               let nodePath = [];
-              for (let tmp = node; tmp; tmp = tmp.getParent())
+              for (let tmp = node; tmp; tmp = tmp.getParent()) {
                 nodePath.unshift(tmp.getLabel());
-              qx.bom.Cookie.set(
-                this.classname + ".selectedNodePath",
-                nodePath.join("."),
-                365,
-                null,
-                null,
-                "Strict"
-              );
+              }
+              qx.bom.Cookie.set(this.classname + ".selectedNodePath", nodePath.join("."), 365, null, null, "Strict");
             }
             let selectedDemoResults = [];
             demos.forEach(demo => {
               let results = this.__demoResultsByDemoHash[demo.toHashCode()];
-              if (results) qx.lang.Array.append(selectedDemoResults, results);
+              if (results) {
+                qx.lang.Array.append(selectedDemoResults, results);
+              }
             });
             this.setCurrentTestName(null);
             this.__selectedDemos.replace(demos);
             this.__selectedDemoResults.replace(selectedDemoResults);
-            if (demos.length == 1) this.setCurrentDemo(demos[0]);
+            if (demos.length == 1) {
+              this.setCurrentDemo(demos[0]);
+            }
             this.setCurrentTestName(testName);
             this.__updateUi();
           });
@@ -529,16 +510,13 @@ qx.Class.define("zx.app.demo.DemoRunner", {
           return new qx.ui.form.List();
 
         case "ctlrTestResults":
-          var ctlr = new qx.data.controller.List(
-            this.__selectedDemoResults,
-            this.getQxObject("lstTestResults"),
-            "testName"
-          ).set({
+          var ctlr = new qx.data.controller.List(this.__selectedDemoResults, this.getQxObject("lstTestResults"), "testName").set({
             labelOptions: {
               converter: (data, model, source, target) => {
                 return target.getLabel();
               }
             },
+
             delegate: {
               createItem: () => new zx.app.demo.TestResultListItem(),
               bindItem: (ctlr, item, index) => {
@@ -546,6 +524,7 @@ qx.Class.define("zx.app.demo.DemoRunner", {
               }
             }
           });
+
           ctlr.addListener("changeSelection", evt => {
             let sel = ctlr.getSelection();
             let result = sel.getLength() ? sel.getItem(0) : null;

@@ -79,6 +79,7 @@ qx.Class.define("zx.server.puppeteer.WebServer", {
           websocket: true,
           upstream: upstreamDebuggerUrl
         });
+
         console.log(`webSocketDebuggerUrl is ${jsonVersion.webSocketDebuggerUrl}`);
       } catch (err) {
         console.log(`Error: ${err.message}`);
@@ -117,6 +118,7 @@ qx.Class.define("zx.server.puppeteer.WebServer", {
       let options = {
         logger: false
       };
+
       if (this.getLogging()) {
         options.logger = qx.lang.Object.mergeWith(
           {
@@ -128,6 +130,7 @@ qx.Class.define("zx.server.puppeteer.WebServer", {
               }
             }
           },
+
           this.getLogging()
         );
       }

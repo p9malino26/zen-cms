@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.cli.Flag", {
   extend: zx.cli.AbstractValue,
@@ -37,7 +36,9 @@ qx.Class.define("zx.cli.Flag", {
      */
     is(arg) {
       let pos = arg.indexOf("=");
-      if (pos > -1) arg = arg.substring(0, pos);
+      if (pos > -1) {
+        arg = arg.substring(0, pos);
+      }
       if (arg.startsWith("--")) {
         let tmp = qx.lang.String.camelCase(arg.substring(2));
         return tmp == this.getName();
@@ -55,7 +56,9 @@ qx.Class.define("zx.cli.Flag", {
      */
     usage() {
       let str = "--" + qx.lang.String.hyphenate(this.getName());
-      if (this.getShortCode()) str += "|-" + this.getShortCode();
+      if (this.getShortCode()) {
+        str += "|-" + this.getShortCode();
+      }
 
       const TYPES = {
         string: "String",
@@ -63,10 +66,15 @@ qx.Class.define("zx.cli.Flag", {
         integer: "Integer",
         float: "Float"
       };
-      let type = this.getType();
-      if (type && type != "string") str += " (" + TYPES[type] + ")";
 
-      if (this.getDescription()) str += "  ::  " + this.getDescription();
+      let type = this.getType();
+      if (type && type != "string") {
+        str += " (" + TYPES[type] + ")";
+      }
+
+      if (this.getDescription()) {
+        str += "  ::  " + this.getDescription();
+      }
 
       return str;
     },
@@ -89,7 +97,9 @@ qx.Class.define("zx.cli.Flag", {
       let argIndex = 0;
 
       function getArg(index) {
-        if (initialValue !== null) return index == 0 ? initialValue : fnGetMore(index - 1);
+        if (initialValue !== null) {
+          return index == 0 ? initialValue : fnGetMore(index - 1);
+        }
         return fnGetMore(index);
       }
 
@@ -100,9 +110,13 @@ qx.Class.define("zx.cli.Flag", {
           value = getArg(argIndex++);
         }
         if (!eatAll && value) {
-          if (value[0] == "-") value = null;
+          if (value[0] == "-") {
+            value = null;
+          }
         }
-        if (value === null) argIndex--;
+        if (value === null) {
+          argIndex--;
+        }
         return value;
       }
 
@@ -112,44 +126,63 @@ qx.Class.define("zx.cli.Flag", {
         switch (type) {
           case "string":
           case null:
-            if (arg === null) return null;
+            if (arg === null) {
+              return null;
+            }
             if (initialValue === null && pass == 0) {
               argIndex--;
             }
             return arg;
 
           case "boolean":
-            if (arg === null) return true;
-            if (arg == "true" || arg == "yes" || arg == "1") return true;
-            if (arg == "false" || arg == "no" || arg == "0") return false;
+            if (arg === null) {
+              return true;
+            }
+            if (arg == "true" || arg == "yes" || arg == "1") {
+              return true;
+            }
+            if (arg == "false" || arg == "no" || arg == "0") {
+              return false;
+            }
             if (initialValue === null && pass == 0) {
               argIndex--;
               return true;
             }
-            throw new Error(
-              "Invalid value for " + this.toString() + ", expected nothing (true) or the words true or false"
-            );
+            throw new Error("Invalid value for " + this.toString() + ", expected nothing (true) or the words true or false");
 
           case "integer":
-            if (arg === null) throw new Error(`Invalid value for ${this.toString()}, expected an integer`);
+            if (arg === null) {
+              throw new Error(`Invalid value for ${this.toString()}, expected an integer`);
+            }
             var value = parseInt(arg, 10);
-            if (isNaN(arg)) throw new Error(`Invalid value for ${this.toString()}, expected an integer`);
+            if (isNaN(arg)) {
+              throw new Error(`Invalid value for ${this.toString()}, expected an integer`);
+            }
             return value;
 
           case "float":
-            if (arg === null) throw new Error(`Invalid value for ${this.toString()}, expected a number`);
+            if (arg === null) {
+              throw new Error(`Invalid value for ${this.toString()}, expected a number`);
+            }
             var value = parseFloat(arg);
-            if (isNaN(arg)) throw new Error(`Invalid value for ${this.toString()}, expected a number`);
+            if (isNaN(arg)) {
+              throw new Error(`Invalid value for ${this.toString()}, expected a number`);
+            }
             return value;
         }
-        if (arg === null) throw new Error(`Invalid value for ${this.toString()}, expected a string`);
+
+        if (arg === null) {
+          throw new Error(`Invalid value for ${this.toString()}, expected a string`);
+        }
         return arg;
       };
 
       let arg = next();
       let result = null;
       if (this.isArray()) {
-        if (arg === null) throw new Error(`Invalid value for ${this.toString()}, expected at least one value`);
+        if (arg === null) {
+          throw new Error(`Invalid value for ${this.toString()}, expected at least one value`);
+        }
         result = [];
         do {
           let value = parseNext(arg, result.length);
@@ -160,8 +193,9 @@ qx.Class.define("zx.cli.Flag", {
         result = parseNext(arg, 0);
       }
 
-      if (initialValue) fnGetMore(argIndex - 1, true);
-      else fnGetMore(argIndex, true);
+      if (initialValue) {
+        fnGetMore(argIndex - 1, true);
+      } else fnGetMore(argIndex, true);
       this.setValue(result);
     }
   }

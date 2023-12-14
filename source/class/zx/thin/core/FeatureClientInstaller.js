@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.thin.core.FeatureClientInstaller", {
   extend: qx.core.Object,
@@ -27,9 +26,8 @@ qx.Class.define("zx.thin.core.FeatureClientInstaller", {
     clientInstall(piece, domNode, options) {
       let clazz = this._getTargetClass(options);
       if (!clazz) {
-        this.error(
-          `Cannot install piece for ${options.targetClassname} because class does not exist`
-        );
+        this.error(`Cannot install piece for ${options.targetClassname} because class does not exist`);
+
         return null;
       }
 
@@ -40,8 +38,9 @@ qx.Class.define("zx.thin.core.FeatureClientInstaller", {
           obj.useNode(domNode);
         } else {
           let domParent = domNode.parentElement;
-          while (domParent.firstChild)
+          while (domParent.firstChild) {
             domParent.removeChild(domParent.firstChild);
+          }
           obj.flush();
           domParent.appendChild(obj.getDomElement());
         }
@@ -50,11 +49,8 @@ qx.Class.define("zx.thin.core.FeatureClientInstaller", {
         return obj;
       }
 
-      this.error(
-        "Cannot install piece for " +
-          clazz.classname +
-          " because I dont know how to handle it"
-      );
+      this.error("Cannot install piece for " + clazz.classname + " because I dont know how to handle it");
+
       return null;
     },
 
@@ -71,12 +67,7 @@ qx.Class.define("zx.thin.core.FeatureClientInstaller", {
     },
 
     async _onFeatureReady(feature, options) {
-      if (
-        qx.Class.hasInterface(
-          feature.constructor,
-          zx.cms.content.IFeatureClientLifecycle
-        )
-      ) {
+      if (qx.Class.hasInterface(feature.constructor, zx.cms.content.IFeatureClientLifecycle)) {
         feature.onReady(options);
       }
     }
@@ -92,13 +83,9 @@ qx.Class.define("zx.thin.core.FeatureClientInstaller", {
     installPiece(piece, options) {
       const useDom = (options && options.useDom) || false;
 
-      let clazz = options.clientInstallerClassname
-        ? qx.Class.getByName(options.clientInstallerClassname)
-        : zx.thin.core.FeatureClientInstaller;
+      let clazz = options.clientInstallerClassname ? qx.Class.getByName(options.clientInstallerClassname) : zx.thin.core.FeatureClientInstaller;
       if (qx.core.Environment.get("qx.debug")) {
-        qx.core.Assert.assertTrue(
-          qx.Class.hasInterface(clazz, zx.cms.content.IFeatureClientInstaller)
-        );
+        qx.core.Assert.assertTrue(qx.Class.hasInterface(clazz, zx.cms.content.IFeatureClientInstaller));
       }
 
       let obj = new clazz();

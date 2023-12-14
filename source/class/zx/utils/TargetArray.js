@@ -1,26 +1,28 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.utils.TargetArray", {
   extend: qx.core.Object,
 
-  construct: function (callback, context) {
-    this.base(arguments);
-    if (context) callback = callback.bind(context);
+  construct(callback, context) {
+    super();
+    if (context) {
+      callback = callback.bind(context);
+    }
     this.__callback = callback;
   },
 
@@ -39,10 +41,13 @@ qx.Class.define("zx.utils.TargetArray", {
     /**
      * Apply for value
      */
-    _applyValue: function (value, oldValue) {
-      if (oldValue)
+    _applyValue(value, oldValue) {
+      if (oldValue) {
         oldValue.removeListener("change", this._onArrayChange, this);
-      if (value) value.addListener("change", this._onArrayChange, this);
+      }
+      if (value) {
+        value.addListener("change", this._onArrayChange, this);
+      }
 
       this.__callback(
         {
@@ -52,6 +57,7 @@ qx.Class.define("zx.utils.TargetArray", {
           added: value ? value.toArray() : [],
           removed: oldValue ? oldValue.toArray() : []
         },
+
         value,
         oldValue
       );
@@ -61,7 +67,7 @@ qx.Class.define("zx.utils.TargetArray", {
      * Called when the array changes
      * @param evt {Event} the event
      */
-    _onArrayChange: function (evt) {
+    _onArrayChange(evt) {
       this.__callback(evt.getData(), evt.getTarget(), null);
     }
   }

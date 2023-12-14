@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.app.demo.TestResultListItem", {
   extend: qx.ui.form.ListItem,
@@ -43,8 +42,9 @@ qx.Class.define("zx.app.demo.TestResultListItem", {
         return;
       }
       let str = model.getTestName();
-      if (!str) str = "All of " + model.getTestClassname();
-      else str = model.getTestClassname() + "." + str;
+      if (!str) {
+        str = "All of " + model.getTestClassname();
+      } else str = model.getTestClassname() + "." + str;
       let status = model.getStatus();
       if (status == "ok") {
         this.set({

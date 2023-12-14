@@ -41,12 +41,13 @@ qx.Class.define("zx.cli.puppeteer.LaunchCommand", {
     createCliCommand() {
       let cmd = new zx.cli.Command("launch").set({
         description: "Runs the Puppeteer server",
-        run: async function () {
+        async run() {
           let launch = new zx.cli.puppeteer.LaunchCommand();
           let { flags } = this.getValues();
           return await launch.run(flags);
         }
       });
+
       cmd.addFlag(
         new zx.cli.Flag("port").set({
           shortCode: "p",
@@ -54,6 +55,7 @@ qx.Class.define("zx.cli.puppeteer.LaunchCommand", {
           type: "integer"
         })
       );
+
       return cmd;
     }
   }

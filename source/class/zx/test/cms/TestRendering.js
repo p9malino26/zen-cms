@@ -24,7 +24,9 @@ qx.Class.define("zx.test.cms.TestRendering", {
     async _getBody(urlPath) {
       let server = zx.server.Standalone.getInstance();
       let object = await server.getObjectByUrl(zx.cms.content.Page, urlPath);
-      if (!object) return null;
+      if (!object) {
+        return null;
+      }
       let rendering = new zx.cms.render.MemoryRendering();
       await server.getRenderer().renderViewable(rendering, object);
       let body = rendering.getBody();

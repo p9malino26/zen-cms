@@ -20,7 +20,7 @@ qx.Class.define("zx.cms.website.UrlRule", {
   implement: [zx.io.remote.IProxied],
 
   construct() {
-    this.base(arguments);
+    super();
     this.setRequiredPermissions(new qx.data.Array());
   },
 
@@ -153,8 +153,12 @@ qx.Class.define("zx.cms.website.UrlRule", {
      */
     async isGranted(req) {
       let user = await zx.server.auth.User.getUserFromSession(req);
-      if (!user) return false;
-      if (user.hasPermission("zx-super-user")) return true;
+      if (!user) {
+        return false;
+      }
+      if (user.hasPermission("zx-super-user")) {
+        return true;
+      }
       let granted = this.getRequiredPermissions().every(code => user.hasPermission(code));
       return granted;
     },
@@ -168,10 +172,16 @@ qx.Class.define("zx.cms.website.UrlRule", {
      * @returns {Boolean}
      */
     async isDenied(req) {
-      if (this.getRequiredPermissions().getLength() == 0) return false;
+      if (this.getRequiredPermissions().getLength() == 0) {
+        return false;
+      }
       let user = await zx.server.auth.User.getUserFromSession(req);
-      if (!user) return true;
-      if (user.hasPermission("zx-super-user")) return false;
+      if (!user) {
+        return true;
+      }
+      if (user.hasPermission("zx-super-user")) {
+        return false;
+      }
       let denied = !this.getRequiredPermissions().every(perm => user.hasPermission(perm));
       return denied;
     },

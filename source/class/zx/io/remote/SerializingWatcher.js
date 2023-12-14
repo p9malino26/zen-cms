@@ -6,7 +6,9 @@ qx.Class.define("zx.io.remote.SerializingWatcher", {
      * @override
      */
     _attachObject(info, endpoint) {
-      if (!info.endpoints) info.endpoints = [];
+      if (!info.endpoints) {
+        info.endpoints = [];
+      }
       if (qx.core.Environment.get("qx.debug")) {
         this.assertTrue(!qx.lang.Array.contains(info.endpoints, endpoint));
       }
@@ -57,12 +59,12 @@ qx.Class.define("zx.io.remote.SerializingWatcher", {
         //  of recursive modifications (eg you could allow the user to make another change while this change is waiting
         //  to be implemented in the server round trip) and anyway, you probably want an array of objects not promises!
         const allToJsonValueNow = (arr, fn) => {
-          if (!arr || !arr.length) return fn([]);
+          if (!arr || !arr.length) {
+            return fn([]);
+          }
 
           if (qx.core.Environment.get("qx.debug") && arr.find(item => qx.Promise.isPromise(item))) {
-            this.warn(
-              "Adding/removing promises to an array may not be what you intended - make sure to handle recursion"
-            );
+            this.warn("Adding/removing promises to an array may not be what you intended - make sure to handle recursion");
           }
 
           return zx.utils.Promisify.allNow(arr, arr => {
@@ -75,15 +77,17 @@ qx.Class.define("zx.io.remote.SerializingWatcher", {
           let data = evt.getData();
           if (data.type == "order") {
             let value = io.toJsonValue(info.endpoints, evt.getTarget(), propertyDef, propertyPath);
-            return zx.utils.Promisify.resolveNow(value, value =>
-              this._onSerializedPropertyChange(object, propertyName, "arrayReplace", value)
-            );
+            return zx.utils.Promisify.resolveNow(value, value => this._onSerializedPropertyChange(object, propertyName, "arrayReplace", value));
           } else {
             return allToJsonValueNow(data.removed, removed => {
               return allToJsonValueNow(data.added, added => {
                 let data = {};
-                if (removed.length) data.removed = removed;
-                if (added.length) data.added = added;
+                if (removed.length) {
+                  data.removed = removed;
+                }
+                if (added.length) {
+                  data.added = added;
+                }
                 this._onSerializedPropertyChange(object, propertyName, "arrayChange", data);
               });
             });
@@ -100,13 +104,9 @@ qx.Class.define("zx.io.remote.SerializingWatcher", {
           let value = io.toJsonValue(info.endpoints, data, propertyDef, propertyPath);
           if (data) {
             propState.arrayChangeListenerId = data.addListener("change", onArrayChange);
-            return zx.utils.Promisify.resolveNow(value, value =>
-              this._onSerializedPropertyChange(object, propertyName, "arrayReplace", value)
-            );
+            return zx.utils.Promisify.resolveNow(value, value => this._onSerializedPropertyChange(object, propertyName, "arrayReplace", value));
           } else {
-            return zx.utils.Promisify.resolveNow(value, value =>
-              this._onSerializedPropertyChange(object, propertyName, "setValue", value)
-            );
+            return zx.utils.Promisify.resolveNow(value, value => this._onSerializedPropertyChange(object, propertyName, "setValue", value));
           }
         };
 
@@ -123,15 +123,12 @@ qx.Class.define("zx.io.remote.SerializingWatcher", {
         //  of recursive modifications (eg you could allow the user to make another change while this change is waiting
         //  to be implemented in the server round trip) and anyway, you probably want an array of objects not promises!
         const resolveChangedDataNow = (arr, fn) => {
-          if (arr === undefined || arr === null) return fn(arr);
+          if (arr === undefined || arr === null) {
+            return fn(arr);
+          }
           let promises = arr.map(data => {
-            if (
-              qx.core.Environment.get("qx.debug") &&
-              (qx.Promise.isPromise(data.value) || qx.Promise.isPromise(data.oldValue))
-            ) {
-              this.warn(
-                "Adding/removing promises to a zx.data.Map may not be what you intended - make sure to handle recursion"
-              );
+            if (qx.core.Environment.get("qx.debug") && (qx.Promise.isPromise(data.value) || qx.Promise.isPromise(data.oldValue))) {
+              this.warn("Adding/removing promises to a zx.data.Map may not be what you intended - make sure to handle recursion");
             }
             return toJsonNow(data.key, key => {
               return toJsonNow(data.value, value => {
@@ -146,15 +143,17 @@ qx.Class.define("zx.io.remote.SerializingWatcher", {
           let data = evt.getData();
           if (data.type == "order") {
             let value = io.toJsonValue(info.endpoints, evt.getTarget(), propertyDef, propertyPath);
-            return zx.utils.Promisify.resolveNow(value, value =>
-              this._onSerializedPropertyChange(object, propertyName, "mapReplace", value)
-            );
+            return zx.utils.Promisify.resolveNow(value, value => this._onSerializedPropertyChange(object, propertyName, "mapReplace", value));
           } else {
             return resolveChangedDataNow(data.removed, removed => {
               return resolveChangedDataNow(data.put, put => {
                 let data = {};
-                if (removed && removed.length) data.removed = removed;
-                if (put && put.length) data.put = put;
+                if (removed && removed.length) {
+                  data.removed = removed;
+                }
+                if (put && put.length) {
+                  data.put = put;
+                }
                 this._onSerializedPropertyChange(object, propertyName, "mapChange", data);
               });
             });
@@ -171,13 +170,9 @@ qx.Class.define("zx.io.remote.SerializingWatcher", {
           let value = io.toJsonValue(info.endpoints, data, propertyDef, propertyPath);
           if (data) {
             propState.arrayChangeListenerId = data.addListener("change", onMapContentsChange);
-            return zx.utils.Promisify.resolveNow(value, value =>
-              this._onSerializedPropertyChange(object, propertyName, "mapReplace", value)
-            );
+            return zx.utils.Promisify.resolveNow(value, value => this._onSerializedPropertyChange(object, propertyName, "mapReplace", value));
           } else {
-            return zx.utils.Promisify.resolveNow(value, value =>
-              this._onSerializedPropertyChange(object, propertyName, "setValue", value)
-            );
+            return zx.utils.Promisify.resolveNow(value, value => this._onSerializedPropertyChange(object, propertyName, "setValue", value));
           }
         };
 
@@ -191,9 +186,7 @@ qx.Class.define("zx.io.remote.SerializingWatcher", {
       } else {
         propState.changeListenerId = object.addListener("change" + upname, evt => {
           let value = io.toJsonValue(info.endpoints, evt.getData(), propertyDef, propertyPath);
-          return zx.utils.Promisify.resolveNow(value, value =>
-            this._onSerializedPropertyChange(object, propertyName, "setValue", value)
-          );
+          return zx.utils.Promisify.resolveNow(value, value => this._onSerializedPropertyChange(object, propertyName, "setValue", value));
         });
       }
     },

@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.io.remote.ProxyTestOne", {
   extend: zx.io.persistence.Object,
@@ -35,9 +35,7 @@ qx.Class.define("zx.test.io.remote.ProxyTestOne", {
   members: {
     "@sayHello": zx.io.remote.anno.Method.DEFAULT,
     async sayHello(msg) {
-      let place = qx.core.Environment.get("zx.io.remote.NetworkEndpoint.server")
-        ? "SERVER"
-        : "BROWSER";
+      let place = qx.core.Environment.get("zx.io.remote.NetworkEndpoint.server") ? "SERVER" : "BROWSER";
       let result = `RUNNING ON ${place}: Hello from ${this.getName()}, msg=${msg}`;
       console.log(result);
       return result;

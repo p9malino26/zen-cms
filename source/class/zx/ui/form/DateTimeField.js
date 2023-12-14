@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.form.DateTimeField", {
   extend: qx.ui.core.Widget,
@@ -21,7 +21,7 @@ qx.Class.define("zx.ui.form.DateTimeField", {
   implement: [qx.ui.form.IForm, qx.ui.form.IDateForm],
 
   construct() {
-    this.base(arguments);
+    super();
 
     // set the layout
     var layout = new qx.ui.layout.HBox();
@@ -35,19 +35,13 @@ qx.Class.define("zx.ui.form.DateTimeField", {
 
     // forward the focusin and focusout events to the textfield. The textfield
     // is not focusable so the events need to be forwarded manually.
-    this.addListener("focusin", () =>
-      textField.fireNonBubblingEvent("focusin", qx.event.type.Focus)
-    );
-    this.addListener("focusout", () =>
-      textField.fireNonBubblingEvent("focusout", qx.event.type.Focus)
-    );
+    this.addListener("focusin", () => textField.fireNonBubblingEvent("focusin", qx.event.type.Focus));
+
+    this.addListener("focusout", () => textField.fireNonBubblingEvent("focusout", qx.event.type.Focus));
 
     this.setDateTimeFormat(this._createDefaultDateTimeFormat());
     if (qx.core.Environment.get("qx.dynlocale")) {
-      this.__localeListenerId = qx.locale.Manager.getInstance().addListener(
-        "changeLocale",
-        () => this.setDateTimeFormat(this._createDefaultDateTimeFormat())
-      );
+      this.__localeListenerId = qx.locale.Manager.getInstance().addListener("changeLocale", () => this.setDateTimeFormat(this._createDefaultDateTimeFormat()));
     }
   },
 
@@ -136,15 +130,11 @@ qx.Class.define("zx.ui.form.DateTimeField", {
 
       // set the date in the datechooser
       this.getChildControl("list").setValue(value);
-      this.getChildControl("cboHours").setValue(
-        value ? value.getHours() + "" : ""
-      );
-      this.getChildControl("cboMinutes").setValue(
-        value ? value.getMinutes() + "" : ""
-      );
-      this.getChildControl("edtSeconds").setValue(
-        value ? value.getSeconds() + "" : ""
-      );
+      this.getChildControl("cboHours").setValue(value ? value.getHours() + "" : "");
+
+      this.getChildControl("cboMinutes").setValue(value ? value.getMinutes() + "" : "");
+
+      this.getChildControl("edtSeconds").setValue(value ? value.getSeconds() + "" : "");
 
       this.__inApplyValue = false;
     },
@@ -155,8 +145,9 @@ qx.Class.define("zx.ui.form.DateTimeField", {
     _applyDateTimeFormat(format) {
       let value = this.getValue();
       let textfield = this.getChildControl("textfield");
-      if (value && format) textfield.setValue(format.format(value));
-      else textfield.setValue("");
+      if (value && format) {
+        textfield.setValue(format.format(value));
+      } else textfield.setValue("");
     },
 
     /**
@@ -170,18 +161,14 @@ qx.Class.define("zx.ui.form.DateTimeField", {
      * Apply for `showTime`
      */
     applyShowTime(value) {
-      this.getChildControl("compTime").setVisibility(
-        value ? "visible" : "excluded"
-      );
+      this.getChildControl("compTime").setVisibility(value ? "visible" : "excluded");
     },
 
     /**
      * Apply for `showSeconds`
      */
     _applyShowSeconds(value) {
-      this.getChildControl("compSeconds").setVisibility(
-        value ? "visible" : "excluded"
-      );
+      this.getChildControl("compSeconds").setVisibility(value ? "visible" : "excluded");
     },
 
     /**
@@ -206,15 +193,16 @@ qx.Class.define("zx.ui.form.DateTimeField", {
      */
     toggle() {
       let isListOpen = this.getChildControl("popup").isVisible();
-      if (isListOpen) this.close();
-      else this.open();
+      if (isListOpen) {
+        this.close();
+      } else this.open();
     },
 
     /**
      * @Override
      */
     focus() {
-      this.base(arguments);
+      super.focus();
       this.getChildControl("textfield").getFocusElement().focus();
     },
 
@@ -239,11 +227,8 @@ qx.Class.define("zx.ui.form.DateTimeField", {
           control = new qx.ui.form.TextField();
           control.setFocusable(false);
           control.addState("inner");
-          control.addListener(
-            "changeValue",
-            this._onTextFieldChangeValue,
-            this
-          );
+          control.addListener("changeValue", this._onTextFieldChangeValue, this);
+
           return control;
 
         case "button":
@@ -264,9 +249,8 @@ qx.Class.define("zx.ui.form.DateTimeField", {
           return comp;
 
         case "compSeconds":
-          var comp = new qx.ui.container.Composite(new qx.ui.layout.HBox()).set(
-            { visibility: "excluded" }
-          );
+          var comp = new qx.ui.container.Composite(new qx.ui.layout.HBox()).set({ visibility: "excluded" });
+
           comp.add(new qx.ui.basic.Label(" : "));
           comp.add(this.getChildControl("edtSeconds"));
           return comp;
@@ -307,15 +291,12 @@ qx.Class.define("zx.ui.form.DateTimeField", {
           control.add(this.getChildControl("list"));
           control.add(this.getChildControl("compTime"));
           control.addListener("pointerup", this._onListChangeDate, this);
-          control.addListener(
-            "changeVisibility",
-            this._onPopupChangeVisibility,
-            this
-          );
+          control.addListener("changeVisibility", this._onPopupChangeVisibility, this);
+
           return control;
       }
 
-      return this.base(arguments, id);
+      return super._createChildControlImpl(id);
     },
 
     /**
@@ -323,8 +304,7 @@ qx.Class.define("zx.ui.form.DateTimeField", {
      */
     _parseTextFieldAndValidateValue() {
       let str = this.getChildControl("textfield").getValue();
-      let useTimeFields =
-        this.getChildControl("popup").getVisibility() == "visible";
+      let useTimeFields = this.getChildControl("popup").getVisibility() == "visible";
 
       // This gets the date in the text field as an array of the important parts, eg
       //  "12 March 2021" => [ "12", "March", "2021" ]
@@ -338,21 +318,29 @@ qx.Class.define("zx.ui.form.DateTimeField", {
       str = this.getDateTimeFormat().format(sampleDate);
       let sampleValues = [];
       let m = str.match(/\d+|\w+/g);
-      if (m) sampleValues = m;
-      while (sampleValues.length < 6) sampleValues.push(0);
+      if (m) {
+        sampleValues = m;
+      }
+      while (sampleValues.length < 6) {
+        sampleValues.push(0);
+      }
 
       // Once split, we replace the sample values with whatever has been written into
       //  the text field; we assume that the order is the same
-      for (let i = 0; i < dateValues.length; i++)
+      for (let i = 0; i < dateValues.length; i++) {
         sampleValues[i] = dateValues[i];
+      }
 
       // Get the format string and break it up into the tokens; make sure that the length
       //  of the sampleValues matches
       let formatString = this.getDateTimeFormat().getFormatString();
       let formatTokens = formatString.match(/\w+/g);
-      while (formatTokens.length > sampleValues.length) sampleValues.push(0);
-      while (formatTokens.length < sampleValues.length)
+      while (formatTokens.length > sampleValues.length) {
+        sampleValues.push(0);
+      }
+      while (formatTokens.length < sampleValues.length) {
         qx.lang.Array.removeAt(sampleValues, sampleValues.length - 1);
+      }
 
       // Break the formatString up into format tokens and separators, and then
       //  use that as a guide to reassemble the sampleValues intersperced with the
@@ -360,17 +348,22 @@ qx.Class.define("zx.ui.form.DateTimeField", {
       let formatParts = formatString.match(/\W+|\w+/g);
       let sampleValuesIndex = 0;
       let result = formatParts.map((part, index) => {
-        if (qx.lang.String.isLetters(part))
+        if (qx.lang.String.isLetters(part)) {
           return sampleValues[sampleValuesIndex++];
+        }
         return part;
       });
       str = result.join("");
 
       let value = null;
       try {
-        if (str) value = this.getDateTimeFormat().parse(str);
+        if (str) {
+          value = this.getDateTimeFormat().parse(str);
+        }
 
-        if (useTimeFields) this._copyTimeFields(value);
+        if (useTimeFields) {
+          this._copyTimeFields(value);
+        }
 
         this.set({
           valid: true,
@@ -381,6 +374,7 @@ qx.Class.define("zx.ui.form.DateTimeField", {
           valid: false,
           invalidMessage: ex.toString()
         });
+
         value = null;
       }
       return value;
@@ -395,11 +389,17 @@ qx.Class.define("zx.ui.form.DateTimeField", {
       let tmp;
 
       tmp = parseInt(this.getChildControl("cboHours").getValue(), 10);
-      if (!isNaN(tmp) && tmp >= 0) dt.setHours(tmp);
+      if (!isNaN(tmp) && tmp >= 0) {
+        dt.setHours(tmp);
+      }
       tmp = parseInt(this.getChildControl("cboMinutes").getValue(), 10);
-      if (!isNaN(tmp) && tmp >= 0) dt.setMinutes(tmp);
+      if (!isNaN(tmp) && tmp >= 0) {
+        dt.setMinutes(tmp);
+      }
       tmp = parseInt(this.getChildControl("edtSeconds").getValue(), 10);
-      if (!isNaN(tmp) && tmp >= 0) dt.setSeconds(tmp);
+      if (!isNaN(tmp) && tmp >= 0) {
+        dt.setSeconds(tmp);
+      }
     },
 
     /**
@@ -409,10 +409,14 @@ qx.Class.define("zx.ui.form.DateTimeField", {
      * @param e {qx.event.type.Data} Change event
      */
     _onTextFieldChangeValue(e) {
-      if (this.__inApplyValue) return;
+      if (this.__inApplyValue) {
+        return;
+      }
       let str = this.getChildControl("textfield").getValue();
       let value = this._parseTextFieldAndValidateValue();
-      if (!this.isValid()) return;
+      if (!this.isValid()) {
+        return;
+      }
 
       this.setValue(value);
     },
@@ -423,16 +427,22 @@ qx.Class.define("zx.ui.form.DateTimeField", {
      * @param e {qx.event.type.Pointer} The pointer event.
      */
     _onListChangeDate(e) {
-      if (this.__inApplyValue) return;
+      if (this.__inApplyValue) {
+        return;
+      }
       var selectedDate = this.getChildControl("list").getValue();
-      if (!selectedDate) return;
+      if (!selectedDate) {
+        return;
+      }
       let value = this.getValue();
       if (!value || !zx.utils.Dates.sameDay(value, selectedDate)) {
-        let useTimeFields =
-          this.getChildControl("popup").getVisibility() == "visible";
+        let useTimeFields = this.getChildControl("popup").getVisibility() == "visible";
         let dest = new Date(selectedDate.getTime());
-        if (useTimeFields) this._copyTimeFields(dest);
-        else if (value) zx.utils.Dates.setTimePart(dest, value);
+        if (useTimeFields) {
+          this._copyTimeFields(dest);
+        } else if (value) {
+          zx.utils.Dates.setTimePart(dest, value);
+        }
         this.setValue(dest);
       }
       //this.close();
@@ -442,10 +452,13 @@ qx.Class.define("zx.ui.form.DateTimeField", {
      * @Override
      */
     async validateField() {
-      if (!this.base(arguments)) return false;
+      if (!super.validateField()) {
+        return false;
+      }
 
-      if (this.getChildControl("popup").isVisible())
+      if (this.getChildControl("popup").isVisible()) {
         this._parseTextFieldAndValidateValue();
+      }
 
       return this.isValid();
     },
@@ -457,21 +470,28 @@ qx.Class.define("zx.ui.form.DateTimeField", {
      */
     _onGlobalFocus(evt) {
       var next = evt.getTarget();
-      if (next.$$qxObject) next = next.$$qxObject;
-      if (!(next instanceof qx.ui.core.Widget)) return;
+      if (next.$$qxObject) {
+        next = next.$$qxObject;
+      }
+      if (!(next instanceof qx.ui.core.Widget)) {
+        return;
+      }
       let popup = this.getChildControl("popup");
       while (next) {
-        if (next == popup) return;
+        if (next == popup) {
+          return;
+        }
         next = next.getLayoutParent();
       }
-      let useTimeFields =
-        this.getChildControl("popup").getVisibility() == "visible";
+      let useTimeFields = this.getChildControl("popup").getVisibility() == "visible";
       if (useTimeFields) {
         let value = this.getValue();
         if (value) {
           let newValue = new Date(value.getTime());
           this._copyTimeFields(newValue);
-          if (value.getTime() != newValue.getTime()) this.setValue(newValue);
+          if (value.getTime() != newValue.getTime()) {
+            this.setValue(newValue);
+          }
         }
       }
       this.close();
@@ -496,7 +516,9 @@ qx.Class.define("zx.ui.form.DateTimeField", {
 
       // if the popup is closed, ignore all
       var popup = this.getChildControl("popup");
-      if (popup.getVisibility() == "hidden") return;
+      if (popup.getVisibility() == "hidden") {
+        return;
+      }
 
       // hide the list always on escape
       if (iden == "Escape") {
@@ -506,13 +528,9 @@ qx.Class.define("zx.ui.form.DateTimeField", {
       }
 
       // Stop navigation keys when popup is open
-      if (
-        iden === "Left" ||
-        iden === "Right" ||
-        iden === "Down" ||
-        iden === "Up"
-      )
+      if (iden === "Left" || iden === "Right" || iden === "Down" || iden === "Up") {
         e.preventDefault();
+      }
 
       // forward the rest of the events to the date chooser
       this.getChildControl("list").handleKeyPress(e);
@@ -525,9 +543,7 @@ qx.Class.define("zx.ui.form.DateTimeField", {
      */
     _onPopupChangeVisibility(e) {
       const DTF = zx.ui.form.DateTimeField;
-      e.getData() == "visible"
-        ? this.addState("popupOpen")
-        : this.removeState("popupOpen");
+      e.getData() == "visible" ? this.addState("popupOpen") : this.removeState("popupOpen");
 
       // Synchronize the chooser with the current value on every
       // opening of the popup. This is needed when the value has been
@@ -552,13 +568,12 @@ qx.Class.define("zx.ui.form.DateTimeField", {
       let format = qx.locale.Date.getDateFormat("medium").toString();
       if (this.isShowTime()) {
         format += " HH:mm";
-        if (this.isShowSeconds()) format += ":ss";
+        if (this.isShowSeconds()) {
+          format += ":ss";
+        }
       }
 
-      return new qx.util.format.DateFormat(
-        format,
-        qx.locale.Manager.getInstance().getLocale()
-      );
+      return new qx.util.format.DateFormat(format, qx.locale.Manager.getInstance().getLocale());
     }
   },
 
@@ -573,14 +588,14 @@ qx.Class.define("zx.ui.form.DateTimeField", {
      */
     __addActiveField(field) {
       const DTF = zx.ui.form.DateTimeField;
-      if (qx.core.Environment.get("qx.debug"))
-        qx.core.Assert.assertTrue(
-          !qx.lang.Array.contains(DTF.__activeFields, field)
-        );
+      if (qx.core.Environment.get("qx.debug")) {
+        qx.core.Assert.assertTrue(!qx.lang.Array.contains(DTF.__activeFields, field));
+      }
 
       DTF.__activeFields.push(field);
-      if (DTF.__activeFields.length == 1)
+      if (DTF.__activeFields.length == 1) {
         qx.event.Manager.addGlobalEventMonitor(DTF.__globalEventMonitor);
+      }
     },
 
     /**
@@ -590,14 +605,14 @@ qx.Class.define("zx.ui.form.DateTimeField", {
      */
     __removeActiveField(field) {
       const DTF = zx.ui.form.DateTimeField;
-      if (qx.core.Environment.get("qx.debug"))
-        qx.core.Assert.assertTrue(
-          qx.lang.Array.contains(DTF.__activeFields, field)
-        );
+      if (qx.core.Environment.get("qx.debug")) {
+        qx.core.Assert.assertTrue(qx.lang.Array.contains(DTF.__activeFields, field));
+      }
 
       qx.lang.Array.remove(DTF.__activeFields, field);
-      if (DTF.__activeFields.length == 0)
+      if (DTF.__activeFields.length == 0) {
         qx.event.Manager.removeGlobalEventMonitor(DTF.__globalEventMonitor);
+      }
     },
 
     /**

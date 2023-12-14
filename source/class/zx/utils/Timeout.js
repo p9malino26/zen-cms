@@ -29,7 +29,7 @@ qx.Class.define("zx.utils.Timeout", {
    * @param {var} context for the callback
    */
   construct(duration, callback, context) {
-    this.base(arguments);
+    super();
     this.__onTimeoutBound = this._onTimeout.bind(this);
     if (duration) {
       this.setDuration(duration);
@@ -42,7 +42,7 @@ qx.Class.define("zx.utils.Timeout", {
   /**
    * Destructor
    */
-  destruct: function () {
+  destruct() {
     this.killTimer();
   },
 

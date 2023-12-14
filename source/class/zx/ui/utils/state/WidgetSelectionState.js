@@ -11,7 +11,9 @@ qx.Class.define("zx.ui.utils.state.WidgetSelectionState", {
   construct(state, widget, isDynamic) {
     super(state, widget, isDynamic);
     this._addListenerFor("changeSelection", () => this.copySelectionToState());
-    if (!isDynamic) this._addListenerOnceFor("appear", () => this.copyStateToSelection());
+    if (!isDynamic) {
+      this._addListenerOnceFor("appear", () => this.copyStateToSelection());
+    }
   },
 
   members: {
@@ -22,19 +24,21 @@ qx.Class.define("zx.ui.utils.state.WidgetSelectionState", {
       let target = this.getTarget();
 
       let id = this.getTargetId();
-      if (!id) return;
+      if (!id) {
+        return;
+      }
 
       let valueIds = this._get(id) || [];
-      if (!qx.lang.Type.isArray(valueIds)) valueIds = [valueIds];
+      if (!qx.lang.Type.isArray(valueIds)) {
+        valueIds = [valueIds];
+      }
       let values = null;
       if (!this.isDynamic()) {
         values = valueIds
           .map(valueId => {
             let value = qx.core.Id.getQxObject(valueId);
             if (!value && valueId) {
-              this._notify(
-                `Cannot restore state of ${target.classname} (${target}) because it's value ${valueId} does not exist`
-              );
+              this._notify(`Cannot restore state of ${target.classname} (${target}) because it's value ${valueId} does not exist`);
             }
             return value;
           })
@@ -52,7 +56,9 @@ qx.Class.define("zx.ui.utils.state.WidgetSelectionState", {
      */
     copySelectionToState() {
       let id = this.getTargetId();
-      if (!id) return;
+      if (!id) {
+        return;
+      }
 
       let valueIds = this.getTarget()
         .getSelection()

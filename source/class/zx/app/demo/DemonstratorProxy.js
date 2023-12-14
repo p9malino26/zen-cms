@@ -1,25 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.app.demo.DemonstratorProxy", {
   extend: zx.io.persistence.Object,
 
   construct(targetObject) {
-    this.base(arguments);
+    super();
     this.__targetObject = targetObject;
   },
 
@@ -28,12 +28,8 @@ qx.Class.define("zx.app.demo.DemonstratorProxy", {
 
     "@getTestNames": zx.io.remote.anno.Method.DEFAULT,
     async getTestNames() {
-      let names = Object.keys(this.__targetObject.constructor.prototype).filter(
-        name =>
-          name.length > 4 &&
-          name.startsWith("test") &&
-          name[4] === name[4].toUpperCase()
-      );
+      let names = Object.keys(this.__targetObject.constructor.prototype).filter(name => name.length > 4 && name.startsWith("test") && name[4] === name[4].toUpperCase());
+
       this.info("getTestNames called, returning " + names.join(","));
       return names;
     },

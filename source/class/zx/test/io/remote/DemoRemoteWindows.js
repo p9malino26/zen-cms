@@ -1,25 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.io.remote.DemoRemoteWindows", {
   extend: zx.app.demo.Demonstrator,
 
   construct() {
-    this.base(arguments);
+    super();
     this._captureLogs(this.__url);
   },
 
@@ -50,7 +50,7 @@ qx.Class.define("zx.test.io.remote.DemoRemoteWindows", {
      * @Override
      */
     async resetDemo() {
-      await this.base(arguments);
+      await super.resetDemo();
 
       let iframe = this.getQxObject("root");
       iframe.setSource("");
@@ -69,7 +69,7 @@ qx.Class.define("zx.test.io.remote.DemoRemoteWindows", {
      * @Override
      */
     initialise() {
-      this.base(arguments);
+      super.initialise();
 
       let ctlr = this.getWindowIoController();
 
@@ -92,9 +92,8 @@ qx.Class.define("zx.test.io.remote.DemoRemoteWindows", {
       const traverse = person => {
         person.getChildren().addListener("change", evt => {
           let data = evt.getData();
-          (data.removed || []).forEach(item =>
-            this.log(person.getName() + ": removed child " + item.getName())
-          );
+          (data.removed || []).forEach(item => this.log(person.getName() + ": removed child " + item.getName()));
+
           (data.added || []).forEach(item => {
             this.log(person.getName() + ": added child " + item.getName());
             traverse(item);
@@ -127,9 +126,8 @@ qx.Class.define("zx.test.io.remote.DemoRemoteWindows", {
           var btn = new qx.ui.toolbar.Button("Change Age");
           btn.addListener("execute", () => {
             var grandad = this._grandad;
-            this.log(
-              `btnChangeAge is setting grandad's age to ${grandad.getAge() + 1}`
-            );
+            this.log(`btnChangeAge is setting grandad's age to ${grandad.getAge() + 1}`);
+
             grandad.setAge(grandad.getAge() + 1);
             this.getWindowIoController().flush();
           });
@@ -139,9 +137,8 @@ qx.Class.define("zx.test.io.remote.DemoRemoteWindows", {
           var btn = new qx.ui.toolbar.Button("Add Child");
           btn.addListener("execute", () => {
             var grandad = this._grandad;
-            let newChild = new zx.test.io.remote.Person(
-              "Child_No_" + (grandad.getChildren().getLength() + 1)
-            );
+            let newChild = new zx.test.io.remote.Person("Child_No_" + (grandad.getChildren().getLength() + 1));
+
             this.log(`btnAddChild is adding child ${newChild.getName()}`);
             grandad.getChildren().push(newChild);
             grandad.getChildren().forEach(child => {
@@ -159,9 +156,8 @@ qx.Class.define("zx.test.io.remote.DemoRemoteWindows", {
           btn.addListener("execute", () => {
             var grandad = this._grandad;
             var beverly = this._beverly;
-            let newChild = new zx.test.io.remote.Person(
-              "Beverly_Child_No_" + (beverly.getChildren().getLength() + 1)
-            );
+            let newChild = new zx.test.io.remote.Person("Beverly_Child_No_" + (beverly.getChildren().getLength() + 1));
+
             this.log(`Button is adding grandchild ${newChild.getName()}`);
             beverly.getChildren().push(newChild);
             beverly.getChildren().forEach(child => {
@@ -185,14 +181,13 @@ qx.Class.define("zx.test.io.remote.DemoRemoteWindows", {
             let oldChild = beverly.getChildren().getItem(0);
             this.log(`Button is removing grandchild ${oldChild.getName()}`);
             beverly.getChildren().remove(oldChild);
-            beverly
-              .getChildren()
-              .forEach(child => child.getSiblings().remove(oldChild));
+            beverly.getChildren().forEach(child => child.getSiblings().remove(oldChild));
             oldChild.getSiblings().removeAll();
             this.getWindowIoController().flush();
           });
       }
-      return this.base(arguments, id);
+
+      return super._createQxObjectImpl(id);
     }
   }
 });

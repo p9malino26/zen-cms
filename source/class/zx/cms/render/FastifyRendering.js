@@ -22,7 +22,7 @@ qx.Class.define("zx.cms.render.FastifyRendering", {
   extend: zx.cms.render.AbstractRendering,
 
   construct(req, reply) {
-    this.base(arguments);
+    super();
     this.__req = req;
     this.__reply = reply;
   },

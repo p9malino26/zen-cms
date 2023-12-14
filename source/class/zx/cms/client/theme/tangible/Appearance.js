@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Theme.define("zx.cms.client.theme.tangible.Appearance", {
   extend: qx.theme.tangible.Appearance,
@@ -31,20 +31,19 @@ qx.Theme.define("zx.cms.client.theme.tangible.Appearance", {
         };
       }
     },
+
     "inlinebutton/icon": {
       alias: "image",
       include: "image",
       style(states) {
         return {
-          textColor: states.disabled
-            ? "text-disabled-on-surface"
-            : "text-primary-on-surface"
+          textColor: states.disabled ? "text-disabled-on-surface" : "text-primary-on-surface"
         };
       }
     },
 
     label: {
-      style: function (states) {
+      style(states) {
         return {
           textColor: states.disabled ? "text-disabled-on-surface" : undefined,
           padding: [3, 0, 4, 0]
@@ -63,6 +62,7 @@ qx.Theme.define("zx.cms.client.theme.tangible.Appearance", {
         return { padding: 0, margin: 0 };
       }
     },
+
     "pickbox/label": "widget",
     "pickbox/pick": {
       alias: "inlinebutton",
@@ -83,7 +83,7 @@ qx.Theme.define("zx.cms.client.theme.tangible.Appearance", {
 
     "tabview/bar": {
       base: true,
-      style: function (states) {
+      style(states) {
         return {
           backgroundColor: "primary-alpha-5"
         };
@@ -92,11 +92,9 @@ qx.Theme.define("zx.cms.client.theme.tangible.Appearance", {
 
     "window/captionbar": {
       base: true,
-      style: function (states) {
+      style(states) {
         return {
-          backgroundColor: states.active
-            ? "primary-selected"
-            : "primary-inactive"
+          backgroundColor: states.active ? "primary-selected" : "primary-inactive"
         };
       }
     },
@@ -150,6 +148,7 @@ qx.Theme.define("zx.cms.client.theme.tangible.Appearance", {
         };
       }
     },
+
     "splitbutton/arrow": {
       base: true,
       style(states) {
@@ -173,6 +172,7 @@ qx.Theme.define("zx.cms.client.theme.tangible.Appearance", {
         };
       }
     },
+
     "splitbutton/arrow/icon": {
       style(states) {
         return {
@@ -192,7 +192,7 @@ qx.Theme.define("zx.cms.client.theme.tangible.Appearance", {
 
     "form-renderer-label": {
       base: true,
-      style: function () {
+      style() {
         return {
           paddingTop: 4
         };
@@ -201,10 +201,13 @@ qx.Theme.define("zx.cms.client.theme.tangible.Appearance", {
 
     "material-textfield": {
       base: true,
-      style: function (states) {
+      style(states) {
         var padding = [3, 1, 4, 1];
-        if (states.readonly) padding = [3, 1, 5, 1];
-        else if (states.focused) padding = [3, 1, 3, 1];
+        if (states.readonly) {
+          padding = [3, 1, 5, 1];
+        } else if (states.focused) {
+          padding = [3, 1, 3, 1];
+        }
         return {
           backgroundColor: "surface",
           padding: padding,
@@ -231,6 +234,7 @@ qx.Theme.define("zx.cms.client.theme.tangible.Appearance", {
         };
       }
     },
+
     "searchfield/btnSearch": "inlinebutton"
   }
 });

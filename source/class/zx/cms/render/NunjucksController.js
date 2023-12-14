@@ -26,12 +26,16 @@ qx.Class.define("zx.cms.render.NunjucksController", {
   extend: qx.core.Object,
 
   construct(theme) {
-    this.base(arguments);
+    super();
     const NC = zx.cms.render.NunjucksController;
-    if (NC.__instance) throw new Error("Multiple instances of " + this.classname);
+    if (NC.__instance) {
+      throw new Error("Multiple instances of " + this.classname);
+    }
     NC.__instance = this;
 
-    if (theme) this.setTheme(theme);
+    if (theme) {
+      this.setTheme(theme);
+    }
 
     let loader = new NC.QooxdooCmsLoader();
     loader.controller = this;
@@ -66,7 +70,9 @@ qx.Class.define("zx.cms.render.NunjucksController", {
   },
 
   destruct() {
-    if (zx.cms.render.NunjucksController.__instance === this) zx.cms.render.NunjucksController.__instance = null;
+    if (zx.cms.render.NunjucksController.__instance === this) {
+      zx.cms.render.NunjucksController.__instance = null;
+    }
   },
 
   members: {
@@ -125,7 +131,9 @@ qx.Class.define("zx.cms.render.NunjucksController", {
       let source = await template.getSource();
       let classname = template.getViewableClassname();
       let query = {};
-      if (classname) query.classname = classname;
+      if (classname) {
+        query.classname = classname;
+      }
       source = zx.cms.render.NunjucksController.parseTemplate(source, query);
 
       let filename = template.getWatchFilename();
@@ -139,7 +147,9 @@ qx.Class.define("zx.cms.render.NunjucksController", {
           let uris = null;
           if (uri) {
             uris = this.__filenamesToUris[filename];
-            if (!uris) uris = this.__filenamesToUris[filename] = {};
+            if (!uris) {
+              uris = this.__filenamesToUris[filename] = {};
+            }
             uris[uri] = true;
           }
           if (qx.core.Environment.get("qx.debug")) {
@@ -168,12 +178,16 @@ qx.Class.define("zx.cms.render.NunjucksController", {
           {
             path: template.toUri()
           },
+
           (err, result) => {
-            if (err) err.message += `\n in ${template}`;
+            if (err) {
+              err.message += `\n in ${template}`;
+            }
             cb(err, result);
           }
         )
       );
+
       return result;
     },
 
@@ -220,7 +234,9 @@ qx.Class.define("zx.cms.render.NunjucksController", {
           let m = seg.match(/^([^=]+)(=(.*))?$/);
           let key = m[1];
           let value = m[3];
-          if (value === undefined) value = true;
+          if (value === undefined) {
+            value = true;
+          }
           query[key] = value;
         });
       }
@@ -259,27 +275,38 @@ qx.Class.define("zx.cms.render.NunjucksController", {
       };
 
       let strQuery = null;
-      if (typeof query == "string") strQuery = query;
-      else if (query) {
+      if (typeof query == "string") {
+        strQuery = query;
+      } else if (query) {
         strQuery = Object.keys(query)
           .map(key => {
             let value = query[key];
-            if (value === null) return key;
-            if (value === undefined) return;
+            if (value === null) {
+              return key;
+            }
+            if (value === undefined) {
+              return;
+            }
             return key + "=" + value;
           })
           .filter(value => !!value)
           .join("&");
       }
-      if (!strQuery) return source;
+      if (!strQuery) {
+        return source;
+      }
 
       let searchStartPos = 0;
       while (true) {
         // Find the next tag
         let pos = source.indexOf("{%", searchStartPos);
-        if (pos < 0) break;
+        if (pos < 0) {
+          break;
+        }
         let endPos = source.indexOf("%}", pos + 2);
-        if (endPos < 0) break;
+        if (endPos < 0) {
+          break;
+        }
 
         // Extract the tag name and filename
         let tag = source.substring(pos + 2, endPos);
@@ -303,8 +330,9 @@ qx.Class.define("zx.cms.render.NunjucksController", {
 
         // Add the query data
         pos = filename.indexOf("?");
-        if (pos < 0) filename += "?";
-        else filename += "&";
+        if (pos < 0) {
+          filename += "?";
+        } else filename += "&";
         filename += strQuery;
         let replacement = prefix + tagname + ' "' + filename + '"' + remainder;
         source = before + replacement + after;
@@ -323,7 +351,7 @@ qx.Class.define("zx.cms.render.NunjucksController", {
       // Set to the actual NunjucksController instance
       controller: null,
 
-      getSource: function (name, callback) {
+      getSource(name, callback) {
         this.controller
           .getSource(name)
           .then(data => {

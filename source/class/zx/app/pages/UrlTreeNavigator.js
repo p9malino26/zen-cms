@@ -111,6 +111,7 @@ qx.Class.define("zx.app.pages.UrlTreeNavigator", {
               name: segs[0],
               parentNode: parentNode
             });
+
             parentNode.getChildren().add(node);
             loadNodes(node, parentUrl + segs[0] + "/");
           } else {
@@ -118,6 +119,7 @@ qx.Class.define("zx.app.pages.UrlTreeNavigator", {
               name: remainder,
               parentNode: parentNode
             });
+
             parentNode.getChildren().add(node);
           }
         }

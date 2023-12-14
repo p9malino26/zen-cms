@@ -25,7 +25,7 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
   extend: zx.io.persistence.db.Database,
 
   construct(options) {
-    this.base(arguments);
+    super();
     this.__uri = options.uri;
     this.__databaseName = options.databaseName;
   },
@@ -64,7 +64,7 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
       let exists = collections.find(coll => coll.collectionName == "zx.server.cms.Page");
       this.__newDatabase = !exists;
 
-      return await this.base(arguments);
+      return await super.open();
     },
 
     async getCollection(clazz) {
@@ -109,7 +109,7 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
         this.__mongoClient = null;
         this.__db = null;
       }
-      await this.base(arguments);
+      await super.close();
     },
 
     /*
@@ -176,7 +176,9 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
      */
     async getDataFromQuery(clazz, query, projection) {
       let data = await this.findOne(clazz, query, projection);
-      if (!data) return null;
+      if (!data) {
+        return null;
+      }
       return {
         json: data
       };

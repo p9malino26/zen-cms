@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * A Demonstrator is capable of having a UI to demonstrate the feature or functionality,
@@ -33,7 +32,7 @@ qx.Class.define("zx.app.demo.Demonstrator", {
   extend: qx.core.Object,
 
   construct() {
-    this.base(arguments);
+    super();
     this.setName(this.classname);
     this.__log = "";
   },
@@ -95,11 +94,14 @@ qx.Class.define("zx.app.demo.Demonstrator", {
      * @param {String} msg
      */
     log(msg) {
-      if (!this.__log) this.__log = [];
+      if (!this.__log) {
+        this.__log = [];
+      }
       this.__log.push({
         msg: msg,
         when: new Date()
       });
+
       this.fireEvent("log");
     },
 
@@ -110,9 +112,9 @@ qx.Class.define("zx.app.demo.Demonstrator", {
      * @param {Boolean?} enable if false, then stop capturing, if true or not provided, start capturing
      */
     _captureLogs(url, enable) {
-      if (enable === false)
+      if (enable === false) {
         zx.utils.PostMessageRelayLogger.addOriginCallback(url, null);
-      else
+      } else
         zx.utils.PostMessageRelayLogger.addOriginCallback(url, data => {
           this.log("IFRAME: " + data.message);
         });
@@ -131,7 +133,9 @@ qx.Class.define("zx.app.demo.Demonstrator", {
      * @returns {Object[]}
      */
     getLog() {
-      if (!this.__log) return [];
+      if (!this.__log) {
+        return [];
+      }
       return this.__log;
     },
 
@@ -148,7 +152,9 @@ qx.Class.define("zx.app.demo.Demonstrator", {
      * @returns {qx.ui.core.LayoutItem?}
      */
     getUiRoot() {
-      if (this.__uiRoot === undefined) this.__uiRoot = this._createUiRoot();
+      if (this.__uiRoot === undefined) {
+        this.__uiRoot = this._createUiRoot();
+      }
       return this.__uiRoot;
     },
 
@@ -194,18 +200,13 @@ qx.Class.define("zx.app.demo.Demonstrator", {
      * @return {String[]}
      */
     async getTestNames() {
-      let names = Object.keys(this.constructor.prototype).filter(
-        name =>
-          name.length > 4 &&
-          name.startsWith("test") &&
-          name[4] === name[4].toUpperCase()
-      );
+      let names = Object.keys(this.constructor.prototype).filter(name => name.length > 4 && name.startsWith("test") && name[4] === name[4].toUpperCase());
+
       if (this._supportsEmbeddedUnitTests) {
         if (!this.__proxyNames) {
           let ctlr = this.getWindowIoController();
-          this.__proxy = await ctlr.getUriMappingAsync(
-            "zx.app.demo.DemonstratorProxy"
-          );
+          this.__proxy = await ctlr.getUriMappingAsync("zx.app.demo.DemonstratorProxy");
+
           this.__proxyNames = await this.__proxy.getTestNames();
         }
         this.__proxyNames.forEach(name => names.push(name));
@@ -226,10 +227,7 @@ qx.Class.define("zx.app.demo.Demonstrator", {
       });
 
       const runTestImpl = async () => {
-        if (
-          this._supportsEmbeddedUnitTests &&
-          this.__proxyNames.indexOf(name) > -1
-        ) {
+        if (this._supportsEmbeddedUnitTests && this.__proxyNames.indexOf(name) > -1) {
           result.log("Starting remote test");
           result.setPhase("test");
           let proxyResult = await this.__proxy.runTest(name);

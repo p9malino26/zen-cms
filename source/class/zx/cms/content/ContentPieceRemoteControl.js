@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.cms.content.ContentPieceRemoteControl", {
   extend: zx.cms.content.AbstractRemoteControl,
@@ -43,7 +43,9 @@ qx.Class.define("zx.cms.content.ContentPieceRemoteControl", {
       switch (propertyName) {
         case "content":
           value = value || "";
-          if (div.innerHTML != value) div.innerHTML = value;
+          if (div.innerHTML != value) {
+            div.innerHTML = value;
+          }
           break;
 
         case "cssClass":
@@ -51,7 +53,7 @@ qx.Class.define("zx.cms.content.ContentPieceRemoteControl", {
           return;
 
         default:
-          return this.base(arguments, propertyName, value, oldValue);
+          return super.propertyChanged(propertyName, value, oldValue);
       }
     }
   },
@@ -65,15 +67,18 @@ qx.Class.define("zx.cms.content.ContentPieceRemoteControl", {
      */
     __initialiseEditor() {
       const CPRC = zx.cms.content.ContentPieceRemoteControl;
-      if (CPRC.__editor) return CPRC.__editor;
+      if (CPRC.__editor) {
+        return CPRC.__editor;
+      }
       let ed = (CPRC.__editor = new MediumEditor([], {
         buttonLabels: "fontawesome"
       }));
 
       ed.subscribe("editableInput", (eventObj, div) => {
         let editable = qx.core.Init.getApplication().findEditable(div);
-        if (!editable)
+        if (!editable) {
           throw new Error(`Cannot find editable for 'editableInput' div`);
+        }
         editable.remoteControl._onEditableInput(editable.uuid, div.innerHTML);
       });
 

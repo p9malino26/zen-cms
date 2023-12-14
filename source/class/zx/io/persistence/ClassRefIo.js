@@ -23,7 +23,7 @@ qx.Class.define("zx.io.persistence.ClassRefIo", {
   implement: [zx.io.persistence.IIo],
 
   construct(clazz) {
-    this.base(arguments);
+    super();
     this.__clazz = clazz;
   },
 
@@ -52,7 +52,9 @@ qx.Class.define("zx.io.persistence.ClassRefIo", {
      * @return {qx.core.Object?} the found object
      */
     async fromJson(endpoint, json) {
-      if (json === null) return null;
+      if (json === null) {
+        return null;
+      }
       let clazz = qx.Class.getByName(json._classname);
       if (!clazz) {
         this.error(`Cannot deserialize class because there is no class called ${json._classname}`);
@@ -66,6 +68,7 @@ qx.Class.define("zx.io.persistence.ClassRefIo", {
           _classname: 1,
           _uuid: 1
         });
+
         if (result) {
           json = {
             _uuid: result.json._uuid,
@@ -93,7 +96,9 @@ qx.Class.define("zx.io.persistence.ClassRefIo", {
      * @async May return a Promise
      */
     toJson(endpoints, obj) {
-      if (obj === null) return null;
+      if (obj === null) {
+        return null;
+      }
       endpoints.forEach(endpoint => endpoint.putDependentObject(obj));
       return { _uuid: obj.toUuid(), _classname: obj.classname };
     }

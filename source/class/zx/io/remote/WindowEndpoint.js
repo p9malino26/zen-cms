@@ -27,7 +27,7 @@ qx.Class.define("zx.io.remote.WindowEndpoint", {
    * @param win {Window} the remote window that this endpoint is for
    */
   construct(win) {
-    this.base(arguments);
+    super();
     this.__window = win;
     this.__pending = {};
     window.addEventListener("message", event => this._onMessage(event));
@@ -84,7 +84,7 @@ qx.Class.define("zx.io.remote.WindowEndpoint", {
      * @Override
      */
     _queuePacket(packet) {
-      this.base(arguments, packet);
+      super._queuePacket(packet);
       this.__startFlushTimer();
     },
 
@@ -94,10 +94,14 @@ qx.Class.define("zx.io.remote.WindowEndpoint", {
      * @returns
      */
     async _onMessage(event) {
-      if (!this.isWindow(event.source)) return;
+      if (!this.isWindow(event.source)) {
+        return;
+      }
 
       let msgData = event.data;
-      if (msgData.signature !== this.classname) return;
+      if (msgData.signature !== this.classname) {
+        return;
+      }
       let responses = await this._receivePackets(null, null, msgData.packets);
       if (responses && responses.length) {
         this.__window.postMessage({

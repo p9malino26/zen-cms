@@ -1,32 +1,35 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.tree.SimpleView", {
   extend: zx.ui.tree.column.View,
 
-  construct: function (labelPath, iconPath) {
-    this.base(arguments);
+  construct(labelPath, iconPath) {
+    super();
     this.__column = new zx.ui.tree.column.AtomColumn().set({
       editable: false,
       width: "*"
     });
+
     this.getColumns().push(this.__column);
     this.setLabelPath(labelPath || "label");
-    if (iconPath) this.setIconPath(iconPath);
+    if (iconPath) {
+      this.setIconPath(iconPath);
+    }
   },
 
   properties: {
@@ -50,15 +53,15 @@ qx.Class.define("zx.ui.tree.SimpleView", {
   members: {
     __column: null,
 
-    _applyOptions: function (value, oldValue) {
+    _applyOptions(value, oldValue) {
       this.__column.setOptions(value);
     },
 
-    _applyLabelPath: function (value, oldValue) {
+    _applyLabelPath(value, oldValue) {
       this.__column.setValuePath(value);
     },
 
-    _applyIconPath: function (value, oldValue) {
+    _applyIconPath(value, oldValue) {
       this.__column.setIconPath(value);
     }
   }

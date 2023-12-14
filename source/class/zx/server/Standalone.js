@@ -36,7 +36,7 @@ qx.Class.define("zx.server.Standalone", {
   extend: qx.core.Object,
 
   construct() {
-    this.base(arguments);
+    super();
     if (zx.server.Standalone.__instance) {
       console.error("Multiple instances of zx.server.Standalone detected - this is probably not intentional");
     }
@@ -165,6 +165,7 @@ qx.Class.define("zx.server.Standalone", {
             let filename = zx.utils.Path.locateFile(impDir, {
               mustExist: true
             });
+
             await new zx.io.persistence.db.ImportExport(filename, this._db).importToDb();
           }
         }

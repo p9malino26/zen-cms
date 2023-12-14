@@ -27,7 +27,7 @@ qx.Class.define("zx.io.remote.NetworkController", {
    * @param {zx.io.remote.NetworkDataSource} datasource
    */
   construct(datasource) {
-    this.base(arguments, new zx.io.remote.NetworkClassIos(), datasource);
+    super(new zx.io.remote.NetworkClassIos(), datasource);
     this.__uris = {};
     this.__pendingUriPromises = {};
     this.__watcher = new zx.io.remote.SerializingWatcher(this.getClassIos());
@@ -54,8 +54,9 @@ qx.Class.define("zx.io.remote.NetworkController", {
      * @param {zx.io.persistence.IObject} object
      */
     receiveUriMapping(uri, object) {
-      if (!object) delete this.__uris[uri];
-      else this.__uris[uri] = object;
+      if (!object) {
+        delete this.__uris[uri];
+      } else this.__uris[uri] = object;
       this.fireDataEvent("uriMapping", { uri, object });
 
       if (this.__pendingUriPromises[uri]) {
@@ -83,9 +84,13 @@ qx.Class.define("zx.io.remote.NetworkController", {
      */
     getUriMappingAsync(uri) {
       let object = this.getUriMapping(uri);
-      if (object !== null) return qx.Promise.resolve(object);
+      if (object !== null) {
+        return qx.Promise.resolve(object);
+      }
       let promise = this.__pendingUriPromises[uri];
-      if (!promise) promise = this.__pendingUriPromises[uri] = new qx.Promise();
+      if (!promise) {
+        promise = this.__pendingUriPromises[uri] = new qx.Promise();
+      }
       return promise;
     },
 
@@ -96,9 +101,12 @@ qx.Class.define("zx.io.remote.NetworkController", {
      * @param {zx.io.persistence.IObject} object
      */
     async putUriMapping(uri, object) {
-      if (!object) delete this.__uris[uri];
-      else this.__uris[uri] = object;
-      for (let arr = this.getEndpoints(), i = 0; i < arr.length; i++) arr[i].putUriMapping(uri, object);
+      if (!object) {
+        delete this.__uris[uri];
+      } else this.__uris[uri] = object;
+      for (let arr = this.getEndpoints(), i = 0; i < arr.length; i++) {
+        arr[i].putUriMapping(uri, object);
+      }
     },
 
     /**

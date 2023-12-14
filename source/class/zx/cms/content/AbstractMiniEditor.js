@@ -1,25 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.cms.content.AbstractMiniEditor", {
   extend: zx.ui.editor.FormEditor,
 
   construct() {
-    this.base(arguments);
+    super();
     if (this._remoteControlProperties) {
       this.__targets = {};
       this._remoteControlProperties.forEach(propertyName => {
@@ -30,6 +30,7 @@ qx.Class.define("zx.cms.content.AbstractMiniEditor", {
             oldValue
           })
         );
+
         this.__targets[propertyName] = {
           target,
           bindId: this.bind("value." + propertyName, target, "value")
@@ -66,15 +67,10 @@ qx.Class.define("zx.cms.content.AbstractMiniEditor", {
      * @param {*} value
      */
     liveEdited(propertyName, value) {
-      if (
-        this._remoteControlProperties &&
-        qx.lang.Array.contains(this._remoteControlProperties, propertyName)
-      ) {
+      if (this._remoteControlProperties && qx.lang.Array.contains(this._remoteControlProperties, propertyName)) {
         let value = this.getValue();
         if (!value) {
-          this.warn(
-            `Live edit of ${propertyName} but there is no piece to update`
-          );
+          this.warn(`Live edit of ${propertyName} but there is no piece to update`);
         } else {
           value["set" + qx.lang.String.firstUp(propertyName)](value);
         }

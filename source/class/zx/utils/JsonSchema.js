@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const fs = require("fs-extra");
 const path = require("path");
@@ -22,7 +22,7 @@ qx.Class.define("zx.utils.JsonSchema", {
   extend: qx.core.Object,
 
   construct(filename) {
-    this.base(arguments);
+    super();
     this.__filename = filename;
   },
 
@@ -65,11 +65,11 @@ qx.Class.define("zx.utils.JsonSchema", {
      * @throws if the data is invalid
      */
     validateData(data) {
-      if (this.__validate(data)) return;
+      if (this.__validate(data)) {
+        return;
+      }
 
-      let msg = this.__validate.errors
-        .map(err => `${err.dataPath} ${err.message}`)
-        .join("\n");
+      let msg = this.__validate.errors.map(err => `${err.dataPath} ${err.message}`).join("\n");
       throw new Error(msg);
     },
 
@@ -110,7 +110,9 @@ qx.Class.define("zx.utils.JsonSchema", {
       let data = zx.utils.JsonSchema.__schemas[filename];
       let stat = await fs.stat(filename);
       if (data) {
-        if (data.mtime.getTime() >= stat.mtime.getTime()) return data.schema;
+        if (data.mtime.getTime() >= stat.mtime.getTime()) {
+          return data.schema;
+        }
       }
 
       data = zx.utils.JsonSchema.__schemas[filename] = {

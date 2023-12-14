@@ -73,6 +73,7 @@ qx.Class.define("zx.cli.commands.DbCommand", {
         let filename = zx.utils.Path.locateFile(impDirs[i], {
           mustExist: true
         });
+
         await new zx.io.persistence.db.ImportExport(filename, this._db).importToDb();
       }
 
@@ -90,12 +91,13 @@ qx.Class.define("zx.cli.commands.DbCommand", {
 
       let sub = new zx.cli.Command("import").set({
         description: `Imports the database from template`,
-        run: async function () {
+        async run() {
           const { args, flags } = this.getValues();
           let cmd = new zx.cli.commands.DbCommand();
           return await cmd.importDatabase();
         }
       });
+
       cmd.addSubcommand(sub);
 
       return cmd;

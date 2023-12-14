@@ -51,14 +51,14 @@ qx.Class.define("zx.utils.Json", {
               return new Date(argumentStr);
               // the above should work in all browsers/versions w/ babel transpile. Original implementation kept below for reference/posterity:
               /*
-              let dt = zx.utils.Dates.parseISO(argumentStr);
-              if (qx.core.Environment.get("qx.debug")) {
-                if (dt && zx.utils.Dates.formatISO(dt) !== argumentStr) {
-                  qx.log.Logger.error("date parsing (iso), str=" + str + ", strDt=" + argumentStr + ", dt=" + dt + ", iso=" + zx.utils.Dates.formatISO(dt));
-                }
-              }
-              return dt;
-              */
+                  let dt = zx.utils.Dates.parseISO(argumentStr);
+                  if (qx.core.Environment.get("qx.debug")) {
+                    if (dt && zx.utils.Dates.formatISO(dt) !== argumentStr) {
+                      qx.log.Logger.error("date parsing (iso), str=" + str + ", strDt=" + argumentStr + ", dt=" + dt + ", iso=" + zx.utils.Dates.formatISO(dt));
+                    }
+                  }
+                  return dt;
+                  */
             }
             case "BigNumber": {
               return new BigNumber(argumentStr);
@@ -67,14 +67,18 @@ qx.Class.define("zx.utils.Json", {
               if (typeof reviver == "function") {
                 try {
                   const result = reviver(key, value);
-                  if (result) return result;
+                  if (result) {
+                    return result;
+                  }
                 } catch (e) {
                   // errors here simply mean the reviver was not equipped to handle this value
                   // this error effectively bubbles to the lines below
                 }
               }
               const eMsg = "Unknown constructor " + constructorName;
-              if (qx.core.Environment.get("qx.debug")) qx.log.Logger.error(eMsg);
+              if (qx.core.Environment.get("qx.debug")) {
+                qx.log.Logger.error(eMsg);
+              }
               return new Error(eMsg);
             }
           }
@@ -143,6 +147,7 @@ qx.Class.define("zx.utils.Json", {
         allErrors: true,
         jsonPointers: true
       });
+
       if (qx.lang.Type.isArray(schema)) {
         ajv.addSchema(schema);
         schema = schema[0].$id;
@@ -156,6 +161,7 @@ qx.Class.define("zx.utils.Json", {
           format: "cli",
           indent: 2
         });
+
         console.warn("JSON data does not validate against " + schema.$id + ":\n" + message);
         return false;
       }
@@ -179,7 +185,7 @@ qx.Class.define("zx.utils.Json", {
      * @param data {Object} JSON data
      * @return {{type,version}|null}
      */
-    getSchemaInfo: function (data) {
+    getSchemaInfo(data) {
       let schemaInfo = {};
       if (data.$schema) {
         let match = data.$schema.match(/\/([^-]+)-([^.]+)\.json$/);
@@ -219,7 +225,7 @@ qx.Class.define("zx.utils.Json", {
      * @param filename {String} the filename to load
      * @return {Object|null} the parsed contents, or null if the file does not exist
      */
-    loadJsonAsync: async function (filename) {
+    async loadJsonAsync(filename) {
       if (!(await fs.existsAsync(filename))) {
         return null;
       }
@@ -237,7 +243,7 @@ qx.Class.define("zx.utils.Json", {
      * @param filename {String} filename to write to
      * @param data {Object|null} the data to write. If null, remove the file
      */
-    saveJsonAsync: async function (filename, data) {
+    async saveJsonAsync(filename, data) {
       if (data !== null) {
         await fs.writeFileAsync(filename, JSON.stringify(data, null, 2), "utf8");
       } else if (await fs.existsAsync(filename)) {

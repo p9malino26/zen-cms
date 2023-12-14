@@ -85,9 +85,8 @@ qx.Class.define("zx.ui.editor.Editor", {
     this.setEntity(null);
     this.setValue(null);
     if (this.__entities) {
-      Object.values(this.__entities).forEach(entity =>
-        entity.removeListener("changeModified", this.__onEntityChangeModified, this)
-      );
+      Object.values(this.__entities).forEach(entity => entity.removeListener("changeModified", this.__onEntityChangeModified, this));
+
       this.__entities = null;
     }
   },
@@ -222,8 +221,9 @@ qx.Class.define("zx.ui.editor.Editor", {
           let entity = value ? zx.ui.editor.SubEntity.getEntity(value, true) : null;
           this.setEntity(entity);
           this.setModified(entity ? entity.getModified() : false);
-          if (this.isMasterValueEditor() && this.__entities)
+          if (this.isMasterValueEditor() && this.__entities) {
             Object.values(this.__entities).forEach(entity => entity.setModified(false));
+          }
           await this._applyValue(value, oldValue, "value");
           await this.fireDataEventAsync("changeValue", value, oldValue);
         } finally {
@@ -231,8 +231,9 @@ qx.Class.define("zx.ui.editor.Editor", {
         }
       };
 
-      if (this.__setValuePromise) this.__setValuePromise = this.__setValuePromise.then(setValueImpl);
-      else this.__setValuePromise = setValueImpl();
+      if (this.__setValuePromise) {
+        this.__setValuePromise = this.__setValuePromise.then(setValueImpl);
+      } else this.__setValuePromise = setValueImpl();
 
       let promise = this.__setValuePromise;
       await promise;
@@ -276,8 +277,12 @@ qx.Class.define("zx.ui.editor.Editor", {
       }
       let mva = this.getMasterValueAccessor();
       if (mva) {
-        if (oldValue) mva.detachSubEntity(oldValue);
-        if (value) mva.attachSubEntity(value);
+        if (oldValue) {
+          mva.detachSubEntity(oldValue);
+        }
+        if (value) {
+          mva.attachSubEntity(value);
+        }
       }
     },
 
@@ -285,12 +290,18 @@ qx.Class.define("zx.ui.editor.Editor", {
      * Apply method
      */
     _applyModified(value) {
-      if (this.inSetValue()) return;
+      if (this.inSetValue()) {
+        return;
+      }
 
       let entity = this.getEntity();
-      if (entity) entity.setModified(value);
+      if (entity) {
+        entity.setModified(value);
+      }
 
-      if (!value && this.__entities) Object.values(this.__entities).forEach(entity => entity.setModified(false));
+      if (!value && this.__entities) {
+        Object.values(this.__entities).forEach(entity => entity.setModified(false));
+      }
     },
 
     /**
@@ -304,8 +315,11 @@ qx.Class.define("zx.ui.editor.Editor", {
       let thisEntity = this.getEntity();
       let modified = evt.getData();
       this.debug(`entity modified=${modified}: modifiedEntity=${modifiedEntity}`);
-      if (thisEntity === modifiedEntity) this.setModified(modified);
-      else if (thisEntity !== modifiedEntity && modified) this.setModified(true);
+      if (thisEntity === modifiedEntity) {
+        this.setModified(modified);
+      } else if (thisEntity !== modifiedEntity && modified) {
+        this.setModified(true);
+      }
     },
 
     /**
@@ -318,8 +332,9 @@ qx.Class.define("zx.ui.editor.Editor", {
         return this.getValue();
       } else {
         let mva = this.getMasterValueAccessor();
-        if (mva) return mva.getValue();
-        else throw new Error(`Cannot getMasterValue ${this.classname} because there is no masterValueAccessor`);
+        if (mva) {
+          return mva.getValue();
+        } else throw new Error(`Cannot getMasterValue ${this.classname} because there is no masterValueAccessor`);
       }
     },
 
@@ -334,10 +349,9 @@ qx.Class.define("zx.ui.editor.Editor", {
      * Apply method
      */
     _applyMasterValueAccessor(value, oldValue) {
-      if (value && this.isMasterValueEditor())
-        throw new Error(
-          `Unexpected masterValueAccessor set on an editor ${this.classname} where isMasterValueEditor() returns true (use one or the other)`
-        );
+      if (value && this.isMasterValueEditor()) {
+        throw new Error(`Unexpected masterValueAccessor set on an editor ${this.classname} where isMasterValueEditor() returns true (use one or the other)`);
+      }
 
       let entity = this.getEntity();
       if (oldValue) {
@@ -359,8 +373,9 @@ qx.Class.define("zx.ui.editor.Editor", {
       }
 
       this.getOwnedQxObjects().forEach(object => {
-        if (object instanceof zx.ui.editor.Editor && !object.isMasterValueEditor())
+        if (object instanceof zx.ui.editor.Editor && !object.isMasterValueEditor()) {
           object.setMasterValueAccessor(value);
+        }
       });
     },
 
@@ -369,31 +384,23 @@ qx.Class.define("zx.ui.editor.Editor", {
      */
     _applyModifiedMonitor(value, oldValue) {
       if (value && !this.isMasterValueEditor()) {
-        throw new Error(
-          `Unexpected modifiedMonitor set on an editor ${this.classname} where isMasterValueEditor() returns false`
-        );
+        throw new Error(`Unexpected modifiedMonitor set on an editor ${this.classname} where isMasterValueEditor() returns false`);
       }
 
       if (oldValue) {
         oldValue.removeMasterValueEditor(this);
         this.getOwnedQxObjects().forEach(object => {
-          if (
-            object instanceof zx.ui.editor.Editor &&
-            object.isMasterValueEditor() &&
-            object.getModifiedMonitor() === oldValue
-          )
+          if (object instanceof zx.ui.editor.Editor && object.isMasterValueEditor() && object.getModifiedMonitor() === oldValue) {
             object.setModifiedMonitor(null);
+          }
         });
       }
       if (value) {
         value.addMasterValueEditor(this);
         this.getOwnedQxObjects().forEach(object => {
-          if (
-            object instanceof zx.ui.editor.Editor &&
-            object.isMasterValueEditor() &&
-            object.getModifiedMonitor() === null
-          )
+          if (object instanceof zx.ui.editor.Editor && object.isMasterValueEditor() && object.getModifiedMonitor() === null) {
             object.setModifiedMonitor(value);
+          }
         });
       }
     },
@@ -402,12 +409,16 @@ qx.Class.define("zx.ui.editor.Editor", {
      * Saves the master value
      */
     async save() {
-      if (!this.getValue()) return;
-      if (this.isMasterValueEditor()) await this.saveValue();
-      else {
+      if (!this.getValue()) {
+        return;
+      }
+      if (this.isMasterValueEditor()) {
+        await this.saveValue();
+      } else {
         let mva = this.getMasterValueAccessor();
-        if (mva) await mva.saveValue();
-        else throw new Error(`Cannot save ${this.classname} because there is no masterValueAccessor`);
+        if (mva) {
+          await mva.saveValue();
+        } else throw new Error(`Cannot save ${this.classname} because there is no masterValueAccessor`);
       }
     },
 
@@ -415,7 +426,9 @@ qx.Class.define("zx.ui.editor.Editor", {
      * @Override
      */
     async saveValue() {
-      if (await this.fireDataEventAsync("save", this.getValue(), null, true)) await this._saveValueImpl();
+      if (await this.fireDataEventAsync("save", this.getValue(), null, true)) {
+        await this._saveValueImpl();
+      }
       this.setModified(false);
     },
 
@@ -432,9 +445,13 @@ qx.Class.define("zx.ui.editor.Editor", {
     attachSubEntity(entity) {
       let mva = this.getMasterValueAccessor();
       entity.addListener("changeModified", this.__onEntityChangeModified, this);
-      if (!this.__entities) this.__entities = {};
+      if (!this.__entities) {
+        this.__entities = {};
+      }
       this.__entities[entity.toHashCode()] = entity;
-      if (mva) mva.attachSubEntity(entity);
+      if (mva) {
+        mva.attachSubEntity(entity);
+      }
     },
 
     /**
@@ -445,14 +462,16 @@ qx.Class.define("zx.ui.editor.Editor", {
 
       entity.removeListener("changeModified", this.__onEntityChangeModified, this);
       delete this.__entities[entity.toHashCode()];
-      if (mva) mva.detachSubEntity(entity);
+      if (mva) {
+        mva.detachSubEntity(entity);
+      }
     },
 
     /**
      * @Override
      */
     _createQxObject(id) {
-      let object = this.base(arguments, id);
+      let object = super._createQxObject(id);
       let mva = this.isMasterValueEditor() ? this : this.getMasterValueAccessor();
       if (mva) {
         if (object instanceof zx.ui.editor.Editor && !object.isMasterValueEditor()) {
@@ -490,9 +509,13 @@ qx.Class.define("zx.ui.editor.Editor", {
      * @param {Boolean} editable
      */
     _setEditableOnObject(object, editable) {
-      if (typeof object.setEditable == "function") object.setEditable(editable);
-      else if (typeof object.setReadOnly == "function") object.setReadOnly(!editable);
-      else if (typeof object.setEnabled == "function") object.setEnabled(editable);
+      if (typeof object.setEditable == "function") {
+        object.setEditable(editable);
+      } else if (typeof object.setReadOnly == "function") {
+        object.setReadOnly(!editable);
+      } else if (typeof object.setEnabled == "function") {
+        object.setEnabled(editable);
+      }
     },
 
     /**
@@ -503,8 +526,9 @@ qx.Class.define("zx.ui.editor.Editor", {
      * @returns
      */
     _applyAutoSave(value, oldValue) {
-      if (value) zx.ui.editor.AutoSave.getInstance().add(this._onAutoSave, this);
-      else zx.ui.editor.AutoSave.getInstance().remove(this._onAutoSave, this);
+      if (value) {
+        zx.ui.editor.AutoSave.getInstance().add(this._onAutoSave, this);
+      } else zx.ui.editor.AutoSave.getInstance().remove(this._onAutoSave, this);
     }
   }
 });

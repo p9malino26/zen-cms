@@ -47,7 +47,7 @@ qx.Class.define("zx.server.rest.RestApiClient", {
    * @param methods {String[]|Map?} the methods to implement
    */
   construct(apiName, methods) {
-    this.base(arguments);
+    super();
     this._apiName = apiName;
 
     if (methods) {
@@ -56,7 +56,9 @@ qx.Class.define("zx.server.rest.RestApiClient", {
       };
       Object.keys(methods).forEach(localName => {
         let value = methods[localName];
-        if (typeof value == "string") value = { method: value };
+        if (typeof value == "string") {
+          value = { method: value };
+        }
         let remoteName = value.remoteName || localName;
         install(value.method || "GET", localName, remoteName);
       });
@@ -100,21 +102,26 @@ qx.Class.define("zx.server.rest.RestApiClient", {
       if (params) {
         if (qx.lang.Type.isArray(params)) {
           url += "?" + params.map(str => encodeURIComponent(str)).join("&");
-        } else if (typeof params == "string") url += "?" + encodeURIComponent(params);
-        else if (qx.lang.Type.isObject(params)) {
+        } else if (typeof params == "string") {
+          url += "?" + encodeURIComponent(params);
+        } else if (qx.lang.Type.isObject(params)) {
           url +=
             "?" +
             Object.keys(params)
               .map(key => {
                 let value = params[str];
-                if (value !== null && value !== undefined) return key + "=" + encodeURIComponent(value);
+                if (value !== null && value !== undefined) {
+                  return key + "=" + encodeURIComponent(value);
+                }
                 return key;
               })
               .join("&");
         }
       }
       let baseUrl = this.getBaseUrl();
-      if (baseUrl) url = baseUrl + url;
+      if (baseUrl) {
+        url = baseUrl + url;
+      }
 
       return await new qx.Promise((resolve, reject) => {
         this._callApiImpl(
@@ -123,9 +130,11 @@ qx.Class.define("zx.server.rest.RestApiClient", {
           body,
           cookieStore,
           data => {
-            if (data.status == "ok") resolve(data.result);
-            else if (data.status == "error") reject(zx.cms.util.Error.create(data.message || "An unknown error was reported by the server"));
-            else reject(zx.cms.util.Error.create("An unrecognised status '${data.status}' was reported by the server"));
+            if (data.status == "ok") {
+              resolve(data.result);
+            } else if (data.status == "error") {
+              reject(zx.cms.util.Error.create(data.message || "An unknown error was reported by the server"));
+            } else reject(zx.cms.util.Error.create("An unrecognised status '${data.status}' was reported by the server"));
           },
           err => {
             reject(zx.cms.util.Error.create(`API: ${httpMethod} ${this._apiName}.${remoteName} failed (${err})`, { params, body }));

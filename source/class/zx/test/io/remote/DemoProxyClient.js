@@ -1,25 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.io.remote.DemoProxyClient", {
   extend: zx.app.demo.Demonstrator,
 
   construct() {
-    this.base(arguments);
+    super();
     this._captureLogs(this.__url);
   },
 
@@ -49,12 +49,11 @@ qx.Class.define("zx.test.io.remote.DemoProxyClient", {
      * @Override
      */
     async initialise() {
-      this.base(arguments);
+      super.initialise();
       let controller = await qx.core.Init.getApplication().getNetController();
 
-      this._proxyTestOne = controller.getUriMapping(
-        "zx.test.io.remote.RemoteXhrServer.proxyTestOne"
-      );
+      this._proxyTestOne = controller.getUriMapping("zx.test.io.remote.RemoteXhrServer.proxyTestOne");
+
       this._proxyTestOne.setName("Proxy Test One");
     },
 
@@ -62,17 +61,13 @@ qx.Class.define("zx.test.io.remote.DemoProxyClient", {
       let controller = await qx.core.Init.getApplication().getNetController();
       let result = await this._proxyTestOne.sayHello("From The Client");
       this.info("Server said: " + result);
-      this.assertEquals(
-        "RUNNING ON SERVER: Hello from Proxy Test One, msg=From The Client",
-        result
-      );
+      this.assertEquals("RUNNING ON SERVER: Hello from Proxy Test One, msg=From The Client", result);
+
       this._proxyTestOne.setName("My New Name");
       result = await this._proxyTestOne.sayHello("From The Client");
       this.info("Server said: " + result);
-      this.assertEquals(
-        "RUNNING ON SERVER: Hello from My New Name, msg=From The Client",
-        result
-      );
+      this.assertEquals("RUNNING ON SERVER: Hello from My New Name, msg=From The Client", result);
+
       this.assertEquals("blah", this._proxyTestOne.blahDeBlah());
       controller.flush();
     },
@@ -93,7 +88,8 @@ qx.Class.define("zx.test.io.remote.DemoProxyClient", {
           this.log("Page source is " + this.__url);
           return iframe;
       }
-      return this.base(arguments, id);
+
+      return super._createQxObjectImpl(id);
     }
   }
 });

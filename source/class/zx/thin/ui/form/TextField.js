@@ -1,26 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.thin.ui.form.TextField", {
   extend: qx.html.Element,
 
   construct() {
-    this.base(arguments);
+    super();
     var div = <div className="qx-text-input-area"></div>;
     this.add(div);
     div.add(this.getQxObject("leadingIcon"));
@@ -185,9 +184,12 @@ qx.Class.define("zx.thin.ui.form.TextField", {
      */
     _applyValue(value) {
       this.setAttribute("value", value);
-      if (!value.length) this.addClass("qx-text-empty");
-      else this.removeClass("qx-text-empty");
-      if (this.isAutoClearErrorText()) this.setErrorText(null);
+      if (!value.length) {
+        this.addClass("qx-text-empty");
+      } else this.removeClass("qx-text-empty");
+      if (this.isAutoClearErrorText()) {
+        this.setErrorText(null);
+      }
     },
 
     _applyName(value) {
@@ -196,10 +198,7 @@ qx.Class.define("zx.thin.ui.form.TextField", {
     },
 
     _applyPassword(value) {
-      this.getQxObject("input").setAttribute(
-        "type",
-        value ? "password" : "text"
-      );
+      this.getQxObject("input").setAttribute("type", value ? "password" : "text");
     },
 
     _applyAutoCompleteName(value) {
@@ -222,7 +221,9 @@ qx.Class.define("zx.thin.ui.form.TextField", {
       let helperText = this.getHelperText();
       let errorText = this.getErrorText();
       let text = helperText || null;
-      if (errorText) text = errorText + "*";
+      if (errorText) {
+        text = errorText + "*";
+      }
       let widget = this.getQxObject("extraText");
       if (text) {
         this.removeClass("qx-text-helper-text qx-text-error-text");
@@ -255,13 +256,9 @@ qx.Class.define("zx.thin.ui.form.TextField", {
     },
 
     __onKeyDown(evt) {
-      if (
-        evt.altKey ||
-        evt.ctrlKey ||
-        evt.metaKey ||
-        qx.event.util.Keyboard.isNonPrintableKeyCode(evt.keyCode)
-      )
+      if (evt.altKey || evt.ctrlKey || evt.metaKey || qx.event.util.Keyboard.isNonPrintableKeyCode(evt.keyCode)) {
         return;
+      }
       if (this.isShowCharCounter()) {
         let max = this.getMaxCharacters();
         let value = this.getValue();
@@ -277,7 +274,9 @@ qx.Class.define("zx.thin.ui.form.TextField", {
       let widget = this.getQxObject("charCount");
       let str = this.getValue().length;
       let max = this.getMaxCharacters();
-      if (max) str += " / " + max;
+      if (max) {
+        str += " / " + max;
+      }
       widget.setText(str);
     },
 
@@ -287,9 +286,7 @@ qx.Class.define("zx.thin.ui.form.TextField", {
           return new zx.thin.ui.basic.Image().addClass("qx-input-leading-icon");
 
         case "trailingIcon":
-          return new zx.thin.ui.basic.Image().addClass(
-            "qx-input-trailing-icon"
-          );
+          return new zx.thin.ui.basic.Image().addClass("qx-input-trailing-icon");
 
         case "label":
           return <label></label>;
@@ -308,7 +305,8 @@ qx.Class.define("zx.thin.ui.form.TextField", {
         case "extraText":
           return <span className="qx-input-extra-text"></span>;
       }
-      return this.base(arguments, id);
+
+      return super._createQxObjectImpl(id);
     }
   }
 });

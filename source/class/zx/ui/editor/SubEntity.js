@@ -1,25 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.editor.SubEntity", {
   extend: qx.core.Object,
 
   construct(object) {
-    this.base(arguments);
+    super();
     this.__object = object;
     this.__bindIds = [];
     this.initModified();
@@ -39,17 +39,20 @@ qx.Class.define("zx.ui.editor.SubEntity", {
     __bindIds: null,
 
     incRef() {
-      if (this.__count === 0)
+      if (this.__count === 0) {
         zx.ui.editor.SubEntity.__entities[this.__object.toHashCode()] = this;
+      }
       this.__count++;
     },
 
     decRef() {
-      if (qx.core.Environment.get("qx.debug"))
+      if (qx.core.Environment.get("qx.debug")) {
         this.assertTrue(this.__count > 0);
+      }
       this.__count--;
-      if (this.__count === 0)
+      if (this.__count === 0) {
         delete zx.ui.editor.SubEntity.__entities[this.__object.toHashCode()];
+      }
     },
 
     getCount() {
@@ -71,7 +74,9 @@ qx.Class.define("zx.ui.editor.SubEntity", {
     getEntity(object, create) {
       let hash = object.toHashCode();
       let ref = this.__entities[hash];
-      if (!ref && create) ref = new zx.ui.editor.SubEntity(object);
+      if (!ref && create) {
+        ref = new zx.ui.editor.SubEntity(object);
+      }
       return ref;
     }
   }

@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const fs = zx.utils.Promisify.fs;
 const path = require("path");
@@ -33,12 +32,9 @@ qx.Class.define("zx.io.persistence.db.FileDatabase", {
   extend: zx.io.persistence.db.Database,
 
   construct(rootDir) {
-    this.base(arguments);
+    super();
     this.__rootDir = rootDir;
-    this.__debounceSaveImpl = zx.utils.Function.debounce(
-      () => this._saveImpl(),
-      250
-    );
+    this.__debounceSaveImpl = zx.utils.Function.debounce(() => this._saveImpl(), 250);
   },
 
   members: {
@@ -50,22 +46,20 @@ qx.Class.define("zx.io.persistence.db.FileDatabase", {
      * @Override
      */
     async open() {
-      if (!fs.existsSync(this.__rootDir))
-        throw new Error(
-          "Cannot find root directory for database: " + this.__rootDir
-        );
-      this._db = await zx.utils.Json.loadJsonAsync(
-        path.join(this.__rootDir, "db.json")
-      );
+      if (!fs.existsSync(this.__rootDir)) {
+        throw new Error("Cannot find root directory for database: " + this.__rootDir);
+      }
+      this._db = await zx.utils.Json.loadJsonAsync(path.join(this.__rootDir, "db.json"));
       if (!this._db) {
         this._db = {
           ids: {},
           idFromFilename: {}
         };
       }
-      if (!fs.existsSync(path.join(this.__rootDir, "_uuids")))
+      if (!fs.existsSync(path.join(this.__rootDir, "_uuids"))) {
         await fs.mkdirAsync(path.join(this.__rootDir, "_uuids"));
-      return await this.base(arguments);
+      }
+      return await super.open();
     },
 
     /*
@@ -74,7 +68,7 @@ qx.Class.define("zx.io.persistence.db.FileDatabase", {
     async close() {
       await this._saveImpl();
       this._db = null;
-      await this.base(arguments);
+      await super.close();
     },
 
     /*
@@ -88,17 +82,15 @@ qx.Class.define("zx.io.persistence.db.FileDatabase", {
      * Saves the database; use `__debounceSaveImpl` normally
      */
     async _saveImpl() {
-      if (this._db)
-        await zx.utils.Json.saveJsonAsync(
-          path.join(this.__rootDir, "db.json"),
-          this._db
-        );
+      if (this._db) {
+        await zx.utils.Json.saveJsonAsync(path.join(this.__rootDir, "db.json"), this._db);
+      }
     },
 
     /*
      * @Override
      */
-    getDataFromUuid(clazz, uuid) {
+    async getDataFromUuid(clazz, uuid) {
       let indexData = this._db.ids[uuid];
       if (!indexData) {
         this.warn("Cannot find document with uuid=" + uuid);
@@ -113,18 +105,20 @@ qx.Class.define("zx.io.persistence.db.FileDatabase", {
         throw new Error(`Cannot find data for uuid ${uuid}: ${ex}`);
       }
       let data = await zx.utils.Json.loadJsonAsync(filename);
-      if (!data._uuid) data._uuid = uuid;
-      else if (data._uuid != uuid)
-        throw new Error(
-          `Error while loading ${uuid} - file ${indexData.filename} has wrong uuid, found ${data._uuid}`
-        );
+      if (!data._uuid) {
+        data._uuid = uuid;
+      } else if (data._uuid != uuid) {
+        throw new Error(`Error while loading ${uuid} - file ${indexData.filename} has wrong uuid, found ${data._uuid}`);
+      }
       return {
         json: data,
         mtime: mtime,
-        isStale() {
+        async isStale() {
           let stat = await fs.statSync(filename, { throwIfNoEntry: false });
           // File has been deleted
-          if (!stat) return true;
+          if (!stat) {
+            return true;
+          }
           return stat && stat.mtime.getTime() > mtime.getTime();
         }
       };
@@ -141,13 +135,11 @@ qx.Class.define("zx.io.persistence.db.FileDatabase", {
         indexData = this._db.ids[uuid] = {
           filename: relative
         };
+
         this._db.idFromFilename[indexData.filename] = uuid;
         this.__debounceSaveImpl();
       }
-      await zx.utils.Json.saveJsonAsync(
-        path.join(this.__rootDir, indexData.filename),
-        json
-      );
+      await zx.utils.Json.saveJsonAsync(path.join(this.__rootDir, indexData.filename), json);
       return uuid;
     },
 

@@ -20,7 +20,7 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
   type: "abstract",
 
   construct(caption) {
-    this.base(arguments, caption || "");
+    super(caption || "");
     this.__buttons = {};
     this.set({
       minWidth: 350,
@@ -33,6 +33,7 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
       modal: true,
       trapKeyboard: true
     });
+
     this.center();
     this.addListenerOnce("appear", () => {
       this.center();
@@ -108,8 +109,11 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
           "keypress",
           function (evt) {
             var key = evt.getKeyIdentifier();
-            if (key == "Enter") this._onEnterPressed(evt);
-            else if (key == "Escape") this._onEscapePressed(evt);
+            if (key == "Enter") {
+              this._onEnterPressed(evt);
+            } else if (key == "Escape") {
+              this._onEscapePressed(evt);
+            }
           },
           this,
           true
@@ -134,7 +138,9 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
     _onEnterPressed() {
       if (this.__opened) {
         var focused = qx.ui.core.FocusHandler.getInstance().getFocusedWidget();
-        if (!(focused instanceof qx.ui.form.TextArea)) this.submitDialog();
+        if (!(focused instanceof qx.ui.form.TextArea)) {
+          this.submitDialog();
+        }
       }
     },
 
@@ -144,7 +150,9 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
     _onEscapePressed() {
       if (this.__opened) {
         var focused = qx.ui.core.FocusHandler.getInstance().getFocusedWidget();
-        if (!(focused instanceof qx.ui.form.TextArea)) this.cancelDialog();
+        if (!(focused instanceof qx.ui.form.TextArea)) {
+          this.cancelDialog();
+        }
       }
     },
 
@@ -153,10 +161,12 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
      * @return {String} either "submit" or "cancel"
      */
     async open() {
-      if (this.__onClosePromise) throw new Error("Cannot open the dialog multiple times");
+      if (this.__onClosePromise) {
+        throw new Error("Cannot open the dialog multiple times");
+      }
       this.__opened = true;
       let promise = (this.__onClosePromise = new qx.Promise());
-      this.base(arguments);
+      super.open();
       this._onOpened();
       return await promise;
     },
@@ -190,11 +200,15 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
       if (!buttonCode) {
         for (let arr = this.getButtons(), i = 0; i < arr.length && !buttonCode; i++) {
           let type = this._getButtonType(arr[i]);
-          if (type.kind == "submit") buttonCode = arr[i];
+          if (type.kind == "submit") {
+            buttonCode = arr[i];
+          }
         }
       }
       buttonCode = buttonCode || "submit";
-      if (!this.fireDataEvent("submit", buttonCode, null, true)) return false;
+      if (!this.fireDataEvent("submit", buttonCode, null, true)) {
+        return false;
+      }
       await this._resolve(buttonCode);
       return true;
     },
@@ -207,7 +221,9 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
      */
     async cancelDialog(buttonCode) {
       buttonCode = buttonCode || "cancel";
-      if (!this.fireDataEvent("cancel", buttonCode, null, true)) return false;
+      if (!this.fireDataEvent("cancel", buttonCode, null, true)) {
+        return false;
+      }
       await this._resolve(buttonCode);
       return true;
     },
@@ -218,7 +234,9 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
      */
     async _resolve(value) {
       let promise = this.__onClosePromise;
-      if (!promise) throw new Error("Cannot resolve the dialog more than once per time it is opened");
+      if (!promise) {
+        throw new Error("Cannot resolve the dialog more than once per time it is opened");
+      }
       this.__onClosePromise = null;
       this.close();
       await promise.resolve(value);
@@ -232,7 +250,9 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
       if (oldValue) {
         oldValue.forEach(code => {
           let button = this.__buttons[code];
-          if (button) buttonBar.remove(button);
+          if (button) {
+            buttonBar.remove(button);
+          }
         });
       }
 
@@ -252,7 +272,9 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
      */
     getDialogButton(code) {
       let button = this.__buttons[code];
-      if (!button) button = this.__buttons[code] = this._createDialogButton(code);
+      if (!button) {
+        button = this.__buttons[code] = this._createDialogButton(code);
+      }
       return button;
     },
 
@@ -277,7 +299,9 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
      */
     _getButtonType(code) {
       let data = (this.__buttonTypes || zx.ui.utils.AbstractDialog.DEFAULT_BUTTON_TYPES)[code];
-      if (!data) throw new Error(`Unrecognised code for button: ${code}`);
+      if (!data) {
+        throw new Error(`Unrecognised code for button: ${code}`);
+      }
       return data;
     },
 
@@ -290,8 +314,7 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
     addCustomButtonType(code, map) {
       if (this.__buttonTypes === null) {
         this.__buttonTypes = {};
-        for (let key in zx.ui.utils.AbstractDialog.DEFAULT_BUTTON_TYPES)
-          this.__buttonTypes[key] = zx.ui.utils.AbstractDialog.DEFAULT_BUTTON_TYPES[key];
+        for (let key in zx.ui.utils.AbstractDialog.DEFAULT_BUTTON_TYPES) this.__buttonTypes[key] = zx.ui.utils.AbstractDialog.DEFAULT_BUTTON_TYPES[key];
       }
       this.__buttonTypes[code] = map;
     },
@@ -304,7 +327,9 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
      */
     _onDialogButtonClick(code, evt) {
       let button = evt.getTarget();
-      if (!this.fireDataEvent("buttonPress", code)) return;
+      if (!this.fireDataEvent("buttonPress", code)) {
+        return;
+      }
       this._handleDialogButtonClick(button, code);
     },
 
@@ -316,8 +341,11 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
      */
     _handleDialogButtonClick(button, code) {
       let data = this._getButtonType(code);
-      if (data.kind == "submit") this.submitDialog(code);
-      else if (data.kind === "cancel") this.cancelDialog(code);
+      if (data.kind == "submit") {
+        this.submitDialog(code);
+      } else if (data.kind === "cancel") {
+        this.cancelDialog(code);
+      }
     },
 
     /*
@@ -350,36 +378,43 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
         icon: "@FontAwesomeSolid/check-circle/16",
         kind: "submit"
       },
+
       yes: {
         caption: "Yes",
         icon: "@FontAwesomeSolid/check-circle/16",
         kind: "submit"
       },
+
       apply: {
         caption: "Apply",
         icon: "@FontAwesomeSolid/check-circle/16",
         kind: "submit"
       },
+
       create: {
         caption: "Create",
         icon: "@FontAwesomeSolid/plus-circle/16",
         kind: "submit"
       },
+
       no: {
         caption: "No",
         icon: "@FontAwesomeSolid/times-circle/16",
         kind: "cancel"
       },
+
       cancel: {
         caption: "Cancel",
         icon: "@FontAwesomeSolid/times-circle/16",
         kind: "cancel"
       },
+
       delete: {
         caption: "Delete",
         icon: "@FontAwesomeSolid/minus-circle/16",
         kind: "cancel"
       },
+
       upload: {
         caption: "Upload",
         icon: "@FontAwesomeSolid/cloud-arrow-up/16",

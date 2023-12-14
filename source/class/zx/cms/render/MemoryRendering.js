@@ -24,7 +24,7 @@ qx.Class.define("zx.cms.render.MemoryRendering", {
   extend: zx.cms.render.AbstractRendering,
 
   construct(query, headers) {
-    this.base(arguments);
+    super();
     this.__query = query || {};
     this.__headers = headers || {};
     this.__responseHeaders = {};
@@ -73,8 +73,9 @@ qx.Class.define("zx.cms.render.MemoryRendering", {
      * @Override
      */
     setResponseHeader(key, value) {
-      if (value === null || value === undefined) delete this.__responseHeaders[key];
-      else this.__responseHeaders[key] = value;
+      if (value === null || value === undefined) {
+        delete this.__responseHeaders[key];
+      } else this.__responseHeaders[key] = value;
     },
 
     /*

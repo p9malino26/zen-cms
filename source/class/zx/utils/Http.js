@@ -74,6 +74,7 @@ qx.Class.define("zx.utils.Http", {
             headers: response.headers,
             body: null
           };
+
           const hasResponseFailed = response.statusCode >= 400;
           let responseBody = "";
           let contentType = response.headers["content-type"];

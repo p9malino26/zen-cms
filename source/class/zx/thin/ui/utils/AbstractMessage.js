@@ -1,28 +1,31 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.thin.ui.utils.AbstractMessage", {
   extend: zx.thin.ui.container.Window,
 
   construct(message, caption, buttons) {
-    this.base(arguments);
-    if (message) this.setMessage(message);
-    if (caption) this.setCaption(caption);
+    super();
+    if (message) {
+      this.setMessage(message);
+    }
+    if (caption) {
+      this.setCaption(caption);
+    }
     this.setButtons(buttons || ["yes", "no"]);
     let body = this.getBody();
     body.add(this.getQxObject("message"));
@@ -79,9 +82,7 @@ qx.Class.define("zx.thin.ui.utils.AbstractMessage", {
       }
       const AbstractMessage = zx.thin.ui.utils.AbstractMessage;
       value.forEach(type => {
-        let btn = new zx.thin.ui.form.Button(
-          AbstractMessage.TYPES[type].caption
-        ).set({ style: "contained" });
+        let btn = new zx.thin.ui.form.Button(AbstractMessage.TYPES[type].caption).set({ style: "contained" });
         btn.addListener("execute", () => this.close(type));
         bar.add(btn);
       });
@@ -95,7 +96,8 @@ qx.Class.define("zx.thin.ui.utils.AbstractMessage", {
         case "buttonBar":
           return <div></div>;
       }
-      return this.base(arguments, id);
+
+      return super._createQxObjectImpl(id);
     }
   },
 
@@ -104,15 +106,19 @@ qx.Class.define("zx.thin.ui.utils.AbstractMessage", {
       ok: {
         caption: "OK"
       },
+
       yes: {
         caption: "Yes"
       },
+
       no: {
         caption: "No"
       },
+
       apply: {
         caption: "Apply"
       },
+
       cancel: {
         caption: "Cancel"
       }

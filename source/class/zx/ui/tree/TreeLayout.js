@@ -1,32 +1,32 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.tree.TreeLayout", {
   extend: qx.ui.layout.Abstract,
 
-  construct: function () {
-    this.base(arguments);
+  construct() {
+    super();
   },
 
   members: {
     /*
      * @Override
      */
-    _computeSizeHint: function () {
+    _computeSizeHint() {
       var tree = this._getWidget(),
         rows = tree.getRows(),
         hint = {
@@ -40,9 +40,12 @@ qx.Class.define("zx.ui.tree.TreeLayout", {
           rowHint = row.getSizeHint(),
           height = rowHint.height;
         hint.height += height;
-        if (rowHint.minHeight) hint.minHeight += rowHint.minHeight;
-        if (hint.width === null || hint.width < rowHint.width)
+        if (rowHint.minHeight) {
+          hint.minHeight += rowHint.minHeight;
+        }
+        if (hint.width === null || hint.width < rowHint.width) {
           hint.width = rowHint.width;
+        }
       }
 
       return hint;
@@ -51,7 +54,7 @@ qx.Class.define("zx.ui.tree.TreeLayout", {
     /*
      * @Override
      */
-    renderLayout: function (availWidth, availHeight) {
+    renderLayout(availWidth, availHeight) {
       var tree = this._getWidget(),
         rows = tree.getRows(),
         top = 0;

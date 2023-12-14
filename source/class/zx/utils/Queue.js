@@ -24,9 +24,11 @@ qx.Class.define("zx.utils.Queue", {
    * @param {Function?} handler callback to process each item
    */
   construct(handler) {
-    this.base(arguments);
+    super();
     this.__queue = [];
-    if (handler) this.setHandler(handler);
+    if (handler) {
+      this.setHandler(handler);
+    }
   },
 
   properties: {
@@ -59,6 +61,7 @@ qx.Class.define("zx.utils.Queue", {
         item: item,
         promise: new qx.Promise()
       };
+
       this.__queue.push(data);
       if (!this.__running) {
         this.__running = true;

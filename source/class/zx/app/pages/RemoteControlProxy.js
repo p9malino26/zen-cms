@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.app.pages.RemoteControlProxy", {
   extend: zx.io.persistence.Object,
@@ -26,8 +26,9 @@ qx.Class.define("zx.app.pages.RemoteControlProxy", {
     "@propertyChanged": zx.io.remote.anno.Method.DEFAULT,
     propertyChanged(uuid, propertyName, value, oldValue) {
       let remoteControl = qx.core.Init.getApplication().findRemoteControl(uuid);
-      if (remoteControl)
+      if (remoteControl) {
         remoteControl.propertyChanged(propertyName, value, oldValue);
+      }
     }
   }
 });

@@ -39,8 +39,8 @@ const sass = window.loadSass();
 qx.Class.define("zx.cms.util.ScssFile", {
   extend: qx.core.Object,
 
-  construct: function (theme, filename) {
-    this.base(arguments);
+  construct(theme, filename) {
+    super();
     this.__theme = theme;
     this.__filename = filename;
     this.__sourceFiles = {};
@@ -102,6 +102,7 @@ qx.Class.define("zx.cms.util.ScssFile", {
               return contents ? { contents } : null;
             }
           },
+
           (error, result) => {
             if (error) {
               this.error("Error status " + error.status + " in " + this.__filename + "[" + error.line + "," + error.column + "]: " + error.message);
@@ -124,7 +125,9 @@ qx.Class.define("zx.cms.util.ScssFile", {
       let webRoot = zx.server.Config.getInstance().getRootDir();
 
       const findFile = filename => {
-        if (fs.existsSync(filename)) return filename;
+        if (fs.existsSync(filename)) {
+          return filename;
+        }
         let info = path.parse(filename);
         if (!info.ext) {
           filename += ".scss";

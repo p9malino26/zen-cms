@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.utils.TextAreaDlg", {
   extend: zx.ui.utils.AbstractDialog,
@@ -22,7 +22,7 @@ qx.Class.define("zx.ui.utils.TextAreaDlg", {
    * Constructor
    */
   construct(message, caption) {
-    this.base(arguments, caption || "Information");
+    super(caption || "Information");
     this.setLayout(new qx.ui.layout.VBox(10));
     this.set({ maxWidth: 500, minWidth: 300 });
 
@@ -32,7 +32,9 @@ qx.Class.define("zx.ui.utils.TextAreaDlg", {
     this.add(txt);
     this.add(this.getQxObject("buttonBar"), { flex: 1 });
     this.setButtons(["ok", "cancel"]);
-    if (message) this.setMessage(message);
+    if (message) {
+      this.setMessage(message);
+    }
   },
 
   properties: {
@@ -78,7 +80,7 @@ qx.Class.define("zx.ui.utils.TextAreaDlg", {
           return new qx.ui.form.TextArea();
       }
 
-      return this.base(arguments, id);
+      return super._createQxObjectImpl(id);
     }
   },
 
@@ -92,8 +94,7 @@ qx.Class.define("zx.ui.utils.TextAreaDlg", {
     showDialog(message, readOnly) {
       var dlg = zx.ui.utils.TextAreaDlg.__instance;
       if (!dlg) {
-        dlg = zx.ui.utils.TextAreaDlg.__instance =
-          new zx.ui.utils.TextAreaDlg();
+        dlg = zx.ui.utils.TextAreaDlg.__instance = new zx.ui.utils.TextAreaDlg();
         var doc = qx.core.Init.getApplication().getRoot();
         doc.add(dlg);
       }

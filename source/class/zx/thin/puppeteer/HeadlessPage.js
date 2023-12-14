@@ -256,8 +256,9 @@ qx.Class.define("zx.thin.puppeteer.HeadlessPage", {
           return;
         }
         delete this.__pendingCalls[json.id];
-        if (json.exception) data.reject(json.exception);
-        else data.resolve(json.result);
+        if (json.exception) {
+          data.reject(json.exception);
+        } else data.resolve(json.result);
       } else if (evt.source !== window) {
         // Error
         apiError("Unexpected message type: " + JSON.stringify(json));

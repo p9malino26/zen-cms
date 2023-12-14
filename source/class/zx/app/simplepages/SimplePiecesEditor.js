@@ -23,7 +23,9 @@ qx.Class.define("zx.app.simplepages.SimplePiecesEditor", {
       clearChildren(root);
 
       let pieces = this.getValue();
-      if (!pieces) return;
+      if (!pieces) {
+        return;
+      }
 
       const addPieces = pieces => {
         pieces.forEach(piece => {
@@ -59,6 +61,7 @@ qx.Class.define("zx.app.simplepages.SimplePiecesEditor", {
             enabled: false,
             show: "icon"
           });
+
           btnDelete.addListener("execute", () => {});
           return btn;
 

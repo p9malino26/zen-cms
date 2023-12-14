@@ -31,6 +31,7 @@ qx.Class.define("zx.test.io.persistence.TestImportExport", {
       json = await db.findOne(zx.test.io.persistence.Site, {
         _uuid: "9a946080-b923-11e9-81cd-e3ec9930a628"
       });
+
       this.assertTrue(!!json);
       this.assertTrue(json._uuid == "9a946080-b923-11e9-81cd-e3ec9930a628");
       this.assertTrue(json._classname == "zx.test.io.persistence.Site");

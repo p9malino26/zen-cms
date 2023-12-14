@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.utils.Dates", {
   extend: qx.core.Object,
@@ -101,19 +101,12 @@ qx.Class.define("zx.utils.Dates", {
      */
     getDaysInMonth(dt) {
       var month;
-      if (typeof dt == "number") month = dt;
-      else month = dt.getMonth();
-      if (
-        month == 0 ||
-        month == 2 ||
-        month == 4 ||
-        month == 6 ||
-        month == 7 ||
-        month == 9 ||
-        month == 11
-      )
+      if (typeof dt == "number") {
+        month = dt;
+      } else month = dt.getMonth();
+      if (month == 0 || month == 2 || month == 4 || month == 6 || month == 7 || month == 9 || month == 11) {
         return 31;
-      else if (month == 1) {
+      } else if (month == 1) {
         dt = new Date(dt.getYear(), 2, -1);
         return dt.getDate();
       } else return 30;
@@ -137,11 +130,7 @@ qx.Class.define("zx.utils.Dates", {
      * @returns {Boolean}
      */
     sameDay(first, second) {
-      return (
-        first.getFullYear() == second.getFullYear() &&
-        first.getMonth() == second.getMonth() &&
-        first.getDate() == second.getDate()
-      );
+      return first.getFullYear() == second.getFullYear() && first.getMonth() == second.getMonth() && first.getDate() == second.getDate();
     },
 
     /**
@@ -152,10 +141,7 @@ qx.Class.define("zx.utils.Dates", {
      * @returns {Boolean}
      */
     sameMonth(first, second) {
-      return (
-        first.getMonth() == second.getMonth() &&
-        first.getFullYear() == second.getFullYear()
-      );
+      return first.getMonth() == second.getMonth() && first.getFullYear() == second.getFullYear();
     },
 
     /**
@@ -170,7 +156,9 @@ qx.Class.define("zx.utils.Dates", {
       var diff = sm - fm;
       var fd = first.getDate();
       var sd = second.getDate();
-      if (fd > sd) diff--;
+      if (fd > sd) {
+        diff--;
+      }
       return diff;
     },
 
@@ -223,18 +211,23 @@ qx.Class.define("zx.utils.Dates", {
      * @returns {String}
      */
     formatFrequency(time, significance) {
-      if (qx.lang.Type.isDate(time))
+      if (qx.lang.Type.isDate(time)) {
         time = new Date().getTime() - time.getTime();
-      else if (qx.lang.Type.isString(time)) time = parseInt(time, 10);
-      else if (!qx.lang.Type.isNumber(time))
-        throw new Error(
-          "Cannot interpret milliseconds in grasshopper.utils.Dates.formatFrequency: time=" +
-            time
-        );
+      } else if (qx.lang.Type.isString(time)) {
+        time = parseInt(time, 10);
+      } else if (!qx.lang.Type.isNumber(time)) {
+        throw new Error("Cannot interpret milliseconds in grasshopper.utils.Dates.formatFrequency: time=" + time);
+      }
 
-      if (time == 0) return "0s";
-      if (time < 1000) return "1s";
-      if (!significance) significance = 2;
+      if (time == 0) {
+        return "0s";
+      }
+      if (time < 1000) {
+        return "1s";
+      }
+      if (!significance) {
+        significance = 2;
+      }
       time = Math.floor(time / 1000);
 
       let secs = time % 60;
@@ -254,10 +247,14 @@ qx.Class.define("zx.utils.Dates", {
       let segs = [weeks, days, hours, mins, secs];
       const UNITS = ["w", "d", "h", "m", "s"];
       let start = 0;
-      while (start < segs.length && segs[start] == 0) start++;
+      while (start < segs.length && segs[start] == 0) {
+        start++;
+      }
       let str = "";
       for (let i = start; i < segs.length && i < start + significance; i++) {
-        if (i - start >= significance) break;
+        if (i - start >= significance) {
+          break;
+        }
         if (segs[i]) {
           str += segs[i] + UNITS[i];
         }
@@ -274,21 +271,22 @@ qx.Class.define("zx.utils.Dates", {
     parseISO(str) {
       // return  str ? new Date(str) : null; // should work in all browsers/versions w/ babel transpile
       /*
-			if (!str)
-				return null;
-			var dt = this.__DFISO.parse(str);
-			if (dt instanceof Date) {
-				// Convert to UTC
-				var newDt = new Date(Date.UTC(dt.getYear() + 1900, dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds()));
-				newDt.setMilliseconds(dt.getMilliseconds());
-				dt = newDt;
-			}
-			return dt;
-			*/
-      if (!str) return null;
-      var m = str.match(
-        /([0-9]+)-([0-9]+)-([0-9]+)T([0-9]+):([0-9]+):([0-9]+).([0-9]+)Z/
-      );
+      if (!str)
+      return null;
+      var dt = this.__DFISO.parse(str);
+      if (dt instanceof Date) {
+      // Convert to UTC
+      var newDt = new Date(Date.UTC(dt.getYear() + 1900, dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds()));
+      newDt.setMilliseconds(dt.getMilliseconds());
+      dt = newDt;
+      }
+      return dt;
+      */
+      if (!str) {
+        return null;
+      }
+      var m = str.match(/([0-9]+)-([0-9]+)-([0-9]+)T([0-9]+):([0-9]+):([0-9]+).([0-9]+)Z/);
+
       if (!m) {
         return null;
       }
@@ -302,36 +300,17 @@ qx.Class.define("zx.utils.Dates", {
 
       var dt = new Date(year, month, day, hours, minutes, seconds, millis);
       if (isNaN(dt.getYear())) {
-        qx.log.Logger.warn(
-          "Could not parse date: str=" +
-            str +
-            ", m=" +
-            JSON.stringify(m) +
-            ", values=" +
-            JSON.stringify([year, month, day, hours, minutes, seconds, millis])
-        );
+        qx.log.Logger.warn("Could not parse date: str=" + str + ", m=" + JSON.stringify(m) + ", values=" + JSON.stringify([year, month, day, hours, minutes, seconds, millis]));
+
         return null;
       }
       var offset = dt.getTimezoneOffset();
       if (offset != 0) {
-        dt = new Date(
-          year,
-          month,
-          day,
-          hours,
-          minutes - offset,
-          seconds,
-          millis
-        );
+        dt = new Date(year, month, day, hours, minutes - offset, seconds, millis);
+
         if (isNaN(dt.getYear())) {
-          qx.log.Logger.warn(
-            "Could not change date offset: str=" +
-              str +
-              ", offset=" +
-              offset +
-              ", m=" +
-              JSON.stringify(m)
-          );
+          qx.log.Logger.warn("Could not change date offset: str=" + str + ", offset=" + offset + ", m=" + JSON.stringify(m));
+
           return null;
         }
       }
@@ -345,21 +324,29 @@ qx.Class.define("zx.utils.Dates", {
      */
     formatISO(dt) {
       /*
-			if (!dt)
-				return null;
-			// The Date constructor assumes the date is in local timezone, but ISO is at GMT so we reverse the timezone difference
-			dt = new Date(dt.getTime());
-			dt.setMinutes(dt.getMinutes() + dt.getTimezoneOffset());
-			return this.__DFISO.format(dt);
-			*/
-      if (!dt) return null;
+      if (!dt)
+      return null;
+      // The Date constructor assumes the date is in local timezone, but ISO is at GMT so we reverse the timezone difference
+      dt = new Date(dt.getTime());
+      dt.setMinutes(dt.getMinutes() + dt.getTimezoneOffset());
+      return this.__DFISO.format(dt);
+      */
+      if (!dt) {
+        return null;
+      }
       function dp2(v) {
-        if (v < 10) return "0" + v;
+        if (v < 10) {
+          return "0" + v;
+        }
         return "" + v;
       }
       function dp3(v) {
-        if (v < 10) return "00" + v;
-        if (v < 100) return "0" + v;
+        if (v < 10) {
+          return "00" + v;
+        }
+        if (v < 100) {
+          return "0" + v;
+        }
         return "" + v;
       }
       var str =
@@ -389,13 +376,21 @@ qx.Class.define("zx.utils.Dates", {
      * @param {Integer} 0, 1, or -1
      */
     compareDates(ld, rd) {
-      if (ld && !rd) return -1;
-      if (rd && !ld) return 1;
+      if (ld && !rd) {
+        return -1;
+      }
+      if (rd && !ld) {
+        return 1;
+      }
       if (ld) {
         ld = ld.getTime();
         rd = rd.getTime();
-        if (ld < rd) return -1;
-        if (ld > rd) return 1;
+        if (ld < rd) {
+          return -1;
+        }
+        if (ld > rd) {
+          return 1;
+        }
       }
       return 0;
     }

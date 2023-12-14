@@ -13,7 +13,9 @@ qx.Class.define("zx.utils.Debounce", {
   construct(fn, timeout) {
     super();
     this.__fn = fn;
-    if (timeout) this.setTimeout(timeout);
+    if (timeout) {
+      this.setTimeout(timeout);
+    }
   },
 
   properties: {
@@ -53,7 +55,9 @@ qx.Class.define("zx.utils.Debounce", {
      * @param {Boolean} value
      */
     _applyQueueRepeats(value) {
-      if (!value && this.__queuedRepeat) this.__queuedRepeat = false;
+      if (!value && this.__queuedRepeat) {
+        this.__queuedRepeat = false;
+      }
     },
 
     /**

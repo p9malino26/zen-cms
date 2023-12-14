@@ -43,9 +43,11 @@ qx.Class.define("zx.data.Map", {
    * @param keysAreHashed {Boolean?} whether keys are objects and according to their hash
    */
   construct(values, keysAreHashed, keyClass, valueClass) {
-    this.base(arguments);
+    super();
     var args = qx.lang.Array.fromArguments(arguments);
-    if (typeof args[0] == "boolean") args.unshift(undefined);
+    if (typeof args[0] == "boolean") {
+      args.unshift(undefined);
+    }
     values = args.shift();
     keysAreHashed = args.shift();
     keyClass = args.shift();
@@ -58,8 +60,13 @@ qx.Class.define("zx.data.Map", {
       values: new qx.data.Array(),
       entries: new qx.data.Array()
     });
-    if (keyClass !== undefined) this.setKeyClass(keyClass);
-    if (valueClass !== undefined) this.setValueClass(valueClass);
+
+    if (keyClass !== undefined) {
+      this.setKeyClass(keyClass);
+    }
+    if (valueClass !== undefined) {
+      this.setValueClass(valueClass);
+    }
     if (values !== undefined) {
       this.replace(values);
     }
@@ -188,6 +195,7 @@ qx.Class.define("zx.data.Map", {
         type: "put",
         put: [data]
       });
+
       return data.oldValue;
     },
 
@@ -198,7 +206,9 @@ qx.Class.define("zx.data.Map", {
      */
     __getKey(key) {
       if (this.__keysAreHashed) {
-        if (key === null || key === undefined) throw new Error("Invalid key passed to Map.__getKey");
+        if (key === null || key === undefined) {
+          throw new Error("Invalid key passed to Map.__getKey");
+        }
         var hash = qx.core.ObjectRegistry.toHashCode(key);
         return hash;
       }
@@ -212,20 +222,17 @@ qx.Class.define("zx.data.Map", {
      * @param value {var} the object
      * @return {PutElement}
      */
-    __putImpl: function (key, value) {
+    __putImpl(key, value) {
       var keyClass = this.getKeyClass();
       var valueClass = this.getValueClass();
-      if (keyClass && !(key instanceof keyClass))
-        throw new Error(
-          "Cannot put key into map because key is the wrong class, expected " + keyClass + ", given key=" + key
-        );
-      if (valueClass && !(value instanceof valueClass))
-        throw new Error(
-          "Cannot put value into map because value is the wrong class, expected " +
-            valueClass +
-            ", given value=" +
-            value
-        );
+      if (keyClass && !(key instanceof keyClass)) {
+        throw new Error("Cannot put key into map because key is the wrong class, expected " + keyClass + ", given key=" + key);
+      }
+
+      if (valueClass && !(value instanceof valueClass)) {
+        throw new Error("Cannot put value into map because value is the wrong class, expected " + valueClass + ", given value=" + value);
+      }
+
       qx.core.Assert.assertFalse(this.__changingValue);
       this.__changingValue = true;
       try {
@@ -242,7 +249,9 @@ qx.Class.define("zx.data.Map", {
           oldValue = entry.getValue();
           values.remove(oldValue);
           entry.setValue(value);
-          if (!values.contains(value)) values.push(value);
+          if (!values.contains(value)) {
+            values.push(value);
+          }
           result = {
             key: key,
             value: value,
@@ -252,8 +261,12 @@ qx.Class.define("zx.data.Map", {
         } else {
           entry = new zx.data.Entry(key, value);
           this.__attachEntry(entry);
-          if (!values.contains(value)) values.push(value);
-          if (!keys.contains(key)) keys.push(key);
+          if (!values.contains(value)) {
+            values.push(value);
+          }
+          if (!keys.contains(key)) {
+            keys.push(key);
+          }
           result = {
             key: key,
             value: value,
@@ -297,7 +310,9 @@ qx.Class.define("zx.data.Map", {
      * @param evt {qx.event.type.Data}
      */
     __onEntryChangeValue(evt) {
-      if (this.__changingValue) return;
+      if (this.__changingValue) {
+        return;
+      }
       var entry = evt.getTarget();
       var value = entry.getValue();
       var oldValue = evt.getOldData();
@@ -309,8 +324,12 @@ qx.Class.define("zx.data.Map", {
         }
       }
       var values = this.getValues();
-      if (remove) values.remove(oldValue);
-      if (!values.contains(value)) values.push(value);
+      if (remove) {
+        values.remove(oldValue);
+      }
+      if (!values.contains(value)) {
+        values.push(value);
+      }
 
       this.fireDataEvent("change", {
         type: "put",
@@ -333,7 +352,9 @@ qx.Class.define("zx.data.Map", {
      */
     replace(src) {
       var t = this;
-      if (src instanceof zx.data.Map) src = src.toObject();
+      if (src instanceof zx.data.Map) {
+        src = src.toObject();
+      }
 
       var values = this.getValues();
       var keys = this.getKeys();
@@ -367,6 +388,7 @@ qx.Class.define("zx.data.Map", {
             value: tmp.getValue(),
             entry: tmp
           });
+
           values.remove(tmp.getValue());
           keys.remove(id);
           this.__detachEntry(tmp);
@@ -387,7 +409,9 @@ qx.Class.define("zx.data.Map", {
         eventData.put = put;
         eventData.type = eventData.type ? "put/remove" : "put";
       }
-      if (eventData.removed || eventData.put) this.fireDataEvent("change", eventData);
+      if (eventData.removed || eventData.put) {
+        this.fireDataEvent("change", eventData);
+      }
     },
 
     /**
@@ -440,6 +464,7 @@ qx.Class.define("zx.data.Map", {
           value: entry.getValue(),
           entry: entry
         });
+
         this.__detachEntry(entry);
       }
       this.getValues().removeAll();
@@ -571,7 +596,9 @@ qx.Class.define("zx.data.Map", {
      *          {Object}
      */
     _applyValues(value, oldValue) {
-      if (oldValue) throw new Error("Cannot change property values of zx.data.Map");
+      if (oldValue) {
+        throw new Error("Cannot change property values of zx.data.Map");
+      }
     },
 
     /**
@@ -583,7 +610,9 @@ qx.Class.define("zx.data.Map", {
      *          {Object}
      */
     _applyKeys(value, oldValue) {
-      if (oldValue) throw new Error("Cannot change property keys of zx.data.Map");
+      if (oldValue) {
+        throw new Error("Cannot change property keys of zx.data.Map");
+      }
     },
 
     /**
@@ -595,14 +624,18 @@ qx.Class.define("zx.data.Map", {
      *          {Object}
      */
     _applyEntries(value, oldValue) {
-      if (oldValue) throw new Error("Cannot change property entries of zx.data.Map");
+      if (oldValue) {
+        throw new Error("Cannot change property entries of zx.data.Map");
+      }
     },
 
     /**
      * Transform for keyClass and valueClass, converts strings to classes
      */
     _transformToClass(value) {
-      if (value) value = qx.Class.getByName(value);
+      if (value) {
+        value = qx.Class.getByName(value);
+      }
       return value;
     }
   }

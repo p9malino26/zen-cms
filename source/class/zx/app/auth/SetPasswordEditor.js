@@ -20,7 +20,7 @@ qx.Class.define("zx.app.auth.SetPasswordEditor", {
   include: [qx.ui.core.MChildrenHandling, qx.ui.core.MLayoutHandling],
 
   construct() {
-    this.base(arguments);
+    super();
     this._addField(this, "edtPassword", "Password");
     this._addField(this, "edtConfirmPassword", "Confirm Password");
   },
@@ -48,13 +48,15 @@ qx.Class.define("zx.app.auth.SetPasswordEditor", {
             validator: () => {
               let password = this.getQxObject("edtPassword").getValue().trim();
               let confirmPassword = this.getQxObject("edtConfirmPassword").getValue().trim();
-              if (password == confirmPassword) return null;
+              if (password == confirmPassword) {
+                return null;
+              }
               return "Both passwords must match exactly";
             }
           });
       }
 
-      return this.base(arguments, id);
+      return super._createQxObjectImpl(id);
     }
   }
 });

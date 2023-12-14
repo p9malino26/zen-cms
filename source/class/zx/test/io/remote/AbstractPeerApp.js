@@ -1,27 +1,26 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.io.remote.AbstractPeerApp", {
   extend: qx.application.Standalone,
 
   members: {
     main() {
-      this.base(arguments);
+      super.main();
 
       if (qx.core.Environment.get("qx.debug")) {
         qx.log.appender.Native;
@@ -64,9 +63,8 @@ qx.Class.define("zx.test.io.remote.AbstractPeerApp", {
       btn = new qx.ui.toolbar.Button("Add Child");
       this._tb.add(btn);
       btn.addListener("execute", () => {
-        let newChild = new zx.test.io.remote.Person(
-          "Child_No_" + (grandad.getChildren().getLength() + 1)
-        );
+        let newChild = new zx.test.io.remote.Person("Child_No_" + (grandad.getChildren().getLength() + 1));
+
         this.log(`Button is adding child ${newChild.getName()}`);
         grandad.getChildren().push(newChild);
         grandad.getChildren().forEach(child => {
@@ -82,9 +80,8 @@ qx.Class.define("zx.test.io.remote.AbstractPeerApp", {
       btn = new qx.ui.toolbar.Button("Add Grandchild");
       this._tb.add(btn);
       btn.addListener("execute", () => {
-        let newChild = new zx.test.io.remote.Person(
-          "Beverly_Child_No_" + (beverly.getChildren().getLength() + 1)
-        );
+        let newChild = new zx.test.io.remote.Person("Beverly_Child_No_" + (beverly.getChildren().getLength() + 1));
+
         this.log(`Button is adding grandchild ${newChild.getName()}`);
         beverly.getChildren().push(newChild);
         beverly.getChildren().forEach(child => {
@@ -106,16 +103,15 @@ qx.Class.define("zx.test.io.remote.AbstractPeerApp", {
         let oldChild = beverly.getChildren().getItem(0);
         this.log(`Button is removing grandchild ${oldChild.getName()}`);
         beverly.getChildren().remove(oldChild);
-        beverly
-          .getChildren()
-          .forEach(child => child.getSiblings().remove(oldChild));
+        beverly.getChildren().forEach(child => child.getSiblings().remove(oldChild));
         oldChild.getSiblings().removeAll();
         this._controller.flush();
       });
 
       const attach = person => {
-        if (person?.$$peer?.childrenChangeId)
+        if (person?.$$peer?.childrenChangeId) {
           throw new Error("attaching to the same person more than once!");
+        }
 
         let id = person.getChildren().addListener("change", evt => {
           let data = evt.getData();

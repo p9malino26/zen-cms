@@ -41,7 +41,9 @@ qx.Class.define("zx.utils.ScriptLoader", {
      */
     __loadScriptBundle(urls, callback, context) {
       if (urls.length == 0) {
-        if (callback) callback.call(context || this);
+        if (callback) {
+          callback.call(context || this);
+        }
         return;
       }
       var resolved = urls.shift();
@@ -61,7 +63,9 @@ qx.Class.define("zx.utils.ScriptLoader", {
       } else {
         var resolved = this.resolveUrl(url);
         if (this.__loaded[url]) {
-          if (callback) callback.call(context || this, url);
+          if (callback) {
+            callback.call(context || this, url);
+          }
           return;
         }
 
@@ -70,7 +74,9 @@ qx.Class.define("zx.utils.ScriptLoader", {
           loading = this.__loading[url] = { callbacks: [] };
           this.__createScriptElement(url, resolved);
         }
-        if (callback) loading.callbacks.push({ callback: callback, context: context });
+        if (callback) {
+          loading.callbacks.push({ callback: callback, context: context });
+        }
       }
       return this;
     },
@@ -82,7 +88,9 @@ qx.Class.define("zx.utils.ScriptLoader", {
      * @return this, for chaining
      */
     loadStylesheet(urls) {
-      if (!qx.lang.Type.isArray(urls)) urls = [urls];
+      if (!qx.lang.Type.isArray(urls)) {
+        urls = [urls];
+      }
       for (var i = 0; i < urls.length; i++) {
         var url = urls[i];
         if (!this.__loaded[url]) {
@@ -100,10 +108,14 @@ qx.Class.define("zx.utils.ScriptLoader", {
      * @returns {Boolean} true if they are all loaded
      */
     isLoaded(urls) {
-      if (!qx.lang.Type.isArray(urls)) urls = [urls];
+      if (!qx.lang.Type.isArray(urls)) {
+        urls = [urls];
+      }
       for (var i = 0; i < urls.length; i++) {
         var url = urls[i];
-        if (!this.__loaded[url]) return false;
+        if (!this.__loaded[url]) {
+          return false;
+        }
       }
       return true;
     },

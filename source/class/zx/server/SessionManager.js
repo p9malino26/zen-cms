@@ -218,7 +218,9 @@ qx.Class.define("zx.server.SessionManager", {
      */
     async _onResponse(request, reply) {
       const session = request.session;
-      if (!session) return;
+      if (!session) {
+        return;
+      }
       request.session.decUse();
       if (!request.session.isInUse()) {
         delete this.__sessionCache[request.session.getSessionId()];

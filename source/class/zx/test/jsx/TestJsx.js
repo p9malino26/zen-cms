@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.jsx.TestJsx", {
   extend: zx.app.demo.Demonstrator,
@@ -27,6 +26,7 @@ qx.Class.define("zx.test.jsx.TestJsx", {
           <div id="el2" className="hello" style="border: 1px solid" /> World
         </div>
       );
+
       this.assertEquals(true, html instanceof qx.html.Element);
       this.assertEquals(3, html.getChildren().length);
       let el2 = html.getChildren()[1];
@@ -45,6 +45,7 @@ qx.Class.define("zx.test.jsx.TestJsx", {
           <div ref={myRef}></div>
         </div>
       );
+
       this.assertTrue(html.getChildren()[0] === myRef.getValue());
     }
   }

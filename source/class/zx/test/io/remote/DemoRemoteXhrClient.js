@@ -1,25 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.io.remote.DemoRemoteXhrClient", {
   extend: zx.app.demo.Demonstrator,
 
   construct() {
-    this.base(arguments);
+    super();
     this._captureLogs(this.__url);
   },
 
@@ -49,12 +49,10 @@ qx.Class.define("zx.test.io.remote.DemoRemoteXhrClient", {
      * @Override
      */
     async initialise() {
-      this.base(arguments);
+      super.initialise();
 
       let controller = await qx.core.Init.getApplication().getNetController();
-      this._grandad = controller.getUriMapping(
-        "zx.test.io.remote.RemoteXhrServer.grandad"
-      );
+      this._grandad = controller.getUriMapping("zx.test.io.remote.RemoteXhrServer.grandad");
     },
 
     async testSayHello() {
@@ -62,10 +60,8 @@ qx.Class.define("zx.test.io.remote.DemoRemoteXhrClient", {
       this._grandad.setAge(age + 1);
       let result = await this._grandad.sayHello("From The Client");
       this.info("Server said: " + result);
-      this.assertEquals(
-        "RUNNING ON SERVER: Hello from Arthur, msg=From The Client",
-        result
-      );
+      this.assertEquals("RUNNING ON SERVER: Hello from Arthur, msg=From The Client", result);
+
       let controller = await qx.core.Init.getApplication().getNetController();
       controller.flush();
     },
@@ -103,7 +99,8 @@ qx.Class.define("zx.test.io.remote.DemoRemoteXhrClient", {
           this.log("Page source is " + this.__url);
           return iframe;
       }
-      return this.base(arguments, id);
+
+      return super._createQxObjectImpl(id);
     }
   }
 });

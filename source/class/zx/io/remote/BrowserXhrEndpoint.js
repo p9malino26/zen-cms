@@ -24,7 +24,7 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
    * @param {String?} url if null then default is used
    */
   construct(url) {
-    this.base(arguments);
+    super();
     this.__url = url || "/zx/io/xhr";
   },
 
@@ -75,7 +75,7 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
      */
     async _shutdown() {
       this.setPolling(false);
-      await this.base(arguments);
+      await super._shutdown();
     },
 
     /**
@@ -98,7 +98,9 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
      * Queues the next poll
      */
     __queueNextPoll() {
-      if (!this.isPolling() || this.__inSend) return;
+      if (!this.isPolling() || this.__inSend) {
+        return;
+      }
 
       this.__timerId = setTimeout(() => {
         this.__timerId = null;
@@ -117,10 +119,14 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
      * @Override
      */
     _flushImpl(queuedPackets, polling) {
-      if (!queuedPackets.length && !polling) return;
+      if (!queuedPackets.length && !polling) {
+        return;
+      }
       this.__clearPollTimeout();
       if (this.__inSend) {
-        if (!this.__sendQueue) this.__sendQueue = [];
+        if (!this.__sendQueue) {
+          this.__sendQueue = [];
+        }
         qx.lang.Array.append(this.__sendQueue, queuedPackets);
         return;
       }
@@ -138,6 +144,7 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
             handler: onComplete,
             body: sendQueue
           });
+
           return;
         }
 
@@ -261,7 +268,9 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
         }
 
         let bodyAsString = JSON.stringify(body, null, 2);
-        if (qx.core.Environment.get("qx.debug")) headers["X-Zx-Io-Remote-SHA1"] = zx.utils.Sha.sha1(bodyAsString);
+        if (qx.core.Environment.get("qx.debug")) {
+          headers["X-Zx-Io-Remote-SHA1"] = zx.utils.Sha.sha1(bodyAsString);
+        }
 
         headers["X-Zx-Io-Remote-ClientTime"] = new Date().getTime();
         headers["X-Zx-Io-Remote-SessionUuid"] = this.getUuid();

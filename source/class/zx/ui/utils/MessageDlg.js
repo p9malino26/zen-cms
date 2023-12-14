@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.utils.MessageDlg", {
   extend: zx.ui.utils.AbstractDialog,
@@ -26,7 +26,7 @@ qx.Class.define("zx.ui.utils.MessageDlg", {
    * @param buttons? {String[]} the buttons to show, defaults to something appropriate for the given type
    */
   construct(type, message, caption, buttons) {
-    this.base(arguments, caption);
+    super(caption);
     this.setLayout(new qx.ui.layout.VBox(10));
     this.set({
       maxWidth: 500,
@@ -46,7 +46,9 @@ qx.Class.define("zx.ui.utils.MessageDlg", {
 
     this.setType(type || "information");
     this.setButtons(buttons || ["ok"]);
-    if (message) this.setMessage(message);
+    if (message) {
+      this.setMessage(message);
+    }
   },
 
   properties: {
@@ -70,9 +72,7 @@ qx.Class.define("zx.ui.utils.MessageDlg", {
      * Apply for `type`
      */
     _applyType(value) {
-      let data =
-        zx.ui.utils.MessageDlg.TYPES[value] ||
-        zx.ui.utils.MessageDlg.TYPES.information;
+      let data = zx.ui.utils.MessageDlg.TYPES[value] || zx.ui.utils.MessageDlg.TYPES.information;
       this.getQxObject("msgAtom").setIcon(data ? data.icon : null);
     },
 
@@ -92,7 +92,7 @@ qx.Class.define("zx.ui.utils.MessageDlg", {
           return new qx.ui.basic.Atom("").set({ rich: true });
       }
 
-      return this.base(arguments, id);
+      return super._createQxObjectImpl(id);
     }
   },
 
@@ -101,52 +101,36 @@ qx.Class.define("zx.ui.utils.MessageDlg", {
       information: {
         icon: "@FontAwesome/info/32"
       },
+
       error: {
         icon: "@FontAwesomeSolid/exclamation-circle/32"
       },
+
       warning: {
         icon: "@FontAwesomeSolid/exclamation-triangle/32"
       },
+
       confirmation: {
         icon: "@FontAwesomeSolid/question-circle/32"
       }
     },
+
     _WINDOW: null,
 
     showError(msg, caption, buttons) {
-      return zx.ui.utils.MessageDlg._showDialog(
-        "error",
-        msg,
-        caption || "Error",
-        buttons
-      );
+      return zx.ui.utils.MessageDlg._showDialog("error", msg, caption || "Error", buttons);
     },
 
     showConfirmation(msg, caption, buttons) {
-      return zx.ui.utils.MessageDlg._showDialog(
-        "confirmation",
-        msg,
-        caption || "Confirmation",
-        buttons || ["yes", "no"]
-      );
+      return zx.ui.utils.MessageDlg._showDialog("confirmation", msg, caption || "Confirmation", buttons || ["yes", "no"]);
     },
 
     showInformation(msg, caption, buttons) {
-      return zx.ui.utils.MessageDlg._showDialog(
-        "information",
-        msg,
-        caption || "Information",
-        buttons
-      );
+      return zx.ui.utils.MessageDlg._showDialog("information", msg, caption || "Information", buttons);
     },
 
     showWarning(msg, caption, buttons) {
-      return zx.ui.utils.MessageDlg._showDialog(
-        "warning",
-        msg,
-        caption || "Warning",
-        buttons || ["ok", "cancel"]
-      );
+      return zx.ui.utils.MessageDlg._showDialog("warning", msg, caption || "Warning", buttons || ["ok", "cancel"]);
     },
 
     _showDialog(type, msg, caption, buttons) {

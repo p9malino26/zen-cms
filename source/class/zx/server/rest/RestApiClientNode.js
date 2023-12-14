@@ -39,6 +39,7 @@ qx.Class.define("zx.server.rest.RestApiClientNode", {
           json: true,
           jar: jar
         });
+
         cookieStore.getAllCookiesSync().forEach(cookie => this.debug(`API received ${cookie.key}=${cookie.value}`));
         onSuccess(data);
       } catch (ex) {

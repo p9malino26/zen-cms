@@ -25,7 +25,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
   extend: zx.io.persistence.Endpoint,
 
   construct(uuid) {
-    this.base(arguments);
+    super();
     this.__sentUuids = {};
     this.__queuedPackets = [];
     this.__lastPacketId = 0;
@@ -112,6 +112,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
         hash: this.toHashCode(),
         promise
       });
+
       this.flush();
       return await promise;
     },
@@ -127,7 +128,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      * Closes the connection
      */
     async close() {
-      if (!this.isOpen()) throw new Error("Cannot close an already closed end point");
+      if (!this.isOpen()) {
+        throw new Error("Cannot close an already closed end point");
+      }
       //this.debug(`Closing endpoint, hash=${this.toHashCode()} uuid=${this.getUuid()}`);
       this.__open = false;
       await this._shutdown();
@@ -138,10 +141,13 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      * Gracefully closes, notifying the other side
      */
     async gracefulClose() {
-      if (!this.isOpen()) throw new Error("Cannot close an already closed end point");
+      if (!this.isOpen()) {
+        throw new Error("Cannot close an already closed end point");
+      }
       this._queuePacket({
         type: "close"
       });
+
       this.flush();
       await this.close();
     },
@@ -204,7 +210,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
       let controller = this.getController();
       for (let i = 0; i < args.length; i++) {
         let arg = args[i];
-        if (arg === null || arg === undefined) continue;
+        if (arg === null || arg === undefined) {
+          continue;
+        }
         if (controller.isCompatibleObject(arg)) {
           let uuid = arg.toUuid();
           if (!uuid || !this.hasObject(uuid)) {
@@ -230,6 +238,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
         args,
         promise: new qx.Promise()
       };
+
       let promise = packet.promise;
       this._queuePacket(packet);
       this.flush();
@@ -246,19 +255,25 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      * @Override
      */
     async _putImpl(obj) {
-      await this.base(arguments, obj);
+      await super._putImpl(obj);
 
       let uuid = obj.toUuid();
       let watcher = this.getController().getSharedWatcher();
-      if (!watcher.isWatching(obj, this)) this.watchObject(obj);
+      if (!watcher.isWatching(obj, this)) {
+        this.watchObject(obj);
+      }
     },
 
     /**
      * @Override
      */
     async _sendJson(uuid, json) {
-      if (!this.isOpen()) throw new Error("Cannot send via a closed end point");
-      if (this.__sentUuids[uuid]) return;
+      if (!this.isOpen()) {
+        throw new Error("Cannot send via a closed end point");
+      }
+      if (this.__sentUuids[uuid]) {
+        return;
+      }
       this.__sentUuids[uuid] = "sent";
       this._queuePacket({
         type: "sendObject",
@@ -306,7 +321,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      * @param {Object} value native JSON representation of the property
      */
     onWatchedPropertySerialized(obj, propertyName, changeType, value) {
-      if (this.isChangingProperty(obj, propertyName)) return;
+      if (this.isChangingProperty(obj, propertyName)) {
+        return;
+      }
 
       let io = this.getController().getClassIos().getClassIo(obj.constructor);
       let uuid = obj.toUuid();
@@ -400,8 +417,12 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      * @param uuid {String} the UUID of the object to map to that URI
      */
     _sendUriMapping(uri, uuid) {
-      if (!this.isOpen()) throw new Error("Cannot send via a closed end point");
-      if (!this.__sentUuids[uuid]) throw new Error("Cannot set a mapping for an unknown UUID");
+      if (!this.isOpen()) {
+        throw new Error("Cannot send via a closed end point");
+      }
+      if (!this.__sentUuids[uuid]) {
+        throw new Error("Cannot set a mapping for an unknown UUID");
+      }
       this._queuePacket({
         type: "sendUriMapping",
         uri,
@@ -413,7 +434,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      * Flushes the queued data to the other end
      */
     async flush() {
-      await this.base(arguments);
+      await super.flush();
       this._sendPropertyChanges();
       if (this._supportsPushPackets) {
         let queuedPackets = this.__takeQueuedPackets();
@@ -471,7 +492,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      */
     async _receivePackets(req, reply, packets) {
       if (qx.core.Environment.get("zx.io.remote.NetworkEndpoint.traceIo")) {
-        if (packets.length) console.log(`${this.classname}: receive = ${JSON.stringify(packets, null, 2)}`);
+        if (packets.length) {
+          console.log(`${this.classname}: receive = ${JSON.stringify(packets, null, 2)}`);
+        }
       }
 
       let response = await this.__receiveQueue.push({ req, reply, packets });
@@ -596,7 +619,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
             this.__sentUuids[packet.uuid] = "received";
             zx.io.remote.NetworkEndpoint.setEndpointFor(obj, this);
 
-            if (!watcher.isWatching(obj, this)) this.watchObject(obj);
+            if (!watcher.isWatching(obj, this)) {
+              this.watchObject(obj);
+            }
           }
         } else if (packet.type == "sendPropertyChanges") {
           let changes = packet.changes;
@@ -619,12 +644,16 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
 
           for (let i = 0; i < args.length; i++) {
             let arg = args[i];
-            if (!arg) continue;
+            if (!arg) {
+              continue;
+            }
             if (arg.hasOwnProperty("value")) {
               args[i] = arg.value;
               continue;
             }
-            if (qx.core.Environment.get("qx.debug")) this.assertTrue(!!arg.uuid);
+            if (qx.core.Environment.get("qx.debug")) {
+              this.assertTrue(!!arg.uuid);
+            }
 
             let obj = await this.getController().getByUuid(null, arg.uuid);
             args[i] = obj;
@@ -637,6 +666,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
             type: "return",
             result: await this._serializeReturnValue(result)
           };
+
           this._queuePacket(resultPacket);
 
           //
@@ -646,9 +676,13 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
             let str = packet.originPacketId;
             let pos = str.indexOf(":");
             let hash = str.substring(0, pos);
-            if (hash != this.toHashCode()) throw new Error(`Received packet ID for wrong end point, found ${hash} expected ${this.toHashCode()}`);
+            if (hash != this.toHashCode()) {
+              throw new Error(`Received packet ID for wrong end point, found ${hash} expected ${this.toHashCode()}`);
+            }
             let index = parseInt(str.substring(pos + 1), 10);
-            if (isNaN(index) || index < 1 || index > this.__lastPacketId) throw new Error("Received invalid index in packet ID");
+            if (isNaN(index) || index < 1 || index > this.__lastPacketId) {
+              throw new Error("Received invalid index in packet ID");
+            }
           }
 
           let promise = this._pendingPromises[packet.originPacketId];
@@ -684,10 +718,13 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           this.fireEvent("close");
         } else if (packet.type == "open") {
           if (qx.core.Environment.get("qx.debug")) {
-            if (packet.uuid != this.getUuid())
+            if (packet.uuid != this.getUuid()) {
               throw new Error(`Open received unexpected UUID, LOCAL hash=${this.toHashCode()}, LOCAL uuid=${this.getUuid()}, REMOTE hash=${packet.hash}, REMOTE uuid=${packet.uuid}`);
+            }
           }
-          if (this.__sentOpened) this.error(`Unexpected open after opened has been sent`);
+          if (this.__sentOpened) {
+            this.error(`Unexpected open after opened has been sent`);
+          }
           this.__openOriginPacketId = packet.packetId;
           this.grabPutQueue();
           try {
@@ -737,7 +774,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
       await this.getController().flush();
       let responses = this.__takeQueuedPackets() || [];
       if (qx.core.Environment.get("zx.io.remote.NetworkEndpoint.traceIo")) {
-        if (responses.length) console.log(`${this.classname}: responses = ${JSON.stringify(responses, null, 2)}`);
+        if (responses.length) {
+          console.log(`${this.classname}: responses = ${JSON.stringify(responses, null, 2)}`);
+        }
       }
 
       return responses;
@@ -774,6 +813,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
               sourceQxObjectId: fields.sourceQxObjectId,
               result: await this._serializeReturnValue(result)
             };
+
             this._queuePacket(resultPacket);
           }
         }
@@ -826,7 +866,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
         qx.log.Logger.error("Cannot initialise remote class because it is not derived from zx.io.persistence.Object");
         return;
       }
-      for (let tmp = clazz; tmp && tmp != zx.io.persistence.Object; tmp = tmp.superclass) zx.io.remote.NetworkEndpoint.__initialiseRemoteClassImpl(tmp);
+      for (let tmp = clazz; tmp && tmp != zx.io.persistence.Object; tmp = tmp.superclass) {
+        zx.io.remote.NetworkEndpoint.__initialiseRemoteClassImpl(tmp);
+      }
     },
 
     /**
@@ -847,7 +889,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
     getEndpointFor(obj) {
       let uuid = (obj.$$zxIo && obj.$$zxIo.endpointUuid) || null;
       if (!uuid) {
-        if (qx.Class.hasInterface(obj.constructor, zx.io.persistence.IObject)) return this.__defaultEndpoint;
+        if (qx.Class.hasInterface(obj.constructor, zx.io.persistence.IObject)) {
+          return this.__defaultEndpoint;
+        }
         return null;
       }
       let endpoint = zx.io.remote.NetworkEndpoint.__allEndpoints[uuid];
@@ -861,7 +905,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      * @param {zx.io.remote.NetworkEndpoint} endpoint
      */
     setEndpointFor(obj, endpoint) {
-      if (!obj.$$zxIo) obj.$$zxIo = {};
+      if (!obj.$$zxIo) {
+        obj.$$zxIo = {};
+      }
       if (qx.core.Environment.get("qx.debug")) {
         qx.core.Assert.assertTrue(!obj.$$zxIo.endpointUuid || obj.$$zxIo.endpointUuid == endpoint.getUuid());
       }
@@ -875,7 +921,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
       const EP = zx.io.remote.NetworkEndpoint;
 
       // Get a list of method names that need wrapping
-      if (EP.__remoteClasses[clazz.classname]) return;
+      if (EP.__remoteClasses[clazz.classname]) {
+        return;
+      }
       EP.__remoteClasses[clazz.classname] = true;
 
       const PROPERTY_PREFIXES = {
@@ -893,22 +941,27 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
         .forEach(name => {
           // Exclude any methods which are property accessors
           let pos = -1;
-          for (let i = 0; i < name.length; i++)
+          for (let i = 0; i < name.length; i++) {
             if (qx.lang.String.isUpperCase(name[i])) {
               pos = i;
               break;
             }
+          }
           if (pos > -1) {
             let prefix = name.substring(0, pos);
             if (PROPERTY_PREFIXES[prefix]) {
               let propertyName = qx.lang.String.firstLow(name.substring(pos));
-              if (qx.Class.hasProperty(clazz, propertyName)) return false;
+              if (qx.Class.hasProperty(clazz, propertyName)) {
+                return false;
+              }
             }
           }
 
           // And then filter by the annotations
           let annos = qx.Annotation.getMember(clazz, name, zx.io.remote.anno.Method);
-          if (annos.length > 0) methods[name] = annos;
+          if (annos.length > 0) {
+            methods[name] = annos;
+          }
         });
 
       // If we're on the client, then wrap it with a call to the remote method
@@ -933,7 +986,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           }
 
           if (anno.isWithRequest) {
-            if (!method.$$zxIo) method.$$zxIo = {};
+            if (!method.$$zxIo) {
+              method.$$zxIo = {};
+            }
             method.$$zxIo.withRequest = true;
             hasWithRequest = true;
           }
@@ -942,7 +997,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
       if (hasWithRequest) {
         let classAnnos = qx.Annotation.getClass(clazz, zx.io.remote.anno.Class);
         let anno = classAnnos.length ? classAnnos[classAnnos.length - 1] : null;
-        if (anno && anno.getProxy() != "always") throw new Error(`Class ${clazz.classname} has withRequest methods but this is incompatible with classes which are not proxied`);
+        if (anno && anno.getProxy() != "always") {
+          throw new Error(`Class ${clazz.classname} has withRequest methods but this is incompatible with classes which are not proxied`);
+        }
       }
     },
 

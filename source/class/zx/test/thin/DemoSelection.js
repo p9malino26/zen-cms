@@ -1,26 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.thin.DemoSelection", {
   extend: zx.thin.ui.container.Window,
 
   construct() {
-    this.base(arguments);
+    super();
     this.setCaption("Demo Selection");
     let body = this.getBody();
     body.add(<h2>Demo of the various selection styles</h2>);
@@ -89,7 +88,8 @@ qx.Class.define("zx.test.thin.DemoSelection", {
         case "switchTwo":
           return new zx.thin.ui.form.Switch("Switch Two");
       }
-      return this.base(arguments, id);
+
+      return super._createQxObjectImpl(id);
     }
   }
 });

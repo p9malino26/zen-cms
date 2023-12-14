@@ -115,6 +115,7 @@ qx.Class.define("zx.io.persistence.Watcher", {
           properties: {},
           listenerIds: []
         };
+
         this.__status.numWatchedObjects++;
         Object.keys(properties).forEach(propertyName => this._watchProperty(info, propertyName));
       }
@@ -130,7 +131,9 @@ qx.Class.define("zx.io.persistence.Watcher", {
     unwatchObject(object, ...args) {
       let uuid = object.toUuid();
       let info = this.__objectInfoByUuid[uuid];
-      if (!info) return;
+      if (!info) {
+        return;
+      }
       if (this._detachObject(info, ...args)) {
         this.__status.numWatchedObjects--;
         delete this.__objectInfoByUuid[uuid];
@@ -165,7 +168,9 @@ qx.Class.define("zx.io.persistence.Watcher", {
     isWatching(object, ...args) {
       let uuid = object.toUuid();
       let info = this.__objectInfoByUuid[uuid];
-      if (!info) return false;
+      if (!info) {
+        return false;
+      }
       return this._isWatchingImpl(info, ...args);
     },
 

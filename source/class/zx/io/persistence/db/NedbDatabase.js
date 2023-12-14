@@ -25,12 +25,14 @@ qx.Class.define("zx.io.persistence.db.NedbDatabase", {
   extend: zx.io.persistence.db.Database,
 
   construct(rootDir) {
-    this.base(arguments);
+    super();
     this.__rootDir = rootDir;
   },
 
   destruct() {
-    if (this.__nedb) this.close();
+    if (this.__nedb) {
+      this.close();
+    }
   },
 
   members: {
@@ -44,17 +46,20 @@ qx.Class.define("zx.io.persistence.db.NedbDatabase", {
      * @Override
      */
     async open() {
-      if (!fs.existsSync(this.__rootDir)) throw new Error("Cannot find root directory for database: " + this.__rootDir);
+      if (!fs.existsSync(this.__rootDir)) {
+        throw new Error("Cannot find root directory for database: " + this.__rootDir);
+      }
       const Nedb = require("nedb");
       this.__nedb = new Nedb({
         filename: path.join(this.__rootDir, "documents.nedb")
       });
+
       await zx.utils.Promisify.call(cb => this.__nedb.loadDatabase(cb));
 
       // Compaction has a performance hit but ensures all data is flushed to disk
       this.__nedb.persistence.setAutocompactionInterval(60 * 1000);
 
-      return await this.base(arguments);
+      return await super.open();
     },
 
     /*
@@ -66,7 +71,7 @@ qx.Class.define("zx.io.persistence.db.NedbDatabase", {
         this.__nedb.persistence.compactDatafile();
         this.__nedb = null;
       }
-      await this.base(arguments);
+      await super.close();
     },
 
     /*

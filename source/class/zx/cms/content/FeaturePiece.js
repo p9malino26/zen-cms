@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.cms.content.FeaturePiece", {
   extend: zx.cms.content.Piece,
@@ -30,10 +29,7 @@ qx.Class.define("zx.cms.content.FeaturePiece", {
       init: "",
       check: "String",
       event: "changeFeatureName",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** CSS Class to apply */
@@ -41,10 +37,7 @@ qx.Class.define("zx.cms.content.FeaturePiece", {
       init: "",
       check: "String",
       event: "changeCssClass",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** Options to be passed to the feature */
@@ -52,20 +45,16 @@ qx.Class.define("zx.cms.content.FeaturePiece", {
       init: null,
       nullable: true,
       event: "changeOptions",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     }
   },
 
   members: {
     async prepareContext(context, rendering) {
-      await this.base(arguments, context, rendering);
+      await super.prepareContext(context, rendering);
       context.featureName = this.getFeatureName();
-      context.feature = zx.cms.content.Features.getFeature(
-        this.getFeatureName()
-      );
+      context.feature = zx.cms.content.Features.getFeature(this.getFeatureName());
+
       context.cssClass = this.getCssClass();
       context.uniqueDivId = zx.cms.content.Piece.getUniqueDivId();
       let options = this.getOptions();

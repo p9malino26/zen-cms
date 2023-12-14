@@ -25,7 +25,7 @@ qx.Class.define("zx.cms.render.FileTemplate", {
   extend: zx.cms.render.Template,
 
   construct(filename, classname, name) {
-    this.base(arguments, classname, name);
+    super(classname, name);
     this.__filename = filename;
   },
 

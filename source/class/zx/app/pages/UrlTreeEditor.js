@@ -1,25 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.app.pages.UrlTreeEditor", {
   extend: zx.ui.editor.Editor,
 
   construct() {
-    this.base(arguments);
+    super();
     this._setLayout(new qx.ui.layout.VBox());
     this._add(this.getQxObject("toolbar"));
     this._add(this.getQxObject("tree"));
@@ -50,23 +50,24 @@ qx.Class.define("zx.app.pages.UrlTreeEditor", {
             header: true,
             controller: this.getQxObject("view")
           });
+
           return row;
 
         case "ctlr":
           var ctlr = new zx.ui.tree.controller.Controller(null);
           ctlr.setOptions({
-            getChildrenPath: function () {
+            getChildrenPath() {
               return "children";
             }
           });
+
           this.bind("value.rootNode", ctlr, "model");
           return ctlr;
 
         case "view":
           var view = new zx.ui.tree.column.View();
-          zx.app.pages.UrlTreeEditor.COLUMNS.forEach(column =>
-            view.getColumns().push(column)
-          );
+          zx.app.pages.UrlTreeEditor.COLUMNS.forEach(column => view.getColumns().push(column));
+
           return view;
 
         case "tree":
@@ -78,15 +79,13 @@ qx.Class.define("zx.app.pages.UrlTreeEditor", {
             draggable: true,
             droppable: true
           });
+
           tree.setLayoutProperties({ flex: 1 });
-          tree.getSelection().addListener(
-            "change",
-            function (evt) {
-              var sel = evt.getTarget();
-              this.setCurrentNode(sel.getLength() ? sel.getItem(0) : null);
-            },
-            this
-          );
+          tree.getSelection().addListener("change", evt => {
+            var sel = evt.getTarget();
+            this.setCurrentNode(sel.getLength() ? sel.getItem(0) : null);
+          });
+
           return tree;
 
         case "toolbar":
@@ -96,14 +95,11 @@ qx.Class.define("zx.app.pages.UrlTreeEditor", {
           return tb;
 
         case "btnAdd":
-          var btn = new qx.ui.toolbar.Button(
-            "Create",
-            "@FontAwesome/plus-square/16"
-          );
+          var btn = new qx.ui.toolbar.Button("Create", "@FontAwesome/plus-square/16");
+
           btn.addListener("execute", () => {
             let node = new zx.app.pages.UrlNode();
-            let parent =
-              this.getCurrentNode() || this.getQxObject("ctlr").getModel();
+            let parent = this.getCurrentNode() || this.getQxObject("ctlr").getModel();
             node.setName("part-" + (parent.getChildren().getLength() + 1));
             node.setParent(parent);
             parent.getChildren().push(node);
@@ -111,10 +107,7 @@ qx.Class.define("zx.app.pages.UrlTreeEditor", {
           return btn;
 
         case "btnDelete":
-          var btn = new qx.ui.toolbar.Button(
-            "Delete",
-            "@FontAwesome/times-circle/16"
-          ).set({ enabled: false });
+          var btn = new qx.ui.toolbar.Button("Delete", "@FontAwesome/times-circle/16").set({ enabled: false });
           return btn;
       }
     }

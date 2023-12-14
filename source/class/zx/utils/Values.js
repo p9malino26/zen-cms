@@ -79,15 +79,27 @@ qx.Class.define("zx.utils.Values", {
      *          {Object|Number|String}
      * @return {Boolean}
      */
-    toBoolean: function (value) {
+    toBoolean(value) {
       var type = typeof value;
-      if (type == "boolean") return value;
-      if (type == "undefined" || !value) return false;
-      if (type == "number") return value != 0;
+      if (type == "boolean") {
+        return value;
+      }
+      if (type == "undefined" || !value) {
+        return false;
+      }
+      if (type == "number") {
+        return value != 0;
+      }
       var str = value.trim().toLowerCase();
-      if (str == "true" || str == "yes" || str == "on" || str == "1") return true;
-      if (str == "false" || str == "no" || str == "off" || str == "0") return false;
-      if (!/[\-\+]?[0-9.]/.test(value)) return false;
+      if (str == "true" || str == "yes" || str == "on" || str == "1") {
+        return true;
+      }
+      if (str == "false" || str == "no" || str == "off" || str == "0") {
+        return false;
+      }
+      if (!/[\-\+]?[0-9.]/.test(value)) {
+        return false;
+      }
       var intVal = parseInt(str);
       return !isNaN(intVal) && intVal != 0;
     },
@@ -95,14 +107,24 @@ qx.Class.define("zx.utils.Values", {
     /**
      * Detects whether a value can be entirely converted into a boolean
      */
-    isBoolean: function (value) {
+    isBoolean(value) {
       var type = typeof value;
-      if (type == "undefined" || !value) return false;
-      if (type == "number") return true;
+      if (type == "undefined" || !value) {
+        return false;
+      }
+      if (type == "number") {
+        return true;
+      }
       var str = value.trim().toLowerCase();
-      if (str == "true" || str == "yes" || str == "on" || str == "1") return true;
-      if (str == "false" || str == "no" || str == "off" || str == "0") return true;
-      if (!/[\-\+]?[0-9.]/.test(value)) return false;
+      if (str == "true" || str == "yes" || str == "on" || str == "1") {
+        return true;
+      }
+      if (str == "false" || str == "no" || str == "off" || str == "0") {
+        return true;
+      }
+      if (!/[\-\+]?[0-9.]/.test(value)) {
+        return false;
+      }
       var intVal = parseInt(str);
       return !isNaN(intVal);
     },
@@ -116,14 +138,24 @@ qx.Class.define("zx.utils.Values", {
      * @param allowEmpty?
      *          {Boolean} true if empty value are considered a valid value
      */
-    isFloat: function (value, allowEmpty) {
-      if (value == null) return false;
+    isFloat(value, allowEmpty) {
+      if (value == null) {
+        return false;
+      }
       var type = typeof value;
-      if (type == "number") return true;
-      if (type != "string") return false;
+      if (type == "number") {
+        return true;
+      }
+      if (type != "string") {
+        return false;
+      }
       value = value.trim();
-      if (value.length == 0) return allowEmpty ? true : false;
-      if (!/^[\-\+]?[0-9.]+$/.test(value)) return false;
+      if (value.length == 0) {
+        return allowEmpty ? true : false;
+      }
+      if (!/^[\-\+]?[0-9.]+$/.test(value)) {
+        return false;
+      }
       return true;
     },
 
@@ -140,9 +172,11 @@ qx.Class.define("zx.utils.Values", {
      *           exception if the value cannot be converted and defaultValue is
      *           null
      */
-    toFloat: function (value, defaultValue) {
+    toFloat(value, defaultValue) {
       if (!this.isFloat(value, false)) {
-        if (defaultValue != null) return defaultValue;
+        if (defaultValue != null) {
+          return defaultValue;
+        }
         throw "Cannot convert value '" + value + "' to a float and no default provided";
       }
       return parseFloat(value);
@@ -157,14 +191,24 @@ qx.Class.define("zx.utils.Values", {
      * @param allowEmpty?
      *          {Boolean} true if empty value are considered a valid value
      */
-    isInt: function (value, allowEmpty) {
-      if (value == null) return false;
+    isInt(value, allowEmpty) {
+      if (value == null) {
+        return false;
+      }
       var type = typeof value;
-      if (type == "number") return true;
-      if (type != "string") return false;
+      if (type == "number") {
+        return true;
+      }
+      if (type != "string") {
+        return false;
+      }
       value = value.trim();
-      if (value.length == 0) return allowEmpty ? true : false;
-      if (!/^[\-\+]?[0-9]+$/.test(value)) return false;
+      if (value.length == 0) {
+        return allowEmpty ? true : false;
+      }
+      if (!/^[\-\+]?[0-9]+$/.test(value)) {
+        return false;
+      }
       return true;
     },
 
@@ -181,9 +225,11 @@ qx.Class.define("zx.utils.Values", {
      *           exception if the value cannot be converted and defaultValue is
      *           null
      */
-    toInt: function (value, defaultValue) {
+    toInt(value, defaultValue) {
       if (!this.isInt(value, false)) {
-        if (defaultValue != null) return defaultValue;
+        if (defaultValue != null) {
+          return defaultValue;
+        }
         throw "Cannot convert value '" + value + "' to an integer and no default provided";
       }
       return parseInt(value);
@@ -192,7 +238,7 @@ qx.Class.define("zx.utils.Values", {
     /**
      * Rounds a floating point number to a given number of places
      */
-    round: function (value, numPlaces) {
+    round(value, numPlaces) {
       var multiplier = Math.pow(10, numPlaces);
       value = Math.round(value * multiplier);
       value /= multiplier;
@@ -207,9 +253,13 @@ qx.Class.define("zx.utils.Values", {
      * @param width
      * @returns
      */
-    leadingZeros: function (value, width) {
-      if (typeof value != "string") value = "" + value;
-      while (value.length < width) value = "0" + value;
+    leadingZeros(value, width) {
+      if (typeof value != "string") {
+        value = "" + value;
+      }
+      while (value.length < width) {
+        value = "0" + value;
+      }
       return value;
     },
 
@@ -220,7 +270,7 @@ qx.Class.define("zx.utils.Values", {
      *          {Character} the character to test
      * @return {Boolean}
      */
-    isDigit: function (ch) {
+    isDigit(ch) {
       // var i = parseInt(ch);
       // return !isNaN(i) && i >= 0 && i <= 9;
       var cc = !ch ? 0 : ch.charCodeAt(0);
@@ -234,7 +284,7 @@ qx.Class.define("zx.utils.Values", {
      *          {Character} the character to test
      * @return {Boolean}
      */
-    isWhitespace: function (ch) {
+    isWhitespace(ch) {
       var cc = !ch ? 0 : ch.charCodeAt(0);
       return cc == 32 || cc == 9 || cc == 10 || cc == 13;
     },
@@ -246,7 +296,7 @@ qx.Class.define("zx.utils.Values", {
      *          {Character} the character to test
      * @return {Boolean}
      */
-    isLetter: function (c) {
+    isLetter(c) {
       var cc = !c ? 0 : c.charCodeAt(0);
       return (cc >= 0x41 && cc <= 0x5a) || (cc >= 0x61 && cc <= 0x7a);
     },
@@ -257,7 +307,7 @@ qx.Class.define("zx.utils.Values", {
      * @param c
      * @return {Boolean}
      */
-    isAlphaNum: function (c) {
+    isAlphaNum(c) {
       return this.isLetter(c) || this.isDigit(c);
     },
 
@@ -278,7 +328,7 @@ qx.Class.define("zx.utils.Values", {
      *          {Character} the character to test
      * @return {Boolean}
      */
-    isUpperCase: function (c) {
+    isUpperCase(c) {
       var cc = !c ? 0 : c.charCodeAt(0);
       return cc >= 0x41 && cc <= 0x5a;
     },
@@ -290,7 +340,7 @@ qx.Class.define("zx.utils.Values", {
      *          {Character} the character to test
      * @return {Boolean}
      */
-    isLowerCase: function (c) {
+    isLowerCase(c) {
       var cc = !c ? 0 : c.charCodeAt(0);
       return cc >= 0x61 && cc <= 0x7a;
     },
@@ -302,14 +352,9 @@ qx.Class.define("zx.utils.Values", {
      *          {Character} the character to test
      * @return {Boolean}
      */
-    isPunctuation: function (c) {
+    isPunctuation(c) {
       var cc = !c ? 0 : c.charCodeAt(0);
-      return (
-        (cc >= 20 && cc <= 0x2f) ||
-        (cc >= 0x3a && cc <= 0x40) ||
-        (cc >= 0x5b && cc <= 0x60) ||
-        (cc >= 0x7b && cc <= 0x7e)
-      );
+      return (cc >= 20 && cc <= 0x2f) || (cc >= 0x3a && cc <= 0x40) || (cc >= 0x5b && cc <= 0x60) || (cc >= 0x7b && cc <= 0x7e);
     },
 
     /**
@@ -318,8 +363,10 @@ qx.Class.define("zx.utils.Values", {
      * @param emailStr
      * @returns
      */
-    isValidEmail: function (emailStr) {
-      if (!emailStr || !emailStr.length) return false;
+    isValidEmail(emailStr) {
+      if (!emailStr || !emailStr.length) {
+        return false;
+      }
 
       /* CHECK tld on 1;off 0 */
       var checkTLD = 0;
@@ -408,7 +455,9 @@ qx.Class.define("zx.utils.Values", {
       var matchArray = emailStr.match(emailPat);
 
       // Nowhere near a match
-      if (matchArray == null) return false;
+      if (matchArray == null) {
+        return false;
+      }
 
       var user = matchArray[1];
       var domain = matchArray[2];
@@ -463,11 +512,7 @@ qx.Class.define("zx.utils.Values", {
        * representing country (uk, nl), and that there's a hostname preceding
        * the domain or country.
        */
-      if (
-        checkTLD == 1 &&
-        domArr[domArr.length - 1].length != 2 &&
-        domArr[domArr.length - 1].search(knownDomsPat) == -1
-      ) {
+      if (checkTLD == 1 && domArr[domArr.length - 1].length != 2 && domArr[domArr.length - 1].search(knownDomsPat) == -1) {
         return false;
       }
 
@@ -487,22 +532,27 @@ qx.Class.define("zx.utils.Values", {
      * @param emails
      * @returns
      */
-    isValidEmails: function (emails) {
-      if (!emails || typeof emails != "string") return false;
+    isValidEmails(emails) {
+      if (!emails || typeof emails != "string") {
+        return false;
+      }
 
       var list = emails.split(/[,;\s]+/);
       var ok = false;
-      for (var i = 0; i < list.length; i++)
-        if (!list[i]) continue;
-        else if (!this.isValidEmail(list[i])) return false;
-        else ok = true;
+      for (var i = 0; i < list.length; i++) {
+        if (!list[i]) {
+          continue;
+        } else if (!this.isValidEmail(list[i])) {
+          return false;
+        } else ok = true;
+      }
       return ok;
     },
 
     /**
      * Detects whether the object is a Qooxdoo class
      */
-    isClass: function (clz) {
+    isClass(clz) {
       return clz && clz.$$type !== undefined && clz.$$type === "Class";
     },
 
@@ -516,8 +566,10 @@ qx.Class.define("zx.utils.Values", {
      * fullName {String} name of the file, including extension
      * ext {String} extension including "."
      */
-    expandFilename: function (path) {
-      if (!path) return null;
+    expandFilename(path) {
+      if (!path) {
+        return null;
+      }
       var m = path.match(/^((.*)[\\\/])?([^\\\/]+)(\.[^.\\\/]+)$/);
       if (m) {
         return {
@@ -549,18 +601,22 @@ qx.Class.define("zx.utils.Values", {
      * get: getMethod
      * set: setMethod
      */
-    getPropertyInfo: function (obj, path) {
+    getPropertyInfo(obj, path) {
       function arrayGet(arr, index) {
         return arr instanceof qx.data.Array ? arr.getItem(index) : arr[index];
       }
       function arraySet(arr, index, value) {
-        if (arr instanceof qx.data.Array) arr.setItem(index, value);
-        else arr[index] = value;
+        if (arr instanceof qx.data.Array) {
+          arr.setItem(index, value);
+        } else arr[index] = value;
       }
-      if (obj === null) return null;
+      if (obj === null) {
+        return null;
+      }
       var result = {
         original: obj
       };
+
       var segs = path.split(".");
       for (var i = 0; i < segs.length - 1; i++) {
         var seg = segs[i];
@@ -572,10 +628,14 @@ qx.Class.define("zx.utils.Values", {
         }
         var upname = qx.lang.String.firstUp(seg);
         obj = obj["get" + upname]();
-        if (obj == null) return null;
+        if (obj == null) {
+          return null;
+        }
         if (index > -1) {
           obj = arrayGet(obj, index);
-          if (obj == null) return null;
+          if (obj == null) {
+            return null;
+          }
         }
       }
       result.object = obj;
@@ -601,14 +661,20 @@ qx.Class.define("zx.utils.Values", {
         };
       } else {
         var upname = qx.lang.String.firstUp(seg);
-        if (typeof obj["get" + upname] == "function") result.get = qx.lang.Function.bind(obj["get" + upname], obj);
-        else if (typeof obj["is" + upname] == "function") result.get = qx.lang.Function.bind(obj["is" + upname], obj);
-        else throw new Error("Cannot find a getter for " + upname);
-        if (typeof obj["get" + upname + "Async"] == "function")
+        if (typeof obj["get" + upname] == "function") {
+          result.get = qx.lang.Function.bind(obj["get" + upname], obj);
+        } else if (typeof obj["is" + upname] == "function") {
+          result.get = qx.lang.Function.bind(obj["is" + upname], obj);
+        } else throw new Error("Cannot find a getter for " + upname);
+        if (typeof obj["get" + upname + "Async"] == "function") {
           result.getAsync = qx.lang.Function.bind(obj["get" + upname + "Async"], obj);
-        if (typeof obj["set" + upname] == "function") result.set = qx.lang.Function.bind(obj["set" + upname], obj);
-        if (typeof obj["set" + upname + "Async"] == "function")
+        }
+        if (typeof obj["set" + upname] == "function") {
+          result.set = qx.lang.Function.bind(obj["set" + upname], obj);
+        }
+        if (typeof obj["set" + upname + "Async"] == "function") {
           result.setAsync = qx.lang.Function.bind(obj["set" + upname + "Async"], obj);
+        }
       }
       return result;
     },
@@ -621,13 +687,18 @@ qx.Class.define("zx.utils.Values", {
      * @returns
      */
     getValue(model, propName) {
-      if (!propName) return model;
+      if (!propName) {
+        return model;
+      }
       var len = propName.length;
-      if (len > 1 && propName.charAt(0) == "'" && propName.charAt(len - 1) == "'")
+      if (len > 1 && propName.charAt(0) == "'" && propName.charAt(len - 1) == "'") {
         return propName.substring(1, len - 1);
+      }
 
       var propInfo = this.getPropertyInfo(model, propName);
-      if (propInfo === null) return null;
+      if (propInfo === null) {
+        return null;
+      }
       return propInfo.get();
     },
 
@@ -639,14 +710,21 @@ qx.Class.define("zx.utils.Values", {
      * @returns
      */
     async getValueAsync(model, propName) {
-      if (!propName) return model;
+      if (!propName) {
+        return model;
+      }
       var len = propName.length;
-      if (len > 1 && propName.charAt(0) == "'" && propName.charAt(len - 1) == "'")
+      if (len > 1 && propName.charAt(0) == "'" && propName.charAt(len - 1) == "'") {
         return propName.substring(1, len - 1);
+      }
 
       var propInfo = this.getPropertyInfo(model, propName);
-      if (propInfo === null) return null;
-      if (propInfo.getAsync) return await propInfo.getAsync();
+      if (propInfo === null) {
+        return null;
+      }
+      if (propInfo.getAsync) {
+        return await propInfo.getAsync();
+      }
       return propInfo.get();
     },
 
@@ -661,10 +739,14 @@ qx.Class.define("zx.utils.Values", {
      */
     setValue(model, propName, value, options) {
       var len = propName.length;
-      if (len > 1 && propName.charAt(0) == "'" && propName.charAt(len - 1) == "'") return;
+      if (len > 1 && propName.charAt(0) == "'" && propName.charAt(len - 1) == "'") {
+        return;
+      }
 
       var propInfo = this.getPropertyInfo(model, propName);
-      if (!propInfo) return;
+      if (!propInfo) {
+        return;
+      }
       value = this.convertForModel(propInfo, value, options);
       propInfo.set(value);
       return true;
@@ -681,13 +763,18 @@ qx.Class.define("zx.utils.Values", {
      */
     async setValueAsync(model, propName, value, options) {
       var len = propName.length;
-      if (len > 1 && propName.charAt(0) == "'" && propName.charAt(len - 1) == "'") return;
+      if (len > 1 && propName.charAt(0) == "'" && propName.charAt(len - 1) == "'") {
+        return;
+      }
 
       var propInfo = this.getPropertyInfo(model, propName);
-      if (!propInfo) return;
+      if (!propInfo) {
+        return;
+      }
       value = this.convertForModel(propInfo, value, options);
-      if (propInfo.setAsync) await propInfo.setAsync(value);
-      else propInfo.set(value);
+      if (propInfo.setAsync) {
+        await propInfo.setAsync(value);
+      } else propInfo.set(value);
       return true;
     },
 
@@ -699,12 +786,16 @@ qx.Class.define("zx.utils.Values", {
      * @param value
      * @returns
      */
-    lookupValue: function (model, path, value) {
-      if (!model) return null;
+    lookupValue(model, path, value) {
+      if (!model) {
+        return null;
+      }
       for (var i = 0; i < model.getLength(); i++) {
         var item = model.getItem(i);
         var itemValue = this.getValue(item, path);
-        if (itemValue == value) return item;
+        if (itemValue == value) {
+          return item;
+        }
       }
       return null;
     },
@@ -717,22 +808,30 @@ qx.Class.define("zx.utils.Values", {
      * @param value
      * @returns
      */
-    convertForModel: function (propInfo, value, options) {
+    convertForModel(propInfo, value, options) {
       var propDef = propInfo.propDef;
       if (propDef && propDef.check) {
         if (typeof value == "String") {
           if (propDef.check == "Integer" || propDef.check == "PositiveInteger") {
             value = parseInt(value);
-            if (isNaN(value)) value = 0;
+            if (isNaN(value)) {
+              value = 0;
+            }
           } else if (propDef.check == "Number" || propDef.check == "PositiveNumber") {
             value = parseFloat(value);
-            if (isNaN(value)) value = 0;
+            if (isNaN(value)) {
+              value = 0;
+            }
           } else if (propDef.check == "Date") {
             var df = null;
-            if (options && options.dateFormat) df = options.dateFormat;
-            else if (qx.Class.isSubClassOf(propInfo.object.constructor, qx.ui.form.IDateForm))
+            if (options && options.dateFormat) {
+              df = options.dateFormat;
+            } else if (qx.Class.isSubClassOf(propInfo.object.constructor, qx.ui.form.IDateForm)) {
               df = propInfo.object.getDateFormat();
-            if (!df) df = qx.util.format.DateFormat.getDateInstance();
+            }
+            if (!df) {
+              df = qx.util.format.DateFormat.getDateInstance();
+            }
             value = df.parse(value);
           }
         }
@@ -749,7 +848,7 @@ qx.Class.define("zx.utils.Values", {
      * @param {*} searchElement The item to search for within the array.
      * @return {Number} The index of the element which defaults to -1 when not found.
      */
-    binaryIndexOf: function (array, searchElement) {
+    binaryIndexOf(array, searchElement) {
       var minIndex = 0;
       var maxIndex = array.length - 1;
       var currentIndex;
@@ -771,7 +870,7 @@ qx.Class.define("zx.utils.Values", {
       return -1;
     },
 
-    binaryStartsWith: function (array, searchElement) {
+    binaryStartsWith(array, searchElement) {
       var minIndex = 0;
       var maxIndex = array.length - 1;
       var currentIndex;
@@ -783,7 +882,9 @@ qx.Class.define("zx.utils.Values", {
 
         if (currentElement.startsWith(searchElement)) {
           while (currentIndex > 0) {
-            if (!array[currentIndex - 1].startsWith(searchElement)) break;
+            if (!array[currentIndex - 1].startsWith(searchElement)) {
+              break;
+            }
             currentIndex--;
           }
           return currentIndex;
@@ -949,6 +1050,7 @@ qx.Class.define("zx.utils.Values", {
               arg = arg.toString(16).toUpperCase();
               break;
           }
+
           arg = /[def]/.test(match[8]) && match[3] && arg >= 0 ? "+" + arg : arg;
           pad_character = match[4] ? (match[4] == "0" ? "0" : match[4].charAt(1)) : " ";
           pad_length = match[6] - String(arg).length;
@@ -971,11 +1073,7 @@ qx.Class.define("zx.utils.Values", {
           parse_tree.push(match[0]);
         } else if ((match = /^\x25{2}/.exec(_fmt)) !== null) {
           parse_tree.push("%");
-        } else if (
-          (match = /^\x25(?:([1-9]\d*)\$|\(([^\)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-fosuxX])/.exec(
-            _fmt
-          )) !== null
-        ) {
+        } else if ((match = /^\x25(?:([1-9]\d*)\$|\(([^\)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-fosuxX])/.exec(_fmt)) !== null) {
           if (match[2]) {
             arg_names |= 1;
             var field_list = [],

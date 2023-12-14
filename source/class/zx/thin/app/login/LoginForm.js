@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.thin.app.login.LoginForm", {
   extend: zx.thin.ui.container.Window,
@@ -23,7 +23,7 @@ qx.Class.define("zx.thin.app.login.LoginForm", {
   }),
 
   construct() {
-    this.base(arguments);
+    super();
     this.setCaption("Login");
     let body = this.getBody();
     body.add(this.getQxObject("form"));
@@ -36,6 +36,7 @@ qx.Class.define("zx.thin.app.login.LoginForm", {
         </p>
       </div>
     );
+
     this.setCentered("both");
     this.setStyle("max-width", "600px");
   },
@@ -78,7 +79,7 @@ qx.Class.define("zx.thin.app.login.LoginForm", {
      * @Override
      */
     _applyVisible(value, oldValue) {
-      this.base(arguments, value, oldValue);
+      super._applyVisible(value, oldValue);
       if (!value) {
         this.reset();
       }
@@ -111,6 +112,7 @@ qx.Class.define("zx.thin.app.login.LoginForm", {
           var btn = new zx.thin.ui.form.Button("Login").set({
             loadingStyle: "ball-clip-rotate-multiple"
           });
+
           btn.addListener("execute", async evt => {
             let email = this.getQxObject("edtEmail").getValue();
             let password = this.getQxObject("edtPassword").getValue();
@@ -119,7 +121,8 @@ qx.Class.define("zx.thin.app.login.LoginForm", {
           });
           return btn;
       }
-      return this.base(arguments, id);
+
+      return super._createQxObjectImpl(id);
     }
   }
 });

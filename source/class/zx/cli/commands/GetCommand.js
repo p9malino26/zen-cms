@@ -19,7 +19,7 @@ qx.Class.define("zx.cli.commands.GetCommand", {
   extend: qx.core.Object,
 
   construct(url) {
-    this.base(arguments);
+    super();
     this.__url = url;
   },
 
@@ -33,7 +33,9 @@ qx.Class.define("zx.cli.commands.GetCommand", {
       await server.start();
 
       let url = this.__url;
-      if (url[0] != "/") url = "/" + url;
+      if (url[0] != "/") {
+        url = "/" + url;
+      }
       if (url.endsWith(".html")) {
         let dbUrl = (url = "pages" + url.substring(0, url.length - 5));
         let object = await server.getObjectByUrl(zx.cms.content.Page, dbUrl);
@@ -50,11 +52,13 @@ qx.Class.define("zx.cli.commands.GetCommand", {
         let rendering = new zx.cms.render.MemoryRendering();
         await server.getRenderer().renderViewable(rendering, object);
         let body = rendering.getBody();
-        if (body) console.log(body);
-        else {
+        if (body) {
+          console.log(body);
+        } else {
           let filename = rendering.getSrcFilename();
-          if (filename) console.log(`Returning file: ${filename}`);
-          else {
+          if (filename) {
+            console.log(`Returning file: ${filename}`);
+          } else {
             console.log("No data");
             return -1;
           }
@@ -68,17 +72,19 @@ qx.Class.define("zx.cli.commands.GetCommand", {
     createCliCommand() {
       let cmd = new zx.cli.Command("get").set({
         description: "Gets the resource as the web server would render it",
-        run: async function () {
+        async run() {
           let { args } = this.getValues();
           return await new zx.cli.commands.GetCommand(args["url-path"]).run();
         }
       });
+
       cmd.addArgument(
         new zx.cli.Argument("url-path").set({
           description: "the path to get, must not include http://",
           required: true
         })
       );
+
       return cmd;
     }
   }

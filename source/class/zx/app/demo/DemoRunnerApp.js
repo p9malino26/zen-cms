@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Basic app for running demos; you probably want to derive from this (eg @see `zx.test.BrowserTestsApp`)
@@ -29,7 +28,7 @@ qx.Class.define("zx.app.demo.DemoRunnerApp", {
      * @Override
      */
     async main() {
-      await this.base(arguments);
+      await super.main();
 
       let doc = this.getRoot();
       let runner = this.getQxObject("runner");
@@ -45,7 +44,7 @@ qx.Class.define("zx.app.demo.DemoRunnerApp", {
           return new zx.app.demo.DemoRunner();
       }
 
-      return this.base(arguments, id);
+      return super._createQxObjectImpl(id);
     }
   }
 });

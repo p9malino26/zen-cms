@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.data.IndexedArray", {
   extend: qx.data.Array,
@@ -24,25 +24,29 @@ qx.Class.define("zx.data.IndexedArray", {
    * @param {Object[]|qx.data.Array?} src initial value for the array contents
    */
   construct(src) {
-    this.base(arguments);
+    super();
     this.__lookup = {};
-    if (src) src.forEach(item => item && this.add(item));
+    if (src) {
+      src.forEach(item => item && this.add(item));
+    }
 
     this.addListener("change", evt => {
       let data = evt.getData();
       let keyGenerator = this.getKeyGenerator();
 
-      if (data.removed)
+      if (data.removed) {
         data.removed.forEach(item => {
           let key = keyGenerator ? keyGenerator(item) : item.toHashCode();
           delete this.__lookup[key];
         });
+      }
 
-      if (data.added)
+      if (data.added) {
         data.added.forEach(item => {
           let key = keyGenerator ? keyGenerator(item) : item.toHashCode();
           this.__lookup[key] = item;
         });
+      }
     });
     this.regenerateLookup();
   },
@@ -78,8 +82,9 @@ qx.Class.define("zx.data.IndexedArray", {
       let keyGenerator = this.getKeyGenerator();
       this.forEach(item => {
         let key = this.getKey(item);
-        if (this.__lookup[key])
+        if (this.__lookup[key]) {
           throw new Error(`Duplicate entry found in IndexedArray, key=${key}`);
+        }
         this.__lookup[key] = item;
       });
     },
@@ -91,11 +96,17 @@ qx.Class.define("zx.data.IndexedArray", {
      * @param {*} item
      */
     add(item) {
-      if (item === null || item === undefined) return null;
+      if (item === null || item === undefined) {
+        return null;
+      }
       let key = this.getKey(item);
       let current = this.__lookup[key];
-      if (current === item) return;
-      if (current) this.remove(current);
+      if (current === item) {
+        return;
+      }
+      if (current) {
+        this.remove(current);
+      }
       this.push(item);
     },
 
@@ -116,7 +127,9 @@ qx.Class.define("zx.data.IndexedArray", {
      */
     removeByKey(key) {
       let item = this.__lookup(key);
-      if (item) this.remove(item);
+      if (item) {
+        this.remove(item);
+      }
     },
 
     /**
@@ -128,9 +141,15 @@ qx.Class.define("zx.data.IndexedArray", {
     getKey(item) {
       let keyGenerator = this.getKeyGenerator();
       let key = null;
-      if (keyGenerator) key = keyGenerator(item);
-      if (!key && item instanceof qx.core.Object) key = item.toHashCode();
-      if (qx.core.Environment.get("qx.debug")) this.assertTrue(!!key);
+      if (keyGenerator) {
+        key = keyGenerator(item);
+      }
+      if (!key && item instanceof qx.core.Object) {
+        key = item.toHashCode();
+      }
+      if (qx.core.Environment.get("qx.debug")) {
+        this.assertTrue(!!key);
+      }
       return key;
     },
 
@@ -154,14 +173,14 @@ qx.Class.define("zx.data.IndexedArray", {
      */
     push(...itemsToAdd) {
       itemsToAdd = itemsToAdd.filter(item => item && !this.contains(item));
-      this.base(arguments, ...itemsToAdd);
+      super.push(...itemsToAdd);
     },
 
     /**
      * @Override
      */
     splice(startIndex, amount, ...itemsToAdd) {
-      let result = this.base(arguments, startIndex, amount);
+      let result = super.splice(startIndex, amount);
       itemsToAdd.forEach(item => item && this.add(item));
     },
 
@@ -170,7 +189,7 @@ qx.Class.define("zx.data.IndexedArray", {
      */
     unshift(...itemsToAdd) {
       itemsToAdd = itemsToAdd.filter(item => item && !this.contains(item));
-      this.base(arguments, ...itemsToAdd);
+      super.unshift(...itemsToAdd);
     },
 
     /**
@@ -178,46 +197,48 @@ qx.Class.define("zx.data.IndexedArray", {
      */
     setItem(index, item) {
       let oldItem = this.getItem(index);
-      if (oldItem === item) return;
+      if (oldItem === item) {
+        return;
+      }
 
-      if (this.contains(item))
-        throw new Error(
-          `Cannot create duplicate in IndexedArray.setItem, index=${index}, item=${item}`
-        );
-      this.base(arguments, index, item);
+      if (this.contains(item)) {
+        throw new Error(`Cannot create duplicate in IndexedArray.setItem, index=${index}, item=${item}`);
+      }
+
+      super.setItem(index, item);
     },
 
     /**
      * @Override
      */
     insertAt(index, item) {
-      if (this.contains(item))
-        throw new Error(
-          `Cannot create duplicate in IndexedArray.insertAt, index=${index}, item=${item}`
-        );
-      this.base(arguments, index, item);
+      if (this.contains(item)) {
+        throw new Error(`Cannot create duplicate in IndexedArray.insertAt, index=${index}, item=${item}`);
+      }
+
+      super.insertAt(index, item);
     },
 
     /**
      * @Override
      */
     insertBefore(index, item) {
-      if (this.contains(item))
-        throw new Error(
-          `Cannot create duplicate in IndexedArray.insertBefore, index=${index}, item=${item}`
-        );
-      this.base(arguments, index, item);
+      if (this.contains(item)) {
+        throw new Error(`Cannot create duplicate in IndexedArray.insertBefore, index=${index}, item=${item}`);
+      }
+
+      super.insertBefore(index, item);
     },
 
     /**
      * @Override
      */
     insertAfter(index, item) {
-      if (this.contains(item))
-        throw new Error(
-          `Cannot create duplicate in IndexedArray.insertAfter, index=${index}, item=${item}`
-        );
-      this.base(arguments, index, item);
+      if (this.contains(item)) {
+        throw new Error(`Cannot create duplicate in IndexedArray.insertAfter, index=${index}, item=${item}`);
+      }
+
+      super.insertAfter(index, item);
     },
 
     /**
@@ -225,7 +246,7 @@ qx.Class.define("zx.data.IndexedArray", {
      */
     append(...itemsToAdd) {
       itemsToAdd = itemsToAdd.filter(item => item && !this.contains(item));
-      this.base(arguments, ...itemsToAdd);
+      super.append(...itemsToAdd);
     }
   }
 });

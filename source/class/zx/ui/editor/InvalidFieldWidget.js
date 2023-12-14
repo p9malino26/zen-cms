@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.editor.InvalidFieldWidget", {
   extend: qx.ui.basic.Atom,
@@ -23,11 +23,8 @@ qx.Class.define("zx.ui.editor.InvalidFieldWidget", {
   include: [qx.ui.form.MForm],
 
   construct(label, icon) {
-    this.base(
-      arguments,
-      label || "Field is not valid",
-      icon || "@FontAwesomeSolid/exclamation-circle/16"
-    );
+    super(label || "Field is not valid", icon || "@FontAwesomeSolid/exclamation-circle/16");
+
     this.addListener("pointerover", this._onPointerOver);
     this.addListener("pointerout", this._onPointerOut);
   },
@@ -54,20 +51,14 @@ qx.Class.define("zx.ui.editor.InvalidFieldWidget", {
     _applyFieldWidget(value, oldValue) {
       if (oldValue) {
         oldValue.removeListener("changeValid", this.__onChangeValid, this);
-        oldValue.removeListener(
-          "changeInvalidMessage",
-          this.__onChangeInvalidMesssage,
-          this
-        );
+        oldValue.removeListener("changeInvalidMessage", this.__onChangeInvalidMesssage, this);
+
         this.set({ valid: true, invalidMessage: null });
       }
       if (value) {
         value.addListener("changeValid", this.__onChangeValid, this);
-        value.addListener(
-          "changeInvalidMessage",
-          this.__onChangeInvalidMesssage,
-          this
-        );
+        value.addListener("changeInvalidMessage", this.__onChangeInvalidMesssage, this);
+
         this.set({
           valid: value.getValid(),
           invalidMessage: value.getInvalidMessage(),
@@ -103,7 +94,9 @@ qx.Class.define("zx.ui.editor.InvalidFieldWidget", {
      * @param evt {qx.event.type.Pointer} Mouse event
      */
     _onPointerOver(evt) {
-      if (!this.isEnabled() || evt.getTarget() !== this) return;
+      if (!this.isEnabled() || evt.getTarget() !== this) {
+        return;
+      }
 
       this.addState("hovered");
     },
@@ -118,7 +111,9 @@ qx.Class.define("zx.ui.editor.InvalidFieldWidget", {
      * @param evt {qx.event.type.Pointer} Mouse event
      */
     _onPointerOut(evt) {
-      if (!this.isEnabled() || evt.getTarget() !== this) return;
+      if (!this.isEnabled() || evt.getTarget() !== this) {
+        return;
+      }
 
       this.removeState("hovered");
     }

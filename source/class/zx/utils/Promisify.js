@@ -26,7 +26,7 @@ qx.Class.define("zx.utils.Promisify", {
       return new Promise(resolve => setTimeout(resolve, timeout));
     },
 
-    promisifyAll: function (target, fn) {
+    promisifyAll(target, fn) {
       const CUSTOM_PROMISIFIED_SYMBOL = zx.utils.Promisify.CUSTOM_PROMISIFIED_SYMBOL;
       Object.getOwnPropertyNames(target).forEach(key => {
         if (this.IGNORED_PROPS.test(key) || (fn && fn(key, target) === false)) {
@@ -56,7 +56,7 @@ qx.Class.define("zx.utils.Promisify", {
       return target;
     },
 
-    isPromisified: function (fn) {
+    isPromisified(fn) {
       try {
         return fn[this.CUSTOM_PROMISIFIED_SYMBOL] === true;
       } catch (e) {
@@ -72,7 +72,7 @@ qx.Class.define("zx.utils.Promisify", {
      * @param context {Object?} optional binding context
      * @return {Function} the promisified function
      */
-    promisify: function (original, context) {
+    promisify(original, context) {
       const CUSTOM_PROMISIFIED_SYMBOL = zx.utils.Promisify.CUSTOM_PROMISIFIED_SYMBOL;
       const CUSTOM_PROMISIFY_ARGS_SYMBOL = zx.utils.Promisify.CUSTOM_PROMISIFY_ARGS_SYMBOL;
 
@@ -101,7 +101,9 @@ qx.Class.define("zx.utils.Promisify", {
             }
             if (argumentNames !== undefined && values.length > 1) {
               const obj = {};
-              for (var i = 0; i < argumentNames.length; i++) obj[argumentNames[i]] = values[i];
+              for (var i = 0; i < argumentNames.length; i++) {
+                obj[argumentNames[i]] = values[i];
+              }
               resolve(obj);
             } else {
               resolve(values[0]);
@@ -118,6 +120,7 @@ qx.Class.define("zx.utils.Promisify", {
         writable: false,
         configurable: true
       });
+
       let promisified = Object.defineProperties(fn, Object.getOwnPropertyDescriptors(original));
 
       if (context) {
@@ -201,7 +204,7 @@ qx.Class.define("zx.utils.Promisify", {
       });
     },
 
-    call: function (fn, debugStack) {
+    call(fn, debugStack) {
       if (qx.core.Environment.get("qx.debug") && debugStack) {
         let ex = null;
         try {
@@ -241,10 +244,14 @@ qx.Class.define("zx.utils.Promisify", {
      * @returns whatever `cb` returns, or a promise if `value` is a promise
      */
     resolveNow(value, cb, cberr) {
-      if (!cb) cb = value => value;
+      if (!cb) {
+        cb = value => value;
+      }
       if (qx.Promise.isPromise(value)) {
         let p = value.then(cb);
-        if (cberr) p = p.catch(cberr);
+        if (cberr) {
+          p = p.catch(cberr);
+        }
         return p;
       } else if (cberr) {
         try {
@@ -260,10 +267,13 @@ qx.Class.define("zx.utils.Promisify", {
     forEachNow(value, fn, cb, cberr) {
       let promise = null;
       value.forEach(value => {
-        if (promise) promise = promise.then(() => fn(value));
-        else {
+        if (promise) {
+          promise = promise.then(() => fn(value));
+        } else {
           let tmp = fn(value);
-          if (qx.Promise.isPromise(tmp)) promise = tmp;
+          if (qx.Promise.isPromise(tmp)) {
+            promise = tmp;
+          }
         }
       });
       return zx.utils.Promisify.resolveNow(promise, cb, cberr);
@@ -286,7 +296,9 @@ qx.Class.define("zx.utils.Promisify", {
      * @returns whatever `cb` returns, or a promise if `value` is a promise
      */
     allNow(arr, cb, cberr) {
-      if (arr.some(value => qx.Promise.isPromise(value))) return zx.utils.Promisify.chain(qx.Promise.all(arr), cb, cberr);
+      if (arr.some(value => qx.Promise.isPromise(value))) {
+        return zx.utils.Promisify.chain(qx.Promise.all(arr), cb, cberr);
+      }
       return cb ? cb(arr) : arr;
     },
 
@@ -361,8 +373,9 @@ qx.Class.define("zx.utils.Promisify", {
         try {
           result = fn(item);
         } catch (ex) {
-          if (cberr) return cberr(ex);
-          else throw ex;
+          if (cberr) {
+            return cberr(ex);
+          } else throw ex;
         }
         if (qx.Promise.isPromise(result)) {
           promise = result
@@ -377,7 +390,9 @@ qx.Class.define("zx.utils.Promisify", {
         arr[index] = result;
       }
 
-      if (promise && cberr) promise = promise.catch(cberr);
+      if (promise && cberr) {
+        promise = promise.catch(cberr);
+      }
 
       return promise || arr;
     },
@@ -390,35 +405,39 @@ qx.Class.define("zx.utils.Promisify", {
      * @param cberr {Function} catch function
      */
     chain(promise, cb, cberr) {
-      if (cb) promise = promise.then(cb);
-      if (cberr) promise = promise.catch(cberr);
+      if (cb) {
+        promise = promise.then(cb);
+      }
+      if (cberr) {
+        promise = promise.catch(cberr);
+      }
       return promise;
     },
 
     fs: null,
 
-    each: function (coll, fn) {
+    each(coll, fn) {
       return zx.utils.Promisify.eachOf(coll, fn);
     },
 
-    forEachOf: function (coll, fn) {
+    forEachOf(coll, fn) {
       return zx.utils.Promisify.eachOf(coll, fn);
     },
 
-    eachOf: function (coll, fn) {
+    eachOf(coll, fn) {
       let promises = Object.keys(coll).map(key => fn(coll[key], key));
       return qx.Promise.all(promises);
     },
 
-    eachSeries: function (coll, fn) {
+    eachSeries(coll, fn) {
       return zx.utils.Promisify.eachOfSeries(coll, fn);
     },
 
-    forEachOfSeries: function (coll, fn) {
+    forEachOfSeries(coll, fn) {
       return zx.utils.Promisify.eachOfSeries(coll, fn);
     },
 
-    eachOfSeries: function (coll, fn) {
+    eachOfSeries(coll, fn) {
       let keys = Object.keys(coll);
       let index = 0;
       function next() {
@@ -437,7 +456,7 @@ qx.Class.define("zx.utils.Promisify", {
   /**
    * @ignore(require)
    */
-  defer: function (statics) {
+  defer(statics) {
     if (typeof require == "function") {
       statics.fs = statics.promisifyAll(require("fs"), function (key, fs) {
         return key !== "SyncWriteStream" && key != "exists";
@@ -493,7 +512,7 @@ qx.Class.define("zx.utils.Promisify", {
 
   var functionToIterator = function (func) {
     return {
-      next: function () {
+      next() {
         var promise = func();
         return promise ? { value: promise } : { done: true };
       }
@@ -503,7 +522,7 @@ qx.Class.define("zx.utils.Promisify", {
   var promiseToIterator = function (promise) {
     var called = false;
     return {
-      next: function () {
+      next() {
         if (called) {
           return { done: true };
         }
@@ -583,6 +602,7 @@ qx.Class.define("zx.utils.Promisify", {
         reject: reject,
         resolve: resolve
       };
+
       that._proceed();
     });
     return this._promise;
@@ -609,6 +629,7 @@ qx.Class.define("zx.utils.Promisify", {
         promise: promise,
         result: result
       });
+
       this._proceed();
     }
   };
@@ -620,6 +641,7 @@ qx.Class.define("zx.utils.Promisify", {
         promise: promise,
         error: error
       });
+
       this._settle(error || new Error("Unknown error"));
     }
   };

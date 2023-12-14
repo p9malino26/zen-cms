@@ -19,7 +19,7 @@ qx.Class.define("zx.app.auth.UsersEditor", {
   extend: zx.ui.editor.FormEditor,
 
   construct() {
-    this.base(arguments);
+    super();
     this.setModifiedMonitor(new zx.ui.editor.ModifiedMonitor());
 
     this._setLayout(new qx.ui.layout.VBox());
@@ -81,6 +81,7 @@ qx.Class.define("zx.app.auth.UsersEditor", {
         value: value,
         visibility: value ? "visible" : "excluded"
       });
+
       this.getQxObject("mniDelete").setEnabled(!!value);
       this.getQxObject("mniSetPassword").setEnabled(!!value);
       this.getQxObject("mniImpersonate").setEnabled(!!value);
@@ -109,7 +110,9 @@ qx.Class.define("zx.app.auth.UsersEditor", {
       }
       matches.forEach(info => lst.add(this.__createListItem(info)));
       let state = zx.ui.utils.UserState.getStateFor(this.getQxObject("lst"));
-      if (state != null) state.copyStateToSelection();
+      if (state != null) {
+        state.copyStateToSelection();
+      }
     },
 
     /**
@@ -120,7 +123,9 @@ qx.Class.define("zx.app.auth.UsersEditor", {
      */
     __createListItem(info) {
       let str = info.username;
-      if (info.fullName) str += " (" + info.fullName + ")";
+      if (info.fullName) {
+        str += " (" + info.fullName + ")";
+      }
       let item = new qx.ui.form.ListItem(str);
       item.setModel(info);
       return item;
@@ -155,11 +160,8 @@ qx.Class.define("zx.app.auth.UsersEditor", {
           return btn;
 
         case "btnAdd":
-          var btn = new qx.ui.form.SplitButton(
-            "Add User",
-            "@FontAwesomeSolid/user-plus/16",
-            this.getQxObject("mnuUserAdmin")
-          );
+          var btn = new qx.ui.form.SplitButton("Add User", "@FontAwesomeSolid/user-plus/16", this.getQxObject("mnuUserAdmin"));
+
           btn.addListener("execute", async () => {
             let dlg = this.getQxObject("dlgCreateUser");
             dlg.reset();
@@ -196,9 +198,8 @@ qx.Class.define("zx.app.auth.UsersEditor", {
           var btn = new qx.ui.menu.Button("Delete User", "@FontAwesomeSolid/user-times/16").set({ enabled: false });
           btn.addListener("execute", async () => {
             let user = this.getCurrentUser();
-            let result = await zx.ui.utils.MessageDlg.showConfirmation(
-              `Are you sure that you want to delete ${user.getUsername()}?`
-            );
+            let result = await zx.ui.utils.MessageDlg.showConfirmation(`Are you sure that you want to delete ${user.getUsername()}?`);
+
             if (result == "yes") {
               let lst = this.getQxObject("lst");
               let item = lst.getSelection()[0] || null;
@@ -251,6 +252,7 @@ qx.Class.define("zx.app.auth.UsersEditor", {
           comp.add(new qx.ui.container.Scroll(this.getQxObject("edUser")), {
             flex: 1
           });
+
           return comp;
 
         case "lst":

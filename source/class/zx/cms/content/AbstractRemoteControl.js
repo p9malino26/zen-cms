@@ -1,25 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.cms.content.AbstractRemoteControl", {
   extend: qx.core.Object,
 
   construct(uuid, elements) {
-    this.base(arguments);
+    super();
     this.__uuid = uuid;
     this.__elements = elements;
   },
@@ -41,9 +41,7 @@ qx.Class.define("zx.cms.content.AbstractRemoteControl", {
     },
 
     propertyChanged(propertyName, value, oldValue) {
-      this.warn(
-        `Property ${propertyName} has changed but the change in value has not been processed because there is no implementation for it`
-      );
+      this.warn(`Property ${propertyName} has changed but the change in value has not been processed because there is no implementation for it`);
     },
 
     /**
@@ -55,11 +53,14 @@ qx.Class.define("zx.cms.content.AbstractRemoteControl", {
     _changeCssClass(value, oldValue) {
       let div = this.getElements()[0] || null;
       let classes = {};
-      qx.lang.Array.fromCollection(div.classList).forEach(
-        name => (classes[name] = true)
-      );
-      if (oldValue) oldValue.split(/\s+/).forEach(name => delete classes[name]);
-      if (value) value.split(/\s+/).forEach(name => (classes[name] = true));
+      qx.lang.Array.fromCollection(div.classList).forEach(name => (classes[name] = true));
+
+      if (oldValue) {
+        oldValue.split(/\s+/).forEach(name => delete classes[name]);
+      }
+      if (value) {
+        value.split(/\s+/).forEach(name => (classes[name] = true));
+      }
       div.className = Object.keys(classes).join(" ");
     }
   }

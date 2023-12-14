@@ -43,6 +43,7 @@ qx.Class.define("zx.cli.puppeteer.ScreenshotCommand", {
           url: this.getUrl(),
           chromiumEndpoint: chromium.getEndpoint()
         });
+
         console.log("Puppeteer client created");
 
         await puppeteer.start();
@@ -68,7 +69,7 @@ qx.Class.define("zx.cli.puppeteer.ScreenshotCommand", {
     createCliCommand() {
       let cmd = new zx.cli.Command("screenshot").set({
         description: "Runs the Puppeteer server",
-        run: async function () {
+        async run() {
           let { flags, args } = this.getValues();
           if (flags.config) {
             let dockerConfig = zx.server.puppeteer.ChromiumDocker.getConfiguration();
@@ -79,9 +80,11 @@ qx.Class.define("zx.cli.puppeteer.ScreenshotCommand", {
             filename: flags.filename,
             url: args.url
           });
+
           return await cmd.run();
         }
       });
+
       cmd.addFlag(
         new zx.cli.Flag("filename").set({
           shortCode: "f",
@@ -90,12 +93,14 @@ qx.Class.define("zx.cli.puppeteer.ScreenshotCommand", {
           required: true
         })
       );
+
       cmd.addArgument(
         new zx.cli.Argument("url").set({
           description: "the url to visit",
           required: true
         })
       );
+
       cmd.addFlag(
         new zx.cli.Flag("config").set({
           shortCode: "c",
@@ -103,6 +108,7 @@ qx.Class.define("zx.cli.puppeteer.ScreenshotCommand", {
           type: "string"
         })
       );
+
       return cmd;
     }
   }

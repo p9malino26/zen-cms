@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.app.pages.DemoPageEditor", {
   extend: zx.app.demo.Demonstrator,
@@ -27,7 +27,7 @@ qx.Class.define("zx.test.app.pages.DemoPageEditor", {
     },
 
     async initialise() {
-      await this.base(arguments);
+      await super.initialise();
       let controller = await qx.core.Init.getApplication().getNetController();
       let config = controller.getUriMapping("zx.server.CmsConfiguration");
       let page = config.getPageAtUrl("pages/tests/test-container-piece");
@@ -66,7 +66,7 @@ qx.Class.define("zx.test.app.pages.DemoPageEditor", {
           return ed;
       }
 
-      return this.base(arguments, id);
+      return super._createQxObjectImpl(id);
     }
   }
 });

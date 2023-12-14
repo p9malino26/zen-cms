@@ -37,7 +37,10 @@ qx.Class.define("zx.cli.commands.UserCommand", {
           username: username,
           password: password
         });
-        if (fullName) user.setFullName(fullName);
+
+        if (fullName) {
+          user.setFullName(fullName);
+        }
         await user.save();
       } finally {
         await server.stop();
@@ -77,7 +80,10 @@ qx.Class.define("zx.cli.commands.UserCommand", {
           perm = new zx.server.auth.Permission().set({
             shortCode: shortCode
           });
-          if (description) perm.setTitle(description);
+
+          if (description) {
+            perm.setTitle(description);
+          }
           await perm.save();
           security.getPermissions().push(perm);
           await security.save();
@@ -159,6 +165,7 @@ qx.Class.define("zx.cli.commands.UserCommand", {
       let cmd = new zx.cli.Command("user").set({
         description: "Utility commands for editing users"
       });
+
       let sub;
 
       /*
@@ -166,14 +173,16 @@ qx.Class.define("zx.cli.commands.UserCommand", {
        */
       sub = new zx.cli.Command("create").set({
         description: `Creates a user account`,
-        run: async function () {
+        async run() {
           const { args, flags } = this.getValues();
           let cmd = new zx.cli.commands.UserCommand();
           let password = flags.password;
-          if (!password)
+          if (!password) {
             password = await zx.utils.Readline.question("Password: ", {
               hidden: true
             });
+          }
+
           if (!password) {
             console.log("Cannot create a user without a password");
             process.exit(1);
@@ -181,23 +190,27 @@ qx.Class.define("zx.cli.commands.UserCommand", {
           return cmd.createUser(args["username"], args["full-name"] || null, password);
         }
       });
+
       sub.addArgument(
         new zx.cli.Argument("username").set({
           description: "the users login ID, usually an email address",
           required: true
         })
       );
+
       sub.addArgument(
         new zx.cli.Argument("full-name").set({
           description: "Optional full name"
         })
       );
+
       sub.addFlag(
         new zx.cli.Flag("password").set({
           shortCode: "p",
           description: "password to use (if not provided then the terminal is prompted)"
         })
       );
+
       cmd.addSubcommand(sub);
 
       /*
@@ -205,23 +218,26 @@ qx.Class.define("zx.cli.commands.UserCommand", {
        */
       sub = new zx.cli.Command("create-permission").set({
         description: `Creates a permission`,
-        run: async function () {
+        async run() {
           const { args, flags } = this.getValues();
           let cmd = new zx.cli.commands.UserCommand();
           cmd.createPermission(args["short-code"], args["description"]);
         }
       });
+
       sub.addArgument(
         new zx.cli.Argument("short-code").set({
           description: "the permission short code to add",
           required: true
         })
       );
+
       sub.addArgument(
         new zx.cli.Argument("description").set({
           description: "Optional description"
         })
       );
+
       cmd.addSubcommand(sub);
 
       /*
@@ -229,24 +245,27 @@ qx.Class.define("zx.cli.commands.UserCommand", {
        */
       sub = new zx.cli.Command("add-permission").set({
         description: `Adds a permission to a user account`,
-        run: async function () {
+        async run() {
           const { args, flags } = this.getValues();
           let cmd = new zx.cli.commands.UserCommand();
           cmd.addPermission(args["username"], args["permission"]);
         }
       });
+
       sub.addArgument(
         new zx.cli.Argument("username").set({
           description: "the users login ID, usually an email address",
           required: true
         })
       );
+
       sub.addArgument(
         new zx.cli.Argument("permission").set({
           description: "the permission short code to add",
           required: true
         })
       );
+
       cmd.addSubcommand(sub);
 
       /*
@@ -254,24 +273,27 @@ qx.Class.define("zx.cli.commands.UserCommand", {
        */
       sub = new zx.cli.Command("remove-permission").set({
         description: `Removes a permission from a user account`,
-        run: async function () {
+        async run() {
           const { args, flags } = this.getValues();
           let cmd = new zx.cli.commands.UserCommand();
           cmd.removePermission(args["username"], args["permission"]);
         }
       });
+
       sub.addArgument(
         new zx.cli.Argument("username").set({
           description: "the users login ID, usually an email address",
           required: true
         })
       );
+
       sub.addArgument(
         new zx.cli.Argument("permission").set({
           description: "the permission short code to add",
           required: true
         })
       );
+
       cmd.addSubcommand(sub);
 
       /*
@@ -279,14 +301,16 @@ qx.Class.define("zx.cli.commands.UserCommand", {
        */
       sub = new zx.cli.Command("set-password").set({
         description: `Sets a users password`,
-        run: async function () {
+        async run() {
           const { args, flags } = this.getValues();
           let cmd = new zx.cli.commands.UserCommand();
           let password = flags.password;
-          if (!password)
+          if (!password) {
             password = await zx.utils.Readline.question("Password: ", {
               hidden: true
             });
+          }
+
           if (!password) {
             console.log("Cannot create a user without a password");
             process.exit(1);
@@ -294,12 +318,14 @@ qx.Class.define("zx.cli.commands.UserCommand", {
           return await cmd.setPassword(args["username"], password);
         }
       });
+
       sub.addArgument(
         new zx.cli.Argument("username").set({
           description: "the users login ID, usually an email address",
           required: true
         })
       );
+
       sub.addFlag(
         new zx.cli.Flag("password").set({
           shortCode: "p",
@@ -307,6 +333,7 @@ qx.Class.define("zx.cli.commands.UserCommand", {
           type: "string"
         })
       );
+
       cmd.addSubcommand(sub);
       return cmd;
     }

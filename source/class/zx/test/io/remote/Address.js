@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.io.remote.Address", {
   extend: zx.io.persistence.Object,
@@ -22,7 +21,7 @@ qx.Class.define("zx.test.io.remote.Address", {
   "@": [zx.io.persistence.anno.Class.DEFAULT, zx.io.remote.anno.Class.NOPROXY],
 
   construct(name) {
-    this.base(arguments);
+    super();
   },
 
   properties: {
@@ -33,6 +32,7 @@ qx.Class.define("zx.test.io.remote.Address", {
       event: "changeLine1",
       "@": zx.io.remote.anno.Property.DEFAULT
     },
+
     line2: {
       init: null,
       nullable: true,
@@ -40,6 +40,7 @@ qx.Class.define("zx.test.io.remote.Address", {
       event: "changeLine2",
       "@": zx.io.remote.anno.Property.DEFAULT
     },
+
     city: {
       init: null,
       nullable: true,
@@ -47,6 +48,7 @@ qx.Class.define("zx.test.io.remote.Address", {
       event: "changeCity",
       "@": zx.io.remote.anno.Property.DEFAULT
     },
+
     postcode: {
       init: null,
       nullable: true,

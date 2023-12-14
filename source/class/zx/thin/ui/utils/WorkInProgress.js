@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Populates a work in progress window,
@@ -24,7 +23,7 @@ qx.Class.define("zx.thin.ui.utils.WorkInProgress", {
   type: "singleton",
 
   construct() {
-    this.base(arguments, "Working, please wait...", "Work In Progress", []);
+    super("Working, please wait...", "Work In Progress", []);
     let tasks = new qx.data.Array();
     tasks.addListener("change", this._onTasksChange, this);
     this.setTasks(tasks);
@@ -54,8 +53,12 @@ qx.Class.define("zx.thin.ui.utils.WorkInProgress", {
      * @return {qx.Promise}
      */
     promiseComplete() {
-      if (!this.getTasks().getLength()) return qx.Promise.resolve();
-      if (!this.__promiseComplete) this.__promiseComplete = new qx.Promise();
+      if (!this.getTasks().getLength()) {
+        return qx.Promise.resolve();
+      }
+      if (!this.__promiseComplete) {
+        this.__promiseComplete = new qx.Promise();
+      }
       return this.__promiseComplete;
     },
 
@@ -64,8 +67,9 @@ qx.Class.define("zx.thin.ui.utils.WorkInProgress", {
      */
     _transformTasks(value, oldValue) {
       if (oldValue) {
-        if (value) oldValue.replace(value);
-        else oldValue.removeAll();
+        if (value) {
+          oldValue.replace(value);
+        } else oldValue.removeAll();
         return oldValue;
       } else {
         return value;
@@ -79,7 +83,9 @@ qx.Class.define("zx.thin.ui.utils.WorkInProgress", {
      * @return {WipTask} the task that was added
      */
     addTask(task) {
-      if (typeof task == "string") task = new zx.thin.ui.utils.WipTask(task);
+      if (typeof task == "string") {
+        task = new zx.thin.ui.utils.WipTask(task);
+      }
       this.getTasks().push(task);
       return task;
     },
@@ -103,11 +109,7 @@ qx.Class.define("zx.thin.ui.utils.WorkInProgress", {
       if (data.removed) {
         data.removed.forEach(task => {
           task.removeListener("changeMessage", this._onTaskChangeMessage, this);
-          task.removeListener(
-            "changeComplete",
-            this._onTaskChangeComplete,
-            this
-          );
+          task.removeListener("changeComplete", this._onTaskChangeComplete, this);
         });
       }
       if (data.added) {
@@ -138,7 +140,9 @@ qx.Class.define("zx.thin.ui.utils.WorkInProgress", {
       let elem = this.getQxObject("message");
       elem.removeAll();
       tasks.forEach((task, index) => {
-        if (index) elem.add(<br></br>);
+        if (index) {
+          elem.add(<br></br>);
+        }
         elem.add(<span>{task.getMessage()}</span>);
       });
       qx.html.Element.flush();

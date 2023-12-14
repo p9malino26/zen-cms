@@ -28,7 +28,7 @@ qx.Class.define("zx.io.remote.proxy.ClassWriter", {
    * @param {Class} clazz
    */
   construct(classesWriter, clazz) {
-    this.base(arguments);
+    super();
     this.__classesWriter = classesWriter;
     this.__clazz = clazz;
     this._initalise();
@@ -129,11 +129,12 @@ qx.Class.define("zx.io.remote.proxy.ClassWriter", {
       names.forEach(name => {
         // Exclude any methods which are property accessors
         let pos = -1;
-        for (let i = 0; i < name.length; i++)
+        for (let i = 0; i < name.length; i++) {
           if (UPPER.indexOf(name[i]) > -1) {
             pos = i;
             break;
           }
+        }
         if (pos > -1) {
           let prefix = name.substring(0, pos);
           if (PROPERTY_PREFIXES[prefix]) {
@@ -198,6 +199,7 @@ qx.Class.define("zx.io.remote.proxy.ClassWriter", {
           let it = {
             name: propertyName
           };
+
           if (info.refine || info.refined) {
             if (info.init !== undefined) {
               it.init = info.init;
@@ -225,6 +227,7 @@ qx.Class.define("zx.io.remote.proxy.ClassWriter", {
             annoExpr: data.annos ? compileAnnos(data.annos) : null,
             code: data.code
           };
+
           return it;
         })
       };

@@ -1,27 +1,26 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.io.remote.RemoteWindowChildFeature", {
   extend: zx.thin.ui.container.Window,
   implement: [zx.cms.content.IFeatureClientLifecycle],
 
   construct() {
-    this.base(arguments);
+    super();
     this.setCaption("Peer Two - Demo of I/O with embedded window");
     let body = this.getBody();
     body.add(<h2>Demo zx.io.remote in embedded window</h2>);
@@ -57,9 +56,8 @@ qx.Class.define("zx.test.io.remote.RemoteWindowChildFeature", {
           var btn = new zx.thin.ui.form.Button("Change Age");
           btn.addListener("execute", () => {
             let grandad = this._grandad;
-            this.info(
-              `Button is setting grandad's age to ${grandad.getAge() + 1}`
-            );
+            this.info(`Button is setting grandad's age to ${grandad.getAge() + 1}`);
+
             grandad.setAge(grandad.getAge() + 1);
             this._controller.flush();
           });
@@ -69,9 +67,8 @@ qx.Class.define("zx.test.io.remote.RemoteWindowChildFeature", {
           var btn = new zx.thin.ui.form.Button("Add Child");
           btn.addListener("execute", () => {
             let grandad = this._grandad;
-            let newChild = new zx.test.io.remote.Person(
-              "Child_No_" + (grandad.getChildren().getLength() + 1)
-            );
+            let newChild = new zx.test.io.remote.Person("Child_No_" + (grandad.getChildren().getLength() + 1));
+
             this.info(`Button is adding child ${newChild.getName()}`);
             grandad.getChildren().push(newChild);
             grandad.getChildren().forEach(child => {
@@ -89,9 +86,8 @@ qx.Class.define("zx.test.io.remote.RemoteWindowChildFeature", {
           btn.addListener("execute", () => {
             let grandad = this._grandad;
             let beverly = this._beverly;
-            let newChild = new zx.test.io.remote.Person(
-              "Beverly_Child_No_" + (beverly.getChildren().getLength() + 1)
-            );
+            let newChild = new zx.test.io.remote.Person("Beverly_Child_No_" + (beverly.getChildren().getLength() + 1));
+
             this.info(`Button is adding grandchild ${newChild.getName()}`);
             beverly.getChildren().push(newChild);
             beverly.getChildren().forEach(child => {
@@ -116,15 +112,14 @@ qx.Class.define("zx.test.io.remote.RemoteWindowChildFeature", {
             let oldChild = beverly.getChildren().getItem(0);
             this.info(`Button is removing grandchild ${oldChild.getName()}`);
             beverly.getChildren().remove(oldChild);
-            beverly
-              .getChildren()
-              .forEach(child => child.getSiblings().remove(oldChild));
+            beverly.getChildren().forEach(child => child.getSiblings().remove(oldChild));
             oldChild.getSiblings().removeAll();
             this._controller.flush();
           });
           return btn;
       }
-      return this.base(arguments, id);
+
+      return super._createQxObjectImpl(id);
     },
 
     async testSayHello(result) {
@@ -161,9 +156,8 @@ qx.Class.define("zx.test.io.remote.RemoteWindowChildFeature", {
       const traverse = person => {
         person.getChildren().addListener("change", evt => {
           let data = evt.getData();
-          (data.removed || []).forEach(item =>
-            this.info(person.getName() + ": removed child " + item.getName())
-          );
+          (data.removed || []).forEach(item => this.info(person.getName() + ": removed child " + item.getName()));
+
           (data.added || []).forEach(item => {
             this.info(person.getName() + ": added child " + item.getName());
             traverse(item);

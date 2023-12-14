@@ -19,7 +19,7 @@ qx.Class.define("zx.test.cli.TestCommand", {
   extend: qx.core.Object,
 
   construct(url) {
-    this.base(arguments);
+    super();
     this.__url = url;
   },
 
@@ -34,8 +34,7 @@ qx.Class.define("zx.test.cli.TestCommand", {
       await zx.test.TestRunner.runAll(zx.test.io.persistence.TestImportExport);
       await zx.test.TestRunner.runAll(zx.test.io.persistence.TestNedbDatabase);
       await zx.test.TestRunner.runAll(zx.test.io.remote.TestPropertyChanges);
-
-      await zx.test.TestRunner.runAll(zx.test.cms.TestTemplates);
+       await zx.test.TestRunner.runAll(zx.test.cms.TestTemplates);
       */
 
       let config = await zx.server.Config.getConfig();

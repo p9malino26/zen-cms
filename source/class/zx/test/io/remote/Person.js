@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.io.remote.Person", {
   extend: zx.io.persistence.Object,
@@ -22,8 +21,10 @@ qx.Class.define("zx.test.io.remote.Person", {
   "@": [zx.io.persistence.anno.Class.DEFAULT, zx.io.remote.anno.Class.NOPROXY],
 
   construct(name) {
-    this.base(arguments);
-    if (name) this.setName(name);
+    super();
+    if (name) {
+      this.setName(name);
+    }
     this.setAddress(new zx.test.io.remote.Address());
     this.setSiblings(new qx.data.Array());
     this.setChildren(new qx.data.Array());
@@ -93,7 +94,9 @@ qx.Class.define("zx.test.io.remote.Person", {
 
   members: {
     _transformArray(value, oldValue) {
-      if (!oldValue) oldValue = new qx.data.Array();
+      if (!oldValue) {
+        oldValue = new qx.data.Array();
+      }
       oldValue.replace(value ? value : []);
       return oldValue;
     },

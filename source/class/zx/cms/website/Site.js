@@ -24,7 +24,7 @@ qx.Class.define("zx.cms.website.Site", {
   implement: [zx.io.remote.IProxied],
 
   construct() {
-    this.base(arguments);
+    super();
     this.setUrlRules(new qx.data.Array());
   },
 

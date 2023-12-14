@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.server.auth.Security", {
   extend: zx.server.Object,
@@ -21,11 +21,12 @@ qx.Class.define("zx.server.auth.Security", {
   "@": [zx.io.remote.anno.Class.NOPROXY],
 
   construct() {
-    this.base(arguments);
+    super();
     this.set({
       permissions: new zx.data.IndexedArray().set({
         keyGenerator: perm => perm.getShortCode()
       }),
+
       roles: new zx.data.IndexedArray().set({
         keyGenerator: role => role.getShortCode()
       })
@@ -40,10 +41,7 @@ qx.Class.define("zx.server.auth.Security", {
       check: "zx.data.IndexedArray",
       event: "changePermissions",
       transform: "_transformPermissions",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** List of roles defined in the system */
@@ -53,10 +51,7 @@ qx.Class.define("zx.server.auth.Security", {
       check: "zx.data.IndexedArray",
       event: "changeRoles",
       transform: "_transformRoles",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     }
   },
 
@@ -71,23 +66,24 @@ qx.Class.define("zx.server.auth.Security", {
         let modified = false;
         for (let shortCode in DP) {
           if (!perms.lookup(shortCode)) {
-            let perm =
-              await zx.server.Standalone.getInstance().findOneObjectByType(
-                zx.server.auth.Permission,
-                { shortCode: shortCode }
-              );
-            if (!perm)
+            let perm = await zx.server.Standalone.getInstance().findOneObjectByType(zx.server.auth.Permission, { shortCode: shortCode });
+
+            if (!perm) {
               perm = new zx.server.auth.Permission().set({
                 shortCode: shortCode,
                 title: DP[shortCode].title,
                 notes: DP[shortCode].notes
               });
+            }
+
             perms.push(perm);
             await perm.save();
             modified = true;
           }
         }
-        if (modified) this.save();
+        if (modified) {
+          this.save();
+        }
       }
     },
 
@@ -95,7 +91,9 @@ qx.Class.define("zx.server.auth.Security", {
      * Transform for `permissions`
      */
     _transformPermissions(value, oldValue) {
-      if (!oldValue) return value;
+      if (!oldValue) {
+        return value;
+      }
       oldValue.replace(value || []);
       return oldValue;
     },
@@ -104,7 +102,9 @@ qx.Class.define("zx.server.auth.Security", {
      * Transform for `roles`
      */
     _transformRoles(value, oldValue) {
-      if (!oldValue) return value;
+      if (!oldValue) {
+        return value;
+      }
       oldValue.replace(value || []);
       return oldValue;
     },
@@ -116,10 +116,7 @@ qx.Class.define("zx.server.auth.Security", {
      * @returns {zx.server.auth.Permission?} null if not found
      */
     findPermission(shortCode) {
-      return (
-        this.getPermissions().find(perm => perm.getShortCode() == shortCode) ||
-        null
-      );
+      return this.getPermissions().find(perm => perm.getShortCode() == shortCode) || null;
     },
 
     /**
@@ -129,9 +126,7 @@ qx.Class.define("zx.server.auth.Security", {
      * @returns {zx.server.auth.Role?} null if not found
      */
     findRole(shortCode) {
-      return (
-        this.getRoles().find(role => role.getShortCode() == shortCode) || null
-      );
+      return this.getRoles().find(role => role.getShortCode() == shortCode) || null;
     }
   },
 
@@ -139,13 +134,12 @@ qx.Class.define("zx.server.auth.Security", {
     __DEFAULT_PERMISSIONS: {
       "zx-logged-in-user": {
         title: "ZX:: User is logged in",
-        notes:
-          "System permission which is automatically assigned while a user is logged in (do not explicitly assign this to a user)"
+        notes: "System permission which is automatically assigned while a user is logged in (do not explicitly assign this to a user)"
       },
+
       "zx-super-user": {
         title: "ZX:: Super user",
-        notes:
-          "This permission grants complete authority and is assumed to have all permissions"
+        notes: "This permission grants complete authority and is assumed to have all permissions"
       }
     },
 
@@ -156,13 +150,12 @@ qx.Class.define("zx.server.auth.Security", {
      * @returns {zx.server.auth.Permission}
      */
     async findPermission(shortCode) {
-      if (shortCode instanceof zx.server.auth.Permission) return shortCode;
+      if (shortCode instanceof zx.server.auth.Permission) {
+        return shortCode;
+      }
       let server = zx.server.Standalone.getInstance();
-      let security = await server.findOneObjectByType(
-        zx.server.auth.Security,
-        null,
-        true
-      );
+      let security = await server.findOneObjectByType(zx.server.auth.Security, null, true);
+
       let perm = security.getPermissions().lookup(shortCode);
       return perm;
     }

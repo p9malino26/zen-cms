@@ -1,26 +1,26 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.io.persistence.ObjectCaches", {
   extend: qx.core.Object,
   type: "singleton",
 
   construct() {
-    this.base(arguments);
+    super();
     this.__caches = {};
   },
 
@@ -38,7 +38,9 @@ qx.Class.define("zx.io.persistence.ObjectCaches", {
     findObjectByUuid(uuid) {
       for (let key in this.__caches) {
         let obj = this.__caches[key].findObjectByUuid(uuid);
-        if (obj) return obj;
+        if (obj) {
+          return obj;
+        }
       }
 
       return null;

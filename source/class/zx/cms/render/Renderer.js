@@ -25,7 +25,7 @@ qx.Class.define("zx.cms.render.Renderer", {
   extend: qx.core.Object,
 
   construct() {
-    this.base(arguments);
+    super();
     this.__views = [];
     new zx.cms.render.NunjucksController();
   },
@@ -53,7 +53,9 @@ qx.Class.define("zx.cms.render.Renderer", {
     getView(template) {
       let hash = template.toHashCode();
       let view = this.__views[hash];
-      if (!view) view = this.__views[hash] = new zx.cms.render.NunjucksView(template);
+      if (!view) {
+        view = this.__views[hash] = new zx.cms.render.NunjucksView(template);
+      }
       return view;
     },
 
@@ -67,7 +69,9 @@ qx.Class.define("zx.cms.render.Renderer", {
       let ctlr = zx.cms.render.Controller.getController(viewable);
       let templateName = ctlr.getTemplateName(viewable);
       let template = await zx.cms.render.Resolver.resolveTemplate(ctlr, this.getTheme(), templateName);
-      if (!template) throw new zx.utils.Http.HttpError(404, `Cannot find template called ${templateName} for ${viewable.classname} instance ${viewable}`);
+      if (!template) {
+        throw new zx.utils.Http.HttpError(404, `Cannot find template called ${templateName} for ${viewable.classname} instance ${viewable}`);
+      }
 
       /*
        * TODO this assumes that the template must be Nunjucks, but that is not necessarily the case in the future.
@@ -91,9 +95,11 @@ qx.Class.define("zx.cms.render.Renderer", {
             username: user ? user.getUsername() : "",
             fullName: (user && user.getFullName()) || ""
           },
+
           site: {
             navigation: []
           },
+
           filehash: filename => server.getUrlFileHash(filename),
           browser: {
             name: qx.bom.client.Browser.detectName(userAgent).replace(/ /g, "-"),
@@ -101,16 +107,20 @@ qx.Class.define("zx.cms.render.Renderer", {
           }
         }
       };
+
       this._updateContext(rendering, context);
 
       function addNav(arr, navItem) {
-        if (!navItem) return;
+        if (!navItem) {
+          return;
+        }
         let data = {
           url: navItem.getUrl(),
           title: navItem.getTitle() || "",
           cssClass: navItem.getCssClass() || "",
           children: []
         };
+
         arr.push(data);
         navItem.getChildren().forEach(child => addNav(data.children, child));
       }
@@ -139,13 +149,17 @@ qx.Class.define("zx.cms.render.Renderer", {
     async renderPiece(context) {
       let templateName = context._templateName;
       let pos = templateName.indexOf(":");
-      if (pos < 0) throw new Error(`Badly formed template name ${templateName}`);
+      if (pos < 0) {
+        throw new Error(`Badly formed template name ${templateName}`);
+      }
       let pieceClassname = templateName.substring(0, pos);
       templateName = templateName.substring(pos + 1);
       let ctlr = zx.cms.render.Controller.getController(pieceClassname);
 
       let template = await zx.cms.render.Resolver.resolveTemplate(ctlr, this.getTheme(), templateName);
-      if (!template) throw new zx.utils.Http.HttpError(404, `Cannot find template called ${templateName} for ${pieceClassname}`);
+      if (!template) {
+        throw new zx.utils.Http.HttpError(404, `Cannot find template called ${templateName} for ${pieceClassname}`);
+      }
 
       let view = new zx.cms.render.NunjucksView(template);
       context = context || {};
@@ -248,9 +262,12 @@ qx.Class.define("zx.cms.render.Renderer", {
         parentContext: parentContext || null,
         parent: parent
       };
+
       if (parentContext) {
         let ancestor = parentContext;
-        while (ancestor.parentContext) ancestor = ancestor.parentContext;
+        while (ancestor.parentContext) {
+          ancestor = ancestor.parentContext;
+        }
         context.zx = ancestor.zx;
         context.pageContext = ancestor;
       }

@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const fs = zx.utils.Promisify.fs;
 const path = require("path");
@@ -27,7 +26,7 @@ qx.Class.define("zx.cms.render.Controller", {
   type: "abstract",
 
   construct(viewableClass) {
-    this.base(arguments);
+    super();
     this.__viewableClass = viewableClass;
   },
 
@@ -53,9 +52,7 @@ qx.Class.define("zx.cms.render.Controller", {
      * @abstract
      */
     getTemplateName(viewable) {
-      throw new Error(
-        "No such implementation for " + this.classname + ".getTemplateName"
-      );
+      throw new Error("No such implementation for " + this.classname + ".getTemplateName");
     },
 
     /**
@@ -71,22 +68,13 @@ qx.Class.define("zx.cms.render.Controller", {
       const vcp = this.getViewableClass().classname.replace(/\./g, "/");
       const cp = this.classname.replace(/\./g, "/");
       let arrPaths;
-      if (name == "index")
-        arrPaths = [
-          vcp + ".html",
-          vcp + "/index.html",
-          cp + ".html",
-          cp + "/index.html"
-        ];
-      else arrPaths = [vcp + "/" + name + ".html", cp + "/" + name + ".html"];
+      if (name == "index") {
+        arrPaths = [vcp + ".html", vcp + "/index.html", cp + ".html", cp + "/index.html"];
+      } else arrPaths = [vcp + "/" + name + ".html", cp + "/" + name + ".html"];
       for (var i = 0; i < arrPaths.length; i++) {
         let filename = zx.server.Config.RESOURCE_DIR + arrPaths[i];
         if (await fs.existsAsync(filename)) {
-          return new zx.cms.render.FileTemplate(
-            filename,
-            this.getViewableClass().classname,
-            name
-          );
+          return new zx.cms.render.FileTemplate(filename, this.getViewableClass().classname, name);
         }
       }
 
@@ -115,39 +103,32 @@ qx.Class.define("zx.cms.render.Controller", {
       let viewableClass;
       if (typeof object == "string") {
         viewableClass = qx.Class.getByName(object);
-        if (!viewableClass)
+        if (!viewableClass) {
           throw new Error(`Cannot find a class called ${object}`);
+        }
       } else if (object.constructor === object) {
         viewableClass = object;
-      } else if (
-        qx.Class.hasInterface(object.constructor, zx.cms.render.IViewable)
-      ) {
+      } else if (qx.Class.hasInterface(object.constructor, zx.cms.render.IViewable)) {
         viewableClass = object.constructor;
       } else {
-        throw new Error(
-          `Cannot locate a contructor for ${object} because I can't understand what it is`
-        );
+        throw new Error(`Cannot locate a contructor for ${object} because I can't understand what it is`);
       }
 
-      let current =
-        zx.cms.render.Controller.__controllers[viewableClass.classname];
-      if (current) return current;
+      let current = zx.cms.render.Controller.__controllers[viewableClass.classname];
+      if (current) {
+        return current;
+      }
 
       let searchClass = viewableClass;
       while (searchClass !== qx.core.Object) {
-        let controllerClass = qx.Class.getByName(
-          searchClass.classname + "Controller"
-        );
+        let controllerClass = qx.Class.getByName(searchClass.classname + "Controller");
+
         if (controllerClass) {
-          current = zx.cms.render.Controller.__controllers[
-            viewableClass.classname
-          ] = new controllerClass(viewableClass);
+          current = zx.cms.render.Controller.__controllers[viewableClass.classname] = new controllerClass(viewableClass);
           return current;
         }
         searchClass = searchClass.superclass;
-        qx.core.Assert.assertFalse(
-          searchClass.classname === zx.cms.content.Page
-        );
+        qx.core.Assert.assertFalse(searchClass.classname === zx.cms.content.Page);
       }
 
       qx.core.Assert.assertFalse(true);

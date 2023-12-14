@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.form.SearchField", {
   extend: qx.ui.core.Widget,
@@ -21,21 +21,20 @@ qx.Class.define("zx.ui.form.SearchField", {
   include: [qx.ui.form.MForm, zx.ui.editor.MField],
 
   construct() {
-    this.base(arguments);
+    super();
     this._setLayout(new qx.ui.layout.HBox());
     this._add(this.getChildControl("field"), {
       flex: 1
     });
+
     this._add(this.getChildControl("buttons"));
     this.__timeout = new zx.utils.Timeout(0, this._onInactivityTimeout, this);
     this.bind("timeout", this.__timeout, "duration");
-    this.addListenerOnce(
-      "appear",
-      function (evt) {
-        if (this.isAllowEmptyValue() && this.isAutoSearch()) this.__doSearch();
-      },
-      this
-    );
+    this.addListenerOnce("appear", evt => {
+      if (this.isAllowEmptyValue() && this.isAutoSearch()) {
+        this.__doSearch();
+      }
+    });
   },
 
   properties: {
@@ -177,9 +176,10 @@ qx.Class.define("zx.ui.form.SearchField", {
     /**
      * Callback for inactivity timeout
      */
-    _onInactivityTimeout: function (evt) {
-      if (!this.__lastSearchValue || this.__lastSearchValue != this.getValue())
+    _onInactivityTimeout(evt) {
+      if (!this.__lastSearchValue || this.__lastSearchValue != this.getValue()) {
         this.__doSearch();
+      }
     },
 
     /**
@@ -187,7 +187,7 @@ qx.Class.define("zx.ui.form.SearchField", {
      *
      * @param evt
      */
-    __onKeyPress: function (evt) {
+    __onKeyPress(evt) {
       if (evt.getKeyIdentifier() == "Enter") {
         this.__timeout.killTimer();
         this.__doSearch();
@@ -199,7 +199,7 @@ qx.Class.define("zx.ui.form.SearchField", {
      *
      * @param evt
      */
-    __onKeyInput: function (evt) {
+    __onKeyInput(evt) {
       this.resetTimer();
     },
 
@@ -211,8 +211,9 @@ qx.Class.define("zx.ui.form.SearchField", {
     },
 
     linkWidget(widget) {
-      if (typeof widget.getSelection == "function")
+      if (typeof widget.getSelection == "function") {
         widget.addListener("changeSelection", () => this.resetTimer());
+      }
       widget.addListener("changeValue", () => this.resetTimer());
     },
 
@@ -224,7 +225,9 @@ qx.Class.define("zx.ui.form.SearchField", {
      */
     __doSearch(userData, timerId) {
       var str = this.getValue();
-      if (!str) str = "";
+      if (!str) {
+        str = "";
+      }
       this.setValue(str);
       if (str || this.isAllowEmptyValue()) {
         this.__lastSearchValue = str;
@@ -235,16 +238,14 @@ qx.Class.define("zx.ui.form.SearchField", {
     /**
      * ApplyXxxx
      */
-    _applyXxxx: function (value, oldValue, name) {
-      this.getChildControl("field")["set" + qx.lang.String.firstUp(name)](
-        value
-      );
+    _applyXxxx(value, oldValue, name) {
+      this.getChildControl("field")["set" + qx.lang.String.firstUp(name)](value);
     },
 
     /**
      * set accessor for psuedo property
      */
-    setValue: function (value) {
+    setValue(value) {
       this.__timeout.killTimer();
       return this.getChildControl("field").setValue(value);
     },
@@ -252,11 +253,13 @@ qx.Class.define("zx.ui.form.SearchField", {
     /**
      * get accessor for psuedo property
      */
-    getValue: function () {
+    getValue() {
       var str = this.getChildControl("field").getValue();
       if (str) {
         str = str.trim();
-        if (!str.length) return null;
+        if (!str.length) {
+          return null;
+        }
       }
       return str;
     },
@@ -264,7 +267,7 @@ qx.Class.define("zx.ui.form.SearchField", {
     /**
      * reset accessor for psuedo property
      */
-    resetValue: function () {
+    resetValue() {
       this.__timeout.killTimer();
       return this.getChildControl("field").resetValue();
     },
@@ -272,16 +275,14 @@ qx.Class.define("zx.ui.form.SearchField", {
     /*
      * @Override
      */
-    _createChildControlImpl: function (id, hash) {
+    _createChildControlImpl(id, hash) {
       switch (id) {
         case "field":
           var fld = new qx.ui.form.TextField();
-          fld.addListener("input", evt =>
-            this.fireDataEvent("input", evt.getData())
-          );
-          fld.addListener("changeValue", evt =>
-            this.fireDataEvent("changeValue", evt.getData())
-          );
+          fld.addListener("input", evt => this.fireDataEvent("input", evt.getData()));
+
+          fld.addListener("changeValue", evt => this.fireDataEvent("changeValue", evt.getData()));
+
           fld.addListener("keypress", this.__onKeyPress, this);
           fld.addListener("keyinput", this.__onKeyInput, this);
           return fld;
@@ -292,14 +293,12 @@ qx.Class.define("zx.ui.form.SearchField", {
           return comp;
 
         case "btnSearch":
-          var btn = new qx.ui.form.Button(
-            "Search",
-            "@FontAwesomeSolid/search/16"
-          ).set({ appearance: "inlinebutton", show: "icon" });
+          var btn = new qx.ui.form.Button("Search", "@FontAwesomeSolid/search/16").set({ appearance: "inlinebutton", show: "icon" });
           btn.addListener("execute", this.__doSearch, this);
           return btn;
       }
-      return this.base(arguments, id, hash);
+
+      return super._createChildControlImpl(id, hash);
     }
   }
 });

@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const child_process = require("child_process");
 
@@ -52,7 +51,10 @@ qx.Class.define("zx.utils.ChildProcess", {
         let spawnArgs = {
           shell: true
         };
-        if (opts.cwd) spawnArgs.cmd = opts.cwd;
+
+        if (opts.cwd) {
+          spawnArgs.cmd = opts.cwd;
+        }
         let proc = child_process.spawn(cmd, args, spawnArgs);
         let result = {
           exitCode: null,
@@ -60,23 +62,30 @@ qx.Class.define("zx.utils.ChildProcess", {
           error: "",
           messages: null
         };
+
         function onStdout(data) {
           data = data.toString().trim();
-          if (opts.copyToConsole) console.log(data);
+          if (opts.copyToConsole) {
+            console.log(data);
+          }
           result.output += data;
-          if (opts.onConsole) opts.onConsole(data, "stdout");
+          if (opts.onConsole) {
+            opts.onConsole(data, "stdout");
+          }
         }
         function onStderr(data) {
           data = data.toString().trim();
-          if (opts.copyToConsole) console.error(data);
+          if (opts.copyToConsole) {
+            console.error(data);
+          }
           result.error += data;
-          if (opts.onConsole) opts.onConsole(data, "stderr");
+          if (opts.onConsole) {
+            opts.onConsole(data, "stderr");
+          }
         }
         proc.stdout.on("data", onStdout);
-        proc.stderr.on(
-          "data",
-          opts.mergeOutput === false ? onStderr : onStdout
-        );
+        proc.stderr.on("data", opts.mergeOutput === false ? onStderr : onStdout);
+
         proc.on("close", code => {
           result.exitCode = code;
           resolve(result);

@@ -21,7 +21,7 @@ qx.Class.define("zx.cli.commands.CreateProxiesCommand", {
   extend: qx.core.Object,
 
   construct(compilerTargetPath, proxiesOutputPath, classToWrite) {
-    this.base(arguments);
+    super();
     this.__compilerTargetPath = compilerTargetPath;
     this.__proxiesOutputPath = proxiesOutputPath;
     this.__classToWrite = classToWrite;
@@ -50,6 +50,7 @@ qx.Class.define("zx.cli.commands.CreateProxiesCommand", {
         compilerTargetPath: compilerTargetPath,
         verbose: true
       });
+
       if (this.__classToWrite) {
         await ctlr.writeProxiedClassesFor(this.__classToWrite);
       } else {
@@ -62,7 +63,7 @@ qx.Class.define("zx.cli.commands.CreateProxiesCommand", {
     createCliCommand() {
       let cmd = new zx.cli.Command("create-proxies").set({
         description: "Creates the proxies",
-        run: async function () {
+        async run() {
           const { args, flags } = this.getValues();
           let cmd = new zx.cli.commands.CreateProxiesCommand(flags["compiler-target-dir"], flags["output-dir"], flags["classname"]);
           return await cmd.run();
@@ -76,6 +77,7 @@ qx.Class.define("zx.cli.commands.CreateProxiesCommand", {
           type: "string"
         })
       );
+
       cmd.addFlag(
         new zx.cli.Flag("output-dir").set({
           shortCode: "o",
@@ -83,6 +85,7 @@ qx.Class.define("zx.cli.commands.CreateProxiesCommand", {
           type: "string"
         })
       );
+
       cmd.addFlag(
         new zx.cli.Flag("classname").set({
           shortCode: "c",

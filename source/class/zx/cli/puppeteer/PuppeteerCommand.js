@@ -13,7 +13,7 @@ qx.Class.define("zx.cli.puppeteer.PuppeteerCommand", {
 
       let sub = new zx.cli.Command("hold").set({
         description: `Holds Chromium in a container for testing and mdebugging`,
-        run: async function () {
+        async run() {
           const { args, flags } = this.getValues();
           if (flags.config) {
             let dockerConfig = zx.server.puppeteer.ChromiumDocker.getConfiguration();
@@ -29,6 +29,7 @@ qx.Class.define("zx.cli.puppeteer.PuppeteerCommand", {
               url: "http://www.google.co.uk",
               chromiumEndpoint: chromium.getEndpoint()
             });
+
             this.info("Puppeteer client created");
 
             await puppeteer.start();
@@ -68,6 +69,7 @@ qx.Class.define("zx.cli.puppeteer.PuppeteerCommand", {
           }
         }
       });
+
       sub.addFlag(
         new zx.cli.Flag("timeout").set({
           shortCode: "t",
@@ -76,6 +78,7 @@ qx.Class.define("zx.cli.puppeteer.PuppeteerCommand", {
           type: "integer"
         })
       );
+
       sub.addFlag(
         new zx.cli.Flag("config").set({
           shortCode: "c",
@@ -83,6 +86,7 @@ qx.Class.define("zx.cli.puppeteer.PuppeteerCommand", {
           type: "string"
         })
       );
+
       cmd.addSubcommand(sub);
 
       return cmd;

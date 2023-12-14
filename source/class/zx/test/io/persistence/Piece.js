@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.io.persistence.Piece", {
   extend: zx.io.persistence.Object,
@@ -40,8 +39,9 @@ qx.Class.define("zx.test.io.persistence.Piece", {
     _applyMustNotBeThree(value) {
       return new qx.Promise((resolve, reject) => {
         setTimeout(() => {
-          if (value == 3) reject("Must Not Be Three!!");
-          else resolve();
+          if (value == 3) {
+            reject("Must Not Be Three!!");
+          } else resolve();
         }, 100);
       });
     }

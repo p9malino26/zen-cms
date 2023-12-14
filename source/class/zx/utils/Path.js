@@ -32,7 +32,7 @@ qx.Class.define("zx.utils.Path", {
      *
      * @param {String} filename the filename to create the parent directory of
      */
-    makeParentDir: async function (filename) {
+    async makeParentDir(filename) {
       var parentDir = path.dirname(filename);
       await zx.utils.Path.makeDirs(parentDir);
     },
@@ -42,7 +42,7 @@ qx.Class.define("zx.utils.Path", {
      *
      * @param {String} filename the directory to create
      */
-    makeDirs: async function (filename) {
+    async makeDirs(filename) {
       filename = path.normalize(filename);
       let segs = filename.split(path.sep);
       let made = "";
@@ -56,7 +56,9 @@ qx.Class.define("zx.utils.Path", {
           try {
             await fs.mkdirAsync(made);
           } catch (err) {
-            if (err.code !== "EEXIST") throw err;
+            if (err.code !== "EEXIST") {
+              throw err;
+            }
           }
           let stat = await fs.statAsync(made);
           if (!stat.isDirectory()) {
@@ -98,7 +100,9 @@ qx.Class.define("zx.utils.Path", {
       let pos = uri.indexOf(":");
       if (pos > -1) {
         let ns = uri.substring(0, pos);
-        if (!qx.util.LibraryManager.getInstance().has(ns)) {throw new Error(`Cannot locate the file for ${uri} because there is no such library`);}
+        if (!qx.util.LibraryManager.getInstance().has(ns)) {
+          throw new Error(`Cannot locate the file for ${uri} because there is no such library`);
+        }
         this.warn("Using a library prefix to locate a resource works, but there is no such thing as library-specific prefixes any more; try using 'resource:' as a prefix");
         return locateFromResources(uri.substring(pos + 1));
       }
@@ -121,7 +125,7 @@ qx.Class.define("zx.utils.Path", {
      * @async
      * @ignore(process)
      */
-    correctCase: function (dir) {
+    correctCase(dir) {
       var drivePrefix = "";
       if (process.platform === "win32" && dir.match(/^[a-zA-Z]:/)) {
         drivePrefix = dir.substring(0, 2);

@@ -18,8 +18,8 @@
 qx.Class.define("zx.ui.tree.Tree", {
   extend: qx.ui.core.Widget,
 
-  construct: function () {
-    this.base(arguments);
+  construct() {
+    super();
     this.__rows = [];
     this.__rowMap = {};
     this.initSelection(new qx.data.Array());
@@ -175,7 +175,7 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Event handler for when the list of columns in the view changes
      */
-    __onColumnsChange: function (data) {
+    __onColumnsChange(data) {
       var t = this;
       data.removed.forEach(function (column) {
         column.removeListener("editorFinished", t.__onCellEditorFinished, t);
@@ -190,14 +190,14 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Event handler for when the editor of a cell says it's done (eg it looses focus)
      */
-    __onCellEditorFinished: function (evt) {
+    __onCellEditorFinished(evt) {
       this.finishEditing();
     },
 
     /**
      * Event handler for when the editor of a cell needs to move to the next cell (eg the user presses tab)
      */
-    __onCellEditorNext: function (evt) {
+    __onCellEditorNext(evt) {
       var columnIndex = this.__editingColumnIndex;
       this.finishEditing();
       if (columnIndex > -1 && columnIndex < this.getView().getColumns().getLength() - 1) {
@@ -211,12 +211,14 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Refreshes the display
      */
-    refresh: function () {
+    refresh() {
       for (var i = 0; i < this.__rows.length; i++) {
         var row = this.__rows[i];
         if (row.isOpened()) {
           var node = this.__rows[i].getNode();
-          if (node) this.expandNode(node);
+          if (node) {
+            this.expandNode(node);
+          }
         }
       }
       this.expandNode(this.getModel().getModel());
@@ -225,9 +227,13 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Starts editing the current row
      */
-    startEditing: function (columnIndex) {
-      if (this.isReadOnly()) return;
-      if (this.__inStartEditing) return;
+    startEditing(columnIndex) {
+      if (this.isReadOnly()) {
+        return;
+      }
+      if (this.__inStartEditing) {
+        return;
+      }
       this.__inStartEditing = true;
       try {
         this.__finishEditingImpl();
@@ -235,7 +241,9 @@ qx.Class.define("zx.ui.tree.Tree", {
         var sel = this.getSelection();
         var node = sel.getItem(0);
         var row = this.getRowFromNode(node);
-        if (row && columnIndex !== null && columnIndex > -1) this.__startEditingImpl(row, columnIndex);
+        if (row && columnIndex !== null && columnIndex > -1) {
+          this.__startEditingImpl(row, columnIndex);
+        }
       } finally {
         this.__inStartEditing = false;
       }
@@ -244,13 +252,19 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Implementation to start editing
      */
-    __startEditingImpl: function (row, columnIndex) {
+    __startEditingImpl(row, columnIndex) {
       var column = this.getView().getColumns().getItem(columnIndex);
       var node = row.getNode();
-      if (!column.isEditable()) return false;
-      if (!this.getView().startEditing(node, column)) return false;
+      if (!column.isEditable()) {
+        return false;
+      }
+      if (!this.getView().startEditing(node, column)) {
+        return false;
+      }
 
-      if (!row.startEditing(columnIndex)) return false;
+      if (!row.startEditing(columnIndex)) {
+        return false;
+      }
       this.__editingRow = row;
       this.__editingColumnIndex = columnIndex;
       column.startEditing(node);
@@ -260,8 +274,10 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Stops editing
      */
-    finishEditing: function () {
-      if (this.__inStartEditing) return;
+    finishEditing() {
+      if (this.__inStartEditing) {
+        return;
+      }
       if (this.__editingRow) {
         this.__finishEditingImpl();
       }
@@ -270,7 +286,7 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Implementation to stop editing
      */
-    __finishEditingImpl: function () {
+    __finishEditingImpl() {
       if (this.__editingRow) {
         var column = this.getView().getColumns().getItem(this.__editingColumnIndex);
         var node = this.__editingRow.getNode();
@@ -286,17 +302,19 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Recursively expands all nodes
      */
-    expandAll: function () {
+    expandAll() {
       for (var i = 0; i < this.__rows.length; i++) {
         var node = this.__rows[i].getNode();
-        if (node) this.expandNode(node);
+        if (node) {
+          this.expandNode(node);
+        }
       }
     },
 
     /**
      * Expands the node, making it visible first if necessary, and refreshing it's children
      */
-    expandNode: function (node) {
+    expandNode(node) {
       var row = this.getRowFromNode(node);
       if (row == null && node != null) {
         let tmp = this.getModel().getParent(node);
@@ -354,13 +372,17 @@ qx.Class.define("zx.ui.tree.Tree", {
             // If the caret is the last of this branch of the tree, then
             // we should have
             // broken out last time around
-            if (nextIndent <= indent) break;
+            if (nextIndent <= indent) {
+              break;
+            }
             continue;
           }
           cr.setHasChildren(this.getModel().hasChildren(cr.getNode()) !== "no");
 
           // Grandchildren? then skip
-          if (indent + 1 < curIndent) continue;
+          if (indent + 1 < curIndent) {
+            continue;
+          }
 
           // Child?
           if (indent + 1 == curIndent) {
@@ -368,8 +390,9 @@ qx.Class.define("zx.ui.tree.Tree", {
               this._removeRow(cr);
               while (rowIndex < rows.length) {
                 cr = rows[rowIndex];
-                if (cr.getIndent() > curIndent) this._removeRow(cr);
-                else break;
+                if (cr.getIndent() > curIndent) {
+                  this._removeRow(cr);
+                } else break;
               }
               rowIndex--;
             } else if (cr.getNode() == children[childIndex]) {
@@ -397,14 +420,16 @@ qx.Class.define("zx.ui.tree.Tree", {
       // End of children
       if (rowIndex > rows.length - 1 || nextIndent <= indent) {
         var insertBefore;
-        if (rowIndex > rows.length - 1) insertBefore = null;
-        else insertBefore = rows[rowIndex];
+        if (rowIndex > rows.length - 1) {
+          insertBefore = null;
+        } else insertBefore = rows[rowIndex];
         while (childIndex < children.length) {
           var childNode = children[childIndex++];
           var data = displaced[childNode.toHashCode()];
           if (data) {
-            if (rowIndex > rows.length - 1) this.__rows.push.apply(this.__rows, data.rows);
-            else {
+            if (rowIndex > rows.length - 1) {
+              this.__rows.push.apply(this.__rows, data.rows);
+            } else {
               var args = [rowIndex, 0].concat(data.rows);
               this.__rows.splice.apply(this.__rows, args);
             }
@@ -419,7 +444,9 @@ qx.Class.define("zx.ui.tree.Tree", {
 
       for (var hash in displaced) {
         var data = displaced[hash];
-        for (var i = 0; i < data.rows.length; i++) this._removeRow(data.rows[i]);
+        for (var i = 0; i < data.rows.length; i++) {
+          this._removeRow(data.rows[i]);
+        }
       }
 
       if (row) {
@@ -437,7 +464,7 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Forces the rows to be redrawn
      */
-    __redraw: function () {
+    __redraw() {
       this.__rows.forEach(function (row) {
         row.invalidateLayoutCache();
       });
@@ -447,7 +474,7 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Collapses the node recursively
      */
-    collapseNode: function (node) {
+    collapseNode(node) {
       var row = this.getRowFromNode(node);
       var rows = this.__rows;
       var rowIndex = rows.indexOf(row);
@@ -457,7 +484,9 @@ qx.Class.define("zx.ui.tree.Tree", {
         var cr = rows[rowIndex],
           curIndent = cr.getIndent();
 
-        if (curIndent <= indent) break;
+        if (curIndent <= indent) {
+          break;
+        }
         this._removeRow(cr);
       }
 
@@ -467,41 +496,43 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Makes sure that a node is visible
      */
-    showNode: function (node) {
+    showNode(node) {
       var chain = [];
       var model = this.getModel();
       while (node) {
         chain.push(node);
         node = model.getParent(node);
       }
-      for (var i = chain.length - 1; i >= 0; i--) this.expandNode(chain[i]);
+      for (var i = chain.length - 1; i >= 0; i--) {
+        this.expandNode(chain[i]);
+      }
     },
 
     /**
      * Returns the row for a node
      */
-    getRowFromNode: function (node) {
+    getRowFromNode(node) {
       return !node ? null : this.__rowMap[node.toHashCode()] || null;
     },
 
     /**
      * Returns all rows
      */
-    getRows: function () {
+    getRows() {
       return this.__rows;
     },
 
     /**
      * Returns the drop caret node
      */
-    getDropCaret: function () {
+    getDropCaret() {
       return this.__dropCaret;
     },
 
     /**
      * Performs a full refresh of the tree
      */
-    reloadAllRows: function () {
+    reloadAllRows() {
       this._removeAllRows();
       this._loadAllRows();
     },
@@ -509,10 +540,14 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Removes all of the rows
      */
-    _removeAllRows: function () {
-      if (!this.__rows.length) return;
+    _removeAllRows() {
+      if (!this.__rows.length) {
+        return;
+      }
       var rows = this.__rows;
-      while (rows.length) this._removeRow(rows[0]);
+      while (rows.length) {
+        this._removeRow(rows[0]);
+      }
       this.__rows = [];
       this.getSelection().removeAll();
       this.__redraw();
@@ -521,8 +556,10 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Loads the rows
      */
-    _loadAllRows: function () {
-      if (this.__rows.length) return;
+    _loadAllRows() {
+      if (this.__rows.length) {
+        return;
+      }
 
       var model = this.getModel();
       var nodes = model.getChildren(null) || [];
@@ -540,7 +577,7 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Factory method to create a new row
      */
-    _createRow: function (node, parentRow) {
+    _createRow(node, parentRow) {
       var row = this.getView().createRow(node);
       this.__rowMap[node.toHashCode()] = row;
       row.set({
@@ -552,6 +589,7 @@ qx.Class.define("zx.ui.tree.Tree", {
         checked: this.getChecked().indexOf(node) > -1,
         showChecked: this.getShowChecked()
       });
+
       row.addListener("changeChecked", this.__onRowChangeChecked, this);
       return row;
     },
@@ -559,12 +597,14 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Event handler for changes to the checked property of rows
      */
-    __onRowChangeChecked: function (evt) {
+    __onRowChangeChecked(evt) {
       var row = evt.getTarget();
       var node = row.getNode();
       var checked = this.getChecked();
       if (evt.getData()) {
-        if (!checked.contains(node)) checked.push(node);
+        if (!checked.contains(node)) {
+          checked.push(node);
+        }
       } else {
         checked.remove(node);
       }
@@ -573,24 +613,32 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Adds a new row
      */
-    _addRow: function (row, before) {
-      if (before) qx.lang.Array.insertBefore(this.__rows, row, before);
-      else this.__rows.push(row);
-      if (row != this.__dropCaret && row.getNode()) this.__rowMap[row.getNode().toHashCode()] = row;
-      if (before) this._addBefore(row, before);
-      else this._add(row);
+    _addRow(row, before) {
+      if (before) {
+        qx.lang.Array.insertBefore(this.__rows, row, before);
+      } else this.__rows.push(row);
+      if (row != this.__dropCaret && row.getNode()) {
+        this.__rowMap[row.getNode().toHashCode()] = row;
+      }
+      if (before) {
+        this._addBefore(row, before);
+      } else this._add(row);
       this.__rowPositions = null;
     },
 
     /**
      * Removes a row
      */
-    _removeRow: function (row) {
+    _removeRow(row) {
       var node = row.getNode();
-      if (this.getFocusedNode() == node) this.setFocusedNode(null);
+      if (this.getFocusedNode() == node) {
+        this.setFocusedNode(null);
+      }
       if (node) {
         row.setNode(null);
-        if (row != this.__dropCaret) delete this.__rowMap[node.toHashCode()];
+        if (row != this.__dropCaret) {
+          delete this.__rowMap[node.toHashCode()];
+        }
       }
       qx.lang.Array.remove(this.__rows, row);
       this._remove(row);
@@ -600,15 +648,17 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Resets the selection
      */
-    _resetSelection: function () {
+    _resetSelection() {
       var sel = this.getSelection();
-      for (var i = 0, rows = this.__rows; i < rows.length; i++) rows[i].setSelected(sel.contains(rows[i].getNode()));
+      for (var i = 0, rows = this.__rows; i < rows.length; i++) {
+        rows[i].setSelected(sel.contains(rows[i].getNode()));
+      }
     },
 
     /**
      * Replaces the selection
      */
-    replaceSelection: function (arr) {
+    replaceSelection(arr) {
       arr = qx.lang.Array.toNativeArray(arr);
       var sel = this.getSelection();
       arr.unshift(sel.getLength());
@@ -619,19 +669,23 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Resets the list of checked rows
      */
-    _resetChecked: function () {
+    _resetChecked() {
       var sel = this.getChecked();
-      for (var i = 0, rows = this.__rows; i < rows.length; i++) rows[i].setChecked(sel.contains(rows[i].getNode()));
+      for (var i = 0, rows = this.__rows; i < rows.length; i++) {
+        rows[i].setChecked(sel.contains(rows[i].getNode()));
+      }
     },
 
     /**
      * Find the row for the event, eg the row that was clicked by searching teh widget
      * heirarchy
      */
-    _getRowFromEvent: function (evt) {
+    _getRowFromEvent(evt) {
       var target = evt.getTarget();
       while (target && target != this) {
-        if (qx.Class.isSubClassOf(target.constructor, zx.ui.tree.Row)) return target;
+        if (qx.Class.isSubClassOf(target.constructor, zx.ui.tree.Row)) {
+          return target;
+        }
         target = target.getLayoutParent();
       }
       return null;
@@ -640,20 +694,24 @@ qx.Class.define("zx.ui.tree.Tree", {
     /**
      * Finds the row at a given x,y
      */
-    _getRowFromPosition: function (clientX, clientY) {
+    _getRowFromPosition(clientX, clientY) {
       this._getRowPositions();
       var rows = this.__rows;
       for (var i = 0; i < rows.length; i++) {
         var pos = this._getRowPosition(i);
         if (pos) {
-          if (clientY >= pos.top && clientY <= pos.bottom) return rows[i];
-          if (clientY <= pos.bottom) return i ? rows[i - 1] : null;
+          if (clientY >= pos.top && clientY <= pos.bottom) {
+            return rows[i];
+          }
+          if (clientY <= pos.bottom) {
+            return i ? rows[i - 1] : null;
+          }
         }
       }
       return null;
     },
 
-    _getRowPositions: function () {
+    _getRowPositions() {
       if (!this._rowPositions) {
         var rows = this.__rows,
           rowPositions = (this.__rowPositions = []),
@@ -673,7 +731,7 @@ qx.Class.define("zx.ui.tree.Tree", {
       return this.__rowPositions;
     },
 
-    _getRowPosition: function (index) {
+    _getRowPosition(index) {
       this._getRowPositions();
       var rpos = this.__rowPositions[index];
       if (!rpos) {
@@ -690,7 +748,7 @@ qx.Class.define("zx.ui.tree.Tree", {
       return rpos;
     },
 
-    __caretOff: function () {
+    __caretOff() {
       if (this.__dropCaret) {
         var index = this.__rows.indexOf(this.__dropCaret);
         if (index > -1) {
@@ -699,24 +757,30 @@ qx.Class.define("zx.ui.tree.Tree", {
       }
     },
 
-    __caretOn: function (index, node) {
-      if (!this.__dropCaret) this.__dropCaret = this.getView().createDropCaretRow(this);
+    __caretOn(index, node) {
+      if (!this.__dropCaret) {
+        this.__dropCaret = this.getView().createDropCaretRow(this);
+      }
       var curIndex = this.__rows.indexOf(this.__dropCaret);
-      if (index != -1 && curIndex == index) return;
+      if (index != -1 && curIndex == index) {
+        return;
+      }
       if (curIndex > -1) {
         this._removeRow(this.__dropCaret);
-        if (curIndex < index) index--;
+        if (curIndex < index) {
+          index--;
+        }
       }
       this.__dropCaret.setNode(node);
       this._addRow(this.__dropCaret, index < -1 ? null : this.__rows[index]);
     },
 
-    __onContentMenu: function (evt) {
+    __onContentMenu(evt) {
       var row = this._getRowFromEvent(evt);
       this.setRightClickNode(row ? row.getNode() : null);
     },
 
-    __onMouseDown: function (evt) {
+    __onMouseDown(evt) {
       this.debug("__onMouseDown: 1");
       var row = this._getRowFromEvent(evt);
       var columnIndex = row ? row.getWidgetColumn(evt.getTarget()) : null;
@@ -729,20 +793,27 @@ qx.Class.define("zx.ui.tree.Tree", {
       this.debug("__onMouseDown: 2: editingRow=" + this.__editingRow + ", editingColumn=" + this.__editingColumnIndex);
     },
 
-    __onMouseUp: function (evt) {
-      if (!this.__mouseIsDown) return;
+    __onMouseUp(evt) {
+      if (!this.__mouseIsDown) {
+        return;
+      }
       this.__mouseIsDown = false;
       var row = this._getRowFromEvent(evt);
-      if (!row) return;
-      if (evt.getButton() != "left") return;
+      if (!row) {
+        return;
+      }
+      if (evt.getButton() != "left") {
+        return;
+      }
 
       this.__debugDrag("__onMouseUp: 1");
 
       var arrow = row.getChildControl("arrow");
       var columnIndex = row.getWidgetColumn(evt.getTarget());
       if (columnIndex === -1) {
-        if (row.getOpened()) this.collapseNode(row.getNode());
-        else this.expandNode(row.getNode());
+        if (row.getOpened()) {
+          this.collapseNode(row.getNode());
+        } else this.expandNode(row.getNode());
         return;
       }
 
@@ -751,17 +822,21 @@ qx.Class.define("zx.ui.tree.Tree", {
       var node = row.getNode();
 
       if (mode == "one") {
-        if (!row.getSelected()) sel.splice(0, sel.length, node);
+        if (!row.getSelected()) {
+          sel.splice(0, sel.length, node);
+        }
       } else if (mode == "single") {
         sel = [node];
       } else if (mode == "additive") {
-        if (row.getSelected()) sel.splice(sel.indexOf(node), 1);
-        else sel.push(node);
+        if (row.getSelected()) {
+          sel.splice(sel.indexOf(node), 1);
+        } else sel.push(node);
       } else {
         if (evt.isShiftPressed()) {
           var startNode = this.getFocusedNode() || (sel.length && sel[0]);
-          if (!startNode) sel.push(node);
-          else {
+          if (!startNode) {
+            sel.push(node);
+          } else {
             var startRow = this.getRowFromNode(this.getFocusedNode() || sel[0]),
               startIndex = this.__rows.indexOf(startRow);
             var endIndex = this.__rows.indexOf(row);
@@ -771,15 +846,20 @@ qx.Class.define("zx.ui.tree.Tree", {
               endIndex = tmp;
             }
             sel = [];
-            for (var i = startIndex; i <= endIndex; i++) sel.push(this.__rows[i].getNode());
+            for (var i = startIndex; i <= endIndex; i++) {
+              sel.push(this.__rows[i].getNode());
+            }
           }
-        } else if (sel.length == 0) sel.push(node);
-        else if (evt.isCtrlOrCommandPressed()) {
-          if (row.getSelected()) sel.splice(sel.indexOf(node), 1);
-          else sel.push(node);
+        } else if (sel.length == 0) {
+          sel.push(node);
+        } else if (evt.isCtrlOrCommandPressed()) {
+          if (row.getSelected()) {
+            sel.splice(sel.indexOf(node), 1);
+          } else sel.push(node);
         } else {
-          if (sel.length && row.getSelected()) sel = [];
-          else sel.splice(0, sel.length, node);
+          if (sel.length && row.getSelected()) {
+            sel = [];
+          } else sel.splice(0, sel.length, node);
         }
       }
 
@@ -790,36 +870,28 @@ qx.Class.define("zx.ui.tree.Tree", {
           tmp.splice.apply(tmp, [0, tmp.getLength()].concat(sel));
           this.setFocusedNode(node);
         }
-        this.debug(
-          "__onMouseUp: 2: columnIndex=" +
-            columnIndex +
-            ", editingColumn=" +
-            this.__editingColumnIndex +
-            ", editingRow=" +
-            this.__editingRow
-        );
-        if (columnIndex !== null) this.startEditing(columnIndex);
+        this.debug("__onMouseUp: 2: columnIndex=" + columnIndex + ", editingColumn=" + this.__editingColumnIndex + ", editingRow=" + this.__editingRow);
+
+        if (columnIndex !== null) {
+          this.startEditing(columnIndex);
+        }
       } else if (columnIndex !== null && sel.length == 1) {
-        this.debug(
-          "__onMouseUp: 3: columnIndex=" +
-            columnIndex +
-            ", editingColumn=" +
-            this.__editingColumnIndex +
-            ", editingRow=" +
-            this.__editingRow
-        );
+        this.debug("__onMouseUp: 3: columnIndex=" + columnIndex + ", editingColumn=" + this.__editingColumnIndex + ", editingRow=" + this.__editingRow);
+
         this.startEditing(columnIndex);
       }
     },
 
-    _getDragSource: function (evt) {
+    _getDragSource(evt) {
       var source = evt.getRelatedTarget();
       var result = null;
-      if (source instanceof zx.ui.tree.Row) result = source.getNode();
+      if (source instanceof zx.ui.tree.Row) {
+        result = source.getNode();
+      }
 
       this.fireDataEvent("getDragSource", {
         event: evt,
-        apply: function (value) {
+        apply(value) {
           result = value;
         }
       });
@@ -827,7 +899,7 @@ qx.Class.define("zx.ui.tree.Tree", {
       return result;
     },
 
-    _dropNode: function (parentNode, insertAfter, evt) {
+    _dropNode(parentNode, insertAfter, evt) {
       var self = this;
       return evt.getCurrentActionAsync().then(function (action) {
         return !self.fireDataEvent(
@@ -838,6 +910,7 @@ qx.Class.define("zx.ui.tree.Tree", {
             action: action,
             event: evt
           },
+
           null,
           true
         );
@@ -845,7 +918,7 @@ qx.Class.define("zx.ui.tree.Tree", {
     },
 
     __dragSourceNode: null,
-    __onDragOver: function (evt) {
+    __onDragOver(evt) {
       var pos = this.getContentLocation();
       var mouseLeft = evt.getDocumentLeft() - pos.left;
       var mouseTop = evt.getDocumentTop() - pos.top;
@@ -865,13 +938,13 @@ qx.Class.define("zx.ui.tree.Tree", {
       this.__onMouseMoveDuringDrag(evt);
     },
 
-    __onDragLeave: function (evt) {
+    __onDragLeave(evt) {
       this.__debugDrag("dragleave");
       this.removeListener("mousemove", this.__onMouseMoveDuringDrag, this, true);
       this.__caretOff();
     },
 
-    __onMouseMoveDuringDrag: function (evt) {
+    __onMouseMoveDuringDrag(evt) {
       var pos = this.getContentLocation();
       var mouseLeft = evt.getDocumentLeft() - pos.left;
       var mouseTop = evt.getDocumentTop() - pos.top;
@@ -879,16 +952,7 @@ qx.Class.define("zx.ui.tree.Tree", {
       var sourceNode = this.__dragSourceNode;
       var targetIndex = this.__rows.indexOf(targetRow);
 
-      this.__debugDrag(
-        "__onMouseMoveDuringDrag: " +
-          sourceNode.classname +
-          ", targetRow=" +
-          targetRow +
-          ", targetIndex=" +
-          targetIndex +
-          ", sourceNode=" +
-          sourceNode
-      );
+      this.__debugDrag("__onMouseMoveDuringDrag: " + sourceNode.classname + ", targetRow=" + targetRow + ", targetIndex=" + targetIndex + ", sourceNode=" + sourceNode);
 
       this.__caretOn(targetIndex, sourceNode);
 
@@ -901,9 +965,8 @@ qx.Class.define("zx.ui.tree.Tree", {
         while (row) {
           var contentPos = row.getContentBounds();
           var offset = this.getView().getDropIndentOffset() || row.getDropIndentOffset();
-          this.__debugDrag(
-            "caretIndex=" + caretIndex + ", row=" + row + ", row.indent=" + row.getIndent() + ", offset=" + offset
-          );
+          this.__debugDrag("caretIndex=" + caretIndex + ", row=" + row + ", row.indent=" + row.getIndent() + ", offset=" + offset);
+
           this.__debugDrag("    mouseLeft=" + mouseLeft + ", contentPos.left=" + contentPos.left);
 
           if (mouseLeft > contentPos.left + offset) {
@@ -946,7 +1009,7 @@ qx.Class.define("zx.ui.tree.Tree", {
       //qx.ui.core.queue.Manager.flush();
     },
 
-    __onDragStart: function (evt) {
+    __onDragStart(evt) {
       if (this.isReadOnly() || !this.getDraggable() || !!this.__editingRow) {
         evt.preventDefault();
         return;
@@ -960,7 +1023,7 @@ qx.Class.define("zx.ui.tree.Tree", {
       this.__debugDrag("__onDragStart");
     },
 
-    __onDropRequest: function (evt) {
+    __onDropRequest(evt) {
       var reqType = evt.getCurrentType();
       var dragType = this.getDragType();
       var sel = this.getSelection();
@@ -971,13 +1034,15 @@ qx.Class.define("zx.ui.tree.Tree", {
       }
     },
 
-    __onDragEnd: function (evt) {
-      if (!this.getDraggable()) return;
+    __onDragEnd(evt) {
+      if (!this.getDraggable()) {
+        return;
+      }
       this.removeListener("mousemove", this.__onMouseMoveDuringDrag, this, true);
       this.__debugDrag("__onDragEnd");
     },
 
-    __onDrop: function (evt) {
+    __onDrop(evt) {
       var t = this;
       if (this.isReadOnly()) {
         evt.preventDefault();
@@ -988,7 +1053,9 @@ qx.Class.define("zx.ui.tree.Tree", {
         return;
       }
 
-      if (!this.getDroppable()) return;
+      if (!this.getDroppable()) {
+        return;
+      }
 
       this.__debugDrag("__onDrop");
 
@@ -999,8 +1066,9 @@ qx.Class.define("zx.ui.tree.Tree", {
       var caretIndex = this.__rows.indexOf(this.__dropCaret);
       var dropParentNode = null;
       var dropInsertAfter = null;
-      if (caretIndex == 0) this.__dropCaret.setIndent(0);
-      else if (caretIndex == -1) {
+      if (caretIndex == 0) {
+        this.__dropCaret.setIndent(0);
+      } else if (caretIndex == -1) {
         var tmp = rows[rows.length - 1];
         this.__dropCaret.setIndent(Math.min(tmp.getIndent() + 1, this.__dropCaret.getIndent()));
       } else {
@@ -1019,7 +1087,9 @@ qx.Class.define("zx.ui.tree.Tree", {
       }
 
       var sourceRow = evt.getRelatedTarget();
-      if (!sourceRow) return;
+      if (!sourceRow) {
+        return;
+      }
 
       var sourceIndex = this.__rows.indexOf(sourceRow);
 
@@ -1042,8 +1112,12 @@ qx.Class.define("zx.ui.tree.Tree", {
             rows.splice(sourceIndex, 1);
             for (var i = sourceIndex; i < rows.length; i++) {
               var row = rows[i];
-              if (row == this.__dropCaret) continue;
-              if (row.getIndent() <= sourceRow.getIndent()) break;
+              if (row == this.__dropCaret) {
+                continue;
+              }
+              if (row.getIndent() <= sourceRow.getIndent()) {
+                break;
+              }
               rows.splice(i, 1);
               i--;
               moved.push(row);
@@ -1058,28 +1132,31 @@ qx.Class.define("zx.ui.tree.Tree", {
             // Adjust the indentation of the node and all child node rows
             var indent = this.__dropCaret.getIndent();
             var indentDiff = indent - sourceRow.getIndent();
-            if (indentDiff != 0)
-              for (var i = 0; i < moved.length; i++) moved[i].setIndent(moved[i].getIndent() + indentDiff);
+            if (indentDiff != 0) {
+              for (var i = 0; i < moved.length; i++) {
+                moved[i].setIndent(moved[i].getIndent() + indentDiff);
+              }
+            }
 
             // If a tree is bisected, we need to make sure that the indent
             // does not jump
             // by more than one between the last row dropped and the next
             // row
             /*
-           * commented this out because when dragging a top level branch into
-           * part way down another top level branch, the branch being dropped
-           * was flattened out 
+          * commented this out because when dragging a top level branch into
+          * part way down another top level branch, the branch being dropped
+          * was flattened out 
           if (caretIndex > 0 && caretIndex < rows.length - 1) {
-            var indent = rows[caretIndex - 1].getIndent();
-            var indentDiff = rows[caretIndex + 1].getIndent() - indent;
-            if (indentDiff > 1) {
-              for (var rowIndex = caretIndex + 1; rowIndex < rows.length; rowIndex++) {
-                var row = rows[rowIndex];
-                if (row.getIndent() <= indent + 1)
-                  break;
-                row.setIndent(Math.max(indent + 1, row.getIndent() - indentDiff + 1));
-              }
-            }
+          var indent = rows[caretIndex - 1].getIndent();
+          var indentDiff = rows[caretIndex + 1].getIndent() - indent;
+          if (indentDiff > 1) {
+          for (var rowIndex = caretIndex + 1; rowIndex < rows.length; rowIndex++) {
+            var row = rows[rowIndex];
+            if (row.getIndent() <= indent + 1)
+              break;
+            row.setIndent(Math.max(indent + 1, row.getIndent() - indentDiff + 1));
+          }
+          }
           }
           */
 
@@ -1098,8 +1175,11 @@ qx.Class.define("zx.ui.tree.Tree", {
                 if (rowIndent == indent) {
                   row.setParentRow(parentRow);
                   var insertAfter = lastRow;
-                  if (lastRow && lastRow.getIndent() == indent - 1) insertAfter = null;
-                  else if (lastRow) insertAfter = lastRow.getNode();
+                  if (lastRow && lastRow.getIndent() == indent - 1) {
+                    insertAfter = null;
+                  } else if (lastRow) {
+                    insertAfter = lastRow.getNode();
+                  }
                   model.moveTo(row.getNode(), parentRow ? parentRow.getNode() : null, insertAfter);
                   lastRow = row;
                 } else if (rowIndent < indent) {
@@ -1117,17 +1197,21 @@ qx.Class.define("zx.ui.tree.Tree", {
 
             for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
               row = rows[rowIndex];
-              if (row == this.__dropCaret) continue;
+              if (row == this.__dropCaret) {
+                continue;
+              }
               var nextRow = rowIndex == rows.length - 1 ? null : rows[rowIndex + 1];
-              if (nextRow == this.__dropCaret) nextRow = rowIndex == rows.length - 2 ? null : rows[rowIndex + 2];
+              if (nextRow == this.__dropCaret) {
+                nextRow = rowIndex == rows.length - 2 ? null : rows[rowIndex + 2];
+              }
 
               var hasChildren = model.hasChildren(row.getNode(), true);
               row.setHasChildren(hasChildren !== "no");
-              if (hasChildren === "no" || !nextRow || nextRow.getIndent() <= row.getIndent())
+              if (hasChildren === "no" || !nextRow || nextRow.getIndent() <= row.getIndent()) {
                 row.set({
                   opened: false
                 });
-              else
+              } else
                 row.set({
                   opened: true
                 });
@@ -1146,45 +1230,69 @@ qx.Class.define("zx.ui.tree.Tree", {
         }, this);
     },
 
-    __onNodeChangeChildren: function (evt) {
-      if (this.__reorgChildren) return;
+    __onNodeChangeChildren(evt) {
+      if (this.__reorgChildren) {
+        return;
+      }
       var node = evt.getData();
-      if (node && !this.getRowFromNode(node)) return;
+      if (node && !this.getRowFromNode(node)) {
+        return;
+      }
       this.expandNode(node);
     },
 
-    _applyIndentWidth: function (value, oldValue) {
-      for (var rows = this.__rows, i = 0; i < rows.length; i++) rows[i].resetIndent();
+    _applyIndentWidth(value, oldValue) {
+      for (var rows = this.__rows, i = 0; i < rows.length; i++) {
+        rows[i].resetIndent();
+      }
     },
 
-    _applyModel: function (value, oldValue) {
-      if (oldValue) oldValue.removeListener("changeNodeChildren", this.__onNodeChangeChildren, this);
+    _applyModel(value, oldValue) {
+      if (oldValue) {
+        oldValue.removeListener("changeNodeChildren", this.__onNodeChangeChildren, this);
+      }
       this._removeAllRows();
-      if (value && this.getView()) this._loadAllRows();
-      if (value) value.addListener("changeNodeChildren", this.__onNodeChangeChildren, this);
+      if (value && this.getView()) {
+        this._loadAllRows();
+      }
+      if (value) {
+        value.addListener("changeNodeChildren", this.__onNodeChangeChildren, this);
+      }
     },
 
-    _applyView: function (value, oldValue) {
+    _applyView(value, oldValue) {
       if (oldValue) {
         oldValue.setTree(null);
         oldValue.removeListener("change");
       }
-      if (oldValue) this._removeAllRows();
-      if (value) value.setTree(this);
-      if (value && this.getModel()) this._loadAllRows();
+      if (oldValue) {
+        this._removeAllRows();
+      }
+      if (value) {
+        value.setTree(this);
+      }
+      if (value && this.getModel()) {
+        this._loadAllRows();
+      }
     },
 
-    _transformSelection: function (value, oldValue) {
-      if (oldValue === undefined) return value;
-      if (!value) oldValue.removeAll();
-      else oldValue.replace(value);
+    _transformSelection(value, oldValue) {
+      if (oldValue === undefined) {
+        return value;
+      }
+      if (!value) {
+        oldValue.removeAll();
+      } else oldValue.replace(value);
       return oldValue;
     },
 
-    _applySelection: function (value, oldValue) {
-      if (oldValue) oldValue.removeListener("change", this._resetSelection, this);
-      if (value) value.addListener("change", this._resetSelection, this);
-      else this.debug("Unexpected NULL for selection");
+    _applySelection(value, oldValue) {
+      if (oldValue) {
+        oldValue.removeListener("change", this._resetSelection, this);
+      }
+      if (value) {
+        value.addListener("change", this._resetSelection, this);
+      } else this.debug("Unexpected NULL for selection");
 
       var rows = this.__rows;
       for (var i = 0; i < rows.length; i++) {
@@ -1192,21 +1300,27 @@ qx.Class.define("zx.ui.tree.Tree", {
       }
     },
 
-    _applySelectonMode: function (value, oldValue) {
+    _applySelectonMode(value, oldValue) {
       var sel = this.getSelection();
 
       if (value == "one" && sel.getLength() == 0) {
         var node = this.getFocusedNode() || (this.__rows.length && this.__rows[0].getNode());
-        if (node) sel.push(node);
-      } else if ((value == "single" || value == "one") && sel.getLength() > 0) sel.splice(0, sel.getLength() - 1);
+        if (node) {
+          sel.push(node);
+        }
+      } else if ((value == "single" || value == "one") && sel.getLength() > 0) {
+        sel.splice(0, sel.getLength() - 1);
+      }
     },
 
-    _transformChecked: function (value) {
-      if (!value) value = new qx.data.Array();
+    _transformChecked(value) {
+      if (!value) {
+        value = new qx.data.Array();
+      }
       return value;
     },
 
-    _applyShowChecked: function (value, oldValue) {
+    _applyShowChecked(value, oldValue) {
       this.__rows.forEach(function (row) {
         row.setShowChecked(value);
       });
@@ -1214,10 +1328,13 @@ qx.Class.define("zx.ui.tree.Tree", {
       qx.ui.core.queue.Layout.add(this);
     },
 
-    _applyChecked: function (value, oldValue) {
-      if (oldValue) oldValue.removeListener("change", this._resetChecked, this);
-      if (value) value.addListener("change", this._resetChecked, this);
-      else this.debug("Unexpected NULL value for checked");
+    _applyChecked(value, oldValue) {
+      if (oldValue) {
+        oldValue.removeListener("change", this._resetChecked, this);
+      }
+      if (value) {
+        value.addListener("change", this._resetChecked, this);
+      } else this.debug("Unexpected NULL value for checked");
 
       var rows = this.__rows;
       for (var i = 0; i < rows.length; i++) {
@@ -1225,18 +1342,22 @@ qx.Class.define("zx.ui.tree.Tree", {
       }
     },
 
-    _applyFocusedNode: function (value, oldValue) {
+    _applyFocusedNode(value, oldValue) {
       if (oldValue) {
         var row = this.getRowFromNode(oldValue);
-        if (row) row.setFocused(false);
+        if (row) {
+          row.setFocused(false);
+        }
       }
       if (value) {
         var row = this.getRowFromNode(value);
-        if (row) row.setFocused(true);
+        if (row) {
+          row.setFocused(true);
+        }
       }
     },
 
-    __debugDrag: function () {
+    __debugDrag() {
       //this.debug.apply(this, arguments);
     }
   }

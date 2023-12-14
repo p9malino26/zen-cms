@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Store for tough-cookie that stores the cookies in the expressjs request session.
@@ -155,11 +154,7 @@ class SessionCookieStore extends Store {
   }
 
   removeCookie(domain, path, key, cb) {
-    if (
-      this.idx[domain] &&
-      this.idx[domain][path] &&
-      this.idx[domain][path][key]
-    ) {
+    if (this.idx[domain] && this.idx[domain][path] && this.idx[domain][path][key]) {
       delete this.idx[domain][path][key];
     }
     this.saveCookies();
@@ -226,15 +221,13 @@ class SessionCookieStore extends Store {
 
   loadCookies() {
     this.idx = {};
-    let cookieJson =
-      this.req.session && this.req.session.qx && this.req.session.qx.cookies;
+    let cookieJson = this.req.session && this.req.session.qx && this.req.session.qx.cookies;
     if (cookieJson) {
       for (var domainName in cookieJson) {
         for (var pathName in cookieJson[domainName]) {
           for (var cookieName in cookieJson[domainName][pathName]) {
-            let cookie = toughCookie.fromJSON(
-              JSON.stringify(cookieJson[domainName][pathName][cookieName])
-            );
+            let cookie = toughCookie.fromJSON(JSON.stringify(cookieJson[domainName][pathName][cookieName]));
+
             this._putCookieImpl(cookie);
           }
         }
@@ -243,9 +236,12 @@ class SessionCookieStore extends Store {
   }
 
   saveCookies() {
-    if (!this.req.session)
+    if (!this.req.session) {
       throw new Error("No session available to store cookies");
-    if (!this.req.session.qx) this.req.session.qx = {};
+    }
+    if (!this.req.session.qx) {
+      this.req.session.qx = {};
+    }
     this.req.session.qx.cookies = qx.lang.Object.clone(this.idx, true);
   }
 }

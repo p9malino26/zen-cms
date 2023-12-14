@@ -24,7 +24,7 @@ qx.Class.define("zx.server.CmsConfiguration", {
   }),
 
   construct() {
-    this.base(arguments);
+    super();
     this.__registeredApis = {};
   },
 
@@ -69,8 +69,12 @@ qx.Class.define("zx.server.CmsConfiguration", {
      */
     registerApi(apiName, clazz, check) {
       let checkFn = check;
-      if (typeof check == "string") checkFn = user => user && user.hasPermission(check);
-      if (checkFn && qx.core.Environment.get("qx.debug")) this.assertTrue(typeof checkFn == "function");
+      if (typeof check == "string") {
+        checkFn = user => user && user.hasPermission(check);
+      }
+      if (checkFn && qx.core.Environment.get("qx.debug")) {
+        this.assertTrue(typeof checkFn == "function");
+      }
       this.__registeredApis[apiName] = {
         apiName,
         apiClass: clazz,
@@ -102,8 +106,12 @@ qx.Class.define("zx.server.CmsConfiguration", {
 
       let registered = this.__registeredApis[apiName];
       if (registered) {
-        if (registered.check && !registered.check(user)) return null;
-        if (!registered.api) registered.api = new registered.apiClass();
+        if (registered.check && !registered.check(user)) {
+          return null;
+        }
+        if (!registered.api) {
+          registered.api = new registered.apiClass();
+        }
         return registered.api;
       }
 
@@ -114,7 +122,9 @@ qx.Class.define("zx.server.CmsConfiguration", {
      * Apply for `urlPages`
      */
     __applyUrlPages(value, oldValue) {
-      if (oldValue) throw new Error(`Unexpected change of ${this.classname}.urlPages`);
+      if (oldValue) {
+        throw new Error(`Unexpected change of ${this.classname}.urlPages`);
+      }
     }
   }
 });

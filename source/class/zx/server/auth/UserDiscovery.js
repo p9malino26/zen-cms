@@ -23,11 +23,13 @@ qx.Class.define("zx.server.auth.UserDiscovery", {
       let user = await server.findOneObjectByType(clazz, {
         username: email.toLowerCase()
       });
+
       if (!user && create) {
         user = new clazz().set({
           username: email,
           fullName: ""
         });
+
         await user.save();
       }
       return user;

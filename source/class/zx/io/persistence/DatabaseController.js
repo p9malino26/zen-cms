@@ -19,7 +19,7 @@ qx.Class.define("zx.io.persistence.DatabaseController", {
   extend: zx.io.persistence.Controller,
 
   construct() {
-    this.base(arguments, new zx.io.persistence.DatabaseClassIos());
+    super(new zx.io.persistence.DatabaseClassIos());
     this.__dirtyObjectUuids = {};
     this.__debounceSaveDirty = new zx.utils.Debounce(() => this._saveDirty(), 250);
     this.__watcher = new zx.io.persistence.Watcher(this.getClassIos());

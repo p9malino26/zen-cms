@@ -34,7 +34,9 @@ qx.Class.define("zx.io.persistence.db.MemoryDatabase", {
      * @param erase {Boolean?} it true, the current in memory database will be erased
      */
     async importFromDisk(dir, erase) {
-      if (erase) this._db = { jsonByUuid: {} };
+      if (erase) {
+        this._db = { jsonByUuid: {} };
+      }
       await new zx.io.persistence.db.ImportExport(dir, this).importToDb();
     },
 
@@ -45,7 +47,8 @@ qx.Class.define("zx.io.persistence.db.MemoryDatabase", {
       this._db = {
         jsonByUuid: {}
       };
-      return await this.base(arguments);
+
+      return await super.open();
     },
 
     /*
@@ -53,7 +56,7 @@ qx.Class.define("zx.io.persistence.db.MemoryDatabase", {
      */
     async close() {
       this._db = null;
-      await this.base(arguments);
+      await super.close();
     },
 
     /*
@@ -67,7 +70,9 @@ qx.Class.define("zx.io.persistence.db.MemoryDatabase", {
     async findOne(query, projection) {
       for (let uuid in this._db.jsonByUuid) {
         let json = this._db.jsonByUuid[uuid];
-        if (zx.io.persistence.db.Utils.matchQuery(json, query)) return json;
+        if (zx.io.persistence.db.Utils.matchQuery(json, query)) {
+          return json;
+        }
       }
       return null;
     },
@@ -79,7 +84,9 @@ qx.Class.define("zx.io.persistence.db.MemoryDatabase", {
       let result = [];
       for (let uuid in this._db.jsonByUuid) {
         let json = this._db.jsonByUuid[uuid];
-        if (zx.io.persistence.db.Utils.matchQuery(json, query)) result.push(json);
+        if (zx.io.persistence.db.Utils.matchQuery(json, query)) {
+          result.push(json);
+        }
       }
       return result;
     },
@@ -109,7 +116,9 @@ qx.Class.define("zx.io.persistence.db.MemoryDatabase", {
      * @Override
      */
     async remove(uuid) {
-      if (!this._db.jsonByUuid[uuid]) return false;
+      if (!this._db.jsonByUuid[uuid]) {
+        return false;
+      }
       delete this._db.jsonByUuid[uuid];
       return true;
     }

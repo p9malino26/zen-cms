@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Handles drag moving of elements, eg a zx.thin.ui.Window will use an instance of this to make
@@ -30,7 +29,7 @@ qx.Class.define("zx.thin.core.Mover", {
    * @param moveElement {qx.html.Element?} the element that is moved, defaults to dragElement
    */
   construct(dragElement, moveElement) {
-    this.base(arguments);
+    super();
     this.__dragElement = dragElement;
     this.__moveElement = moveElement || dragElement;
 
@@ -63,7 +62,9 @@ qx.Class.define("zx.thin.core.Mover", {
      * Apply method for enabled property
      */
     _applyEnabled(value) {
-      if (!value) this.__endMoving();
+      if (!value) {
+        this.__endMoving();
+      }
     },
 
     /**
@@ -91,7 +92,9 @@ qx.Class.define("zx.thin.core.Mover", {
      * @param evt {qx.event.type.Pointer}
      */
     _onMovePointerMove(evt) {
-      if (!this.isEnabled()) return;
+      if (!this.isEnabled()) {
+        return;
+      }
 
       // Don't start moving until we see an actual drag
       if (this.__mouseDown && !this.__capturing) {
@@ -107,6 +110,7 @@ qx.Class.define("zx.thin.core.Mover", {
         left: this.__capturing.element.left + left,
         top: this.__capturing.element.top + top
       });
+
       evt.preventDefault();
     },
 
@@ -132,12 +136,15 @@ qx.Class.define("zx.thin.core.Mover", {
           top: evt.getDocumentTop(),
           left: evt.getDocumentLeft()
         },
+
         element: {
           left: dom.offsetLeft,
           top: dom.offsetTop
         },
+
         cursor: this.__dragElement.getStyle("cursor")
       };
+
       this.__dragElement.setStyle("cursor", "grab");
     },
 

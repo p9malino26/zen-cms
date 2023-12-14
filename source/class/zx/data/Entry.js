@@ -18,8 +18,8 @@
 qx.Class.define("zx.data.Entry", {
   extend: qx.core.Object,
 
-  construct: function (key, value) {
-    this.base(arguments);
+  construct(key, value) {
+    super();
     this.set({ key: key, value: value });
   },
 

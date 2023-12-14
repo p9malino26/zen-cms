@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Mixin.define("zx.ui.editor.MField", {
   properties: {
@@ -47,9 +47,9 @@ qx.Mixin.define("zx.ui.editor.MField", {
           message = await fn(this);
         } catch (ex) {
           if (ex instanceof qx.core.ValidationError) {
-            if (ex.message && ex.message != qx.type.BaseError.DEFAULTMESSAGE)
+            if (ex.message && ex.message != qx.type.BaseError.DEFAULTMESSAGE) {
               message = ex.message;
-            else message = ex.getComment();
+            } else message = ex.getComment();
           } else {
             throw ex;
           }
@@ -67,17 +67,21 @@ qx.Mixin.define("zx.ui.editor.MField", {
      * @returns {Boolean}
      */
     isEmptyField() {
-      if (qx.Class.hasInterface(this.constructor, qx.ui.core.ISingleSelection))
+      if (qx.Class.hasInterface(this.constructor, qx.ui.core.ISingleSelection)) {
         return this.getSelection().length > 0;
+      }
 
-      if (
-        qx.Class.hasInterface(this.constructor, qx.data.controller.ISelection)
-      )
+      if (qx.Class.hasInterface(this.constructor, qx.data.controller.ISelection)) {
         return this.getSelection().getLength() > 0;
+      }
 
       let value = this.getValue();
-      if (value === null || value === undefined) return true;
-      if (typeof value == "string" && value.length == 0) return true;
+      if (value === null || value === undefined) {
+        return true;
+      }
+      if (typeof value == "string" && value.length == 0) {
+        return true;
+      }
       return false;
     }
   }

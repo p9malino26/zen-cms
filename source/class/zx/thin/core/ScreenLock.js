@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * This class is used to lock off access to controls, by presenting slightly shaded overlay, similar to
@@ -25,7 +24,7 @@ qx.Class.define("zx.thin.core.ScreenLock", {
   extend: qx.html.Element,
 
   construct() {
-    this.base(arguments);
+    super();
     this.setCssClass("qx-screen-lock");
   },
 
@@ -38,7 +37,9 @@ qx.Class.define("zx.thin.core.ScreenLock", {
      */
     lock() {
       this.__lockCount++;
-      if (this.__lockCount == 1) this.setVisible(true);
+      if (this.__lockCount == 1) {
+        this.setVisible(true);
+      }
     },
 
     /**
@@ -46,7 +47,9 @@ qx.Class.define("zx.thin.core.ScreenLock", {
      */
     unlock() {
       this.__lockCount--;
-      if (this.__lockCount == 0) this.setVisible(false);
+      if (this.__lockCount == 0) {
+        this.setVisible(false);
+      }
     },
 
     /**
@@ -62,7 +65,7 @@ qx.Class.define("zx.thin.core.ScreenLock", {
           root.add(this);
         }
       }
-      this.base(arguments, value, oldValue);
+      super._applyVisible(value, oldValue);
     }
   },
 
@@ -77,8 +80,9 @@ qx.Class.define("zx.thin.core.ScreenLock", {
      */
     getInstance() {
       const ScreenLock = zx.thin.core.ScreenLock;
-      if (!ScreenLock.__instance)
+      if (!ScreenLock.__instance) {
         ScreenLock.__instance = new zx.thin.core.ScreenLock();
+      }
       return ScreenLock.__instance;
     },
 
@@ -91,10 +95,7 @@ qx.Class.define("zx.thin.core.ScreenLock", {
       const ScreenLock = zx.thin.core.ScreenLock;
       if (qx.core.Environment.get("qx.debug")) {
         if (ScreenLock.__instance && instance) {
-          qx.log.Logger.warn(
-            ScreenLock,
-            "Overwriting non-null ScreenLock instance"
-          );
+          qx.log.Logger.warn(ScreenLock, "Overwriting non-null ScreenLock instance");
         }
       }
       ScreenLock.__instance = instance;

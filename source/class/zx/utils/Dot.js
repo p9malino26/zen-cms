@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.utils.Dot", {
   extend: qx.core.Object,
@@ -44,18 +44,17 @@ qx.Class.define("zx.utils.Dot", {
           interpolate: /\{\{=([\s\S]+?)\}\}/g,
           encode: /\{\{!([\s\S]+?)\}\}/g,
           use: /\{\{#([\s\S]+?)\}\}/g,
-          useParams:
-            /(^|[^\w$])def(?:\.|\[[\'\"])([\w$\.]+)(?:[\'\"]\])?\s*\:\s*([\w$\.]+|\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})/g,
+          useParams: /(^|[^\w$])def(?:\.|\[[\'\"])([\w$\.]+)(?:[\'\"]\])?\s*\:\s*([\w$\.]+|\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})/g,
           define: /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
           defineParams: /^\s*([\w$]+):([\s\S]+)/,
           conditional: /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
-          iterate:
-            /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
+          iterate: /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
           varname: "it",
           strip: true,
           append: true,
           selfcontained: false
         },
+
         template: undefined, //fn, compile template
         compile: undefined //fn, for express
       },
@@ -100,6 +99,7 @@ qx.Class.define("zx.utils.Dot", {
           end: ")+'",
           endencode: "||'').toString().encodeHTML()+'"
         },
+
         split: {
           start: "';out+=(",
           end: ");out+='",
@@ -116,11 +116,14 @@ qx.Class.define("zx.utils.Dot", {
           }
           if (!(code in def)) {
             if (assign === ":") {
-              if (c.defineParams)
+              if (c.defineParams) {
                 value.replace(c.defineParams, function (m, param, v) {
                   def[code] = { arg: param, text: v };
                 });
-              if (!(code in def)) def[code] = value;
+              }
+              if (!(code in def)) {
+                def[code] = value;
+              }
             } else {
               new Function("def", "def['" + code + "']=" + value)(def);
             }
@@ -128,18 +131,17 @@ qx.Class.define("zx.utils.Dot", {
           return "";
         })
         .replace(c.use || skip, function (m, code) {
-          if (c.useParams)
+          if (c.useParams) {
             code = code.replace(c.useParams, function (m, s, d, param) {
               if (def[d] && def[d].arg && param) {
                 var rw = (d + ":" + param).replace(/'|\\/g, "_");
                 def.__exp = def.__exp || {};
-                def.__exp[rw] = def[d].text.replace(
-                  new RegExp("(^|[^\\w$])" + def[d].arg + "([^\\w$])", "g"),
-                  "$1" + param + "$2"
-                );
+                def.__exp[rw] = def[d].text.replace(new RegExp("(^|[^\\w$])" + def[d].arg + "([^\\w$])", "g"), "$1" + param + "$2");
+
                 return s + "def.__exp['" + rw + "']";
               }
             });
+          }
           var v = new Function("def", "return " + code)(def);
           return v ? resolveDefs(c, v, def) : v;
         });
@@ -159,12 +161,7 @@ qx.Class.define("zx.utils.Dot", {
 
       str = (
         "var out='" +
-        (c.strip
-          ? str
-              .replace(/(^|\r|\n)\t* +| +\t*(\r|\n|$)/g, " ")
-              .replace(/\r|\n|\t|\/\*[\s\S]*?\*\//g, "")
-          : str
-        )
+        (c.strip ? str.replace(/(^|\r|\n)\t* +| +\t*(\r|\n|$)/g, " ").replace(/\r|\n|\t|\/\*[\s\S]*?\*\//g, "") : str)
           .replace(/'|\\/g, "\\$&")
           .replace(c.interpolate || skip, function (m, code) {
             return cse.start + unescape(code) + cse.end;
@@ -174,16 +171,12 @@ qx.Class.define("zx.utils.Dot", {
             return cse.start + unescape(code) + cse.endencode;
           })
           .replace(c.conditional || skip, function (m, elsecase, code) {
-            return elsecase
-              ? code
-                ? "';}else if(" + unescape(code) + "){out+='"
-                : "';}else{out+='"
-              : code
-              ? "';if(" + unescape(code) + "){out+='"
-              : "';}out+='";
+            return elsecase ? (code ? "';}else if(" + unescape(code) + "){out+='" : "';}else{out+='") : code ? "';if(" + unescape(code) + "){out+='" : "';}out+='";
           })
           .replace(c.iterate || skip, function (m, iterate, vname, iname) {
-            if (!iterate) return "';} } out+='";
+            if (!iterate) {
+              return "';} } out+='";
+            }
             sid += 1;
             indv = iname || "i" + sid;
             iterate = unescape(iterate);
@@ -228,17 +221,14 @@ qx.Class.define("zx.utils.Dot", {
         .replace(/(\s|;|\}|^|\{)out\+=''\+/g, "$1out+=");
 
       if (needhtmlencode && c.selfcontained) {
-        str =
-          "String.prototype.encodeHTML=(" +
-          encodeHTMLSource.toString() +
-          "());" +
-          str;
+        str = "String.prototype.encodeHTML=(" + encodeHTMLSource.toString() + "());" + str;
       }
       try {
         return new Function(c.varname, str);
       } catch (e) {
-        if (typeof console !== "undefined")
+        if (typeof console !== "undefined") {
           console.log("Could not create a template function: " + str);
+        }
         throw e;
       }
     };
@@ -252,7 +242,8 @@ qx.Class.define("zx.utils.Dot", {
    * ZX integration
    */
   for (var name in module.exports)
-    if (module.exports.hasOwnProperty(name))
+    if (module.exports.hasOwnProperty(name)) {
       zx.utils.Dot[name] = module.exports[name];
+    }
   zx.utils.Dot.templateSettings.strip = false; // Stripping whitespace will break HTML output (eg newlines)
 })();

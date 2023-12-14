@@ -42,6 +42,7 @@ qx.Class.define("zx.utils.Mutex", {
         fn,
         promise: new qx.Promise()
       };
+
       this.__tasks.push(data);
 
       if (!this.__running) {

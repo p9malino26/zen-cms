@@ -18,15 +18,19 @@
 qx.Class.define("zx.utils.Binding", {
   extend: qx.core.Object,
 
-  construct: function (path, model, bidirectional) {
-    this.base(arguments);
+  construct(path, model, bidirectional) {
+    super();
     this.__stack = [];
     this.setBidirectional(bidirectional !== false);
-    if (path !== undefined) this.setPath(path);
-    if (model) this.setModel(model);
+    if (path !== undefined) {
+      this.setPath(path);
+    }
+    if (model) {
+      this.setModel(model);
+    }
   },
 
-  destruct: function () {
+  destruct() {
     this.reset();
   },
 
@@ -77,14 +81,14 @@ qx.Class.define("zx.utils.Binding", {
     /**
      * Removes the model and the paths
      */
-    reset: function () {
+    reset() {
       this.set({ model: null, path: null });
     },
 
     /**
      * Apply for path
      */
-    _applyPath: function (path, oldPath) {
+    _applyPath(path, oldPath) {
       var model = this.getModel();
       var oldValue;
       if (oldValue && model) {
@@ -111,14 +115,16 @@ qx.Class.define("zx.utils.Binding", {
         }
       }
       if (path === null || !model) {
-        if (oldValue !== undefined && oldValue !== null) this.fireDataEvent("changeValue", oldValue, null);
+        if (oldValue !== undefined && oldValue !== null) {
+          this.fireDataEvent("changeValue", oldValue, null);
+        }
       }
     },
 
     /**
      * Apply for model
      */
-    _applyModel: function (model, oldModel) {
+    _applyModel(model, oldModel) {
       var path = this.getPath();
       var oldValue;
       if (oldModel && path) {
@@ -129,26 +135,34 @@ qx.Class.define("zx.utils.Binding", {
         this._bindChild(0, model);
         this.__value = this.getValue();
       } else {
-        if (oldValue !== undefined && oldValue !== null) this.fireDataEvent("changeValue", null, oldValue);
+        if (oldValue !== undefined && oldValue !== null) {
+          this.fireDataEvent("changeValue", null, oldValue);
+        }
       }
     },
 
     /**
      * Sets the value
      */
-    setValue: function (value) {
-      if (!this.getBidirectional()) return;
+    setValue(value) {
+      if (!this.getBidirectional()) {
+        return;
+      }
       var data = this.__stack[this.__stack.length - 1];
-      if (!data.parentModel) return;
+      if (!data.parentModel) {
+        return;
+      }
       if (!this._sameValue(this.__value, value)) {
         this.__inSetValue = true;
         try {
           var upname = qx.lang.String.firstUp(data.path);
           if (data.index !== undefined) {
             var obj = upname.length == 0 ? data.parentModel : data.parentModel["get" + upname]();
-            if (obj instanceof qx.data.Array) obj.setItem(parseInt(data.index, 10), value);
-            else if (obj instanceof zx.data.Map) obj.put(data.index, value);
-            else obj[data.index] = value;
+            if (obj instanceof qx.data.Array) {
+              obj.setItem(parseInt(data.index, 10), value);
+            } else if (obj instanceof zx.data.Map) {
+              obj.put(data.index, value);
+            } else obj[data.index] = value;
           } else {
             data.parentModel["set" + upname](value);
           }
@@ -165,27 +179,41 @@ qx.Class.define("zx.utils.Binding", {
      * Compares two values for equivelance; specifically, if they are a date the
      * time is compared not the object
      */
-    _sameValue: function (left, right) {
-      if (left === right) return true;
-      if (left === null || right === null || left === undefined || right === undefined) return false;
-      if (left instanceof Date && right instanceof Date) return left.getTime() == right.getTime();
+    _sameValue(left, right) {
+      if (left === right) {
+        return true;
+      }
+      if (left === null || right === null || left === undefined || right === undefined) {
+        return false;
+      }
+      if (left instanceof Date && right instanceof Date) {
+        return left.getTime() == right.getTime();
+      }
       return false;
     },
 
     /**
      * Gets the value
      */
-    getValue: function (value) {
-      if (this.__stack.length == 0) return null;
+    getValue(value) {
+      if (this.__stack.length == 0) {
+        return null;
+      }
 
       var data = this.__stack[this.__stack.length - 1];
-      if (!data.parentModel) return null;
+      if (!data.parentModel) {
+        return null;
+      }
 
       var upname = qx.lang.String.firstUp(data.path);
       if (data.index !== undefined) {
         var obj = upname.length == 0 ? data.parentModel : data.parentModel["get" + upname]();
-        if (obj instanceof qx.data.Array) return obj.getItem(data.index) || null;
-        if (obj instanceof zx.data.Map) return obj.get(data.index) || null;
+        if (obj instanceof qx.data.Array) {
+          return obj.getItem(data.index) || null;
+        }
+        if (obj instanceof zx.data.Map) {
+          return obj.get(data.index) || null;
+        }
         return obj[data.index] || null;
       } else if (upname.length) {
         return data.parentModel["get" + upname]();
@@ -197,30 +225,40 @@ qx.Class.define("zx.utils.Binding", {
     /**
      * Called to bind listeners to the child object at a depth into the path
      */
-    _bindChild: function (depth, parentModel) {
+    _bindChild(depth, parentModel) {
       var t = this;
       var data = this.__stack[depth];
 
       function onArrayChange(evt) {
         var arrayValue = evt.getTarget();
         var childValue = null;
-        if (arrayValue instanceof qx.data.Array) childValue = arrayValue.getItem(parseInt(data.index, 10));
-        else if (childValue instanceof zx.data.Map) childValue = arrayValue.get(data.index);
-        else childValue = arrayValue[data.index];
-        if (childValue === undefined) childValue = null;
+        if (arrayValue instanceof qx.data.Array) {
+          childValue = arrayValue.getItem(parseInt(data.index, 10));
+        } else if (childValue instanceof zx.data.Map) {
+          childValue = arrayValue.get(data.index);
+        } else childValue = arrayValue[data.index];
+        if (childValue === undefined) {
+          childValue = null;
+        }
 
         if (depth == t.__stack.length - 1) {
           if (childValue === t.getValue()) {
-            if (!t.__inSetValue) t.fireDataEvent("changeValue", childValue, childValue);
+            if (!t.__inSetValue) {
+              t.fireDataEvent("changeValue", childValue, childValue);
+            }
           }
         } else {
           t._unbindChild(depth + 1);
-          if (childValue) t._bindChild(depth + 1, childValue);
+          if (childValue) {
+            t._bindChild(depth + 1, childValue);
+          }
         }
       }
 
       function set(childValue, oldChildValue) {
-        if (childValue === undefined) childValue = null;
+        if (childValue === undefined) {
+          childValue = null;
+        }
 
         if (data.index !== undefined) {
           if (data.arrayListenerId) {
@@ -239,21 +277,27 @@ qx.Class.define("zx.utils.Binding", {
               // TODO
             } else childValue = childValue[data.index];
 
-            if (childValue === undefined) childValue = null;
+            if (childValue === undefined) {
+              childValue = null;
+            }
           }
         }
 
         if (depth == t.__stack.length - 1) {
           if (childValue === t.getValue()) {
-            if (!t.__inSetValue) t.fireDataEvent("changeValue", childValue, childValue);
+            if (!t.__inSetValue) {
+              t.fireDataEvent("changeValue", childValue, childValue);
+            }
           }
         } else {
           var oldDescendantValue = t.getValue();
           t._unbindChild(depth + 1);
-          if (childValue) t._bindChild(depth + 1, childValue);
-          else if (!t.__inSetValue && oldDescendantValue)
+          if (childValue) {
+            t._bindChild(depth + 1, childValue);
+          } else if (!t.__inSetValue && oldDescendantValue) {
             // this should only fire once because children will have already been unbound
             t.fireDataEvent("changeValue", null, oldDescendantValue);
+          }
         }
       }
 
@@ -267,6 +311,7 @@ qx.Class.define("zx.utils.Binding", {
           },
           this
         );
+
         set(parentModel["get" + upname]());
       } else set(parentModel);
     },
@@ -274,9 +319,11 @@ qx.Class.define("zx.utils.Binding", {
     /**
      * Called to unbind listeners etc from a child
      */
-    _unbindChild: function (depth) {
+    _unbindChild(depth) {
       var data = this.__stack[depth];
-      if (data.listenerId && depth < this.__stack.length - 1) this._unbindChild(depth + 1);
+      if (data.listenerId && depth < this.__stack.length - 1) {
+        this._unbindChild(depth + 1);
+      }
       if (data.listenerId) {
         data.parentModel.removeListenerById(data.listenerId);
         delete data.listenerId;

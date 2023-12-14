@@ -10,17 +10,17 @@ qx.Class.define("zx.ui.richtext.CodeMirror", {
   implement: [qx.ui.form.IStringForm, qx.ui.form.IForm],
   include: [qx.ui.form.MForm],
 
-  construct: function (theme, mode) {
-    this.base(arguments);
+  construct(theme, mode) {
+    super();
     this.__features = {};
     this.addListenerOnce("appear", this.__initEditor, this);
-    zx.utils.ScriptLoader.loadScript(
-      ["zx/ui/richtext/codemirror/lib/codemirror.js"],
-      this.__onScriptLoaded,
-      this
-    ).loadStylesheet(["zx/ui/richtext/codemirror/lib/codemirror.css"]);
-    if (theme) this.setTheme(theme);
-    if (mode) this.setMode(mode);
+    zx.utils.ScriptLoader.loadScript(["zx/ui/richtext/codemirror/lib/codemirror.js"], this.__onScriptLoaded, this).loadStylesheet(["zx/ui/richtext/codemirror/lib/codemirror.css"]);
+    if (theme) {
+      this.setTheme(theme);
+    }
+    if (mode) {
+      this.setMode(mode);
+    }
     this.addListener("appear", this.__onAppear, this);
   },
 
@@ -90,9 +90,11 @@ qx.Class.define("zx.ui.richtext.CodeMirror", {
     /**
      * Sets a "feature" of CodeMirror
      */
-    _setFeature: function (name, value) {
+    _setFeature(name, value) {
       this.__features[name] = value;
-      if (this.__editor) this.__applyFeature(name, value);
+      if (this.__editor) {
+        this.__applyFeature(name, value);
+      }
     },
 
     /*******************************************************************
@@ -110,7 +112,7 @@ qx.Class.define("zx.ui.richtext.CodeMirror", {
      * @param value
      *          {Object} the vale to set
      */
-    __applyFeature: function (name, value) {
+    __applyFeature(name, value) {
       var FEATURE = zx.ui.richtext.CodeMirror.__FEATURES[name],
         scripts = null;
 
@@ -119,11 +121,15 @@ qx.Class.define("zx.ui.richtext.CodeMirror", {
         return;
       }
 
-      if (typeof FEATURE.scripts == "function") scripts = FEATURE.scripts(value);
-      else scripts = FEATURE.scripts;
-      if (!scripts) FEATURE.configure(this.__editor, value);
-      else {
-        if (!qx.lang.Type.isArray(scripts)) scripts = [scripts];
+      if (typeof FEATURE.scripts == "function") {
+        scripts = FEATURE.scripts(value);
+      } else scripts = FEATURE.scripts;
+      if (!scripts) {
+        FEATURE.configure(this.__editor, value);
+      } else {
+        if (!qx.lang.Type.isArray(scripts)) {
+          scripts = [scripts];
+        }
         zx.utils.ScriptLoader.loadScript(
           scripts,
           function () {
@@ -142,7 +148,7 @@ qx.Class.define("zx.ui.richtext.CodeMirror", {
      *
      * @returns {String[]} a list of URLs to load
      */
-    __getInitScripts: function () {
+    __getInitScripts() {
       var mode = this.getMode();
       var MODE = zx.ui.richtext.CodeMirror.__MODES[mode];
       var scripts;
@@ -158,8 +164,10 @@ qx.Class.define("zx.ui.richtext.CodeMirror", {
     /**
      * Initialises the editor
      */
-    __initEditor: function () {
-      if (this.__editor || !this.__scriptsLoaded || !this.getContentElement().getDomElement()) return;
+    __initEditor() {
+      if (this.__editor || !this.__scriptsLoaded || !this.getContentElement().getDomElement()) {
+        return;
+      }
 
       // Make sure we have all the required init scripts loaded
       var scripts = this.__getInitScripts();
@@ -176,6 +184,7 @@ qx.Class.define("zx.ui.richtext.CodeMirror", {
         theme: "default", // this.getTheme(),
         lineNumbers: true
       };
+
       this.__pendingValue = null;
 
       // Start the editor
@@ -200,18 +209,22 @@ qx.Class.define("zx.ui.richtext.CodeMirror", {
      *
      * @param evt
      */
-    __onAppear: function (evt) {
-      if (this.__editor) this.__editor.refresh();
+    __onAppear(evt) {
+      if (this.__editor) {
+        this.__editor.refresh();
+      }
     },
 
     /**
      * Queues a "changeValue" event until the next blur or a timeout
      */
-    __queueChangeEvent: function () {
+    __queueChangeEvent() {
       this.fireEvent("change");
       if (this.getEnableChangeEvent() && this.hasListener("changeValue")) {
         var TM = qx.util.TimerManager.getInstance();
-        if (this.__notifyChangeTimer != null) TM.stop(this.__notifyChangeTimer);
+        if (this.__notifyChangeTimer != null) {
+          TM.stop(this.__notifyChangeTimer);
+        }
         this.__notifyChangeTimer = TM.start(this.__flushChangeEvent, 0, this, null, 250);
       }
     },
@@ -219,19 +232,23 @@ qx.Class.define("zx.ui.richtext.CodeMirror", {
     /**
      * Sends the changeValue event, if there have been changes
      */
-    __flushChangeEvent: function () {
-      if (this.__inChangeEvent) return;
+    __flushChangeEvent() {
+      if (this.__inChangeEvent) {
+        return;
+      }
       this.__inChangeEvent = true;
       try {
         this.fireDataEvent("changeValue", this.getValue());
-        if (this.hasListener("input")) this.fireDataEvent("input", this.getValue());
+        if (this.hasListener("input")) {
+          this.fireDataEvent("input", this.getValue());
+        }
         this.__notifyChangeTimer = null;
       } finally {
         this.__inChangeEvent = false;
       }
     },
 
-    __resizeCodeMirror: function () {
+    __resizeCodeMirror() {
       var el = this.getContentElement();
       if (el) {
         var Style = qx.bom.element.Style;
@@ -259,7 +276,7 @@ qx.Class.define("zx.ui.richtext.CodeMirror", {
      * @param originalUrl
      * @param url
      */
-    __onScriptLoaded: function (originalUrl, url) {
+    __onScriptLoaded(originalUrl, url) {
       this.__scriptsLoaded = true;
       this.__initEditor();
     },
@@ -269,16 +286,16 @@ qx.Class.define("zx.ui.richtext.CodeMirror", {
      * APPLY METHODS
      *
      */
-    _applyEditorOption: function (value, oldValue, name) {
+    _applyEditorOption(value, oldValue, name) {
       this._setFeature(name, value);
     },
 
-    _applyTheme: function (value, oldValue, name) {
+    _applyTheme(value, oldValue, name) {
       zx.utils.ScriptLoader.loadStylesheet("zx/ui/richtext/codemirror/theme/" + value + ".css");
       this._applyEditorOption(value, oldValue, name);
     },
 
-    _applyMode: function (value, oldValue) {
+    _applyMode(value, oldValue) {
       zx.utils.ScriptLoader.loadScript(
         this.__getInitScripts(),
         function () {
@@ -300,10 +317,12 @@ qx.Class.define("zx.ui.richtext.CodeMirror", {
     /*
      * @Override - see qx.ui.form.IStringForm
      */
-    setValue: function (value) {
+    setValue(value) {
       if (this.__editor) {
         var curr = this.__editor.getValue();
-        if (curr == value) return;
+        if (curr == value) {
+          return;
+        }
         this.__editor.setValue(value);
         this.__editor.refresh();
       } else this.__pendingValue = value;
@@ -312,22 +331,24 @@ qx.Class.define("zx.ui.richtext.CodeMirror", {
     /*
      * @Override - see qx.ui.form.IStringForm
      */
-    resetValue: function () {
+    resetValue() {
       this.setValue("");
     },
 
     /*
      * @Override - see qx.ui.form.IStringForm
      */
-    getValue: function () {
-      if (this.__editor) return this.__editor.getValue();
+    getValue() {
+      if (this.__editor) {
+        return this.__editor.getValue();
+      }
       return this.__pendingValue || "";
     },
 
     /*
      * @Override
      */
-    _createContentElement: function () {
+    _createContentElement() {
       var el = new qx.html.Element("div");
 
       // Apply styles
@@ -346,8 +367,8 @@ qx.Class.define("zx.ui.richtext.CodeMirror", {
     /*
      * @Override
      */
-    renderLayout: function (left, top, width, height) {
-      var result = this.base(arguments, left, top, width, height - 7);
+    renderLayout(left, top, width, height) {
+      var result = super.renderLayout(left, top, width, height - 7);
       this.__width = width;
       this.__height = height;
       this.__resizeCodeMirror();
@@ -358,7 +379,7 @@ qx.Class.define("zx.ui.richtext.CodeMirror", {
   statics: {
     __FEATURES: {
       theme: {
-        configure: function (editor, value) {
+        configure(editor, value) {
           if (editor.getOption("theme") != value) {
             zx.utils.ScriptLoader.loadStylesheet("zx/ui/richtext/codemirror/theme/" + value + ".css");
             editor.setOption("theme", value);
@@ -383,6 +404,7 @@ qx.Class.define("zx.ui.richtext.CodeMirror", {
           "zx/ui/richtext/codemirror/mode/htmlmixed/htmlmixed.js"
         ]
       },
+
       htmlembedded: {
         mode: "application/x-ejs",
         dependsOnScripts: [

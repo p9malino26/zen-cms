@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * A SimpleFeature is a simple Feature which always renders the qx.html.Element on the
@@ -30,11 +29,9 @@ qx.Class.define("zx.cms.content.SimpleFeature", {
    * @param targetClass {Class} the class that this feature is for
    */
   construct(targetClass) {
-    this.base(arguments);
+    super();
     this._targetClass = targetClass;
-    this._anno =
-      qx.Annotation.getClass(targetClass, zx.cms.content.anno.Feature)[0] ||
-      null;
+    this._anno = qx.Annotation.getClass(targetClass, zx.cms.content.anno.Feature)[0] || null;
 
     this._serverRenderClass = null;
     this._supportsServerRender = null;
@@ -42,17 +39,10 @@ qx.Class.define("zx.cms.content.SimpleFeature", {
     if (this._anno) {
       this._supportsServerRender = this._anno.isSupportsServerRender();
       if (this._anno.getServerRender()) {
-        this._serverRenderClass = qx.Class.getByName(
-          this._anno.getServerRender()
-        );
+        this._serverRenderClass = qx.Class.getByName(this._anno.getServerRender());
+
         if (qx.core.Environment.get("qx.debug")) {
-          this.assertTrue(
-            !!this._serverRenderClass &&
-              qx.Class.hasInterface(
-                this._serverRenderClass,
-                zx.cms.content.IFeatureServerRender
-              )
-          );
+          this.assertTrue(!!this._serverRenderClass && qx.Class.hasInterface(this._serverRenderClass, zx.cms.content.IFeatureServerRender));
         }
       }
       if (this._anno.getClientInstaller()) {
@@ -60,38 +50,22 @@ qx.Class.define("zx.cms.content.SimpleFeature", {
       }
     }
 
-    if (
-      !this._serverRenderClass &&
-      qx.Class.hasInterface(
-        this._targetClass,
-        zx.cms.content.IFeatureServerRender
-      )
-    )
+    if (!this._serverRenderClass && qx.Class.hasInterface(this._targetClass, zx.cms.content.IFeatureServerRender)) {
       this._serverRenderClass = this._targetClass;
-    if (this._supportsServerRender === null)
-      this._supportsServerRender =
-        !!this._serverRenderClass ||
-        qx.Class.isSubClassOf(this._targetClass, qx.html.Element);
-    if (
-      this._supportsServerRender &&
-      !this._serverRenderClass &&
-      !qx.Class.isSubClassOf(this._targetClass, qx.html.Element)
-    )
-      this.error(
-        `Cannot determine zx.cms.content.IFeatureServerRender instance to use to render ${this._targetClass.classname}`
-      );
+    }
+    if (this._supportsServerRender === null) {
+      this._supportsServerRender = !!this._serverRenderClass || qx.Class.isSubClassOf(this._targetClass, qx.html.Element);
+    }
+    if (this._supportsServerRender && !this._serverRenderClass && !qx.Class.isSubClassOf(this._targetClass, qx.html.Element)) {
+      this.error(`Cannot determine zx.cms.content.IFeatureServerRender instance to use to render ${this._targetClass.classname}`);
+    }
 
-    if (
-      !this._clientInstallerClassname &&
-      qx.Class.hasInterface(
-        this._targetClass,
-        zx.cms.content.IFeatureClientInstaller
-      )
-    )
+    if (!this._clientInstallerClassname && qx.Class.hasInterface(this._targetClass, zx.cms.content.IFeatureClientInstaller)) {
       this._clientInstallerClassname = this._targetClass.classname;
-    if (!this._clientInstallerClassname)
-      this._clientInstallerClassnamename =
-        "zx.thin.core.FeatureClientInstaller";
+    }
+    if (!this._clientInstallerClassname) {
+      this._clientInstallerClassnamename = "zx.thin.core.FeatureClientInstaller";
+    }
   },
 
   members: {
@@ -117,26 +91,22 @@ qx.Class.define("zx.cms.content.SimpleFeature", {
      * @Override
      */
     async prepareContext(context, rendering, options) {
-      if (!this._supportsServerRender) return;
+      if (!this._supportsServerRender) {
+        return;
+      }
 
-      if (!this._serverRenderObj && this._serverRenderClass)
+      if (!this._serverRenderObj && this._serverRenderClass) {
         this._serverRenderObj = new this._serverRenderClass();
+      }
 
-      if (this._serverRenderObj)
-        return await this._serverRenderObj.prepareContext(
-          context,
-          rendering,
-          options
-        );
+      if (this._serverRenderObj) {
+        return await this._serverRenderObj.prepareContext(context, rendering, options);
+      }
 
       let element = new this._targetClass();
-      if (
-        qx.Class.hasInterface(
-          element.constructor,
-          zx.cms.content.IFeatureServerLifecycle
-        )
-      )
+      if (qx.Class.hasInterface(element.constructor, zx.cms.content.IFeatureServerLifecycle)) {
         await element.prepareContext(context, rendering, options);
+      }
       context._element = element;
     },
 
@@ -144,15 +114,13 @@ qx.Class.define("zx.cms.content.SimpleFeature", {
      * @Override
      */
     renderServer(context, rendering, options) {
-      if (!this._supportsServerRender) return "";
+      if (!this._supportsServerRender) {
+        return "";
+      }
 
-      if (this._serverRenderObj)
-        return this._serverRenderObj.renderServer(
-          this._targetClass,
-          context,
-          rendering,
-          options
-        );
+      if (this._serverRenderObj) {
+        return this._serverRenderObj.renderServer(this._targetClass, context, rendering, options);
+      }
 
       return (context._element && context._element.serialize()) || "";
     },
@@ -163,15 +131,16 @@ qx.Class.define("zx.cms.content.SimpleFeature", {
     renderClientInstall(rendering, options) {
       let useDom = !this._anno || !!this._anno.isSupportsServerRender();
 
-      if (!this._serverRenderObj && this._serverRenderClass)
+      if (!this._serverRenderObj && this._serverRenderClass) {
         this._serverRenderObj = new this._serverRenderClass();
+      }
 
       if (this._serverRenderObj) {
-        let result = this._serverRenderObj.renderClientInstall(
-          this._clientInstallerClassname,
-          options
-        );
-        if (result !== null || result !== undefined) return result;
+        let result = this._serverRenderObj.renderClientInstall(this._clientInstallerClassname, options);
+
+        if (result !== null || result !== undefined) {
+          return result;
+        }
       }
 
       let config = {
@@ -180,11 +149,8 @@ qx.Class.define("zx.cms.content.SimpleFeature", {
         clientInstallerClassname: this._clientInstallerClassname,
         options: options
       };
-      return `zx.thin.core.FeatureClientInstaller.installPiece(piece, ${JSON.stringify(
-        config,
-        null,
-        2
-      )});\n`;
+
+      return `zx.thin.core.FeatureClientInstaller.installPiece(piece, ${JSON.stringify(config, null, 2)});\n`;
     }
   }
 });

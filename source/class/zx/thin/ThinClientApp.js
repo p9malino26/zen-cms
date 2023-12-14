@@ -32,7 +32,7 @@ qx.Class.define("zx.thin.ThinClientApp", {
   extend: qx.application.Native,
 
   construct() {
-    this.base(arguments);
+    super();
     this.__readyPromise = new qx.Promise();
 
     let dom = qx.bom.Selector.query("#qx-thin-client-root")[0];
@@ -87,7 +87,7 @@ qx.Class.define("zx.thin.ThinClientApp", {
      * @Override
      */
     async main() {
-      await this.base(arguments);
+      await super.main();
 
       if (window !== window.parent) {
         // Controller manages the objects and their serialisation
@@ -168,7 +168,9 @@ qx.Class.define("zx.thin.ThinClientApp", {
         let uuid = div.getAttribute("data-zx-cms-piece-uuid");
         if (uuid) {
           editable = this.__editablePieces[uuid];
-          if (!editable) throw new Error(`Found piece with UUID ${uuid} but it is not editable`);
+          if (!editable) {
+            throw new Error(`Found piece with UUID ${uuid} but it is not editable`);
+          }
           return editable;
         }
       }
@@ -207,7 +209,9 @@ qx.Class.define("zx.thin.ThinClientApp", {
       Object.values(this.__editablePieces).forEach(editable => {
         if (!editable.remoteControl) {
           let clazz = qx.Class.getByName(editable.classname);
-          if (!clazz) throw new Error(`Cannot create remote control class ${editable.classname} because it does not exist`);
+          if (!clazz) {
+            throw new Error(`Cannot create remote control class ${editable.classname} because it does not exist`);
+          }
           editable.remoteControl = new clazz(editable.uuid, editable.elements);
           editable.remoteControl.initialise();
         }
@@ -227,7 +231,9 @@ qx.Class.define("zx.thin.ThinClientApp", {
      * The network controller for talking to the server
      */
     async getNetController() {
-      if (this.__netController) return this.__netController;
+      if (this.__netController) {
+        return this.__netController;
+      }
 
       // Controller manages the objects and their serialisation
       this.__netController = new zx.io.remote.NetworkController();
@@ -237,6 +243,7 @@ qx.Class.define("zx.thin.ThinClientApp", {
         polling: false,
         shareConnection: false
       }));
+
       this.__netController.addEndpoint(endpoint);
       let promise = new qx.Promise();
       await endpoint.open().then(() => {

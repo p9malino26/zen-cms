@@ -31,7 +31,7 @@ qx.Class.define("zx.io.persistence.db.ImportExport", {
    * @param db {Database} the database
    */
   construct(rootDir, db) {
-    this.base(arguments);
+    super();
     this.__rootDir = rootDir;
     this.__db = db;
   },
@@ -52,6 +52,7 @@ qx.Class.define("zx.io.persistence.db.ImportExport", {
           encoding: "utf8",
           withFileTypes: true
         });
+
         for (let i = 0; i < files.length; i++) {
           let file = files[i];
           if (file.isDirectory()) {

@@ -67,7 +67,9 @@ qx.Class.define("zx.cms.website.ShortUrl", {
      * Makes sure that there is a short code allocated
      */
     async allocateShortCode() {
-      if (this.getShortCode()) return;
+      if (this.getShortCode()) {
+        return;
+      }
       let shortened = null;
       let pass = 0;
       let server = zx.server.Standalone.getInstance();
@@ -78,6 +80,7 @@ qx.Class.define("zx.cms.website.ShortUrl", {
           _classname: "zx.cms.website.ShortUrl",
           shortCode: shortened
         });
+
         if (!data) {
           this.setShortCode(shortened);
           await this.save();
@@ -102,6 +105,7 @@ qx.Class.define("zx.cms.website.ShortUrl", {
       let shortUrl = await server.findOneObjectByType(zx.cms.website.ShortUrl, {
         shortCode: shortCode
       });
+
       return shortUrl;
     },
 
@@ -115,7 +119,9 @@ qx.Class.define("zx.cms.website.ShortUrl", {
     shorten(str, index) {
       const util = require("util");
       let encoder = new util.TextEncoder("utf-8");
-      if (index) str += zx.cms.website.ShortUrl.__intToString(index);
+      if (index) {
+        str += zx.cms.website.ShortUrl.__intToString(index);
+      }
       let bytes = encoder.encode(str);
       let fletcher = new zx.utils.Fletcher32();
       fletcher.append(bytes);

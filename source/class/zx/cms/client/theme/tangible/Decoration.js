@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Theme.define("zx.cms.client.theme.tangible.Decoration", {
   extend: qx.theme.tangible.Decoration,
@@ -29,6 +29,7 @@ qx.Theme.define("zx.cms.client.theme.tangible.Decoration", {
         color: "primary-alpha-10"
       }
     },
+
     "material-textfield-disabled": {
       style: {
         style: "solid",
@@ -45,6 +46,7 @@ qx.Theme.define("zx.cms.client.theme.tangible.Decoration", {
         color: "primary-alpha-10"
       }
     },
+
     "border-disabled": {
       style: {
         style: "solid",
@@ -64,6 +66,7 @@ qx.Theme.define("zx.cms.client.theme.tangible.Decoration", {
         shadowSpreadRadius: 0
       }
     },
+
     "toolbar-button-hovered": {
       include: "material-button-hovered",
       style: {
@@ -71,24 +74,28 @@ qx.Theme.define("zx.cms.client.theme.tangible.Decoration", {
         width: 1
       }
     },
+
     "toolbar-button-left": {
       include: "toolbar-button",
       style: {
         radius: [2, 0, 0, 2]
       }
     },
+
     "toolbar-button-hovered-left": {
       include: "toolbar-button-hovered",
       style: {
         radius: [2, 0, 0, 2]
       }
     },
+
     "toolbar-button-right": {
       include: "toolbar-button",
       style: {
         radius: [0, 2, 2, 0]
       }
     },
+
     "toolbar-button-hovered-right": {
       include: "toolbar-button-hovered",
       style: {
@@ -111,11 +118,8 @@ qx.Theme.define("zx.cms.client.theme.tangible.Decoration", {
     },
 
     progress: {
-      decorator: [
-        qx.ui.decoration.MBoxShadow,
-        qx.ui.decoration.MBorderRadius,
-        qx.ui.decoration.MSingleBorder
-      ],
+      decorator: [qx.ui.decoration.MBoxShadow, qx.ui.decoration.MBorderRadius, qx.ui.decoration.MSingleBorder],
+
       style: {
         radius: 4,
         width: 1,

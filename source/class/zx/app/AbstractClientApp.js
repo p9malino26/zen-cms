@@ -20,7 +20,7 @@ qx.Class.define("zx.app.AbstractClientApp", {
   include: [zx.app.MClientApp],
 
   construct() {
-    this.base(arguments);
+    super();
     if (!zx.app.AbstractClientApp.__INSTANCE) {
       zx.app.AbstractClientApp.__INSTANCE = this;
     } else {

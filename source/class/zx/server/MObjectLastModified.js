@@ -29,12 +29,7 @@ qx.Mixin.define("zx.server.MObjectLastModified", {
       nullable: true,
       check: "Date",
       event: "changeLastModified",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT,
-        zx.utils.anno.Json.PUBLIC,
-        zx.server.anno.LastModified.EXCLUDED
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT, zx.utils.anno.Json.PUBLIC, zx.server.anno.LastModified.EXCLUDED]
     }
   },
 

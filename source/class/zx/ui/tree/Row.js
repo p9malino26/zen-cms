@@ -1,26 +1,26 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.tree.Row", {
   extend: qx.ui.core.Widget,
   implement: [zx.ui.tree.IRow],
 
-  construct: function (tree) {
-    this.base(arguments);
+  construct(tree) {
+    super();
     this._setLayout(new qx.ui.layout.HBox());
     this.__tree = tree;
 
@@ -171,39 +171,42 @@ qx.Class.define("zx.ui.tree.Row", {
       opened: true
     },
 
-    _applyNode: function (value, oldValue) {
+    _applyNode(value, oldValue) {
       this.setController(value ? this.getTree().getView() : null);
       this.update();
     },
 
-    _resetArrow: function () {
+    _resetArrow() {
       if (this.getHasChildren()) {
         this.addState("hasChildren");
-        if (this.isOpened()) this.addState("opened");
-        else this.removeState("opened");
+        if (this.isOpened()) {
+          this.addState("opened");
+        } else this.removeState("opened");
       } else {
         this.removeState("hasChildren");
         this.removeState("opened");
       }
     },
 
-    _applySelected: function (value, oldValue) {
-      if (value) this.addState("selected");
-      else this.removeState("selected");
+    _applySelected(value, oldValue) {
+      if (value) {
+        this.addState("selected");
+      } else this.removeState("selected");
       this._resetArrow();
     },
 
-    _applyChecked: function (value, oldValue) {
-      if (value) this.addState("checked");
-      else this.removeState("checked");
+    _applyChecked(value, oldValue) {
+      if (value) {
+        this.addState("checked");
+      } else this.removeState("checked");
       this.getChildControl("check").setValue(value);
     },
 
-    _applyShowChecked: function (value) {
+    _applyShowChecked(value) {
       this.__updateCheckedVisibility();
     },
 
-    __updateCheckedVisibility: function () {
+    __updateCheckedVisibility() {
       var cbx = this.getChildControl("check");
       if (this.isShowChecked()) {
         cbx.setVisibility(this.isHeader() ? "hidden" : "visible");
@@ -212,39 +215,40 @@ qx.Class.define("zx.ui.tree.Row", {
       }
     },
 
-    _applyHeader: function (value) {
+    _applyHeader(value) {
       this.__updateCheckedVisibility();
     },
 
-    _applyFocused: function (value, oldValue) {
-      if (value) this.addState("focused");
-      else this.removeState("focused");
+    _applyFocused(value, oldValue) {
+      if (value) {
+        this.addState("focused");
+      } else this.removeState("focused");
     },
 
-    __onMouseOver: function (evt) {
+    __onMouseOver(evt) {
       this.addState("hovered");
     },
 
-    __onMouseOut: function (evt) {
+    __onMouseOut(evt) {
       this.removeState("hovered");
     },
 
-    getTree: function () {
+    getTree() {
       return this.__tree;
     },
 
-    resetView: function () {
+    resetView() {
       var ctlr = this.getController();
       this.setController(null);
       this.setController(ctlr);
     },
 
-    _resetIndent: function () {
+    _resetIndent() {
       this.invalidateLayoutCache();
       this.scheduleLayoutUpdate();
     },
 
-    startEditing: function (columnIndex) {
+    startEditing(columnIndex) {
       var cell = this.__cells[columnIndex];
       if (cell.isEditing()) {
         this.warn("Already editing the row!");
@@ -252,19 +256,27 @@ qx.Class.define("zx.ui.tree.Row", {
       }
 
       var editWidget = cell.startEditing();
-      if (!editWidget) return false;
+      if (!editWidget) {
+        return false;
+      }
 
       // This really should be null, but somehow, sometimes, this isn't on MS Edge.  Rather
       //  than die with an exception, just abort the start editing.
-      if (editWidget.getLayoutParent()) return false;
+      if (editWidget.getLayoutParent()) {
+        return false;
+      }
       this._addAfter(editWidget, cell.getDisplayWidget());
       return true;
     },
 
-    finishEditing: function (columnIndex) {
-      if (!this.__cells) return;
+    finishEditing(columnIndex) {
+      if (!this.__cells) {
+        return;
+      }
       var cell = this.__cells[columnIndex];
-      if (!cell.isEditing()) return;
+      if (!cell.isEditing()) {
+        return;
+      }
 
       var editWidget = cell.finishEditing();
       if (editWidget) {
@@ -275,7 +287,7 @@ qx.Class.define("zx.ui.tree.Row", {
     /**
      * Returns the widget for a given column, used by the layout
      */
-    getColumnWidget: function (index) {
+    getColumnWidget(index) {
       var cell = this.__cells[index];
       return cell.getWidget();
     },
@@ -283,7 +295,7 @@ qx.Class.define("zx.ui.tree.Row", {
     /**
      * Apply method for controller
      */
-    _applyController: function (value, oldValue) {
+    _applyController(value, oldValue) {
       var t = this;
       if (this.__cells) {
         this.__cells.forEach(function (cell, index) {
@@ -294,7 +306,9 @@ qx.Class.define("zx.ui.tree.Row", {
       if (value) {
         var layout = this._getLayout();
         var clz = value.getLayoutClass();
-        if (!(layout instanceof clz)) this._setLayout(new clz());
+        if (!(layout instanceof clz)) {
+          this._setLayout(new clz());
+        }
 
         this.__cells = [];
         value.getColumnsForRow(this).forEach(function (column, index) {
@@ -312,7 +326,7 @@ qx.Class.define("zx.ui.tree.Row", {
     /**
      * Updates all cells with the new node/model
      */
-    update: function () {
+    update() {
       var t = this;
       var model = this.getNode();
       if (this.__cells) {
@@ -325,7 +339,7 @@ qx.Class.define("zx.ui.tree.Row", {
     /**
      * Called to create children
      */
-    _createChildren: function () {
+    _createChildren() {
       this._add(this.getChildControl("check"));
       this._add(this.getChildControl("arrow"));
     },
@@ -333,15 +347,16 @@ qx.Class.define("zx.ui.tree.Row", {
     /*
      * @Override
      */
-    getContentBounds: function () {
+    getContentBounds() {
       var bounds = null;
       if (this.__cells) {
         this.__cells.forEach(function (cell) {
           var ctl = cell.getWidget();
           var tmp = ctl.getBounds();
           if (tmp) {
-            if (!bounds) bounds = tmp;
-            else {
+            if (!bounds) {
+              bounds = tmp;
+            } else {
               var right = bounds.left + bounds.width;
               var tmpRight = tmp.left + tmp.width;
               right = Math.max(right, tmpRight);
@@ -354,6 +369,7 @@ qx.Class.define("zx.ui.tree.Row", {
                 left: Math.min(bounds.left, tmp.left),
                 top: Math.min(bounds.top, tmp.top)
               };
+
               bounds.width = right - bounds.left;
               bounds.height = bottom - bounds.top;
             }
@@ -367,18 +383,26 @@ qx.Class.define("zx.ui.tree.Row", {
     /*
      * @Override
      */
-    getWidgetColumn: function (widget) {
-      if (!this.__cells) return -1;
+    getWidgetColumn(widget) {
+      if (!this.__cells) {
+        return -1;
+      }
       var content = [];
       this.__cells.forEach(function (cell) {
         var widget = cell.getDisplayWidget();
-        if (widget) content.push(widget);
+        if (widget) {
+          content.push(widget);
+        }
       });
       var arrow = this.getChildControl("arrow");
       while (widget && widget != this) {
         var pos = content.indexOf(widget);
-        if (pos > -1) return pos;
-        if (widget === arrow) return -1;
+        if (pos > -1) {
+          return pos;
+        }
+        if (widget === arrow) {
+          return -1;
+        }
         widget = widget.getLayoutParent();
       }
       return null;
@@ -387,7 +411,7 @@ qx.Class.define("zx.ui.tree.Row", {
     /*
      * @Override
      */
-    createMimicWidgets: function () {
+    createMimicWidgets() {
       var result = [];
       this.__cells.forEach(function (cell) {
         var widget = cell.getColumn().createMimicWidget(this.getNode());
@@ -399,7 +423,7 @@ qx.Class.define("zx.ui.tree.Row", {
     /*
      * @Override
      */
-    _createChildControlImpl: function (id, hash) {
+    _createChildControlImpl(id, hash) {
       switch (id) {
         case "content":
           debugger;
@@ -419,19 +443,22 @@ qx.Class.define("zx.ui.tree.Row", {
           cbx.bind("value", this, "checked");
           return cbx;
       }
-      return this.base(arguments, id, hash);
+
+      return super._createChildControlImpl(id, hash);
     },
 
-    getLayout: function () {
+    getLayout() {
       return this._getLayout();
     },
 
-    setLayout: function (layout) {
+    setLayout(layout) {
       return this._setLayout(layout);
     },
 
-    toString: function () {
-      if (!this.__cells || !this.__cells[0]) return "(no cells)";
+    toString() {
+      if (!this.__cells || !this.__cells[0]) {
+        return "(no cells)";
+      }
       return this.__cells[0].getColumn().getDisplayValue(this.getNode());
     }
   }

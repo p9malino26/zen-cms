@@ -20,7 +20,7 @@ qx.Class.define("zx.cms.website.NavItem", {
   implement: [zx.io.remote.IProxied],
 
   construct() {
-    this.base(arguments);
+    super();
     this.setChildren(new qx.data.Array());
   },
 

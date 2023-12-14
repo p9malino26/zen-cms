@@ -1,38 +1,34 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.editor.AutoSave", {
   extend: qx.core.Object,
   type: "singleton",
 
-  construct: function () {
-    this.base(arguments);
+  construct() {
+    super();
     this.__editors = new qx.data.Array();
     this.__timer = new zx.utils.Timeout(1000, this.__onTimeout, this);
     this.__timer.setRecurring(true);
     this.__timer.startTimer();
-    qx.core.Init.getApplication().addListener(
-      "shutdown",
-      function () {
-        this.setEnabled(false);
-        this._autoSave();
-      },
-      this
-    );
+    qx.core.Init.getApplication().addListener("shutdown", () => {
+      this.setEnabled(false);
+      this._autoSave();
+    });
   },
 
   properties: {
@@ -66,16 +62,17 @@ qx.Class.define("zx.ui.editor.AutoSave", {
     __lastEventTime: 0,
 
     _applyEnabled(value, oldValue) {
-      if (oldValue) this.__timer.killTimer();
-      if (value) this.__timer.startTimer();
+      if (oldValue) {
+        this.__timer.killTimer();
+      }
+      if (value) {
+        this.__timer.startTimer();
+      }
     },
 
     __onTimeout() {
       var uim = zx.ui.utils.UserIdleMonitor.getInstance();
-      if (
-        uim.getLastEventTime() != this.__lastEventTime &&
-        uim.getIdleTimeElapsed() > this.getAutoSavePeriod()
-      ) {
+      if (uim.getLastEventTime() != this.__lastEventTime && uim.getIdleTimeElapsed() > this.getAutoSavePeriod()) {
         this._autoSave();
         this.__lastEventTime = uim.getLastEventTime();
       }
@@ -88,14 +85,14 @@ qx.Class.define("zx.ui.editor.AutoSave", {
       //this.debug("auto-save");
       let masters = {};
       this.__editors.forEach(editor => {
-        if (editor.isMasterValueEditor()) masters[editor.toHashCode()] = editor;
-        else {
+        if (editor.isMasterValueEditor()) {
+          masters[editor.toHashCode()] = editor;
+        } else {
           let mva = editor.getMasterValueAccessor();
-          if (mva) masters[mva.toHashCode()] = mva;
-          else if (qx.core.Environment.get("qx.debug")) {
-            this.error(
-              `Cannot auto save ${editor.classname} because it does not have a masterAccessor and is not a master editor`
-            );
+          if (mva) {
+            masters[mva.toHashCode()] = mva;
+          } else if (qx.core.Environment.get("qx.debug")) {
+            this.error(`Cannot auto save ${editor.classname} because it does not have a masterAccessor and is not a master editor`);
           }
         }
       });
@@ -115,7 +112,9 @@ qx.Class.define("zx.ui.editor.AutoSave", {
     remove(editor) {
       for (var arr = this.__editors, i = 0; i < arr.getLength(); i++) {
         var info = arr.getItem(i);
-        if (info === editor) arr.removeAt(i--);
+        if (info === editor) {
+          arr.removeAt(i--);
+        }
       }
     },
 

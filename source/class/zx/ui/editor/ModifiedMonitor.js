@@ -46,8 +46,9 @@ qx.Class.define("zx.ui.editor.ModifiedMonitor", {
      * @param child {zx.ui.editor.Editor} child the editor to add
      */
     addMasterValueEditor(child) {
-      if (qx.core.Environment.get("qx.debug"))
+      if (qx.core.Environment.get("qx.debug")) {
         this.assertTrue(!qx.lang.Array.contains(this.__masterValueEditors, child));
+      }
       this.__masterValueEditors.push(child);
       child.addListener("changeModified", this.__updateModified, this);
       this.__updateModified();
@@ -59,8 +60,9 @@ qx.Class.define("zx.ui.editor.ModifiedMonitor", {
      * @param child {zx.ui.editor.Editor} child the editor to add
      */
     removeMasterValueEditor(child) {
-      if (qx.core.Environment.get("qx.debug"))
+      if (qx.core.Environment.get("qx.debug")) {
         this.assertTrue(qx.lang.Array.contains(this.__masterValueEditors, child));
+      }
       child.removeListener("changeModified", this.__updateModified, this);
       qx.lang.Array.remove(this.__masterValueEditors, child);
       this.__updateModified();
@@ -72,7 +74,9 @@ qx.Class.define("zx.ui.editor.ModifiedMonitor", {
     async saveAll() {
       for (let i = 0; i < this.__masterValueEditors.length; i++) {
         let ed = this.__masterValueEditors[i];
-        if (ed.isModified()) await ed.save();
+        if (ed.isModified()) {
+          await ed.save();
+        }
       }
       this.__updateModified();
     },

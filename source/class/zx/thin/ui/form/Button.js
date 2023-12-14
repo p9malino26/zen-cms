@@ -1,29 +1,32 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.thin.ui.form.Button", {
   extend: qx.html.Element,
 
   construct(caption, icon) {
-    this.base(arguments, "button");
+    super("button");
     this.initButtonStyle();
-    if (caption) this.setCaption(caption);
-    if (icon) this.setIcon(icon);
+    if (caption) {
+      this.setCaption(caption);
+    }
+    if (icon) {
+      this.setIcon(icon);
+    }
     this.add(this.getQxObject("icon"));
     this.add(this.getQxObject("text"));
     this.addListener("pointerdown", () => this.addClass("qx-button-down"));
@@ -115,7 +118,9 @@ qx.Class.define("zx.thin.ui.form.Button", {
      * Apply for `buttonStyle`
      */
     _applyButtonStyle(value, oldValue) {
-      if (oldValue) this.removeClass("qx-button-" + oldValue);
+      if (oldValue) {
+        this.removeClass("qx-button-" + oldValue);
+      }
       this.addClass("qx-button-" + value);
     },
 
@@ -169,8 +174,7 @@ qx.Class.define("zx.thin.ui.form.Button", {
         elem.dispose();
       }
       if (value) {
-        this.__loading = elem =
-          zx.thin.core.LoadingStyles.getInstance().createElement(value);
+        this.__loading = elem = zx.thin.core.LoadingStyles.getInstance().createElement(value);
         elem.setQxObjectId("loading");
         this.addOwnedQxObject(elem);
         let index = this.indexOf(this.getQxObject("text"));
@@ -210,7 +214,8 @@ qx.Class.define("zx.thin.ui.form.Button", {
         case "text":
           return <span></span>;
       }
-      return this.base(arguments, id);
+
+      return super._createQxObjectImpl(id);
     }
   }
 });

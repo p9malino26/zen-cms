@@ -30,7 +30,7 @@ qx.Class.define("zx.test.TestsAppBrowser", {
      * @Override
      */
     async main() {
-      await this.base(arguments);
+      await super.main();
 
       let runner = this.getQxObject("runner");
       this.loadDemos(runner);

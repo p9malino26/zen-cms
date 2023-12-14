@@ -1,30 +1,32 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.utils.EditorDialog", {
   extend: zx.ui.utils.AbstractDialog,
 
   construct(editor, caption) {
-    this.base(arguments, caption);
+    super(caption);
     this.setLayout(new qx.ui.layout.VBox());
     this.bind("value", editor, "value");
     this.bind("editor.value", this, "value");
 
-    if (editor) this.setEditor(editor);
+    if (editor) {
+      this.setEditor(editor);
+    }
     this.add(this.getQxObject("buttonBar"));
   },
 
@@ -45,11 +47,7 @@ qx.Class.define("zx.ui.utils.EditorDialog", {
     _applyEditor(value, oldValue) {
       if (oldValue) {
         this.remove(oldValue);
-        oldValue.removeListener(
-          "changeValid",
-          this.__onEditorChangeValid,
-          this
-        );
+        oldValue.removeListener("changeValid", this.__onEditorChangeValid, this);
       }
       if (value) {
         this.add(value);
@@ -93,12 +91,11 @@ qx.Class.define("zx.ui.utils.EditorDialog", {
       let editor = this.getEditor();
       await editor.validate();
       if (!editor.isValid()) {
-        zx.ui.utils.MessageDlg.showError(
-          "Please correct the errors on the form"
-        );
+        zx.ui.utils.MessageDlg.showError("Please correct the errors on the form");
+
         return false;
       }
-      return await this.base(arguments, buttonCode);
+      return await super.submitDialog(buttonCode);
     }
   }
 });

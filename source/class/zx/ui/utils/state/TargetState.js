@@ -136,20 +136,27 @@ qx.Class.define("zx.ui.utils.state.TargetState", {
      * @returns {String}
      */
     _getIdOfItem(item) {
-      if (item === null || item === undefined) return null;
+      if (item === null || item === undefined) {
+        return null;
+      }
 
       if (this.__isDynamic) {
         let model = typeof item.getModel == "function" ? item.getModel() : item;
-        if (typeof model.toUuid == "function") return model.toUuid();
-        if (typeof model._uuid == "string") return model._uuid;
+        if (typeof model.toUuid == "function") {
+          return model.toUuid();
+        }
+        if (typeof model._uuid == "string") {
+          return model._uuid;
+        }
       }
 
       let valueId = qx.core.Id.getAbsoluteIdOf(item);
-      if (valueId) return valueId;
+      if (valueId) {
+        return valueId;
+      }
 
-      this._notify(
-        `Cannot get ID state of ${this.__target.classname} (${this.__target}) because it's value ${item.classname} (${item})  does not have an ID`
-      );
+      this._notify(`Cannot get ID state of ${this.__target.classname} (${this.__target}) because it's value ${item.classname} (${item})  does not have an ID`);
+
       return null;
     },
 

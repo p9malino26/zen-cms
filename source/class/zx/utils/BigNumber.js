@@ -30,6 +30,7 @@ qx.Class.define("zx.utils.BigNumber", {
     }
   }
 });
+
 (function (globalObject) {
   "use strict";
 
@@ -204,7 +205,9 @@ qx.Class.define("zx.utils.BigNumber", {
         x = this;
 
       // Enable constructor call without `new`.
-      if (!(x instanceof BigNumber)) return new BigNumber(v, b);
+      if (!(x instanceof BigNumber)) {
+        return new BigNumber(v, b);
+      }
 
       if (b == null) {
         if (v && v._isBigNumber === true) {
@@ -228,7 +231,7 @@ qx.Class.define("zx.utils.BigNumber", {
 
           // Fast path for integers, where n < 2147483648 (2**31).
           if (v === ~~v) {
-            for (e = 0, i = v; i >= 10; i /= 10, e++);
+            for (e = 0, i = v; i >= 10; i /= 10, e++) {}
 
             if (e > MAX_EXP) {
               x.c = x.e = null;
@@ -242,18 +245,24 @@ qx.Class.define("zx.utils.BigNumber", {
 
           str = String(v);
         } else {
-          if (!isNumeric.test((str = String(v)))) return parseNumeric(x, str, isNum);
+          if (!isNumeric.test((str = String(v)))) {
+            return parseNumeric(x, str, isNum);
+          }
 
           x.s = str.charCodeAt(0) == 45 ? ((str = str.slice(1)), -1) : 1;
         }
 
         // Decimal point?
-        if ((e = str.indexOf(".")) > -1) str = str.replace(".", "");
+        if ((e = str.indexOf(".")) > -1) {
+          str = str.replace(".", "");
+        }
 
         // Exponential form?
         if ((i = str.search(/e/i)) > 0) {
           // Determine exponent.
-          if (e < 0) e = i;
+          if (e < 0) {
+            e = i;
+          }
           e += +str.slice(i + 1);
           str = str.substring(0, i);
         } else if (e < 0) {
@@ -275,7 +284,9 @@ qx.Class.define("zx.utils.BigNumber", {
 
         if ((isNum = typeof v == "number")) {
           // Avoid potential interpretation of Infinity and NaN as base 44+ values.
-          if (v * 0 != 0) return parseNumeric(x, str, isNum, b);
+          if (v * 0 != 0) {
+            return parseNumeric(x, str, isNum, b);
+          }
 
           x.s = 1 / v < 0 ? ((str = str.slice(1)), -1) : 1;
 
@@ -319,15 +330,16 @@ qx.Class.define("zx.utils.BigNumber", {
         str = convertBase(str, b, 10, x.s);
 
         // Decimal point?
-        if ((e = str.indexOf(".")) > -1) str = str.replace(".", "");
-        else e = str.length;
+        if ((e = str.indexOf(".")) > -1) {
+          str = str.replace(".", "");
+        } else e = str.length;
       }
 
       // Determine leading zeros.
-      for (i = 0; str.charCodeAt(i) === 48; i++);
+      for (i = 0; str.charCodeAt(i) === 48; i++) {}
 
       // Determine trailing zeros.
-      for (len = str.length; str.charCodeAt(--len) === 48; );
+      for (len = str.length; str.charCodeAt(--len) === 48; ) {}
 
       if ((str = str.slice(i, ++len))) {
         len -= i;
@@ -355,10 +367,14 @@ qx.Class.define("zx.utils.BigNumber", {
           // e is the base 10 exponent.
           // i is where to slice str to get the first element of the coefficient array.
           i = (e + 1) % LOG_BASE;
-          if (e < 0) i += LOG_BASE; // i < 1
+          if (e < 0) {
+            i += LOG_BASE;
+          } // i < 1
 
           if (i < len) {
-            if (i) x.c.push(+str.slice(0, i));
+            if (i) {
+              x.c.push(+str.slice(0, i));
+            }
 
             for (len -= LOG_BASE; i < len; ) {
               x.c.push(+str.slice(i, (i += LOG_BASE)));
@@ -369,7 +385,7 @@ qx.Class.define("zx.utils.BigNumber", {
             i -= len;
           }
 
-          for (; i--; str += "0");
+          for (; i--; str += "0") {}
           x.c.push(+str);
         }
       } else {
@@ -526,8 +542,9 @@ qx.Class.define("zx.utils.BigNumber", {
           // '[BigNumber Error] FORMAT not an object: {v}'
           if (obj.hasOwnProperty((p = "FORMAT"))) {
             v = obj[p];
-            if (typeof v == "object") FORMAT = v;
-            else throw Error(bignumberError + p + " not an object: " + v);
+            if (typeof v == "object") {
+              FORMAT = v;
+            } else throw Error(bignumberError + p + " not an object: " + v);
           }
 
           // ALPHABET {string}
@@ -573,8 +590,12 @@ qx.Class.define("zx.utils.BigNumber", {
      * '[BigNumber Error] Invalid BigNumber: {v}'
      */
     BigNumber.isBigNumber = function (v) {
-      if (!v || v._isBigNumber !== true) return false;
-      if (!BigNumber.DEBUG) return true;
+      if (!v || v._isBigNumber !== true) {
+        return false;
+      }
+      if (!BigNumber.DEBUG) {
+        return true;
+      }
 
       var i,
         n,
@@ -586,24 +607,32 @@ qx.Class.define("zx.utils.BigNumber", {
         if ((s === 1 || s === -1) && e >= -MAX && e <= MAX && e === mathfloor(e)) {
           // If the first element is zero, the BigNumber value must be zero.
           if (c[0] === 0) {
-            if (e === 0 && c.length === 1) return true;
+            if (e === 0 && c.length === 1) {
+              return true;
+            }
             break out;
           }
 
           // Calculate number of digits that c[0] should have, based on the exponent.
           i = (e + 1) % LOG_BASE;
-          if (i < 1) i += LOG_BASE;
+          if (i < 1) {
+            i += LOG_BASE;
+          }
 
           // Calculate number of digits of c[0].
           //if (Math.ceil(Math.log(c[0] + 1) / Math.LN10) == i) {
           if (String(c[0]).length == i) {
             for (i = 0; i < c.length; i++) {
               n = c[i];
-              if (n < 0 || n >= BASE || n !== mathfloor(n)) break out;
+              if (n < 0 || n >= BASE || n !== mathfloor(n)) {
+                break out;
+              }
             }
 
             // Last element cannot be zero, unless it is the only element.
-            if (n !== 0) return true;
+            if (n !== 0) {
+              return true;
+            }
           }
         }
 
@@ -669,8 +698,9 @@ qx.Class.define("zx.utils.BigNumber", {
           c = [],
           rand = new BigNumber(ONE);
 
-        if (dp == null) dp = DECIMAL_PLACES;
-        else intCheck(dp, 0, MAX);
+        if (dp == null) {
+          dp = DECIMAL_PLACES;
+        } else intCheck(dp, 0, MAX);
 
         k = mathceil(dp / LOG_BASE);
 
@@ -736,7 +766,9 @@ qx.Class.define("zx.utils.BigNumber", {
         if (!CRYPTO) {
           for (; i < k; ) {
             v = random53bitInt();
-            if (v < 9e15) c[i++] = v % 1e14;
+            if (v < 9e15) {
+              c[i++] = v % 1e14;
+            }
           }
         }
 
@@ -750,20 +782,22 @@ qx.Class.define("zx.utils.BigNumber", {
         }
 
         // Remove trailing elements which are zero.
-        for (; c[i] === 0; c.pop(), i--);
+        for (; c[i] === 0; c.pop(), i--) {}
 
         // Zero?
         if (i < 0) {
           c = [(e = 0)];
         } else {
           // Remove leading elements which are zero and adjust exponent accordingly.
-          for (e = -1; c[0] === 0; c.splice(0, 1), e -= LOG_BASE);
+          for (e = -1; c[0] === 0; c.splice(0, 1), e -= LOG_BASE) {}
 
           // Count the digits of the first element of c to determine leading zeros, and...
-          for (i = 1, v = c[0]; v >= 10; v /= 10, i++);
+          for (i = 1, v = c[0]; v >= 10; v /= 10, i++) {}
 
           // adjust the exponent accordingly.
-          if (i < LOG_BASE) e -= LOG_BASE - i;
+          if (i < LOG_BASE) {
+            e -= LOG_BASE - i;
+          }
         }
 
         rand.e = e;
@@ -781,7 +815,9 @@ qx.Class.define("zx.utils.BigNumber", {
       var i = 1,
         args = arguments,
         sum = new BigNumber(args[0]);
-      for (; i < args.length; ) sum = sum.plus(args[i++]);
+      for (; i < args.length; ) {
+        sum = sum.plus(args[i++]);
+      }
       return sum;
     };
 
@@ -804,13 +840,15 @@ qx.Class.define("zx.utils.BigNumber", {
           len = str.length;
 
         for (; i < len; ) {
-          for (arrL = arr.length; arrL--; arr[arrL] *= baseIn);
+          for (arrL = arr.length; arrL--; arr[arrL] *= baseIn) {}
 
           arr[0] += alphabet.indexOf(str.charAt(i++));
 
           for (j = 0; j < arr.length; j++) {
             if (arr[j] > baseOut - 1) {
-              if (arr[j + 1] == null) arr[j + 1] = 0;
+              if (arr[j + 1] == null) {
+                arr[j + 1] = 0;
+              }
               arr[j + 1] += (arr[j] / baseOut) | 0;
               arr[j] %= baseOut;
             }
@@ -862,10 +900,12 @@ qx.Class.define("zx.utils.BigNumber", {
         e = k = xc.length;
 
         // Remove trailing zeros.
-        for (; xc[--k] == 0; xc.pop());
+        for (; xc[--k] == 0; xc.pop()) {}
 
         // Zero?
-        if (!xc[0]) return alphabet.charAt(0);
+        if (!xc[0]) {
+          return alphabet.charAt(0);
+        }
 
         // Does str represent an integer? If so, no need for the division.
         if (i < 0) {
@@ -921,10 +961,10 @@ qx.Class.define("zx.utils.BigNumber", {
           }
 
           // Determine trailing zeros.
-          for (k = xc.length; !xc[--k]; );
+          for (k = xc.length; !xc[--k]; ) {}
 
           // E.g. [4, 11, 15] becomes 4bf.
-          for (i = 0, str = ""; i <= k; str += alphabet.charAt(xc[i++]));
+          for (i = 0, str = ""; i <= k; str += alphabet.charAt(xc[i++])) {}
 
           // Add leading zeros, decimal point and trailing zeros as required.
           str = toFixedPoint(str, e, alphabet.charAt(0));
@@ -957,7 +997,9 @@ qx.Class.define("zx.utils.BigNumber", {
           x[i] = temp % base;
         }
 
-        if (carry) x = [carry].concat(x);
+        if (carry) {
+          x = [carry].concat(x);
+        }
 
         return x;
       }
@@ -990,7 +1032,7 @@ qx.Class.define("zx.utils.BigNumber", {
         }
 
         // Remove leading zeros.
-        for (; !a[0] && a.length > 1; a.splice(0, 1));
+        for (; !a[0] && a.length > 1; a.splice(0, 1)) {}
       }
 
       // x: dividend, y: divisor.
@@ -1042,9 +1084,11 @@ qx.Class.define("zx.utils.BigNumber", {
 
         // Result exponent may be one less then the current value of e.
         // The coefficients of the BigNumbers from convertBase may have trailing zeros.
-        for (i = 0; yc[i] == (xc[i] || 0); i++);
+        for (i = 0; yc[i] == (xc[i] || 0); i++) {}
 
-        if (yc[i] > (xc[i] || 0)) e--;
+        if (yc[i] > (xc[i] || 0)) {
+          e--;
+        }
 
         if (s < 0) {
           qc.push(1);
@@ -1073,11 +1117,13 @@ qx.Class.define("zx.utils.BigNumber", {
           remL = rem.length;
 
           // Add zeros to make remainder as long as divisor.
-          for (; remL < yL; rem[remL++] = 0);
+          for (; remL < yL; rem[remL++] = 0) {}
           yz = yc.slice();
           yz = [0].concat(yz);
           yc0 = yc[0];
-          if (yc[1] >= base / 2) yc0++;
+          if (yc[1] >= base / 2) {
+            yc0++;
+          }
           // Not necessary, but to prevent trial digit n > base, when using base 3.
           // else if (base == 3 && yc0 == 1) yc0 = 1 + 1e-15;
 
@@ -1092,7 +1138,9 @@ qx.Class.define("zx.utils.BigNumber", {
               // Calculate trial digit, n.
 
               rem0 = rem[0];
-              if (yL != remL) rem0 = rem0 * base + (rem[1] || 0);
+              if (yL != remL) {
+                rem0 = rem0 * base + (rem[1] || 0);
+              }
 
               // n is how many times the divisor goes into the current remainder.
               n = mathfloor(rem0 / yc0);
@@ -1110,7 +1158,9 @@ qx.Class.define("zx.utils.BigNumber", {
 
               if (n > 1) {
                 // n may be > base only when base is 3.
-                if (n >= base) n = base - 1;
+                if (n >= base) {
+                  n = base - 1;
+                }
 
                 // product = divisor * trial digit.
                 prod = multiply(yc, n, base);
@@ -1144,7 +1194,9 @@ qx.Class.define("zx.utils.BigNumber", {
                 prodL = prod.length;
               }
 
-              if (prodL < remL) prod = [0].concat(prod);
+              if (prodL < remL) {
+                prod = [0].concat(prod);
+              }
 
               // Subtract product from remainder.
               subtract(rem, prod, remL, base);
@@ -1184,12 +1236,14 @@ qx.Class.define("zx.utils.BigNumber", {
           more = rem[0] != null;
 
           // Leading zero?
-          if (!qc[0]) qc.splice(0, 1);
+          if (!qc[0]) {
+            qc.splice(0, 1);
+          }
         }
 
         if (base == BASE) {
           // To calculate q.e, first get the number of digits of qc[0].
-          for (i = 1, s = qc[0]; s >= 10; s /= 10, i++);
+          for (i = 1, s = qc[0]; s >= 10; s /= 10, i++) {}
 
           round(q, dp + (q.e = i + e * LOG_BASE - 1) + 1, rm, more);
 
@@ -1215,10 +1269,13 @@ qx.Class.define("zx.utils.BigNumber", {
     function format(n, i, rm, id) {
       var c0, e, ne, len, str;
 
-      if (rm == null) rm = ROUNDING_MODE;
-      else intCheck(rm, 0, 8);
+      if (rm == null) {
+        rm = ROUNDING_MODE;
+      } else intCheck(rm, 0, 8);
 
-      if (!n.c) return n.toString();
+      if (!n.c) {
+        return n.toString();
+      }
 
       c0 = n.c[0];
       ne = n.e;
@@ -1242,7 +1299,7 @@ qx.Class.define("zx.utils.BigNumber", {
         // Exponential notation.
         if (id == 1 || (id == 2 && (i <= e || e <= TO_EXP_NEG))) {
           // Append zeros?
-          for (; len < i; str += "0", len++);
+          for (; len < i; str += "0", len++) {}
           str = toExponential(str, e);
 
           // Fixed-point notation.
@@ -1252,12 +1309,16 @@ qx.Class.define("zx.utils.BigNumber", {
 
           // Append zeros?
           if (e + 1 > len) {
-            if (--i > 0) for (str += "."; i--; str += "0");
+            if (--i > 0) {
+              for (str += "."; i--; str += "0") {}
+            }
           } else {
             i += e - len;
             if (i > 0) {
-              if (e + 1 == len) str += ".";
-              for (; i--; str += "0");
+              if (e + 1 == len) {
+                str += ".";
+              }
+              for (; i--; str += "0") {}
             }
           }
         }
@@ -1293,10 +1354,10 @@ qx.Class.define("zx.utils.BigNumber", {
         j = c.length;
 
       // Remove trailing zeros.
-      for (; !c[--j]; c.pop());
+      for (; !c[--j]; c.pop()) {}
 
       // Calculate the base 10 exponent. First get the number of digits of c[0].
-      for (j = c[0]; j >= 10; j /= 10, i++);
+      for (j = c[0]; j >= 10; j /= 10, i++) {}
 
       // Overflow?
       if ((e = i + e * LOG_BASE - 1) > MAX_EXP) {
@@ -1345,7 +1406,9 @@ qx.Class.define("zx.utils.BigNumber", {
               s = s.replace(dotAfter, "$1").replace(dotBefore, "0.$1");
             }
 
-            if (str != s) return new BigNumber(s, base);
+            if (str != s) {
+              return new BigNumber(s, base);
+            }
           }
 
           // '[BigNumber Error] Not a number: {n}'
@@ -1387,7 +1450,7 @@ qx.Class.define("zx.utils.BigNumber", {
         // j is the actual index of rd within n (if < 0, rd is a leading zero).
         out: {
           // Get the number of digits of the first element of xc.
-          for (d = 1, k = xc[0]; k >= 10; k /= 10, d++);
+          for (d = 1, k = xc[0]; k >= 10; k /= 10, d++) {}
           i = sd - d;
 
           // If the rounding digit is in the first element of xc...
@@ -1404,7 +1467,7 @@ qx.Class.define("zx.utils.BigNumber", {
             if (ni >= xc.length) {
               if (r) {
                 // Needed by sqrt.
-                for (; xc.length <= ni; xc.push(0));
+                for (; xc.length <= ni; xc.push(0)) {}
                 n = rd = 0;
                 d = 1;
                 i %= LOG_BASE;
@@ -1416,7 +1479,7 @@ qx.Class.define("zx.utils.BigNumber", {
               n = k = xc[ni];
 
               // Get the number of digits of n.
-              for (d = 1; k >= 10; k /= 10, d++);
+              for (d = 1; k >= 10; k /= 10, d++) {}
 
               // Get the index of rd within n.
               i %= LOG_BASE;
@@ -1489,20 +1552,24 @@ qx.Class.define("zx.utils.BigNumber", {
               // If the digit to be rounded up is in the first element of xc...
               if (ni == 0) {
                 // i will be the length of xc[0] before k is added.
-                for (i = 1, j = xc[0]; j >= 10; j /= 10, i++);
+                for (i = 1, j = xc[0]; j >= 10; j /= 10, i++) {}
                 j = xc[0] += k;
-                for (k = 1; j >= 10; j /= 10, k++);
+                for (k = 1; j >= 10; j /= 10, k++) {}
 
                 // if i != k the length has increased.
                 if (i != k) {
                   x.e++;
-                  if (xc[0] == BASE) xc[0] = 1;
+                  if (xc[0] == BASE) {
+                    xc[0] = 1;
+                  }
                 }
 
                 break;
               } else {
                 xc[ni] += k;
-                if (xc[ni] != BASE) break;
+                if (xc[ni] != BASE) {
+                  break;
+                }
                 xc[ni--] = 0;
                 k = 1;
               }
@@ -1510,7 +1577,7 @@ qx.Class.define("zx.utils.BigNumber", {
           }
 
           // Remove trailing zeros.
-          for (i = xc.length; xc[--i] === 0; xc.pop());
+          for (i = xc.length; xc[--i] === 0; xc.pop()) {}
         }
 
         // Overflow? Infinity.
@@ -1530,7 +1597,9 @@ qx.Class.define("zx.utils.BigNumber", {
       var str,
         e = n.e;
 
-      if (e === null) return n.toString();
+      if (e === null) {
+        return n.toString();
+      }
 
       str = coeffToString(n.c);
 
@@ -1546,7 +1615,9 @@ qx.Class.define("zx.utils.BigNumber", {
      */
     P.absoluteValue = P.abs = function () {
       var x = new BigNumber(this);
-      if (x.s < 0) x.s = 1;
+      if (x.s < 0) {
+        x.s = 1;
+      }
       return x;
     };
 
@@ -1582,18 +1653,25 @@ qx.Class.define("zx.utils.BigNumber", {
 
       if (dp != null) {
         intCheck(dp, 0, MAX);
-        if (rm == null) rm = ROUNDING_MODE;
-        else intCheck(rm, 0, 8);
+        if (rm == null) {
+          rm = ROUNDING_MODE;
+        } else intCheck(rm, 0, 8);
 
         return round(new BigNumber(x), dp + x.e + 1, rm);
       }
 
-      if (!(c = x.c)) return null;
+      if (!(c = x.c)) {
+        return null;
+      }
       n = ((v = c.length - 1) - bitFloor(this.e / LOG_BASE)) * LOG_BASE;
 
       // Subtract the number of trailing zeros of the last number.
-      if ((v = c[v])) for (; v % 10 == 0; v /= 10, n--);
-      if (n < 0) n = 0;
+      if ((v = c[v])) {
+        for (; v % 10 == 0; v /= 10, n--) {}
+      }
+      if (n < 0) {
+        n = 0;
+      }
 
       return n;
     };
@@ -1664,7 +1742,9 @@ qx.Class.define("zx.utils.BigNumber", {
         throw Error(bignumberError + "Exponent not an integer: " + valueOf(n));
       }
 
-      if (m != null) m = new BigNumber(m);
+      if (m != null) {
+        m = new BigNumber(m);
+      }
 
       // Exponent of MAX_SAFE_INTEGER is 15.
       nIsBig = n.e > 14;
@@ -1681,11 +1761,15 @@ qx.Class.define("zx.utils.BigNumber", {
 
       if (m) {
         // x % m returns NaN if abs(m) is zero, or m is NaN.
-        if (m.c ? !m.c[0] : !m.s) return new BigNumber(NaN);
+        if (m.c ? !m.c[0] : !m.s) {
+          return new BigNumber(NaN);
+        }
 
         isModExp = !nIsNeg && x.isInteger() && m.isInteger();
 
-        if (isModExp) x = x.mod(m);
+        if (isModExp) {
+          x = x.mod(m);
+        }
 
         // Overflow to ±Infinity: >=2**1e10 or >=1.0000024**1e15.
         // Underflow to ±0: <=0.79**1e10 or <=0.9999975**1e15.
@@ -1703,7 +1787,9 @@ qx.Class.define("zx.utils.BigNumber", {
         k = x.s < 0 && isOdd(n) ? -0 : 0;
 
         // If x >= 1, k = ±Infinity.
-        if (x.e > -1) k = 1 / k;
+        if (x.e > -1) {
+          k = 1 / k;
+        }
 
         // If n is negative return ±0, else return ±Infinity.
         return new BigNumber(nIsNeg ? 1 / k : k);
@@ -1716,7 +1802,9 @@ qx.Class.define("zx.utils.BigNumber", {
 
       if (nIsBig) {
         half = new BigNumber(0.5);
-        if (nIsNeg) n.s = 1;
+        if (nIsNeg) {
+          n.s = 1;
+        }
         nIsOdd = isOdd(n);
       } else {
         i = Math.abs(+valueOf(n));
@@ -1729,10 +1817,14 @@ qx.Class.define("zx.utils.BigNumber", {
       for (;;) {
         if (nIsOdd) {
           y = y.times(x);
-          if (!y.c) break;
+          if (!y.c) {
+            break;
+          }
 
           if (k) {
-            if (y.c.length > k) y.c.length = k;
+            if (y.c.length > k) {
+              y.c.length = k;
+            }
           } else if (isModExp) {
             y = y.mod(m); //y = y.minus(div(y, m, 0, MODULO_MODE).times(m));
           }
@@ -1740,7 +1832,9 @@ qx.Class.define("zx.utils.BigNumber", {
 
         if (i) {
           i = mathfloor(i / 2);
-          if (i === 0) break;
+          if (i === 0) {
+            break;
+          }
           nIsOdd = i % 2;
         } else {
           n = n.times(half);
@@ -1750,7 +1844,9 @@ qx.Class.define("zx.utils.BigNumber", {
             nIsOdd = isOdd(n);
           } else {
             i = +valueOf(n);
-            if (i === 0) break;
+            if (i === 0) {
+              break;
+            }
             nIsOdd = i % 2;
           }
         }
@@ -1758,14 +1854,20 @@ qx.Class.define("zx.utils.BigNumber", {
         x = x.times(x);
 
         if (k) {
-          if (x.c && x.c.length > k) x.c.length = k;
+          if (x.c && x.c.length > k) {
+            x.c.length = k;
+          }
         } else if (isModExp) {
           x = x.mod(m); //x = x.minus(div(x, m, 0, MODULO_MODE).times(m));
         }
       }
 
-      if (isModExp) return y;
-      if (nIsNeg) y = ONE.div(y);
+      if (isModExp) {
+        return y;
+      }
+      if (nIsNeg) {
+        y = ONE.div(y);
+      }
 
       return m ? y.mod(m) : k ? round(y, POW_PRECISION, ROUNDING_MODE, more) : y;
     };
@@ -1780,8 +1882,9 @@ qx.Class.define("zx.utils.BigNumber", {
      */
     P.integerValue = function (rm) {
       var n = new BigNumber(this);
-      if (rm == null) rm = ROUNDING_MODE;
-      else intCheck(rm, 0, 8);
+      if (rm == null) {
+        rm = ROUNDING_MODE;
+      } else intCheck(rm, 0, 8);
       return round(n, n.e + 1, rm);
     };
 
@@ -1899,7 +2002,9 @@ qx.Class.define("zx.utils.BigNumber", {
       b = y.s;
 
       // Either NaN?
-      if (!a || !b) return new BigNumber(NaN);
+      if (!a || !b) {
+        return new BigNumber(NaN);
+      }
 
       // Signs differ?
       if (a != b) {
@@ -1914,7 +2019,9 @@ qx.Class.define("zx.utils.BigNumber", {
 
       if (!xe || !ye) {
         // Either Infinity?
-        if (!xc || !yc) return xc ? ((y.s = -b), y) : new BigNumber(yc ? x : NaN);
+        if (!xc || !yc) {
+          return xc ? ((y.s = -b), y) : new BigNumber(yc ? x : NaN);
+        }
 
         // Either zero?
         if (!xc[0] || !yc[0]) {
@@ -1949,7 +2056,7 @@ qx.Class.define("zx.utils.BigNumber", {
         t.reverse();
 
         // Prepend zeros to equalise exponents.
-        for (b = a; b--; t.push(0));
+        for (b = a; b--; t.push(0)) {}
         t.reverse();
       } else {
         // Exponents equal. Check digit by digit.
@@ -1975,13 +2082,15 @@ qx.Class.define("zx.utils.BigNumber", {
 
       // Append zeros to xc if shorter.
       // No need to add zeros to yc if shorter as subtract only needs to start at yc.length.
-      if (b > 0) for (; b--; xc[i++] = 0);
+      if (b > 0) {
+        for (; b--; xc[i++] = 0) {}
+      }
       b = BASE - 1;
 
       // Subtract yc from xc.
       for (; j > a; ) {
         if (xc[--j] < yc[j]) {
-          for (i = j; i && !xc[--i]; xc[i] = b);
+          for (i = j; i && !xc[--i]; xc[i] = b) {}
           --xc[i];
           xc[j] += BASE;
         }
@@ -1990,7 +2099,7 @@ qx.Class.define("zx.utils.BigNumber", {
       }
 
       // Remove leading zeros and adjust exponent accordingly.
-      for (; xc[0] == 0; xc.splice(0, 1), --ye);
+      for (; xc[0] == 0; xc.splice(0, 1), --ye) {}
 
       // Zero?
       if (!xc[0]) {
@@ -2058,7 +2167,9 @@ qx.Class.define("zx.utils.BigNumber", {
       y = x.minus(q.times(y));
 
       // To match JavaScript %, ensure sign of zero is sign of dividend.
-      if (!y.c[0] && MODULO_MODE == 1) y.s = x.s;
+      if (!y.c[0] && MODULO_MODE == 1) {
+        y.s = x.s;
+      }
 
       return y;
     };
@@ -2141,7 +2252,7 @@ qx.Class.define("zx.utils.BigNumber", {
       }
 
       // Initialise the result array with zeros.
-      for (i = xcL + ycL, zc = []; i--; zc.push(0));
+      for (i = xcL + ycL, zc = []; i--; zc.push(0)) {}
 
       base = BASE;
       sqrtBase = SQRT_BASE;
@@ -2211,7 +2322,9 @@ qx.Class.define("zx.utils.BigNumber", {
       b = y.s;
 
       // Either NaN?
-      if (!a || !b) return new BigNumber(NaN);
+      if (!a || !b) {
+        return new BigNumber(NaN);
+      }
 
       // Signs differ?
       if (a != b) {
@@ -2226,11 +2339,15 @@ qx.Class.define("zx.utils.BigNumber", {
 
       if (!xe || !ye) {
         // Return ±Infinity if either ±Infinity.
-        if (!xc || !yc) return new BigNumber(a / 0);
+        if (!xc || !yc) {
+          return new BigNumber(a / 0);
+        }
 
         // Either zero?
         // Return y if y is non-zero, x if x is non-zero, or zero if both are zero.
-        if (!xc[0] || !yc[0]) return yc[0] ? y : new BigNumber(xc[0] ? x : a * 0);
+        if (!xc[0] || !yc[0]) {
+          return yc[0] ? y : new BigNumber(xc[0] ? x : a * 0);
+        }
       }
 
       xe = bitFloor(xe);
@@ -2248,7 +2365,7 @@ qx.Class.define("zx.utils.BigNumber", {
         }
 
         t.reverse();
-        for (; a--; t.push(0));
+        for (; a--; t.push(0)) {}
         t.reverse();
       }
 
@@ -2302,25 +2419,30 @@ qx.Class.define("zx.utils.BigNumber", {
 
       if (sd != null && sd !== !!sd) {
         intCheck(sd, 1, MAX);
-        if (rm == null) rm = ROUNDING_MODE;
-        else intCheck(rm, 0, 8);
+        if (rm == null) {
+          rm = ROUNDING_MODE;
+        } else intCheck(rm, 0, 8);
 
         return round(new BigNumber(x), sd, rm);
       }
 
-      if (!(c = x.c)) return null;
+      if (!(c = x.c)) {
+        return null;
+      }
       v = c.length - 1;
       n = v * LOG_BASE + 1;
 
       if ((v = c[v])) {
         // Subtract the number of trailing zeros of the last element.
-        for (; v % 10 == 0; v /= 10, n--);
+        for (; v % 10 == 0; v /= 10, n--) {}
 
         // Add the number of digits of the first element.
-        for (v = c[0]; v >= 10; v /= 10, n++);
+        for (v = c[0]; v >= 10; v /= 10, n++) {}
       }
 
-      if (sd && x.e + 1 > n) n = x.e + 1;
+      if (sd && x.e + 1 > n) {
+        n = x.e + 1;
+      }
 
       return n;
     };
@@ -2374,7 +2496,9 @@ qx.Class.define("zx.utils.BigNumber", {
       // Pass x to Math.sqrt as integer, then adjust the exponent of the result.
       if (s == 0 || s == 1 / 0) {
         n = coeffToString(c);
-        if ((n.length + e) % 2 == 0) n += "0";
+        if ((n.length + e) % 2 == 0) {
+          n += "0";
+        }
         s = Math.sqrt(+n);
         e = bitFloor((e + 1) / 2) - (e < 0 || e % 2);
 
@@ -2397,7 +2521,9 @@ qx.Class.define("zx.utils.BigNumber", {
       if (r.c[0]) {
         e = r.e;
         s = e + dp;
-        if (s < 3) s = 0;
+        if (s < 3) {
+          s = 0;
+        }
 
         // Newton-Raphson iteration.
         for (;;) {
@@ -2408,7 +2534,9 @@ qx.Class.define("zx.utils.BigNumber", {
             // The exponent of r may here be one less than the final result exponent,
             // e.g 0.0009999 (e-4) --> 0.001 (e-3), so adjust s so the rounding digits
             // are indexed correctly.
-            if (r.e < e) --s;
+            if (r.e < e) {
+              --s;
+            }
             n = n.slice(s - 3, s + 1);
 
             // The 4th rounding digit may be in error by -1 so if the 4 rounding digits
@@ -2551,9 +2679,15 @@ qx.Class.define("zx.utils.BigNumber", {
         if (g1 > 0 && len > 0) {
           i = len % g1 || g1;
           intPart = intDigits.substr(0, i);
-          for (; i < len; i += g1) intPart += groupSeparator + intDigits.substr(i, g1);
-          if (g2 > 0) intPart += groupSeparator + intDigits.slice(i);
-          if (isNeg) intPart = "-" + intPart;
+          for (; i < len; i += g1) {
+            intPart += groupSeparator + intDigits.substr(i, g1);
+          }
+          if (g2 > 0) {
+            intPart += groupSeparator + intDigits.slice(i);
+          }
+          if (isNeg) {
+            intPart = "-" + intPart;
+          }
         }
 
         str = fractionPart
@@ -2602,7 +2736,9 @@ qx.Class.define("zx.utils.BigNumber", {
         }
       }
 
-      if (!xc) return new BigNumber(x);
+      if (!xc) {
+        return new BigNumber(x);
+      }
 
       d = new BigNumber(ONE);
       n1 = d0 = new BigNumber(ONE);
@@ -2625,7 +2761,9 @@ qx.Class.define("zx.utils.BigNumber", {
       for (;;) {
         q = div(n, d, 0, 1);
         d2 = d0.plus(q.times(d1));
-        if (d2.comparedTo(md) == 1) break;
+        if (d2.comparedTo(md) == 1) {
+          break;
+        }
         d0 = d1;
         d1 = d2;
         n1 = n0.plus(q.times((d2 = n1)));
@@ -2667,7 +2805,9 @@ qx.Class.define("zx.utils.BigNumber", {
      * '[BigNumber Error] Argument {not a primitive number|not an integer|out of range}: {sd|rm}'
      */
     P.toPrecision = function (sd, rm) {
-      if (sd != null) intCheck(sd, 1, MAX);
+      if (sd != null) {
+        intCheck(sd, 1, MAX);
+      }
       return format(this, sd, rm, 2);
     };
 
@@ -2692,7 +2832,9 @@ qx.Class.define("zx.utils.BigNumber", {
       if (e === null) {
         if (s) {
           str = "Infinity";
-          if (s < 0) str = "-" + str;
+          if (s < 0) {
+            str = "-" + str;
+          }
         } else {
           str = "NaN";
         }
@@ -2707,7 +2849,9 @@ qx.Class.define("zx.utils.BigNumber", {
           str = convertBase(toFixedPoint(coeffToString(n.c), e, "0"), 10, b, s, true);
         }
 
-        if (s < 0 && n.c[0]) str = "-" + str;
+        if (s < 0 && n.c[0]) {
+          str = "-" + str;
+        }
       }
 
       return str;
@@ -2723,7 +2867,9 @@ qx.Class.define("zx.utils.BigNumber", {
 
     P._isBigNumber = true;
 
-    if (configObject != null) BigNumber.set(configObject);
+    if (configObject != null) {
+      BigNumber.set(configObject);
+    }
 
     return BigNumber;
   }
@@ -2749,12 +2895,12 @@ qx.Class.define("zx.utils.BigNumber", {
     for (; i < j; ) {
       s = a[i++] + "";
       z = LOG_BASE - s.length;
-      for (; z--; s = "0" + s);
+      for (; z--; s = "0" + s) {}
       r += s;
     }
 
     // Determine trailing zeros.
-    for (j = r.length; r.charCodeAt(--j) === 48; );
+    for (j = r.length; r.charCodeAt(--j) === 48; ) {}
 
     return r.slice(0, j + 1 || 1);
   }
@@ -2771,30 +2917,44 @@ qx.Class.define("zx.utils.BigNumber", {
       l = y.e;
 
     // Either NaN?
-    if (!i || !j) return null;
+    if (!i || !j) {
+      return null;
+    }
 
     a = xc && !xc[0];
     b = yc && !yc[0];
 
     // Either zero?
-    if (a || b) return a ? (b ? 0 : -j) : i;
+    if (a || b) {
+      return a ? (b ? 0 : -j) : i;
+    }
 
     // Signs differ?
-    if (i != j) return i;
+    if (i != j) {
+      return i;
+    }
 
     a = i < 0;
     b = k == l;
 
     // Either Infinity?
-    if (!xc || !yc) return b ? 0 : !xc ^ a ? 1 : -1;
+    if (!xc || !yc) {
+      return b ? 0 : !xc ^ a ? 1 : -1;
+    }
 
     // Compare exponents.
-    if (!b) return (k > l) ^ a ? 1 : -1;
+    if (!b) {
+      return (k > l) ^ a ? 1 : -1;
+    }
 
     j = (k = xc.length) < (l = yc.length) ? k : l;
 
     // Compare digit by digit.
-    for (i = 0; i < j; i++) if (xc[i] != yc[i]) return (xc[i] > yc[i]) ^ a ? 1 : -1;
+    for (i = 0; i < j; i++) {
+      if (xc[i] != yc[i]) {
+        return (xc[i] > yc[i]) ^ a ? 1 : -1;
+      }
+    }
 
     // Compare lengths.
     return k == l ? 0 : (k > l) ^ a ? 1 : -1;
@@ -2825,7 +2985,7 @@ qx.Class.define("zx.utils.BigNumber", {
     // Negative exponent?
     if (e < 0) {
       // Prepend zeros.
-      for (zs = z + "."; ++e; zs += z);
+      for (zs = z + "."; ++e; zs += z) {}
       str = zs + str;
 
       // Positive exponent
@@ -2834,7 +2994,7 @@ qx.Class.define("zx.utils.BigNumber", {
 
       // Append zeros.
       if (++e > len) {
-        for (zs = z, e -= len; --e; zs += z);
+        for (zs = z, e -= len; --e; zs += z) {}
         str += zs;
       } else if (e < len) {
         str = str.slice(0, e) + "." + str.slice(e);

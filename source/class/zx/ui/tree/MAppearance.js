@@ -1,34 +1,32 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Theme.define("zx.ui.tree.MAppearance", {
   appearances: {
     "zx-ui-tree": {
-      style: function (states) {
+      style(states) {
         return {};
       }
     },
 
     "zx-ui-tree-row": {
-      style: function (states) {
+      style(states) {
         return {
-          textColor: states.selected
-            ? "table-row-background-selected"
-            : undefined
+          textColor: states.selected ? "table-row-background-selected" : undefined
         };
       }
     },
@@ -37,12 +35,14 @@ qx.Theme.define("zx.ui.tree.MAppearance", {
 
     "zx-ui-tree-row/arrow": {
       alias: "image",
-      style: function (states) {
+      style(states) {
         var icon;
-        if (!states.hasChildren) icon = "file";
-        else icon = states.opened ? "folder-open" : "folder";
-        if (states.selected) icon = "@FontAwesome/" + icon;
-        else icon = "@FontAwesomeSolid/" + icon;
+        if (!states.hasChildren) {
+          icon = "file";
+        } else icon = states.opened ? "folder-open" : "folder";
+        if (states.selected) {
+          icon = "@FontAwesome/" + icon;
+        } else icon = "@FontAwesomeSolid/" + icon;
         return {
           source: icon + "/16"
         };
@@ -50,7 +50,7 @@ qx.Theme.define("zx.ui.tree.MAppearance", {
     },
 
     "zx-ui-tree-row/content/label": {
-      style: function (states) {
+      style(states) {
         return {
           textColor: "text-on-surface",
           padding: [2, 0, 0, 2]
@@ -62,7 +62,7 @@ qx.Theme.define("zx.ui.tree.MAppearance", {
 
     "zx-ui-tree-dropcaret": {
       alias: "zx-ui-tree-row",
-      style: function (states) {
+      style(states) {
         return {
           opacity: 0.5
         };
@@ -72,29 +72,25 @@ qx.Theme.define("zx.ui.tree.MAppearance", {
     "tree-column-rowwidget": {
       alias: "atom",
 
-      style: function (states) {
+      style(states) {
         return {};
       }
     },
 
     /*
-		"tree-column-header": {
-		  alias: "atom"
-		},
-		*/
+    "tree-column-header": {
+    alias: "atom"
+    },
+    */
 
     "tree-column-cell": {
       alias: "atom",
 
-      style: function (states) {
+      style(states) {
         var decorator;
         return {
           padding: [3, 0, 2, 0],
-          textColor: states.disabled
-            ? "text-disabled"
-            : states.selected
-            ? "text-on-surface"
-            : "text-on-primary"
+          textColor: states.disabled ? "text-disabled" : states.selected ? "text-on-surface" : "text-on-primary"
         };
       }
     }

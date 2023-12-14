@@ -60,6 +60,7 @@ qx.Class.define("zx.server.rest.RestApiServer", {
         DELETE: "_httpDelete",
         PATCH: "_httpPatch"
       };
+
       let prefix = PREFIXES[req.method];
       if (!prefix) {
         this.error("Unsupported method for uri " + apiName + "." + methodName);
@@ -80,11 +81,13 @@ qx.Class.define("zx.server.rest.RestApiServer", {
             status: "ok",
             result: result
           });
+
           this.debug(`API Call ${req.method} ${apiName}.${methodName}: response: ${JSON.stringify(result)}`);
         } else {
           reply.send({
             status: "ok"
           });
+
           this.debug(`API Call ${req.method} ${apiName}.${methodName}: response is undefined`);
         }
       } catch (ex) {
@@ -133,8 +136,12 @@ qx.Class.define("zx.server.rest.RestApiServer", {
      * @param api {RestApiServer} the class to register
      */
     registerApi(name, api) {
-      if (api && !name) name = api.classname;
-      if (!name || !api) throw new Error(`Cannot determine name or type of API class to add; name=${name} api=${api}`);
+      if (api && !name) {
+        name = api.classname;
+      }
+      if (!name || !api) {
+        throw new Error(`Cannot determine name or type of API class to add; name=${name} api=${api}`);
+      }
       zx.server.rest.RestApiServer.__apis[name] = api;
     },
 
@@ -145,7 +152,9 @@ qx.Class.define("zx.server.rest.RestApiServer", {
      * @return {AbstractServerRestApi} instance, null if not found
      */
     getApi(name) {
-      if (typeof name.classname == "string") name = name.classname;
+      if (typeof name.classname == "string") {
+        name = name.classname;
+      }
       return zx.server.rest.RestApiServer.__apis[name] || null;
     },
 

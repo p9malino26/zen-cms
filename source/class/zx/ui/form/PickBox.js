@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.form.PickBox", {
   extend: qx.ui.core.Widget,
@@ -21,7 +21,7 @@ qx.Class.define("zx.ui.form.PickBox", {
   include: [qx.ui.form.MForm],
 
   construct() {
-    this.base(arguments);
+    super();
     this._setLayout(new qx.ui.layout.HBox());
     this._add(this.getChildControl("label"), { flex: 1 });
     this._add(this.getChildControl("pick"));
@@ -103,23 +103,15 @@ qx.Class.define("zx.ui.form.PickBox", {
         this.removeBinding(this.__labelBindingId);
         this.__labelBindingId = null;
       }
-      this.__labelBindingId = this.bind(
-        "value." + this.getLabelPath(),
-        this.getChildControl("label"),
-        "label",
-        this.getLabelOptions()
-      );
+      this.__labelBindingId = this.bind("value." + this.getLabelPath(), this.getChildControl("label"), "label", this.getLabelOptions());
+
       if (this.__iconBindingId) {
         this.removeBinding(this.__iconBindingId);
         this.__iconBindingId = null;
       }
-      if (this.getIconPath())
-        this.__iconBindingId = this.bind(
-          "value." + this.getIconPath(),
-          this.getChildControl("label"),
-          "icon",
-          this.getIconOptions()
-        );
+      if (this.getIconPath()) {
+        this.__iconBindingId = this.bind("value." + this.getIconPath(), this.getChildControl("label"), "icon", this.getIconOptions());
+      }
     },
 
     /**
@@ -143,7 +135,7 @@ qx.Class.define("zx.ui.form.PickBox", {
           return btn;
       }
 
-      return this.base(arguments, id, hash);
+      return super._createChildControlImpl(id, hash);
     },
 
     /**
@@ -157,7 +149,7 @@ qx.Class.define("zx.ui.form.PickBox", {
           });
       }
 
-      return this.base(arguments, id);
+      return super._createQxObjectImpl(id);
     }
   }
 });

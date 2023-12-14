@@ -27,7 +27,7 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
    * @param {zx.io.remote.NetworkController} controller
    */
   construct(controller) {
-    this.base(arguments);
+    super();
     this.__controller = controller;
   },
 
@@ -113,6 +113,7 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
                 endpoints[remoteAppName].remoteSessionId
               } (${endpoint.toHashCode()})`
             );
+
             let body = (req.body && JSON.parse(req.body)) || null;
             this.debug(`Body=${JSON.stringify(body, null, 2)}`);
           }
@@ -139,7 +140,9 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
         endpoint.close();
         endpoint = null;
       }
-      if (firstRequest) delete endpoints[remoteAppName];
+      if (firstRequest) {
+        delete endpoints[remoteAppName];
+      }
 
       // If no endpoint, then create one
       if (!endpoint) {
@@ -147,20 +150,25 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
         this.debug(
           `Opening new endpoint localSessionId=${localSessionId}, remoteAppName=${remoteAppName}, remoteSessionId=${remoteSessionId} (${endpoint.toHashCode()}) req.sessionId=${req.session.getSessionId()}`
         );
+
         endpoint.open();
         this.__controller.addEndpoint(endpoint);
         this.fireDataEvent("addEndpoint", { endpoint });
         endpoint.addListenerOnce("close", () =>
           setTimeout(() => {
             // Remove it from the controller if we have not already done it above
-            if (qx.lang.Array.contains(this.__controller.getEndpoints(), endpoint)) this.__controller.removeEndpoint(endpoint);
+            if (qx.lang.Array.contains(this.__controller.getEndpoints(), endpoint)) {
+              this.__controller.removeEndpoint(endpoint);
+            }
             endpoint.dispose();
           }, 1)
         );
       }
 
       // Store the endpoint's last-seen time
-      if (!endpoints[remoteAppName]) endpoints[remoteAppName] = {};
+      if (!endpoints[remoteAppName]) {
+        endpoints[remoteAppName] = {};
+      }
       endpoints[remoteAppName].remoteSessionId = remoteSessionId;
       endpoints[remoteAppName].lastSeen = new Date().getTime();
 

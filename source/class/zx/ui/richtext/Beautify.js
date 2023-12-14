@@ -9,7 +9,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
    * Constructor
    */
   construct() {
-    this.base(arguments, null, ["comp"]);
+    super(null, ["comp"]);
   },
 
   members: {
@@ -18,6 +18,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
     beautifyCss: null
   }
 });
+
 /*jshint curly:true, eqeqeq:true, laxbreak:true, noempty:false */
 /*
 
@@ -145,22 +146,42 @@ qx.Class.define("zx.ui.richtext.Beautify", {
     // Test whether a given character code starts an identifier.
 
     var isIdentifierStart = (exports.isIdentifierStart = function (code) {
-      if (code < 65) return code === 36;
-      if (code < 91) return true;
-      if (code < 97) return code === 95;
-      if (code < 123) return true;
+      if (code < 65) {
+        return code === 36;
+      }
+      if (code < 91) {
+        return true;
+      }
+      if (code < 97) {
+        return code === 95;
+      }
+      if (code < 123) {
+        return true;
+      }
       return code >= 0xaa && nonASCIIidentifierStart.test(String.fromCharCode(code));
     });
 
     // Test whether a given character is part of an identifier.
 
     var isIdentifierChar = (exports.isIdentifierChar = function (code) {
-      if (code < 48) return code === 36;
-      if (code < 58) return true;
-      if (code < 65) return false;
-      if (code < 91) return true;
-      if (code < 97) return code === 95;
-      if (code < 123) return true;
+      if (code < 48) {
+        return code === 36;
+      }
+      if (code < 58) {
+        return true;
+      }
+      if (code < 65) {
+        return false;
+      }
+      if (code < 91) {
+        return true;
+      }
+      if (code < 97) {
+        return code === 95;
+      }
+      if (code < 123) {
+        return true;
+      }
       return code >= 0xaa && nonASCIIidentifier.test(String.fromCharCode(code));
     });
   })(acorn);
@@ -257,6 +278,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
         start_line_index: output.get_line_number(),
         ternary_depth: 0
       };
+
       return next_flags;
     }
 
@@ -280,16 +302,13 @@ qx.Class.define("zx.ui.richtext.Beautify", {
     opt.indent_char = options.indent_char ? options.indent_char : " ";
     opt.preserve_newlines = options.preserve_newlines === undefined ? true : options.preserve_newlines;
     opt.break_chained_methods = options.break_chained_methods === undefined ? false : options.break_chained_methods;
-    opt.max_preserve_newlines =
-      options.max_preserve_newlines === undefined ? 0 : parseInt(options.max_preserve_newlines, 10);
+    opt.max_preserve_newlines = options.max_preserve_newlines === undefined ? 0 : parseInt(options.max_preserve_newlines, 10);
     opt.space_in_paren = options.space_in_paren === undefined ? false : options.space_in_paren;
     opt.space_in_empty_paren = options.space_in_empty_paren === undefined ? false : options.space_in_empty_paren;
     opt.jslint_happy = options.jslint_happy === undefined ? false : options.jslint_happy;
-    opt.space_after_anon_function =
-      options.space_after_anon_function === undefined ? false : options.space_after_anon_function;
+    opt.space_after_anon_function = options.space_after_anon_function === undefined ? false : options.space_after_anon_function;
     opt.keep_array_indentation = options.keep_array_indentation === undefined ? false : options.keep_array_indentation;
-    opt.space_before_conditional =
-      options.space_before_conditional === undefined ? true : options.space_before_conditional;
+    opt.space_before_conditional = options.space_before_conditional === undefined ? true : options.space_before_conditional;
     opt.unescape_strings = options.unescape_strings === undefined ? false : options.unescape_strings;
     opt.wrap_line_length = options.wrap_line_length === undefined ? 0 : parseInt(options.wrap_line_length, 10);
     opt.e4x = options.e4x === undefined ? false : options.e4x;
@@ -427,8 +446,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
       if ((opt.preserve_newlines && current_token.wanted_newline) || force_linewrap) {
         print_newline(false, true);
       } else if (opt.wrap_line_length) {
-        var proposed_line_length =
-          output.current_line.get_character_count() + current_token.text.length + (output.space_before_token ? 1 : 0);
+        var proposed_line_length = output.current_line.get_character_count() + current_token.text.length + (output.space_before_token ? 1 : 0);
         if (proposed_line_length >= opt.wrap_line_length) {
           print_newline(false, true);
         }
@@ -437,12 +455,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
 
     function print_newline(force_newline, preserve_statement_flags) {
       if (!preserve_statement_flags) {
-        if (
-          flags.last_text !== ";" &&
-          flags.last_text !== "," &&
-          flags.last_text !== "=" &&
-          last_type !== "TK_OPERATOR"
-        ) {
+        if (flags.last_text !== ";" && flags.last_text !== "," && flags.last_text !== "=" && last_type !== "TK_OPERATOR") {
           while (flags.mode === MODE.Statement && !flags.if_block && !flags.do_block) {
             restore_mode();
           }
@@ -476,8 +489,9 @@ qx.Class.define("zx.ui.richtext.Beautify", {
     }
 
     function deindent() {
-      if (flags.indentation_level > 0 && (!flags.parent || flags.indentation_level > flags.parent.indentation_level))
+      if (flags.indentation_level > 0 && (!flags.parent || flags.indentation_level > flags.parent.indentation_level)) {
         flags.indentation_level -= 1;
+      }
     }
 
     function set_mode(mode) {
@@ -513,41 +527,29 @@ qx.Class.define("zx.ui.richtext.Beautify", {
       return (
         flags.parent.mode === MODE.ObjectLiteral &&
         flags.mode === MODE.Statement &&
-        ((flags.last_text === ":" && flags.ternary_depth === 0) ||
-          (last_type === "TK_RESERVED" && in_array(flags.last_text, ["get", "set"])))
+        ((flags.last_text === ":" && flags.ternary_depth === 0) || (last_type === "TK_RESERVED" && in_array(flags.last_text, ["get", "set"])))
       );
     }
 
     function start_of_statement() {
       if (
-        (last_type === "TK_RESERVED" &&
-          in_array(flags.last_text, ["var", "let", "const"]) &&
-          current_token.type === "TK_WORD") ||
+        (last_type === "TK_RESERVED" && in_array(flags.last_text, ["var", "let", "const"]) && current_token.type === "TK_WORD") ||
         (last_type === "TK_RESERVED" && flags.last_text === "do") ||
         (last_type === "TK_RESERVED" && flags.last_text === "return" && !current_token.wanted_newline) ||
-        (last_type === "TK_RESERVED" &&
-          flags.last_text === "else" &&
-          !(current_token.type === "TK_RESERVED" && current_token.text === "if")) ||
-        (last_type === "TK_END_EXPR" &&
-          (previous_flags.mode === MODE.ForInitializer || previous_flags.mode === MODE.Conditional)) ||
+        (last_type === "TK_RESERVED" && flags.last_text === "else" && !(current_token.type === "TK_RESERVED" && current_token.text === "if")) ||
+        (last_type === "TK_END_EXPR" && (previous_flags.mode === MODE.ForInitializer || previous_flags.mode === MODE.Conditional)) ||
         (last_type === "TK_WORD" &&
           flags.mode === MODE.BlockStatement &&
           !flags.in_case &&
           !(current_token.text === "--" || current_token.text === "++") &&
           current_token.type !== "TK_WORD" &&
           current_token.type !== "TK_RESERVED") ||
-        (flags.mode === MODE.ObjectLiteral &&
-          ((flags.last_text === ":" && flags.ternary_depth === 0) ||
-            (last_type === "TK_RESERVED" && in_array(flags.last_text, ["get", "set"]))))
+        (flags.mode === MODE.ObjectLiteral && ((flags.last_text === ":" && flags.ternary_depth === 0) || (last_type === "TK_RESERVED" && in_array(flags.last_text, ["get", "set"]))))
       ) {
         set_mode(MODE.Statement);
         indent();
 
-        if (
-          last_type === "TK_RESERVED" &&
-          in_array(flags.last_text, ["var", "let", "const"]) &&
-          current_token.type === "TK_WORD"
-        ) {
+        if (last_type === "TK_RESERVED" && in_array(flags.last_text, ["var", "let", "const"]) && current_token.type === "TK_WORD") {
           flags.declaration_statement = true;
         }
 
@@ -555,9 +557,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
         // If starting a new statement with [if, for, while, do], push to a new line.
         // if (a) if (b) if(c) d(); else e(); else f();
         if (!start_of_object_property()) {
-          allow_wrap_or_preserved_newline(
-            current_token.type === "TK_RESERVED" && in_array(current_token.text, ["do", "for", "if", "while"])
-          );
+          allow_wrap_or_preserved_newline(current_token.type === "TK_RESERVED" && in_array(current_token.text, ["do", "for", "if", "while"]));
         }
 
         return true;
@@ -622,10 +622,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
 
         next_mode = MODE.ArrayLiteral;
         if (is_array(flags.mode)) {
-          if (
-            flags.last_text === "[" ||
-            (flags.last_text === "," && (last_last_text === "]" || last_last_text === "}"))
-          ) {
+          if (flags.last_text === "[" || (flags.last_text === "," && (last_last_text === "]" || last_last_text === "}"))) {
             // ], [ goes to new line
             // }, [ goes to new line
             if (!opt.keep_array_indentation) {
@@ -645,33 +642,18 @@ qx.Class.define("zx.ui.richtext.Beautify", {
 
       if (flags.last_text === ";" || last_type === "TK_START_BLOCK") {
         print_newline();
-      } else if (
-        last_type === "TK_END_EXPR" ||
-        last_type === "TK_START_EXPR" ||
-        last_type === "TK_END_BLOCK" ||
-        flags.last_text === "."
-      ) {
+      } else if (last_type === "TK_END_EXPR" || last_type === "TK_START_EXPR" || last_type === "TK_END_BLOCK" || flags.last_text === ".") {
         // TODO: Consider whether forcing this is required.  Review failing tests when removed.
         allow_wrap_or_preserved_newline(current_token.wanted_newline);
         // do nothing on (( and )( and ][ and ]( and .(
-      } else if (
-        !(last_type === "TK_RESERVED" && current_token.text === "(") &&
-        last_type !== "TK_WORD" &&
-        last_type !== "TK_OPERATOR"
-      ) {
+      } else if (!(last_type === "TK_RESERVED" && current_token.text === "(") && last_type !== "TK_WORD" && last_type !== "TK_OPERATOR") {
         output.space_before_token = true;
-      } else if (
-        (last_type === "TK_RESERVED" && (flags.last_word === "function" || flags.last_word === "typeof")) ||
-        (flags.last_text === "*" && last_last_text === "function")
-      ) {
+      } else if ((last_type === "TK_RESERVED" && (flags.last_word === "function" || flags.last_word === "typeof")) || (flags.last_text === "*" && last_last_text === "function")) {
         // function() vs function ()
         if (opt.space_after_anon_function) {
           output.space_before_token = true;
         }
-      } else if (
-        last_type === "TK_RESERVED" &&
-        (in_array(flags.last_text, Tokenizer.line_starters) || flags.last_text === "catch")
-      ) {
+      } else if (last_type === "TK_RESERVED" && (in_array(flags.last_text, Tokenizer.line_starters) || flags.last_text === "catch")) {
         if (opt.space_before_conditional) {
           output.space_before_token = true;
         }
@@ -706,9 +688,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
       }
 
       if (flags.multiline_frame) {
-        allow_wrap_or_preserved_newline(
-          current_token.text === "]" && is_array(flags.mode) && !opt.keep_array_indentation
-        );
+        allow_wrap_or_preserved_newline(current_token.text === "]" && is_array(flags.mode) && !opt.keep_array_indentation);
       }
 
       if (opt.space_in_paren) {
@@ -761,12 +741,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
       var empty_anonymous_function = empty_braces && flags.last_word === "function" && last_type === "TK_END_EXPR";
 
       if (opt.brace_style === "expand" || (opt.brace_style === "none" && current_token.wanted_newline)) {
-        if (
-          last_type !== "TK_OPERATOR" &&
-          (empty_anonymous_function ||
-            last_type === "TK_EQUALS" ||
-            (last_type === "TK_RESERVED" && is_special_word(flags.last_text) && flags.last_text !== "else"))
-        ) {
+        if (last_type !== "TK_OPERATOR" && (empty_anonymous_function || last_type === "TK_EQUALS" || (last_type === "TK_RESERVED" && is_special_word(flags.last_text) && flags.last_text !== "else"))) {
           output.space_before_token = true;
         } else {
           print_newline(false, true);
@@ -824,11 +799,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
     }
 
     function handle_word() {
-      if (
-        current_token.type === "TK_RESERVED" &&
-        flags.mode !== MODE.ObjectLiteral &&
-        in_array(current_token.text, ["set", "get"])
-      ) {
+      if (current_token.type === "TK_RESERVED" && flags.mode !== MODE.ObjectLiteral && in_array(current_token.text, ["set", "get"])) {
         current_token.type = "TK_WORD";
       }
 
@@ -846,8 +817,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
         !is_expression(flags.mode) &&
         (last_type !== "TK_OPERATOR" || flags.last_text === "--" || flags.last_text === "++") &&
         last_type !== "TK_EQUALS" &&
-        (opt.preserve_newlines ||
-          !(last_type === "TK_RESERVED" && in_array(flags.last_text, ["var", "let", "const", "set", "get"])))
+        (opt.preserve_newlines || !(last_type === "TK_RESERVED" && in_array(flags.last_text, ["var", "let", "const", "set", "get"])))
       ) {
         print_newline();
       }
@@ -883,10 +853,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
         }
       }
 
-      if (
-        current_token.type === "TK_RESERVED" &&
-        (current_token.text === "case" || (current_token.text === "default" && flags.in_case_statement))
-      ) {
+      if (current_token.type === "TK_RESERVED" && (current_token.text === "case" || (current_token.text === "default" && flags.in_case_statement))) {
         print_newline();
         if (flags.case_body || opt.jslint_happy) {
           // switch cases following one another
@@ -900,10 +867,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
       }
 
       if (current_token.type === "TK_RESERVED" && current_token.text === "function") {
-        if (
-          in_array(flags.last_text, ["}", ";"]) ||
-          (output.just_added_newline() && !in_array(flags.last_text, ["[", "{", ":", "=", ","]))
-        ) {
+        if (in_array(flags.last_text, ["}", ";"]) || (output.just_added_newline() && !in_array(flags.last_text, ["[", "{", ":", "=", ","]))) {
           // make sure there is a nice clean space of at least one blank line
           // before a new function definition
           if (!output.just_added_blankline() && !current_token.comments_before.length) {
@@ -929,12 +893,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
         }
       }
 
-      if (
-        last_type === "TK_COMMA" ||
-        last_type === "TK_START_EXPR" ||
-        last_type === "TK_EQUALS" ||
-        last_type === "TK_OPERATOR"
-      ) {
+      if (last_type === "TK_COMMA" || last_type === "TK_START_EXPR" || last_type === "TK_EQUALS" || last_type === "TK_OPERATOR") {
         if (!start_of_object_property()) {
           allow_wrap_or_preserved_newline();
         }
@@ -952,11 +911,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
         if (!(current_token.type === "TK_RESERVED" && in_array(current_token.text, ["else", "catch", "finally"]))) {
           prefix = "NEWLINE";
         } else {
-          if (
-            opt.brace_style === "expand" ||
-            opt.brace_style === "end-expand" ||
-            (opt.brace_style === "none" && current_token.wanted_newline)
-          ) {
+          if (opt.brace_style === "expand" || opt.brace_style === "end-expand" || (opt.brace_style === "none" && current_token.wanted_newline)) {
             prefix = "NEWLINE";
           } else {
             prefix = "SPACE";
@@ -970,11 +925,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
         prefix = "SPACE";
       } else if (last_type === "TK_STRING") {
         prefix = "NEWLINE";
-      } else if (
-        last_type === "TK_RESERVED" ||
-        last_type === "TK_WORD" ||
-        (flags.last_text === "*" && last_last_text === "function")
-      ) {
+      } else if (last_type === "TK_RESERVED" || last_type === "TK_WORD" || (flags.last_text === "*" && last_last_text === "function")) {
         prefix = "SPACE";
       } else if (last_type === "TK_START_BLOCK") {
         prefix = "NEWLINE";
@@ -983,11 +934,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
         prefix = "NEWLINE";
       }
 
-      if (
-        current_token.type === "TK_RESERVED" &&
-        in_array(current_token.text, Tokenizer.line_starters) &&
-        flags.last_text !== ")"
-      ) {
+      if (current_token.type === "TK_RESERVED" && in_array(current_token.text, Tokenizer.line_starters) && flags.last_text !== ")") {
         if (flags.last_text === "else" || flags.last_text === "export") {
           prefix = "SPACE";
         } else {
@@ -996,12 +943,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
       }
 
       if (current_token.type === "TK_RESERVED" && in_array(current_token.text, ["else", "catch", "finally"])) {
-        if (
-          last_type !== "TK_END_BLOCK" ||
-          opt.brace_style === "expand" ||
-          opt.brace_style === "end-expand" ||
-          (opt.brace_style === "none" && current_token.wanted_newline)
-        ) {
+        if (last_type !== "TK_END_BLOCK" || opt.brace_style === "expand" || opt.brace_style === "end-expand" || (opt.brace_style === "none" && current_token.wanted_newline)) {
           print_newline();
         } else {
           output.trim(true);
@@ -1018,11 +960,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
           // no newline between 'return nnn'
           output.space_before_token = true;
         } else if (last_type !== "TK_END_EXPR") {
-          if (
-            (last_type !== "TK_START_EXPR" ||
-              !(current_token.type === "TK_RESERVED" && in_array(current_token.text, ["var", "let", "const"]))) &&
-            flags.last_text !== ":"
-          ) {
+          if ((last_type !== "TK_START_EXPR" || !(current_token.type === "TK_RESERVED" && in_array(current_token.text, ["var", "let", "const"]))) && flags.last_text !== ":") {
             // no need to force newline on 'var': for (var x = 0...)
             if (current_token.type === "TK_RESERVED" && current_token.text === "if" && flags.last_text === "else") {
               // no newline for } else if {
@@ -1031,11 +969,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
               print_newline();
             }
           }
-        } else if (
-          current_token.type === "TK_RESERVED" &&
-          in_array(current_token.text, Tokenizer.line_starters) &&
-          flags.last_text !== ")"
-        ) {
+        } else if (current_token.type === "TK_RESERVED" && in_array(current_token.text, Tokenizer.line_starters) && flags.last_text !== ")") {
           print_newline();
         }
       } else if (flags.multiline_frame && is_array(flags.mode) && flags.last_text === "," && last_last_text === "}") {
@@ -1074,12 +1008,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
         output.space_before_token = true;
       } else if (last_type === "TK_RESERVED" || last_type === "TK_WORD") {
         output.space_before_token = true;
-      } else if (
-        last_type === "TK_COMMA" ||
-        last_type === "TK_START_EXPR" ||
-        last_type === "TK_EQUALS" ||
-        last_type === "TK_OPERATOR"
-      ) {
+      } else if (last_type === "TK_COMMA" || last_type === "TK_START_EXPR" || last_type === "TK_EQUALS" || last_type === "TK_OPERATOR") {
         if (!start_of_object_property()) {
           allow_wrap_or_preserved_newline();
         }
@@ -1122,10 +1051,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
       }
 
       print_token();
-      if (
-        flags.mode === MODE.ObjectLiteral ||
-        (flags.mode === MODE.Statement && flags.parent.mode === MODE.ObjectLiteral)
-      ) {
+      if (flags.mode === MODE.ObjectLiteral || (flags.mode === MODE.Statement && flags.parent.mode === MODE.ObjectLiteral)) {
         if (flags.mode === MODE.Statement) {
           restore_mode();
         }
@@ -1186,9 +1112,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
       if (
         in_array(current_token.text, ["--", "++", "!", "~"]) ||
         (in_array(current_token.text, ["-", "+"]) &&
-          (in_array(last_type, ["TK_START_BLOCK", "TK_START_EXPR", "TK_EQUALS", "TK_OPERATOR"]) ||
-            in_array(flags.last_text, Tokenizer.line_starters) ||
-            flags.last_text === ","))
+          (in_array(last_type, ["TK_START_BLOCK", "TK_START_EXPR", "TK_EQUALS", "TK_OPERATOR"]) || in_array(flags.last_text, Tokenizer.line_starters) || flags.last_text === ","))
       ) {
         // unary operators (and binary +/- pretending to be unary) special cases
 
@@ -1204,15 +1128,10 @@ qx.Class.define("zx.ui.richtext.Beautify", {
         if (last_type === "TK_RESERVED" || last_type === "TK_END_EXPR") {
           space_before = true;
         } else if (last_type === "TK_OPERATOR") {
-          space_before =
-            (in_array(current_token.text, ["--", "-"]) && in_array(flags.last_text, ["--", "-"])) ||
-            (in_array(current_token.text, ["++", "+"]) && in_array(flags.last_text, ["++", "+"]));
+          space_before = (in_array(current_token.text, ["--", "-"]) && in_array(flags.last_text, ["--", "-"])) || (in_array(current_token.text, ["++", "+"]) && in_array(flags.last_text, ["++", "+"]));
         }
 
-        if (
-          (flags.mode === MODE.BlockStatement || flags.mode === MODE.Statement) &&
-          (flags.last_text === "{" || flags.last_text === ";")
-        ) {
+        if ((flags.mode === MODE.BlockStatement || flags.mode === MODE.Statement) && (flags.last_text === "{" || flags.last_text === ";")) {
           // { foo; --i }
           // foo(); --bar;
           print_newline();
@@ -1514,27 +1433,12 @@ qx.Class.define("zx.ui.richtext.Beautify", {
     var whitespace = "\n\r\t ".split("");
     var digit = /[0-9]/;
 
-    var punct = (
-      "+ - * / % & ++ -- = += -= *= /= %= == === != !== > < >= <= >> << >>> >>>= >>= <<= && &= | || ! ~ , : ? ^ ^= |= :: =>" +
-      " <%= <% %> <?= <? ?>"
-    ).split(" "); // try to be a good boy and try not to break the markup language identifiers
+    var punct = ("+ - * / % & ++ -- = += -= *= /= %= == === != !== > < >= <= >> << >>> >>>= >>= <<= && &= | || ! ~ , : ? ^ ^= |= :: =>" + " <%= <% %> <?= <? ?>").split(" "); // try to be a good boy and try not to break the markup language identifiers
 
     // words which should always start on new line.
-    this.line_starters =
-      "continue,try,throw,return,var,let,const,if,switch,case,default,for,while,break,function,yield,import,export".split(
-        ","
-      );
-    var reserved_words = this.line_starters.concat([
-      "do",
-      "in",
-      "else",
-      "get",
-      "set",
-      "new",
-      "catch",
-      "finally",
-      "typeof"
-    ]);
+    this.line_starters = "continue,try,throw,return,var,let,const,if,switch,case,default,for,while,break,function,yield,import,export".split(",");
+
+    var reserved_words = this.line_starters.concat(["do", "in", "else", "get", "set", "new", "catch", "finally", "typeof"]);
 
     var n_newlines, whitespace_before_token, in_html_comment, tokens, parser_pos;
     var input_length;
@@ -1555,12 +1459,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
       while (!(last && last.type === "TK_EOF")) {
         token_values = tokenize_next();
         next = new Token(token_values[1], token_values[0], n_newlines, whitespace_before_token);
-        while (
-          next.type === "TK_INLINE_COMMENT" ||
-          next.type === "TK_COMMENT" ||
-          next.type === "TK_BLOCK_COMMENT" ||
-          next.type === "TK_UNKNOWN"
-        ) {
+        while (next.type === "TK_INLINE_COMMENT" || next.type === "TK_COMMENT" || next.type === "TK_BLOCK_COMMENT" || next.type === "TK_UNKNOWN") {
           comments.push(next);
           token_values = tokenize_next();
           next = new Token(token_values[1], token_values[0], n_newlines, whitespace_before_token);
@@ -1578,9 +1477,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
         } else if (
           (next.type === "TK_END_BLOCK" || next.type === "TK_END_EXPR") &&
           open &&
-          ((next.text === "]" && open.text === "[") ||
-            (next.text === ")" && open.text === "(") ||
-            (next.text === "}" && open.text === "}"))
+          ((next.text === "]" && open.text === "[") || (next.text === ")" && open.text === "(") || (next.text === "}" && open.text === "}"))
         ) {
           next.parent = open.parent;
           open = open_stack.pop();
@@ -1696,13 +1593,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
           }
         }
 
-        if (
-          !(
-            last_token.type === "TK_DOT" ||
-            (last_token.type === "TK_RESERVED" && in_array(last_token.text, ["set", "get"]))
-          ) &&
-          in_array(c, reserved_words)
-        ) {
+        if (!(last_token.type === "TK_DOT" || (last_token.type === "TK_RESERVED" && in_array(last_token.text, ["set", "get"]))) && in_array(c, reserved_words)) {
           if (c === "in") {
             // hack for 'in' operator
             return [c, "TK_OPERATOR"];
@@ -1740,14 +1631,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
         if (input.charAt(parser_pos) === "*") {
           parser_pos += 1;
           if (parser_pos < input_length) {
-            while (
-              parser_pos < input_length &&
-              !(
-                input.charAt(parser_pos) === "*" &&
-                input.charAt(parser_pos + 1) &&
-                input.charAt(parser_pos + 1) === "/"
-              )
-            ) {
+            while (parser_pos < input_length && !(input.charAt(parser_pos) === "*" && input.charAt(parser_pos + 1) && input.charAt(parser_pos + 1) === "/")) {
               c = input.charAt(parser_pos);
               comment += c;
               if (c === "\n" || c === "\r") {
@@ -1785,31 +1669,15 @@ qx.Class.define("zx.ui.richtext.Beautify", {
         c === "'" ||
         c === '"' || // string
         ((c === "/" || // regexp
-          (opts.e4x &&
-            c === "<" &&
-            input
-              .slice(parser_pos - 1)
-              .match(
-                /^<([-a-zA-Z:0-9_.]+|{[^{}]*}|!\[CDATA\[[\s\S]*?\]\])\s*([-a-zA-Z:0-9_.]+=('[^']*'|"[^"]*"|{[^{}]*})\s*)*\/?\s*>/
-              ))) && // xml // regex and xml can only appear in specific locations during parsing
-          ((last_token.type === "TK_RESERVED" &&
-            in_array(last_token.text, ["return", "case", "throw", "else", "do", "typeof", "yield"])) ||
+          (opts.e4x && c === "<" && input.slice(parser_pos - 1).match(/^<([-a-zA-Z:0-9_.]+|{[^{}]*}|!\[CDATA\[[\s\S]*?\]\])\s*([-a-zA-Z:0-9_.]+=('[^']*'|"[^"]*"|{[^{}]*})\s*)*\/?\s*>/))) &&
+          // xml // regex and xml can only appear in specific locations during parsing
+          ((last_token.type === "TK_RESERVED" && in_array(last_token.text, ["return", "case", "throw", "else", "do", "typeof", "yield"])) ||
             (last_token.type === "TK_END_EXPR" &&
               last_token.text === ")" &&
               last_token.parent &&
               last_token.parent.type === "TK_RESERVED" &&
               in_array(last_token.parent.text, ["if", "while", "for"])) ||
-            in_array(last_token.type, [
-              "TK_COMMENT",
-              "TK_START_EXPR",
-              "TK_START_BLOCK",
-              "TK_END_BLOCK",
-              "TK_OPERATOR",
-              "TK_EQUALS",
-              "TK_EOF",
-              "TK_SEMICOLON",
-              "TK_COMMA"
-            ])))
+            in_array(last_token.type, ["TK_COMMENT", "TK_START_EXPR", "TK_START_BLOCK", "TK_END_BLOCK", "TK_OPERATOR", "TK_EQUALS", "TK_EOF", "TK_SEMICOLON", "TK_COMMA"])))
       ) {
         var sep = c,
           esc = false,
@@ -1822,11 +1690,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
           // handle regexp
           //
           var in_char_class = false;
-          while (
-            parser_pos < input_length &&
-            (esc || in_char_class || input.charAt(parser_pos) !== sep) &&
-            !acorn.newline.test(input.charAt(parser_pos))
-          ) {
+          while (parser_pos < input_length && (esc || in_char_class || input.charAt(parser_pos) !== sep) && !acorn.newline.test(input.charAt(parser_pos))) {
             resulting_string += input.charAt(parser_pos);
             if (!esc) {
               esc = input.charAt(parser_pos) === "\\";
@@ -1844,8 +1708,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
           //
           // handle e4x xml literals
           //
-          var xmlRegExp =
-            /<(\/?)([-a-zA-Z:0-9_.]+|{[^{}]*}|!\[CDATA\[[\s\S]*?\]\])\s*([-a-zA-Z:0-9_.]+=('[^']*'|"[^"]*"|{[^{}]*})\s*)*(\/?)\s*>/g;
+          var xmlRegExp = /<(\/?)([-a-zA-Z:0-9_.]+|{[^{}]*}|!\[CDATA\[[\s\S]*?\]\])\s*([-a-zA-Z:0-9_.]+=('[^']*'|"[^"]*"|{[^{}]*})\s*)*(\/?)\s*>/g;
           var xmlStr = input.slice(parser_pos - 1);
           var match = xmlRegExp.exec(xmlStr);
           if (match && match.index === 0) {
@@ -1877,11 +1740,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
           //
           // Template strings can travers lines without escape characters.
           // Other strings cannot
-          while (
-            parser_pos < input_length &&
-            (esc ||
-              (input.charAt(parser_pos) !== sep && (sep === "`" || !acorn.newline.test(input.charAt(parser_pos)))))
-          ) {
+          while (parser_pos < input_length && (esc || (input.charAt(parser_pos) !== sep && (sep === "`" || !acorn.newline.test(input.charAt(parser_pos)))))) {
             resulting_string += input.charAt(parser_pos);
             if (esc) {
               if (input.charAt(parser_pos) === "x" || input.charAt(parser_pos) === "u") {
@@ -2142,8 +2001,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
     options = options || {};
     var indentSize = options.indent_size || 4;
     var indentCharacter = options.indent_char || " ";
-    var selectorSeparatorNewline =
-      options.selector_separator_newline === undefined ? true : options.selector_separator_newline;
+    var selectorSeparatorNewline = options.selector_separator_newline === undefined ? true : options.selector_separator_newline;
     var end_with_newline = options.end_with_newline === undefined ? false : options.end_with_newline;
     var newline_between_rules = options.newline_between_rules === undefined ? true : options.newline_between_rules;
 
@@ -2496,6 +2354,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
     "@supports": true,
     "@document": true
   };
+
   css_beautify.CONDITIONAL_GROUP_RULE = {
     "@media": true,
     "@supports": true,
@@ -2523,7 +2382,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
         // If we don't even have window, try global.
         global.css_beautify = css_beautify;
     }
-*/
+  */
 })();
 
 /*jshint curly:true, eqeqeq:true, laxbreak:true, noempty:false */
@@ -2614,26 +2473,12 @@ qx.Class.define("zx.ui.richtext.Beautify", {
   function style_html(html_source, options, js_beautify, css_beautify) {
     //Wrapper function to invoke all the necessary constructors and deal with the output.
 
-    var multi_parser,
-      indent_inner_html,
-      indent_size,
-      indent_character,
-      wrap_line_length,
-      brace_style,
-      unformatted,
-      preserve_newlines,
-      max_preserve_newlines,
-      indent_handlebars,
-      end_with_newline;
+    var multi_parser, indent_inner_html, indent_size, indent_character, wrap_line_length, brace_style, unformatted, preserve_newlines, max_preserve_newlines, indent_handlebars, end_with_newline;
 
     options = options || {};
 
     // backwards compatibility to 1.3.4
-    if (
-      (options.wrap_line_length === undefined || parseInt(options.wrap_line_length, 10) === 0) &&
-      options.max_char !== undefined &&
-      parseInt(options.max_char, 10) !== 0
-    ) {
+    if ((options.wrap_line_length === undefined || parseInt(options.wrap_line_length, 10) === 0) && options.max_char !== undefined && parseInt(options.max_char, 10) !== 0) {
       options.wrap_line_length = options.max_char;
     }
 
@@ -2641,8 +2486,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
     indent_size = options.indent_size === undefined ? 4 : parseInt(options.indent_size, 10);
     indent_character = options.indent_char === undefined ? " " : options.indent_char;
     brace_style = options.brace_style === undefined ? "collapse" : options.brace_style;
-    wrap_line_length =
-      parseInt(options.wrap_line_length, 10) === 0 ? 32786 : parseInt(options.wrap_line_length || 250, 10);
+    wrap_line_length = parseInt(options.wrap_line_length, 10) === 0 ? 32786 : parseInt(options.wrap_line_length || 250, 10);
     unformatted = options.unformatted || [
       "a",
       "span",
@@ -2682,12 +2526,9 @@ qx.Class.define("zx.ui.richtext.Beautify", {
       "h5",
       "h6"
     ];
+
     preserve_newlines = options.preserve_newlines === undefined ? true : options.preserve_newlines;
-    max_preserve_newlines = preserve_newlines
-      ? isNaN(parseInt(options.max_preserve_newlines, 10))
-        ? 32786
-        : parseInt(options.max_preserve_newlines, 10)
-      : 0;
+    max_preserve_newlines = preserve_newlines ? (isNaN(parseInt(options.max_preserve_newlines, 10)) ? 32786 : parseInt(options.max_preserve_newlines, 10)) : 0;
     indent_handlebars = options.indent_handlebars === undefined ? false : options.indent_handlebars;
     end_with_newline = options.end_with_newline === undefined ? false : options.end_with_newline;
 
@@ -2701,6 +2542,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
         parentcount: 1,
         parent1: ""
       };
+
       this.tag_type = "";
       this.token_text = this.last_token = this.last_text = this.token_type = "";
       this.newlines = 0;
@@ -2709,10 +2551,9 @@ qx.Class.define("zx.ui.richtext.Beautify", {
       this.Utils = {
         //Uilities made available to the various functions
         whitespace: "\n\r\t ".split(""),
-        single_token:
-          "br,input,link,meta,!doctype,basefont,base,area,hr,wbr,param,img,isindex,?xml,embed,?php,?,?=".split(","), //all the single tags for HTML
+        single_token: "br,input,link,meta,!doctype,basefont,base,area,hr,wbr,param,img,isindex,?xml,embed,?php,?,?=".split(","), //all the single tags for HTML
         extra_liners: "head,body,/html".split(","), //for tags that need a line of whitespace before them
-        in_array: function (what, arr) {
+        in_array(what, arr) {
           for (var i = 0; i < arr.length; i++) {
             if (what === arr[i]) {
               return true;
@@ -2971,13 +2812,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
             break;
           }
 
-          if (
-            indent_handlebars &&
-            tag_start_char === "{" &&
-            content.length > 2 &&
-            content[content.length - 2] === "}" &&
-            content[content.length - 1] === "}"
-          ) {
+          if (indent_handlebars && tag_start_char === "{" && content.length > 2 && content[content.length - 2] === "}" && content[content.length - 1] === "}") {
             break;
           }
         } while (input_char !== ">");
@@ -3001,10 +2836,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
           tag_offset = tag_complete[2] === "#" ? 3 : 2;
         }
         var tag_check = tag_complete.substring(tag_offset, tag_index).toLowerCase();
-        if (
-          tag_complete.charAt(tag_complete.length - 2) === "/" ||
-          this.Utils.in_array(tag_check, this.Utils.single_token)
-        ) {
+        if (tag_complete.charAt(tag_complete.length - 2) === "/" || this.Utils.in_array(tag_check, this.Utils.single_token)) {
           //if this tag name is a single tag type (either in the list or has a closing /)
           if (!peek) {
             this.tag_type = "SINGLE";
@@ -3024,19 +2856,13 @@ qx.Class.define("zx.ui.richtext.Beautify", {
           this.tag_type = "SINGLE";
         } else if (
           tag_check === "script" &&
-          (tag_complete.search("type") === -1 ||
-            (tag_complete.search("type") > -1 &&
-              tag_complete.search(/\b(text|application)\/(x-)?(javascript|ecmascript|jscript|livescript)/) > -1))
+          (tag_complete.search("type") === -1 || (tag_complete.search("type") > -1 && tag_complete.search(/\b(text|application)\/(x-)?(javascript|ecmascript|jscript|livescript)/) > -1))
         ) {
           if (!peek) {
             this.record_tag(tag_check);
             this.tag_type = "SCRIPT";
           }
-        } else if (
-          tag_check === "style" &&
-          (tag_complete.search("type") === -1 ||
-            (tag_complete.search("type") > -1 && tag_complete.search("text/css") > -1))
-        ) {
+        } else if (tag_check === "style" && (tag_complete.search("type") === -1 || (tag_complete.search("type") > -1 && tag_complete.search("text/css") > -1))) {
           if (!peek) {
             this.record_tag(tag_check);
             this.tag_type = "STYLE";
@@ -3373,8 +3199,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
             var tag_name = multi_parser.token_text.match(/\w+/)[0];
             var tag_extracted_from_last_output = null;
             if (multi_parser.output.length) {
-              tag_extracted_from_last_output =
-                multi_parser.output[multi_parser.output.length - 1].match(/(?:<|{{#)\s*(\w+)/);
+              tag_extracted_from_last_output = multi_parser.output[multi_parser.output.length - 1].match(/(?:<|{{#)\s*(\w+)/);
             }
             if (tag_extracted_from_last_output === null || tag_extracted_from_last_output[1] !== tag_name) {
               multi_parser.print_newline(false, multi_parser.output);
@@ -3452,6 +3277,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
           }
           break;
       }
+
       multi_parser.last_token = multi_parser.token_type;
       multi_parser.last_text = multi_parser.token_text;
     }
@@ -3472,8 +3298,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
         define(["require", "./beautify", "./beautify-css"], function(requireamd) {
             var js_beautify =  requireamd("./beautify");
             var css_beautify =  requireamd("./beautify-css");
-
-            return {
+             return {
               html_beautify: function(html_source, options) {
                 return style_html(html_source, options, js_beautify.js_beautify, css_beautify.css_beautify);
               }
@@ -3484,8 +3309,7 @@ qx.Class.define("zx.ui.richtext.Beautify", {
         // and you will be able to `var html_beautify = require("beautify").html_beautify`.
         var js_beautify = require('./beautify.js');
         var css_beautify = require('./beautify-css.js');
-
-        exports.html_beautify = function(html_source, options) {
+         exports.html_beautify = function(html_source, options) {
             return style_html(html_source, options, js_beautify.js_beautify, css_beautify.css_beautify);
         };
     } else if (typeof window !== "undefined") {

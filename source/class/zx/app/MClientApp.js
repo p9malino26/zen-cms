@@ -45,6 +45,7 @@ qx.Mixin.define("zx.app.MClientApp", {
         timeout: 60000,
         polling: true
       }));
+
       if (!endpoint.isPolling()) {
         this.warn(" *************** POLLING TURNED OFF IN CODE ********* ");
       }
@@ -68,6 +69,7 @@ qx.Mixin.define("zx.app.MClientApp", {
           "X-Zx-Io-Remote-SessionUuid": this.__endpoint.getUuid(),
           "X-Zx-Io-Remote-ApplicationName": qx.core.Environment.get("qx.compiler.applicationName")
         });
+
         this.__uploadMgr.addListener("addFile", evt => {
           var file = evt.getData();
           file.setParam("X-Zx-Io-Remote-SessionUuid", this.__endpoint.getUuid());

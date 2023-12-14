@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.app.auth.ImpersonateDlg", {
   extend: zx.ui.utils.AbstractDialog,
@@ -22,7 +22,7 @@ qx.Class.define("zx.app.auth.ImpersonateDlg", {
    * Constructor
    */
   construct(caption) {
-    this.base(arguments, caption || "Impersonate");
+    super(caption || "Impersonate");
     this.setLayout(new qx.ui.layout.VBox(10));
     this.set({ maxWidth: 500, minWidth: 300 });
 
@@ -49,9 +49,9 @@ qx.Class.define("zx.app.auth.ImpersonateDlg", {
      */
     _applyLink(value) {
       this.getQxObject("edtLink").setValue(value || "");
-      if (value)
+      if (value) {
         value = `You can click <a href="${value}" target="_blank">this link</a> or copy from the field below`;
-      else value = "";
+      } else value = "";
       this.getQxObject("lblLink").setValue(value);
     },
 
@@ -83,7 +83,7 @@ qx.Class.define("zx.app.auth.ImpersonateDlg", {
           });
       }
 
-      return this.base(arguments, id);
+      return super._createQxObjectImpl(id);
     }
   },
 
@@ -96,8 +96,7 @@ qx.Class.define("zx.app.auth.ImpersonateDlg", {
     showDialog(link) {
       var dlg = zx.app.auth.ImpersonateDlg.__instance;
       if (!dlg) {
-        dlg = zx.app.auth.ImpersonateDlg.__instance =
-          new zx.app.auth.ImpersonateDlg();
+        dlg = zx.app.auth.ImpersonateDlg.__instance = new zx.app.auth.ImpersonateDlg();
         var doc = qx.core.Init.getApplication().getRoot();
         doc.add(dlg);
       }

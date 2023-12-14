@@ -19,7 +19,7 @@ qx.Class.define("zx.test.ui.editor.PersonEditor", {
   extend: zx.ui.editor.FormEditor,
 
   construct() {
-    this.base(arguments);
+    super();
     this._setLayout(new qx.ui.layout.VBox());
     this._add(this.getQxObject("grpName"));
     this._add(this.getQxObject("grpAddress"));
@@ -36,7 +36,7 @@ qx.Class.define("zx.test.ui.editor.PersonEditor", {
     _masterValueEditor: true, // true by default, set here for clarity
 
     _saveValueImpl() {
-      this.base(arguments);
+      super._saveValueImpl();
       this.info("Saving person");
     },
 
@@ -48,6 +48,7 @@ qx.Class.define("zx.test.ui.editor.PersonEditor", {
           this._addField(grp, "edtAge", "Age", "age", {
             dataType: "Integer"
           });
+
           return grp;
 
         case "edtName":
@@ -76,7 +77,7 @@ qx.Class.define("zx.test.ui.editor.PersonEditor", {
           return ed;
       }
 
-      return this.base(arguments, id);
+      return super._createQxObjectImpl(id);
     }
   }
 });

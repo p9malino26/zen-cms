@@ -20,7 +20,7 @@ qx.Class.define("zx.thin.ui.container.AbstractWindow", {
   type: "abstract",
 
   construct() {
-    this.base(arguments);
+    super();
     this.__mover = new zx.thin.core.Mover(this._getMoverDragElement(), this);
 
     this._createElements();
@@ -130,10 +130,11 @@ qx.Class.define("zx.thin.ui.container.AbstractWindow", {
       }
       if (this.isModal()) {
         let modal = zx.thin.core.Modal.getInstance();
-        if (value) modal.pushTarget(this);
-        else modal.removeTarget(this);
+        if (value) {
+          modal.pushTarget(this);
+        } else modal.removeTarget(this);
       }
-      this.base(arguments, value, oldValue);
+      super._applyVisible(value, oldValue);
     },
 
     /**
@@ -172,16 +173,18 @@ qx.Class.define("zx.thin.ui.container.AbstractWindow", {
      * Apply for `inline`
      */
     _applyInline(value) {
-      if (value) this.addClass("qx-window-inline");
-      else this.removeClass("qx-window-inline");
+      if (value) {
+        this.addClass("qx-window-inline");
+      } else this.removeClass("qx-window-inline");
       this._updateMover();
     },
 
     _applyModal(value) {
       if (this.isVisible()) {
         let modal = zx.thin.core.Modal.getInstance();
-        if (value) modal.pushTarget(this);
-        else modal.removeTarget(this);
+        if (value) {
+          modal.pushTarget(this);
+        } else modal.removeTarget(this);
       }
     },
 
@@ -217,14 +220,16 @@ qx.Class.define("zx.thin.ui.container.AbstractWindow", {
      * @param evt {Event}
      */
     _onWindowResize(evt) {
-      if (this.getCentered() != "none") this.center(this.getCentered());
+      if (this.getCentered() != "none") {
+        this.center(this.getCentered());
+      }
     },
 
     /**
      * @Override
      */
     _connectDomNode(domNode) {
-      this.base(arguments, domNode);
+      super._connectDomNode(domNode);
       if (this.getCentered() != "none") {
         this.center(this.getCentered());
         setTimeout(() => this.center(this.getCentered()), 1);
@@ -237,7 +242,9 @@ qx.Class.define("zx.thin.ui.container.AbstractWindow", {
      * @param centered {String} same as the centered property, this controls how the centering is done
      */
     center(centered) {
-      if (centered === undefined) centered = "both";
+      if (centered === undefined) {
+        centered = "both";
+      }
       if (this.isInline()) {
         if (centered == "x" || centered == "both") {
           this.setStyles({
@@ -250,13 +257,19 @@ qx.Class.define("zx.thin.ui.container.AbstractWindow", {
           marginLeft: null,
           marginRight: null
         });
-        if (!this.canBeSeen()) return;
+
+        if (!this.canBeSeen()) {
+          return;
+        }
 
         let size = this.getDimensions();
         let css = {};
-        if (centered == "x" || centered == "both") css.left = Math.round((qx.bom.Viewport.getWidth() - size.width) / 2);
-        if (centered == "y" || centered == "both")
+        if (centered == "x" || centered == "both") {
+          css.left = Math.round((qx.bom.Viewport.getWidth() - size.width) / 2);
+        }
+        if (centered == "y" || centered == "both") {
           css.top = Math.round((qx.bom.Viewport.getHeight() - size.height) / 2);
+        }
         this.setStyles(css);
       }
     },
@@ -272,7 +285,8 @@ qx.Class.define("zx.thin.ui.container.AbstractWindow", {
         case "qx.window.body":
           return <div className="qx-window-body"></div>;
       }
-      return this.base(arguments, id);
+
+      return super._createQxObjectImpl(id);
     }
   }
 });

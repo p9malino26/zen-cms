@@ -25,7 +25,7 @@ qx.Class.define("zx.server.Config", {
    * Constructor
    */
   construct() {
-    this.base(arguments);
+    super();
   },
 
   /**

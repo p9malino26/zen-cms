@@ -1,26 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.thin.ui.container.Dialog", {
   extend: zx.thin.ui.container.AbstractWindow,
 
   construct() {
-    this.base(arguments);
+    super();
     this.initButtonPlacement();
     this.initBodyText();
   },
@@ -52,8 +51,12 @@ qx.Class.define("zx.thin.ui.container.Dialog", {
      * Apply for `buttonPlacement`
      */
     _applyButtonPlacement(value, oldValue) {
-      if (oldValue) this.removeClass("qx-dialog-button-" + oldValue);
-      if (value) this.addClass("qx-dialog-button-" + value);
+      if (oldValue) {
+        this.removeClass("qx-dialog-button-" + oldValue);
+      }
+      if (value) {
+        this.addClass("qx-dialog-button-" + value);
+      }
     },
 
     /**
@@ -93,10 +96,10 @@ qx.Class.define("zx.thin.ui.container.Dialog", {
       }
       this.getQxObject("qx.window.footer").add(btn);
       if (!qxObjectId) {
-        qxObjectId =
-          "__generated__" + caption.toLowerCase().replace(/[^a-z0-9_]/g, "");
-        if (icon)
+        qxObjectId = "__generated__" + caption.toLowerCase().replace(/[^a-z0-9_]/g, "");
+        if (icon) {
           qxObjectId += "_" + icon.toLowerCase().replace(/[^a-z0-9_]/g, "");
+        }
       }
       btn.setQxObjectId(qxObjectId);
       return btn;
@@ -131,7 +134,8 @@ qx.Class.define("zx.thin.ui.container.Dialog", {
         case "bodyText":
           return <div></div>;
       }
-      return this.base(arguments, id);
+
+      return super._createQxObjectImpl(id);
     }
   },
 
@@ -141,6 +145,7 @@ qx.Class.define("zx.thin.ui.container.Dialog", {
         centered: "both",
         movable: false
       });
+
       let btn = dlg.addButton("OK", null, "btnOk");
       btn.addListener("execute", () => dlg.close("ok"));
       dlg.setText(msg);
@@ -152,6 +157,7 @@ qx.Class.define("zx.thin.ui.container.Dialog", {
         centered: "both",
         movable: false
       });
+
       const TYPES = {
         yes: { caption: "Yes" },
         no: { caption: "No" },
@@ -162,17 +168,14 @@ qx.Class.define("zx.thin.ui.container.Dialog", {
         next: { caption: "Next" },
         prev: { caption: "Previous" }
       };
+
       buttons.forEach(id => {
         let type = TYPES[id];
         let btn;
-        if (!type)
+        if (!type) {
           btn = dlg.addButton(id, null, "btn" + qx.lang.String.firstUp(id));
-        else
-          btn = dlg.addButton(
-            type.caption,
-            type.icon || null,
-            "btn" + qx.lang.String.firstUp(id)
-          );
+        } else btn = dlg.addButton(type.caption, type.icon || null, "btn" + qx.lang.String.firstUp(id));
+
         btn.setValue(id);
         btn.addListener("execute", () => dlg.close(id));
       });

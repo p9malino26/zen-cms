@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * When a test is run, it is given an instance of TestResult to store its results in
@@ -97,7 +96,9 @@ qx.Class.define("zx.app.demo.TestResult", {
      * @param {String} msg
      */
     log(msg) {
-      if (!this.__log) this.__log = [];
+      if (!this.__log) {
+        this.__log = [];
+      }
       this.__log.push({
         msg: msg,
         phase: this.getPhase(),
@@ -111,7 +112,9 @@ qx.Class.define("zx.app.demo.TestResult", {
      * @param {Object[]} log
      */
     importLog(log) {
-      if (!this.__log) this.__log = [];
+      if (!this.__log) {
+        this.__log = [];
+      }
       log.forEach(entry => this.__log.push(entry));
     },
 
@@ -128,7 +131,9 @@ qx.Class.define("zx.app.demo.TestResult", {
      * @returns {Object[]}
      */
     getLog() {
-      if (!this.__log) return [];
+      if (!this.__log) {
+        return [];
+      }
       return this.__log;
     },
 

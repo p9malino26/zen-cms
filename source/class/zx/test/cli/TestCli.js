@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.cli.TestCli", {
   extend: qx.dev.unit.TestCase,
@@ -39,6 +39,7 @@ qx.Class.define("zx.test.cli.TestCli", {
           required: true
         })
       );
+
       sub2.addArgument(new zx.cli.Argument("arg-one"));
       sub2.addArgument(
         new zx.cli.Argument("arg-array").set({
@@ -46,17 +47,8 @@ qx.Class.define("zx.test.cli.TestCli", {
         })
       );
 
-      let cmd = root.parseRoot([
-        "xxx",
-        "hello",
-        "--flag-one=alpha",
-        "world",
-        "--integer",
-        "4",
-        "five",
-        "six",
-        "seven"
-      ]);
+      let cmd = root.parseRoot(["xxx", "hello", "--flag-one=alpha", "world", "--integer", "4", "five", "six", "seven"]);
+
       this.assertTrue(cmd.getName() == "world");
       this.assertTrue(cmd.getParent().getFlag("flagOne").getValue() == "alpha");
       this.assertTrue(cmd.getFlag("integer").getValue() === 4);
@@ -66,17 +58,8 @@ qx.Class.define("zx.test.cli.TestCli", {
       this.assertTrue(arr[0] === "six");
       this.assertTrue(arr[1] === "seven");
 
-      cmd = root.parseRoot([
-        "xxx",
-        "hello",
-        "world",
-        "--",
-        "--integer",
-        "4",
-        "five",
-        "six",
-        "seven"
-      ]);
+      cmd = root.parseRoot(["xxx", "hello", "world", "--", "--integer", "4", "five", "six", "seven"]);
+
       this.assertTrue(cmd.getName() == "world");
       this.assertTrue(cmd.getArgument(0).getValue() === "--integer");
       arr = cmd.getArgument(1).getValue();

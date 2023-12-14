@@ -1,25 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.io.remote.RemoteXhrServer", {
   extend: qx.core.Object,
 
   construct() {
-    this.base(arguments);
+    super();
     let server = zx.server.Standalone.getInstance();
     let controller = server.getNetworkController();
 
@@ -29,10 +29,7 @@ qx.Class.define("zx.test.io.remote.RemoteXhrServer", {
     });
     controller.putUriMapping(this.classname + ".grandad", this._grandad);
 
-    controller.putUriMapping(
-      this.classname + ".proxyTestOne",
-      new zx.test.io.remote.ProxyTestOne()
-    );
+    controller.putUriMapping(this.classname + ".proxyTestOne", new zx.test.io.remote.ProxyTestOne());
 
     this._debbie = new zx.test.io.remote.Person("Debbie");
     this._clarice = new zx.test.io.remote.Person("Clarice");
@@ -50,9 +47,8 @@ qx.Class.define("zx.test.io.remote.RemoteXhrServer", {
     const traverse = person => {
       person.getChildren().addListener("change", evt => {
         let data = evt.getData();
-        (data.removed || []).forEach(item =>
-          this.info(person.getName() + ": removed child " + item.getName())
-        );
+        (data.removed || []).forEach(item => this.info(person.getName() + ": removed child " + item.getName()));
+
         (data.added || []).forEach(item => {
           this.info(person.getName() + ": added child " + item.getName());
           traverse(item);

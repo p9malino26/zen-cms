@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * A Piece which is a container for multiple pieces; the container
@@ -36,10 +35,7 @@ qx.Class.define("zx.cms.content.ContainerPiece", {
       init: "vertical",
       check: ["horizontal", "vertical", "flow"],
       event: "changeOrientation",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** Pieces in the Page */
@@ -62,10 +58,7 @@ qx.Class.define("zx.cms.content.ContainerPiece", {
       init: "",
       check: "String",
       event: "changeCssClass",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** Layout used to present this page */
@@ -74,10 +67,7 @@ qx.Class.define("zx.cms.content.ContainerPiece", {
       nullable: true,
       check: "String",
       event: "changeLayout",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     }
   },
 
@@ -97,7 +87,7 @@ qx.Class.define("zx.cms.content.ContainerPiece", {
      * @Override
      */
     async prepareContext(context, rendering) {
-      await this.base(arguments, context);
+      await super.prepareContext(context);
       context.pieces = [];
       context.orientation = this.getOrientation();
       context.cssClass = this.getCssClass();

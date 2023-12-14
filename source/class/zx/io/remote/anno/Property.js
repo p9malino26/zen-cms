@@ -72,6 +72,7 @@ qx.Class.define("zx.io.remote.anno.Property", {
     statics.PROTECTED = new zx.io.remote.anno.Property().set({
       clientEditable: false
     });
+
     statics.EMBED = new zx.io.remote.anno.Property().set({ embed: true });
   }
 });

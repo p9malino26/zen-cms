@@ -1,32 +1,38 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.tree.simple.AbstractNode", {
   extend: qx.core.Object,
 
-  construct: function (label, icon, model) {
-    this.base(arguments);
+  construct(label, icon, model) {
+    super();
     this._children = new qx.data.Array();
-    if (label) this.setLabel(label);
-    if (icon) this.setIcon(icon);
-    if (model) this.setModel(model);
+    if (label) {
+      this.setLabel(label);
+    }
+    if (icon) {
+      this.setIcon(icon);
+    }
+    if (model) {
+      this.setModel(model);
+    }
   },
 
-  destruct: function () {
+  destruct() {
     this._disposeArray("_children");
   },
 
@@ -83,13 +89,15 @@ qx.Class.define("zx.ui.tree.simple.AbstractNode", {
     __inLoadChildren: false,
     _children: null,
 
-    getChildren: function () {
+    getChildren() {
       this.checkChildrenLoaded();
       return this._children;
     },
 
-    checkChildrenLoaded: function () {
-      if (this.__inLoadChildren) return;
+    checkChildrenLoaded() {
+      if (this.__inLoadChildren) {
+        return;
+      }
       this.__inLoadChildren = true;
       try {
         if (!this.getHasLoadedChildren()) {
@@ -102,28 +110,32 @@ qx.Class.define("zx.ui.tree.simple.AbstractNode", {
       }
     },
 
-    _loadChildren: function () {
+    _loadChildren() {
       this.fireEvent("loadChildren");
       this.setHasLoadedChildren(true);
     },
 
-    _applyHasLoadedChildren: function (value) {
+    _applyHasLoadedChildren(value) {
       /*
-			 * whats the purpose of this??
-			if (!value && this.getModel() && this.getParent())
-				this.getModel().fireDataEvent("changeNodeChildren", this.getParent());
-				*/
+      * whats the purpose of this??
+      if (!value && this.getModel() && this.getParent())
+      this.getModel().fireDataEvent("changeNodeChildren", this.getParent());
+      */
     },
 
-    _applyParent: function (value, oldValue) {
-      if (oldValue) oldValue.getChildren().remove(this);
+    _applyParent(value, oldValue) {
+      if (oldValue) {
+        oldValue.getChildren().remove(this);
+      }
       if (value) {
         var peers = value.getChildren();
-        if (!peers.contains(this)) peers.push(this);
+        if (!peers.contains(this)) {
+          peers.push(this);
+        }
       }
     },
 
-    _applyModel: function (value, oldValue) {
+    _applyModel(value, oldValue) {
       // Nothing
     }
   }

@@ -130,6 +130,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
           "9000/tcp": {}
         }
       };
+
       if (appConfig.env) {
         for (let key in appConfig.env) {
           containerConfig.Env.push(key + "=" + appConfig.env[key]);
@@ -245,6 +246,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
         }).set({
           recurring: true
         });
+
         this.info("Chromium started: " + JSON.stringify(this.__chromiumJson, null, 2));
       }
     },
@@ -316,6 +318,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
       env: {
         ZX_AUTO_RESTART: true
       },
+
       maxPool: 10,
       minPort: 9000,
       maxPort: 9100,

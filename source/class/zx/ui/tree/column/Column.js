@@ -1,28 +1,34 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.tree.column.Column", {
   extend: qx.core.Object,
 
-  construct: function (caption, valuePath, width) {
-    this.base(arguments);
-    if (caption) this.setCaption(caption);
-    if (valuePath) this.setValuePath(valuePath);
-    if (width) this.setWidth(width);
+  construct(caption, valuePath, width) {
+    super();
+    if (caption) {
+      this.setCaption(caption);
+    }
+    if (valuePath) {
+      this.setValuePath(valuePath);
+    }
+    if (width) {
+      this.setWidth(width);
+    }
   },
 
   properties: {
@@ -107,55 +113,64 @@ qx.Class.define("zx.ui.tree.column.Column", {
     /**
      * Returns the actual value for the cell
      */
-    getRawValue: function (model) {
+    getRawValue(model) {
       var path = this.getValuePath();
-      if (!path || !model) return null;
+      if (!path || !model) {
+        return null;
+      }
       var value = zx.utils.Values.getValue(model, path);
       var fn = this.getValueTransform();
-      if (fn) value = fn(value, model, path);
+      if (fn) {
+        value = fn(value, model, path);
+      }
       return value;
     },
 
     /**
      * Sets the actual value on the model for the cell
      */
-    setRawValue: function (model, value) {
+    setRawValue(model, value) {
       var path = this.getValuePath();
-      if (!path || !model) return;
+      if (!path || !model) {
+        return;
+      }
       return zx.utils.Values.setValue(model, path, value);
     },
 
     /**
      * Returns the value being edited in the editor, the return value is the equivalent to getRawValue
      */
-    getEditedValue: function () {
+    getEditedValue() {
       return this.getEditWidget().getValue();
     },
 
     /**
      * Sets the value being edited in the editor, value is the equivalent to setRawValue
      */
-    _setEditWidgetValue: function (model) {
+    _setEditWidgetValue(model) {
       this.getEditWidget().setValue(this.getDisplayValue(model));
     },
 
     /**
      * Returns the display value for the cell, which is typically passed to the cell widget's value property
      */
-    getDisplayValue: function (model) {
+    getDisplayValue(model) {
       return this.getRawValue(model) || "";
     },
 
     /**
      * Updates the widget to show the display value for the cell
      */
-    updateDisplayWidgetValue: function (widget, model, row) {
+    updateDisplayWidgetValue(widget, model, row) {
       var value;
-      if (row.isHeader()) value = this.getCaption();
-      else {
+      if (row.isHeader()) {
+        value = this.getCaption();
+      } else {
         value = this.getDisplayValue(model);
         var fn = this.getDisplayTransform();
-        if (fn) value = fn(this.getRawValue(model), value, model, this);
+        if (fn) {
+          value = fn(this.getRawValue(model), value, model, this);
+        }
       }
       this._updateDisplayWidgetValueImpl(widget, model, row, value);
     },
@@ -163,14 +178,14 @@ qx.Class.define("zx.ui.tree.column.Column", {
     /**
      * Updates the widget
      */
-    _updateDisplayWidgetValueImpl: function (widget, model, row, value) {
+    _updateDisplayWidgetValueImpl(widget, model, row, value) {
       widget.setValue("" + (value || ""));
     },
 
     /**
      * Creates a widget to show the cell value
      */
-    createDisplayWidget: function (row) {
+    createDisplayWidget(row) {
       return new qx.ui.basic.Label().set({
         rich: true,
         appearance: row.isHeader() ? "tree-column-header" : "tree-column-cell"
@@ -181,7 +196,7 @@ qx.Class.define("zx.ui.tree.column.Column", {
      * Creates a one-off widget that mimics the visual appearance, used for creating life-life drag
      * and drop carets.  Must include values all configured to match the model
      */
-    createMimicWidget: function (model) {
+    createMimicWidget(model) {
       return new qx.ui.basic.Label().set({
         rich: true,
         value: this.getDisplayValue(model),
@@ -192,8 +207,10 @@ qx.Class.define("zx.ui.tree.column.Column", {
     /**
      * Creates bindings
      */
-    createBindings: function () {
-      if (!this.getValuePath()) return null;
+    createBindings() {
+      if (!this.getValuePath()) {
+        return null;
+      }
       var binding = new zx.utils.Binding(this.getValuePath(), null, true);
       return [binding];
     },
@@ -201,7 +218,7 @@ qx.Class.define("zx.ui.tree.column.Column", {
     /**
      * Updates the bindings with the new model value
      */
-    updateBindings: function (bindings, model, row) {
+    updateBindings(bindings, model, row) {
       if (bindings) {
         bindings.forEach(function (binding) {
           binding.setModel(model);
@@ -212,7 +229,7 @@ qx.Class.define("zx.ui.tree.column.Column", {
     /**
      * Disposes of the bindings
      */
-    disposeBindings: function (model, bindings) {
+    disposeBindings(model, bindings) {
       if (bindings) {
         bindings.forEach(function (binding) {
           binding.setModel(null);
@@ -224,8 +241,10 @@ qx.Class.define("zx.ui.tree.column.Column", {
     /**
      * Returns the editor for this column; reuses the same control for all rows
      */
-    getEditWidget: function () {
-      if (!this.isEditable()) return null;
+    getEditWidget() {
+      if (!this.isEditable()) {
+        return null;
+      }
       if (!this.__editWidget) {
         this.__editWidget = this._createEditWidget();
       }
@@ -235,34 +254,28 @@ qx.Class.define("zx.ui.tree.column.Column", {
     /**
      * Creates the widget
      */
-    _createEditWidget: function () {
+    _createEditWidget() {
       var widget = new qx.ui.form.TextField();
-      widget.addListener(
-        "blur",
-        function (evt) {
+      widget.addListener("blur", evt => {
+        this.fireEvent("editorFinished");
+      });
+
+      widget.addListener("keypress", evt => {
+        if (evt.getKeyIdentifier() == "Enter" || evt.getKeyIdentifier() == "Escape") {
           this.fireEvent("editorFinished");
-        },
-        this
-      );
-      widget.addListener(
-        "keypress",
-        function (evt) {
-          if (
-            evt.getKeyIdentifier() == "Enter" ||
-            evt.getKeyIdentifier() == "Escape"
-          )
-            this.fireEvent("editorFinished");
-          if (evt.getKeyIdentifier() == "Tab") this.fireEvent("editorNext");
-        },
-        this
-      );
+        }
+        if (evt.getKeyIdentifier() == "Tab") {
+          this.fireEvent("editorNext");
+        }
+      });
+
       return widget;
     },
 
     /**
      * Starts editing - copies the value to the edit widget
      */
-    startEditing: function (model) {
+    startEditing(model) {
       this._setEditWidgetValue(model);
       var widget = this.getEditWidget();
       widget.focus();
@@ -271,7 +284,7 @@ qx.Class.define("zx.ui.tree.column.Column", {
     /**
      * Finishes editing - copies the edit widget's value to the model
      */
-    finishEditing: function (model) {
+    finishEditing(model) {
       var value = this.getEditedValue();
       try {
         this.setRawValue(model, value);
@@ -283,12 +296,16 @@ qx.Class.define("zx.ui.tree.column.Column", {
     /**
      * Compares two rows for sorting
      */
-    compare: function (left, right) {
+    compare(left, right) {
       left = this.getDisplayValue(left);
       right = this.getDisplayValue(right);
       if (this.isCaseInsensitive()) {
-        if (typeof left == "string") left = left.toLowerCase();
-        if (typeof right == "string") right = right.toLowerCase();
+        if (typeof left == "string") {
+          left = left.toLowerCase();
+        }
+        if (typeof right == "string") {
+          right = right.toLowerCase();
+        }
       }
       return left < right ? -1 : left > right ? 1 : 0;
     }

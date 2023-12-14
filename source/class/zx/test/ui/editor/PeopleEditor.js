@@ -1,25 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.ui.editor.PeopleEditor", {
   extend: zx.ui.editor.Editor,
 
   construct() {
-    this.base(arguments);
+    super();
     this._setLayout(new qx.ui.layout.VBox());
     this._add(this.getQxObject("toolbar"));
     this._add(this.getQxObject("root"));
@@ -46,6 +46,7 @@ qx.Class.define("zx.test.ui.editor.PeopleEditor", {
         value: value,
         visibility: value ? "visible" : "excluded"
       });
+
       this.getQxObject("btnDelete").setEnabled(!!value);
     },
 
@@ -78,6 +79,7 @@ qx.Class.define("zx.test.ui.editor.PeopleEditor", {
           var btn = new qx.ui.toolbar.Button("Delete Person").set({
             enabled: false
           });
+
           btn.addListener("execute", () => {
             let model = this.getQxObject("ctlr").getModel();
             model.remove(this.getCurrentPerson());
@@ -94,11 +96,8 @@ qx.Class.define("zx.test.ui.editor.PeopleEditor", {
           return new qx.ui.form.List();
 
         case "ctlr":
-          var ctlr = new qx.data.controller.List(
-            null,
-            this.getQxObject("lst"),
-            "name"
-          );
+          var ctlr = new qx.data.controller.List(null, this.getQxObject("lst"), "name");
+
           ctlr.addListener("changeSelection", evt => {
             let sel = ctlr.getSelection();
             let item = sel.getLength() ? sel.getItem(0) : null;
@@ -110,6 +109,7 @@ qx.Class.define("zx.test.ui.editor.PeopleEditor", {
           var ed = new zx.test.ui.editor.PersonEditor().set({
             visibility: "excluded"
           });
+
           ed.bind("modified", this, "modified");
           ed.addListener("changeModified", evt => {
             this.info("Person editor detected modified=" + evt.getData());
@@ -121,6 +121,7 @@ qx.Class.define("zx.test.ui.editor.PeopleEditor", {
             visibility: "hidden",
             layout: new qx.ui.layout.VBox()
           });
+
           comp.add(this.getQxObject("lblStatus"));
           this.getQxObject("edPerson").addListener("changeValid", evt => {
             let valid = evt.getData();
@@ -132,6 +133,7 @@ qx.Class.define("zx.test.ui.editor.PeopleEditor", {
           var lbl = new qx.ui.basic.Label("Form is not valid").set({
             allowGrowX: true
           });
+
           return lbl;
       }
     }

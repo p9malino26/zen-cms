@@ -19,7 +19,7 @@ qx.Class.define("zx.io.remote.FastifyXhrEndpoint", {
   extend: zx.io.remote.NetworkEndpoint,
 
   construct(sessionId, uuid) {
-    this.base(arguments, uuid);
+    super(uuid);
     this.__sessionId = sessionId;
   },
 

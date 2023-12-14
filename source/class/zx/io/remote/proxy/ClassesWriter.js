@@ -22,7 +22,7 @@ qx.Class.define("zx.io.remote.proxy.ClassesWriter", {
   extend: qx.core.Object,
 
   construct() {
-    this.base(arguments);
+    super();
     this.__templateCache = {};
   },
 
@@ -72,8 +72,12 @@ qx.Class.define("zx.io.remote.proxy.ClassesWriter", {
       };
 
       info = this.__templateCache[filename];
-      if (info && info.promise) return info.promise;
-      if (!info) info = this.__templateCache[filename] = {};
+      if (info && info.promise) {
+        return info.promise;
+      }
+      if (!info) {
+        info = this.__templateCache[filename] = {};
+      }
       info.promise = loadTemplateImpl();
       return info.promise;
     },

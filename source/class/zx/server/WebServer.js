@@ -137,6 +137,7 @@ qx.Class.define("zx.server.WebServer", {
             outputPath: path.join(appDirectory, proxiesOutputPath),
             compilerTargetPath: path.join(appDirectory, compilerTargetPath)
           });
+
           await ctlr.writeAllProxiedClasses();
         }
       }
@@ -235,6 +236,7 @@ qx.Class.define("zx.server.WebServer", {
       let options = {
         logger: false
       };
+
       if (this._config.logging) {
         options.logger = qx.lang.Object.mergeWith(
           {
@@ -246,6 +248,7 @@ qx.Class.define("zx.server.WebServer", {
               }
             }
           },
+
           this._config.logging
         );
       }
@@ -254,6 +257,7 @@ qx.Class.define("zx.server.WebServer", {
           key: this.getSslPrivateKey(),
           cert: this.getSslCertificate()
         };
+
         options.http2 = true;
       }
       if (this.isTrustProxy()) {
@@ -302,7 +306,9 @@ qx.Class.define("zx.server.WebServer", {
      */
     async _initSessions(app) {
       let sessionConfig = this._config.session || {};
-      if (!sessionConfig.secret) this.warn("Using default secret for signing sessions - please set session.secret in the configuration");
+      if (!sessionConfig.secret) {
+        this.warn("Using default secret for signing sessions - please set session.secret in the configuration");
+      }
       if (sessionConfig.secret.length < 32) {
         this.warn("session.secret in the configuration is too short, it should be at least 32 characters");
         sessionConfig.secret = null;
@@ -455,6 +461,7 @@ qx.Class.define("zx.server.WebServer", {
         root: zx.server.Config.resolveApp("compiled", targets.browser || "source"),
         prefix: "/zx/code"
       });
+
       app.register(fastifyStatic, {
         root: zx.server.Config.resolveApp("node_modules/medium-editor/dist"),
         prefix: "/zx/extra/medium-editor",
@@ -465,10 +472,12 @@ qx.Class.define("zx.server.WebServer", {
         "/zx/impersonate/:shortCode",
         this.wrapMiddleware(async (req, reply) => await this.__impersonate(req, reply))
       );
+
       app.get(
         "/zx/shorturl/:shortCode",
         this.wrapMiddleware(async (req, reply) => await this.__shortUrl(req, reply))
       );
+
       app.get(
         "/zx/blobs/:uuid",
         this.wrapMiddleware(async (req, reply) => await this.__blobs(req, reply))
@@ -525,6 +534,7 @@ qx.Class.define("zx.server.WebServer", {
           type: "exact",
           rule: rule
         };
+
         if (!rule.getIsRegEx()) {
           data.match = rule.getUrl().toLowerCase();
         } else {
@@ -571,7 +581,9 @@ qx.Class.define("zx.server.WebServer", {
       }
 
       const takeActionImpl = async (action, redirectTo, customActionCode) => {
-        if (action === null) return;
+        if (action === null) {
+          return;
+        }
 
         switch (action) {
           case "blockNotFound":
@@ -824,10 +836,13 @@ qx.Class.define("zx.server.WebServer", {
     getUrlFileHash(url) {
       function addHash(filename) {
         let stat = fs.statSync(filename, { throwIfNoEntry: false });
-        if (!stat) return url;
+        if (!stat) {
+          return url;
+        }
         let pos = url.indexOf("?");
-        if (pos > -1) url += "&";
-        else url += "?";
+        if (pos > -1) {
+          url += "&";
+        } else url += "?";
         url += stat.mtimeMs;
         return url;
       }
@@ -840,7 +855,9 @@ qx.Class.define("zx.server.WebServer", {
       } else if (url.startsWith("/zx/theme/")) {
         let tmp = url.substring(10);
         tmp = this._renderer.getTheme().resolveSync(tmp);
-        if (tmp) return addHash(tmp);
+        if (tmp) {
+          return addHash(tmp);
+        }
       }
 
       return url;

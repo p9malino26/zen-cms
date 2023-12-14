@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.ui.tree.RowLayout", {
   extend: qx.ui.layout.Abstract,
@@ -22,7 +22,7 @@ qx.Class.define("zx.ui.tree.RowLayout", {
     /*
      * @Override
      */
-    renderLayout: function (availWidth, availHeight, padding) {
+    renderLayout(availWidth, availHeight, padding) {
       var row = this._getWidget();
       var ctlr = row.getController();
 
@@ -32,10 +32,8 @@ qx.Class.define("zx.ui.tree.RowLayout", {
       var hint = arrow.getSizeHint();
       if (row.isHasChildren()) {
         var top = !hint.height ? 0 : parseInt((availHeight - hint.height) / 2);
-        var height = Math.min(
-          hint.maxHeight,
-          Math.max(availHeight, hint.minHeight)
-        );
+        var height = Math.min(hint.maxHeight, Math.max(availHeight, hint.minHeight));
+
         arrow.renderLayout(indent, top, hint.width, height);
       }
       var firstColumnLoss = indent + hint.width;
@@ -43,32 +41,30 @@ qx.Class.define("zx.ui.tree.RowLayout", {
       var check = row.getChildControl("check");
       var hint = check.getSizeHint();
       var top = !hint.height ? 0 : parseInt((availHeight - hint.height) / 2);
-      var height = Math.min(
-        hint.maxHeight,
-        Math.max(availHeight, hint.minHeight)
-      );
+      var height = Math.min(hint.maxHeight, Math.max(availHeight, hint.minHeight));
+
       check.renderLayout(firstColumnLoss, top, hint.width, height);
       firstColumnLoss += hint.width;
 
-      if (!ctlr) return;
+      if (!ctlr) {
+        return;
+      }
 
       var widths = [];
       var numFill = 0;
       var usedSpace = 0;
 
       function cap(column, width) {
-        if (column.getMaxWidth() !== null)
+        if (column.getMaxWidth() !== null) {
           width = Math.min(column.getMaxWidth(), width);
-        if (column.getMinWidth() !== null)
+        }
+        if (column.getMinWidth() !== null) {
           width = Math.max(column.getMinWidth(), width);
+        }
         return width;
       }
 
-      for (
-        var i = 0, columns = ctlr.getColumnsForRow(row);
-        i < columns.getLength();
-        i++
-      ) {
+      for (var i = 0, columns = ctlr.getColumnsForRow(row); i < columns.getLength(); i++) {
         var column = columns.getItem(i);
         var child = row.getColumnWidget(i);
         var hint = child.getSizeHint();
@@ -76,8 +72,9 @@ qx.Class.define("zx.ui.tree.RowLayout", {
         var top = !hint.height ? 0 : parseInt((availHeight - hint.height) / 2);
         var width = column.getWidth();
         if (typeof width == "string") {
-          if (width == "*") width = null;
-          else {
+          if (width == "*") {
+            width = null;
+          } else {
             if (width.match(/%$/)) {
               var pct = parseInt(width, 10) / 100;
               width = parseInt(availWidth * pct, 10);
@@ -86,8 +83,9 @@ qx.Class.define("zx.ui.tree.RowLayout", {
             }
           }
         }
-        if (width === null) numFill++;
-        else {
+        if (width === null) {
+          numFill++;
+        } else {
           width = cap(column, width);
           usedSpace += width;
         }
@@ -104,24 +102,18 @@ qx.Class.define("zx.ui.tree.RowLayout", {
       }
 
       var left = firstColumnLoss;
-      for (
-        var i = 0, columns = ctlr.getColumnsForRow(row);
-        i < columns.getLength();
-        i++
-      ) {
+      for (var i = 0, columns = ctlr.getColumnsForRow(row); i < columns.getLength(); i++) {
         var column = columns.getItem(i);
         var child = row.getColumnWidget(i);
         var hint = child.getSizeHint();
 
-        if (i) left++;
-        var top = !hint.height
-          ? 0
-          : Math.round((availHeight - hint.height) / 2);
+        if (i) {
+          left++;
+        }
+        var top = !hint.height ? 0 : Math.round((availHeight - hint.height) / 2);
         var hint = child.getSizeHint();
-        var height = Math.min(
-          hint.maxHeight,
-          Math.max(availHeight, hint.minHeight)
-        );
+        var height = Math.min(hint.maxHeight, Math.max(availHeight, hint.minHeight));
+
         child.renderLayout(left, top, widths[i], height);
 
         left += widths[i];
@@ -131,7 +123,7 @@ qx.Class.define("zx.ui.tree.RowLayout", {
     /*
      * @Override
      */
-    _computeSizeHint: function () {
+    _computeSizeHint() {
       var row = this._getWidget();
       var ctlr = row.getController();
 
@@ -147,28 +139,30 @@ qx.Class.define("zx.ui.tree.RowLayout", {
       var hint = arrow.getSizeHint();
       result.width = indent + hint.width;
       result.height = Math.max(result.height, hint.height);
-      if (hint.minHeight)
+      if (hint.minHeight) {
         result.minHeight = Math.max(result.minHeight, hint.minHeight);
+      }
 
       if (ctlr) {
-        for (
-          var i = 0, columns = ctlr.getColumnsForRow(row);
-          i < columns.getLength();
-          i++
-        ) {
+        for (var i = 0, columns = ctlr.getColumnsForRow(row); i < columns.getLength(); i++) {
           var column = columns.getItem(i);
           var child = row.getColumnWidget(i);
           var hint = child.getSizeHint();
 
-          if (i) result.width++;
+          if (i) {
+            result.width++;
+          }
 
           var width = column.getWidth();
-          if (typeof width != "number") width = 20;
+          if (typeof width != "number") {
+            width = 20;
+          }
           result.width += width;
 
           result.height = Math.max(result.height, hint.height);
-          if (hint.minHeight)
+          if (hint.minHeight) {
             result.minHeight = Math.max(result.minHeight, hint.minHeight);
+          }
         }
       }
       //result.maxWidth = result.width;

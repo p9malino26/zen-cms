@@ -19,7 +19,7 @@ qx.Class.define("zx.io.persistence.Endpoint", {
   extend: qx.core.Object,
 
   construct() {
-    this.base(arguments);
+    super();
     this.__changingProperties = {};
   },
 
@@ -153,7 +153,9 @@ qx.Class.define("zx.io.persistence.Endpoint", {
 
       await this._sendJson(uuid, json);
       let uuidNow = obj.toUuid();
-      if (uuidNow && uuid != uuidNow) throw new Error(`UUID changed from ${uuid} to ${uuidNow} while saving`);
+      if (uuidNow && uuid != uuidNow) {
+        throw new Error(`UUID changed from ${uuid} to ${uuidNow} while saving`);
+      }
       if (!this.__putQueueDoneObjects) {
         this.__putQueueDoneObjects = {};
       }
@@ -199,7 +201,9 @@ qx.Class.define("zx.io.persistence.Endpoint", {
      */
     async __clearPutQueueDependentObjects() {
       const scanForMore = async () => {
-        if (!this.__putDependentObjects) return false;
+        if (!this.__putDependentObjects) {
+          return false;
+        }
         let uuids = Object.keys(this.__putDependentObjects);
         let didWork = false;
         for (let i = 0; i < uuids.length; i++) {
@@ -214,7 +218,9 @@ qx.Class.define("zx.io.persistence.Endpoint", {
       let passes = 0;
       while (await scanForMore()) {
         passes++;
-        if (passes > zx.io.persistence.Controller.MAX_PUT_PASSES) throw new Error(`Failed to save because putQueue produces an endless stream of changes`);
+        if (passes > zx.io.persistence.Controller.MAX_PUT_PASSES) {
+          throw new Error(`Failed to save because putQueue produces an endless stream of changes`);
+        }
       }
     },
 
@@ -228,8 +234,12 @@ qx.Class.define("zx.io.persistence.Endpoint", {
       let io = this.__controller.getClassIos().getClassIo(obj.constructor);
       let uuid = obj.toUuid();
 
-      if (!this.__putDependentObjects) this.__putDependentObjects = {};
-      if (this.__putDependentObjects[uuid] && this.__putDependentObjects[uuid] !== obj) throw new Error(`Unexpected change in UUID discovered for ${uuid}: ${obj}`);
+      if (!this.__putDependentObjects) {
+        this.__putDependentObjects = {};
+      }
+      if (this.__putDependentObjects[uuid] && this.__putDependentObjects[uuid] !== obj) {
+        throw new Error(`Unexpected change in UUID discovered for ${uuid}: ${obj}`);
+      }
       if (this.__controller._getKnownObject(uuid)) {
         qx.core.Assert.assertTrue(this.__controller._getKnownObjectStatus(uuid) === "success");
       } else {
@@ -262,8 +272,9 @@ qx.Class.define("zx.io.persistence.Endpoint", {
       if (this.__changingProperties[key] !== undefined) {
         let count = this.__changingProperties[key];
         count--;
-        if (count == 0) delete this.__changingProperties[key];
-        else this.__changingProperties[key] = count;
+        if (count == 0) {
+          delete this.__changingProperties[key];
+        } else this.__changingProperties[key] = count;
       }
     },
 

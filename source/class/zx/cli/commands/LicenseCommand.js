@@ -22,7 +22,7 @@ qx.Class.define("zx.cli.commands.LicenseCommand", {
   extend: qx.core.Object,
 
   construct(template, files) {
-    this.base(arguments);
+    super();
     this.__template = template;
     this.__files = files;
   },
@@ -46,8 +46,12 @@ qx.Class.define("zx.cli.commands.LicenseCommand", {
     async run() {
       let template = await fs.promises.readFile(this.__template, "utf8");
       template = template.split("\n").map(str => str.trim());
-      if (template[template.length - 1].length) template.push("");
-      if (template[template.length - 2].length) template.push("");
+      if (template[template.length - 1].length) {
+        template.push("");
+      }
+      if (template[template.length - 2].length) {
+        template.push("");
+      }
       template = template.join("\n");
 
       const processFile = async filename => {
@@ -85,7 +89,9 @@ qx.Class.define("zx.cli.commands.LicenseCommand", {
           }
         }
         if (headerComment) {
-          if (!this.isReplace()) return;
+          if (!this.isReplace()) {
+            return;
+          }
         }
         src = template + src;
         if (this.isDryRun()) {
@@ -119,28 +125,32 @@ qx.Class.define("zx.cli.commands.LicenseCommand", {
     createCliCommand() {
       let cmd = new zx.cli.Command("license").set({
         description: "Edits the license header on source files",
-        run: async function () {
+        async run() {
           let { args, flags } = this.getValues();
           let cmd = new zx.cli.commands.LicenseCommand(flags["template"], args["files"]);
           cmd.set({
             dryRun: !!flags["dry-run"],
             replace: !!flags["replace"]
           });
+
           return await cmd.run();
         }
       });
+
       cmd.addFlag(
         new zx.cli.Flag("dry-run").set({
           description: "Whether to only pretend to edit the file (outputs to stdout)",
           type: "boolean"
         })
       );
+
       cmd.addFlag(
         new zx.cli.Flag("replace").set({
           description: "Replace any existing header, rather than preserve one if there already is one",
           type: "boolean"
         })
       );
+
       cmd.addFlag(
         new zx.cli.Flag("template").set({
           description: "the license header template",
@@ -148,6 +158,7 @@ qx.Class.define("zx.cli.commands.LicenseCommand", {
           type: "string"
         })
       );
+
       cmd.addArgument(
         new zx.cli.Argument("files").set({
           description: "the license header template",
@@ -156,6 +167,7 @@ qx.Class.define("zx.cli.commands.LicenseCommand", {
           array: true
         })
       );
+
       return cmd;
     }
   }

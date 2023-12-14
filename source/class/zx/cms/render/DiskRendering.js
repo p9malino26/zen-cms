@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const fs = require("fs-extra");
 
@@ -25,7 +24,7 @@ qx.Class.define("zx.cms.render.DiskRendering", {
   extend: zx.cms.render.AbstractRendering,
 
   construct(filename, query, headers) {
-    this.base(arguments);
+    super();
     this.__filename = filename;
     this.__query = query || {};
     this.__headers = headers || {};
@@ -89,13 +88,14 @@ qx.Class.define("zx.cms.render.DiskRendering", {
      */
     sendFile(filename, options) {
       let srcFilename;
-      if (options && options.root)
+      if (options && options.root) {
         srcFilename = path.resolve(options.root, filename);
-      else srcFilename = path.resolve(filename);
+      } else srcFilename = path.resolve(filename);
       let p = fs.copy(srcFilename, this.__filename, {
         overwrite: true,
         preserveTimestamps: true
       });
+
       this.__promises.push(p);
     },
 

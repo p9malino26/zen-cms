@@ -29,7 +29,7 @@ qx.Class.define("zx.cms.render.Theme", {
   extend: qx.core.Object,
 
   construct(themeName) {
-    this.base(arguments);
+    super();
     if (!themeName) {
       themeName = this.classname;
     }
@@ -236,7 +236,9 @@ qx.Class.define("zx.cms.render.Theme", {
             for (let i = 0, files = scssFile.getSourceFilenames(); i < files.length; i++) {
               let sourceFile = files[i];
               sourceFile = await zx.utils.Path.correctCase(sourceFile);
-              if (sourceFile.startsWith(localDir) || sourceFile.startsWith(resourceDir)) return;
+              if (sourceFile.startsWith(localDir) || sourceFile.startsWith(resourceDir)) {
+                return;
+              }
               if (!dependentFiles[sourceFile]) {
                 dependentFiles[sourceFile] = true;
                 watcher.add(sourceFile);

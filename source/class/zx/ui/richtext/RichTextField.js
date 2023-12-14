@@ -6,8 +6,8 @@ qx.Class.define("zx.ui.richtext.RichTextField", {
   /**
    * Constructor
    */
-  construct: function () {
-    this.base(arguments);
+  construct() {
+    super();
     this._setLayout(new qx.ui.layout.Grow());
     this._add(this.getQxObject("tabview"));
   },
@@ -23,7 +23,7 @@ qx.Class.define("zx.ui.richtext.RichTextField", {
   },
 
   members: {
-    _applyValue: function (value, oldValue) {
+    _applyValue(value, oldValue) {
       this.getQxObject("edtContent").setValue(value || "");
       this.getQxObject("edtHtml").setValue(value || "");
     },
@@ -66,17 +66,14 @@ qx.Class.define("zx.ui.richtext.RichTextField", {
 
         case "btnBeautify":
           var btn = new qx.ui.form.Button("Beautify");
-          btn.addListener(
-            "execute",
-            function (evt) {
-              var html = this.getValue();
-              if (html) {
-                html = zx.ui.richtext.Beautify.beautifyHtml(html);
-                this.setValue(html);
-              }
-            },
-            this
-          );
+          btn.addListener("execute", evt => {
+            var html = this.getValue();
+            if (html) {
+              html = zx.ui.richtext.Beautify.beautifyHtml(html);
+              this.setValue(html);
+            }
+          });
+
           return btn;
 
         case "edtHtml":
@@ -85,7 +82,8 @@ qx.Class.define("zx.ui.richtext.RichTextField", {
           edt.addListener("changeValue", evt => this.setValue(evt.getData()));
           return edt;
       }
-      return this.base(arguments, id);
+
+      return super._createQxObjectImpl(id);
     }
   }
 });

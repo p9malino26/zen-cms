@@ -1,26 +1,25 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.thin.core.Modal", {
   extend: qx.html.Element,
 
   construct() {
-    this.base(arguments);
+    super();
     this.__targets = [];
     this.setCssClass("qx-modal");
   },
@@ -48,7 +47,7 @@ qx.Class.define("zx.thin.core.Modal", {
           root.add(this);
         }
       }
-      this.base(arguments, value, oldValue);
+      super._applyVisible(value, oldValue);
     },
 
     /**
@@ -79,10 +78,10 @@ qx.Class.define("zx.thin.core.Modal", {
      */
     __updateTargets() {
       this.__targets.forEach(target => target.setStyle("z-index", null));
-      let target = this.__targets.length
-        ? this.__targets[this.__targets.length - 1]
-        : null;
-      if (target) target.setStyle("z-index", this.getZIndex() + 1000);
+      let target = this.__targets.length ? this.__targets[this.__targets.length - 1] : null;
+      if (target) {
+        target.setStyle("z-index", this.getZIndex() + 1000);
+      }
       this.setVisible(!!target);
     }
   },
@@ -98,7 +97,9 @@ qx.Class.define("zx.thin.core.Modal", {
      */
     getInstance() {
       const Modal = zx.thin.core.Modal;
-      if (!Modal.__instance) Modal.__instance = new zx.thin.core.Modal();
+      if (!Modal.__instance) {
+        Modal.__instance = new zx.thin.core.Modal();
+      }
       return Modal.__instance;
     },
 

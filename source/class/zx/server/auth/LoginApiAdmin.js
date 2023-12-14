@@ -39,11 +39,13 @@ qx.Class.define("zx.server.auth.LoginApiAdmin", {
         _classname: clazz.classname,
         username: { $regex: partial, $options: "i" }
       };
+
       let results = await db.find(query, {
         username: 1,
         fullName: 1,
         _uuid: 1
       });
+
       results = await results.limit(200).toArray();
       return results;
     },
@@ -64,7 +66,10 @@ qx.Class.define("zx.server.auth.LoginApiAdmin", {
         username: user.getUsername(),
         timeNow: new Date().getTime()
       };
-      if (redirectTo) data.redirectTo = redirectTo;
+
+      if (redirectTo) {
+        data.redirectTo = redirectTo;
+      }
 
       let shortUrl = new zx.cms.website.ShortUrl().set({
         url: "zx/impersonate/" + qx.util.Uuid.createUuidV4(),
@@ -72,6 +77,7 @@ qx.Class.define("zx.server.auth.LoginApiAdmin", {
         title: "Impersonate " + user.getUsername(),
         value: JSON.stringify(data)
       });
+
       await shortUrl.allocateShortCode();
       await shortUrl.save();
       return {
@@ -89,8 +95,12 @@ qx.Class.define("zx.server.auth.LoginApiAdmin", {
         status = "exists";
       } else {
         user = await zx.server.Standalone.getInstance().getUserDiscovery().getUserFromEmail(username, true);
-        if (fullName) user.setFullName(fullName);
-        if (password) user.setPassword(password);
+        if (fullName) {
+          user.setFullName(fullName);
+        }
+        if (password) {
+          user.setPassword(password);
+        }
         await user.save();
         status = "ok";
       }
@@ -99,6 +109,7 @@ qx.Class.define("zx.server.auth.LoginApiAdmin", {
       let query = {
         _uuid: user.toUuid()
       };
+
       let json = await db.findOne(zx.server.auth.User, query, {
         username: 1,
         fullName: 1,

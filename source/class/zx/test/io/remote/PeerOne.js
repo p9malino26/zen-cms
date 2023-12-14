@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * @use(zx.app.demo.DemonstratorProxy)
@@ -34,14 +33,19 @@ qx.Class.define("zx.test.io.remote.PeerOne", {
        * Create iframe to contain PeerTwo
        */
       let uri = document.location.pathname;
-      if (uri.endsWith("/index.html")) uri = uri.substring(0, uri.length - 11);
-      if (uri.endsWith("/")) uri = uri.substring(0, uri.length - 11);
+      if (uri.endsWith("/index.html")) {
+        uri = uri.substring(0, uri.length - 11);
+      }
+      if (uri.endsWith("/")) {
+        uri = uri.substring(0, uri.length - 11);
+      }
       let pos = uri.lastIndexOf("/");
       uri = uri.substring(0, pos + 1) + "peertwo/index.html";
       // let uri = "/tests/io/remote/demo-thin-peer-two.html";
       let iframe = new qx.ui.embed.Iframe(uri).set({
         padding: 40
       });
+
       root.add(iframe, { flex: 1 });
 
       /*

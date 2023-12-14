@@ -16,7 +16,7 @@
  * ************************************************************************ */
 
 var helper = {
-  tone: function (color) {
+  tone(color) {
     if (color == "dark" || color == "light") {
       return color;
     }
@@ -38,7 +38,7 @@ var helper = {
    * @param color {String} a valid qooxdoo/CSS rgb color string
    * @return {String} "dark" if color is light and vise versa
    */
-  contrastTone: function (color) {
+  contrastTone(color) {
     return helper.tone(color) === "dark" ? "light" : "dark";
   },
   /**
@@ -48,7 +48,7 @@ var helper = {
    * @param fillColor {String} a valid qooxdoo/CSS rgb color string
    * @return {String} a CSS rgba color string
    */
-  inkColorForFill: function (textStyle, fillColor) {
+  inkColorForFill(textStyle, fillColor) {
     var textColor = {
       dark: {
         primary: "rgba(0,0,0,0.87)",
@@ -57,6 +57,7 @@ var helper = {
         disabled: "rgba(0,0,0,0.38)",
         icon: "rgba(0,0,0,0.38)"
       },
+
       light: {
         primary: "#fff",
         secondary: "rgba(255,255,255,0.7)",
@@ -65,17 +66,18 @@ var helper = {
         icon: "rgba(255,255,255,0.5)"
       }
     };
+
     var contrastTone = helper.contrastTone(fillColor);
     return textColor[contrastTone][textStyle];
   },
 
   // helpers
-  onX: function (key) {
+  onX(key) {
     var baseColor = key.split("-")[2];
     return helper.contrastTone(baseColor) === "dark" ? "#000000" : "#ffffff";
   },
   // helpers
-  xState: function (key) {
+  xState(key) {
     var d = key.split("-");
     var color = d[0];
     var state = d[1];
@@ -85,41 +87,47 @@ var helper = {
           lightness: 10,
           saturation: 10
         });
+
       case "hovered":
         return qx.util.ColorUtil.scale(color, {
           lightness: 10
         });
+
       case "disabled":
         return qx.util.ColorUtil.scale(color, {
           lightness: -10,
           saturation: -70
         });
+
       case "selected":
         return qx.util.ColorUtil.scale(color, {
           lightness: -10
         });
+
       case "selected_disabled":
         return qx.util.ColorUtil.scale(color, {
           lightness: 30,
           saturation: -70
         });
+
       case "inactive":
         return qx.util.ColorUtil.scale(color, {
           saturation: -40
         });
+
       default:
         return color;
     }
   },
 
-  textXonY: function (key) {
+  textXonY(key) {
     var splitKey = key.split("-");
     var textStyle = splitKey[1];
     var fillColor = splitKey[3];
     return helper.inkColorForFill(textStyle, fillColor);
   },
 
-  setAlpha: function (key) {
+  setAlpha(key) {
     var splitKey = key.split("-");
     if (splitKey.length == 4) {
       splitKey[1] = splitKey[0] + "-" + splitKey[1];

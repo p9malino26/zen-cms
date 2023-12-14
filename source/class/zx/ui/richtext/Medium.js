@@ -7,41 +7,29 @@ qx.Class.define("zx.ui.richtext.Medium", {
   implement: [qx.ui.form.IStringForm, qx.ui.form.IForm],
   include: [qx.ui.form.MForm],
 
-  construct: function (initFn) {
-    this.base(arguments);
+  construct(initFn) {
+    super();
     this.__initFn = initFn;
-    zx.utils.ScriptLoader.loadScript(
-      ["zx/ui/richtext/medium-editor/js/medium-editor.js"],
-      this.__onScriptLoaded,
-      this
-    ).loadStylesheet([
+    zx.utils.ScriptLoader.loadScript(["zx/ui/richtext/medium-editor/js/medium-editor.js"], this.__onScriptLoaded, this).loadStylesheet([
       "zx/ui/richtext/medium-editor/css/medium-editor.css",
       "zx/ui/richtext/medium-editor/css/themes/beagle.css"
     ]);
 
     this.__changeValueTimeout = new zx.utils.Timeout(500, () => this.fireDataEvent("changeValue", this.getValue()));
 
-    this.addListenerOnce(
-      "appear",
-      function () {
-        this.__initEditor();
-      },
-      this
-    );
+    this.addListenerOnce("appear", () => {
+      this.__initEditor();
+    });
 
-    this.addListener(
-      "disappear",
-      function (evt) {
-        if (this.__editor) {
-          this.__editor.getExtensionByName("toolbar").hideToolbar();
-          var t = this;
-          setTimeout(function () {
-            t.__editor.getExtensionByName("toolbar").hideToolbar();
-          }, 100);
-        }
-      },
-      this
-    );
+    this.addListener("disappear", evt => {
+      if (this.__editor) {
+        this.__editor.getExtensionByName("toolbar").hideToolbar();
+        var t = this;
+        setTimeout(function () {
+          t.__editor.getExtensionByName("toolbar").hideToolbar();
+        }, 100);
+      }
+    });
   },
 
   events: {
@@ -90,41 +78,33 @@ qx.Class.define("zx.ui.richtext.Medium", {
     __initialised: false,
     __inChangeEvent: false,
 
-    __onScriptLoaded: function (originalUrl, url) {
+    __onScriptLoaded(originalUrl, url) {
       this.__scriptsLoaded = true;
-      if (this.isDisposed()) return;
+      if (this.isDisposed()) {
+        return;
+      }
       this.__initEditor();
     },
 
-    __initEditor: function () {
+    __initEditor() {
       var el = this.getContentElement().getDomElement();
-      if (this.__editor || !this.__scriptsLoaded || !el) return;
+      if (this.__editor || !this.__scriptsLoaded || !el) {
+        return;
+      }
 
       el.innerHTML = this.__pendingValue || "<p></p>";
       var opts = {
         toolbar: {
-          buttons: [
-            "bold",
-            "italic",
-            "underline",
-            "anchor",
-            "h1",
-            "h2",
-            "unorderedlist",
-            "orderedlist",
-            "justifyLeft",
-            "justifyCenter",
-            "justifyFull",
-            "justifyRight",
-            "indent",
-            "outdent",
-            "quote"
-          ]
+          buttons: ["bold", "italic", "underline", "anchor", "h1", "h2", "unorderedlist", "orderedlist", "justifyLeft", "justifyCenter", "justifyFull", "justifyRight", "indent", "outdent", "quote"]
         },
+
         cleanPastedHTML: true,
         forcePlainText: false
       };
-      if (this.__initFn) opts = this.__initFn(opts);
+
+      if (this.__initFn) {
+        opts = this.__initFn(opts);
+      }
       var ed = (this.__editor = new MediumEditor(el, opts));
       ed.subscribe("editableInput", this._onNativeInput.bind(this));
       this.__initialised = true;
@@ -134,10 +114,13 @@ qx.Class.define("zx.ui.richtext.Medium", {
       }
     },
 
-    _onNativeInput: function (evt) {
+    _onNativeInput(evt) {
       if (this.isReadOnly()) {
-        if (typeof evt.preventDefault == "function") evt.preventDefault();
-        else if (typeof evt.stopPropagation == "function") evt.stopPropagation();
+        if (typeof evt.preventDefault == "function") {
+          evt.preventDefault();
+        } else if (typeof evt.stopPropagation == "function") {
+          evt.stopPropagation();
+        }
         return;
       }
       this.fireEvent("change");
@@ -147,13 +130,14 @@ qx.Class.define("zx.ui.richtext.Medium", {
     /*
      * @Override
      */
-    _createContentElement: function () {
+    _createContentElement() {
       var elOuter = new qx.html.Element("div");
       elOuter.setStyles({
         overflow: "scroll",
         "font-family": "arial",
         "font-size": "12px"
       });
+
       return elOuter;
     },
 
@@ -163,14 +147,11 @@ qx.Class.define("zx.ui.richtext.Medium", {
     /*
     _getContentHint: function() {
       var hint = this.base(arguments);
-
-      // two lines of text by default
+       // two lines of text by default
       hint.height = hint.height * 2;
-
-      // 10 character wide
+       // 10 character wide
       hint.width = 16 * 10;
-
-      return hint;
+       return hint;
     },
     */
 
@@ -190,7 +171,7 @@ qx.Class.define("zx.ui.richtext.Medium", {
     /**
      * Resizes MCE to match the widget
      */
-    _resizeEditor: function () {
+    _resizeEditor() {
       /*
       if (this.__editor)
         this.__editor.theme.resizeTo(this._width - 2, this._height - 2);
@@ -200,7 +181,7 @@ qx.Class.define("zx.ui.richtext.Medium", {
     /*
      * @Override
      */
-    getFocusElement: function () {
+    getFocusElement() {
       var el = this.getContentElement();
       if (el) {
         return el;
@@ -210,11 +191,11 @@ qx.Class.define("zx.ui.richtext.Medium", {
     /*
      * @Override
      */
-    _applyEnabled: function (value, oldValue) {
-      this.base(arguments, value, oldValue);
+    _applyEnabled(value, oldValue) {
+      super._applyEnabled(value, oldValue);
     },
 
-    _applyReadOnly: function (value, oldValue) {
+    _applyReadOnly(value, oldValue) {
       var element = this.getContentElement();
 
       element.setAttribute("readOnly", value);
@@ -235,8 +216,10 @@ qx.Class.define("zx.ui.richtext.Medium", {
      * @param value
      *          {String} The new value
      */
-    setValue: function (value) {
-      if (this.__inChangeEvent) return;
+    setValue(value) {
+      if (this.__inChangeEvent) {
+        return;
+      }
       if (this.__initialised) {
         value = value || "";
 
@@ -251,7 +234,9 @@ qx.Class.define("zx.ui.richtext.Medium", {
 
         var el = this.getContentElement().getDomElement();
         var current = el.innerHTML;
-        if (current != value) el.innerHTML = value;
+        if (current != value) {
+          el.innerHTML = value;
+        }
       } else this.__pendingValue = value;
     },
 
@@ -260,8 +245,10 @@ qx.Class.define("zx.ui.richtext.Medium", {
      *
      * @return {String|null} The current value
      */
-    getValue: function () {
-      if (!this.__initialised) return this.__pendingValue;
+    getValue() {
+      if (!this.__initialised) {
+        return this.__pendingValue;
+      }
       var el = this.getContentElement().getDomElement();
       var current = el.innerHTML;
       return current;
@@ -270,7 +257,7 @@ qx.Class.define("zx.ui.richtext.Medium", {
     /**
      * Resets the value to the default
      */
-    resetValue: function () {
+    resetValue() {
       this.setValue(null);
     }
   }
