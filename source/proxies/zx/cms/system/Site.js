@@ -10,7 +10,7 @@
  *
 
   
- * @use(zx.cms.system.NavItem)
+ * @use(zx.cms.website.NavItem)
   
  * @use(qx.data.Array)
   
@@ -23,83 +23,66 @@
   
 
  */
-qx.Class.define("zx.cms.system.Site", {
+qx.Class.define("zx.cms.website.Site", {
   extend: zx.io.persistence.Object,
-  
 
   construct(...vargs) {
     this.base(arguments, ...vargs);
-    zx.io.remote.NetworkEndpoint.initialiseRemoteClass(zx.cms.system.Site);
+    zx.io.remote.NetworkEndpoint.initialiseRemoteClass(zx.cms.website.Site);
   },
 
   properties: {
-    
-      title: {
-        
-        
-           check: "String", 
-          nullable: false,
-           event: "changeTitle", 
-           apply: "_applyTitle", 
-          
-        
-        "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
-      },
-    
-      rootNavigation: {
-         init: null, 
-        
-           check: "zx.cms.system.NavItem", 
-          nullable: true,
-           event: "changeRootNavigation", 
-           apply: "_applyRootNavigation", 
-          
-        
-        "@": [new zx.io.persistence.anno.Property().set({ "embed": true }), new zx.io.remote.anno.Property()]
-      },
-    
-      urlRules: {
-        
-        
-           check: "qx.data.Array", 
-          nullable: false,
-           event: "changeUrlRules", 
-           apply: "_applyUrlRules", 
-           transform: "_transformUrlRules", 
-        
-        "@": [new zx.io.persistence.anno.Property().set({ "embed": true }), new zx.io.remote.anno.Property()]
-      },
-    
+    title: {
+      check: "String",
+      nullable: false,
+      event: "changeTitle",
+      apply: "_applyTitle",
+
+      "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
+    },
+
+    rootNavigation: {
+      init: null,
+
+      check: "zx.cms.website.NavItem",
+      nullable: true,
+      event: "changeRootNavigation",
+      apply: "_applyRootNavigation",
+
+      "@": [new zx.io.persistence.anno.Property().set({ embed: true }), new zx.io.remote.anno.Property()]
+    },
+
+    urlRules: {
+      check: "qx.data.Array",
+      nullable: false,
+      event: "changeUrlRules",
+      apply: "_applyUrlRules",
+      transform: "_transformUrlRules",
+
+      "@": [new zx.io.persistence.anno.Property().set({ embed: true }), new zx.io.remote.anno.Property()]
+    }
   },
 
   members: {
-    
-      _applyTitle(value, oldValue) {
-        // Nothing - to be overridden
-      },
-    
-      _applyRootNavigation(value, oldValue) {
-        // Nothing - to be overridden
-      },
-    
-      _applyUrlRules(value, oldValue) {
-        // Nothing - to be overridden
-      },
-    
+    _applyTitle(value, oldValue) {
+      // Nothing - to be overridden
+    },
 
-    
-      
+    _applyRootNavigation(value, oldValue) {
+      // Nothing - to be overridden
+    },
 
-      
-        _transformUrlRules(value, oldValue) {
-        if (oldValue) {
-          oldValue.replace(value);
-          return oldValue;
-        }
+    _applyUrlRules(value, oldValue) {
+      // Nothing - to be overridden
+    },
 
-        return value;
-      },
-      
-    
+    _transformUrlRules(value, oldValue) {
+      if (oldValue) {
+        oldValue.replace(value);
+        return oldValue;
+      }
+
+      return value;
+    }
   }
 });

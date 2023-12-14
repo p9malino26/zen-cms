@@ -22,7 +22,7 @@ qx.Class.define("zx.server.auth.LoginApi", {
   members: {
     "@loginUser": zx.io.remote.anno.Method.DEFAULT,
     async loginUser(username, password, rememberMe) {
-      let user = await zx.server.auth.User.getUserFromEmail(username);
+      let user = await zx.server.Standalone.getInstance().getUserDiscovery().getUserFromEmail(username);
       if (!user || user.getPassword() !== password) {
         return { status: "error" };
       }

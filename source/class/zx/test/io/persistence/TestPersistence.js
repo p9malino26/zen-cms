@@ -60,9 +60,9 @@ qx.Class.define("zx.test.io.persistence.TestPersistence", {
     },
 
     async __getByUrl(db, ctlr, url) {
-      let json = await db.findOne({ url }, { _uuid: 1 });
+      let json = await db.findOne(zx.cms.content.Page, { url }, { _uuid: 1 });
       let uuid = json._uuid;
-      let obj = uuid ? await ctlr.getByUuid(uuid) : null;
+      let obj = uuid ? await ctlr.getByUuid(zx.cms.content.Page, uuid) : null;
       return obj;
     },
 
@@ -116,12 +116,12 @@ qx.Class.define("zx.test.io.persistence.TestPersistence", {
       this.info(`ref1 = ${id1}`);
       this.info(`ref2 = ${id2}`);
 
-      let data = await db.getDataFromUuid(id1);
+      let data = await db.getDataFromUuid(zx.test.io.persistence.DemoReferences, id1);
       this.assertEquals(data.json.other._uuid, id2);
       ref1 = null;
       ref2 = null;
 
-      ref1 = await ctlr.getByUuid(id1);
+      ref1 = await ctlr.getByUuid(zx.test.io.persistence.DemoReferences, id1);
       this.assertTrue(!!ref1.getOther());
       this.assertEquals(ref1.toUuid(), id1);
       this.assertEquals(ref1.getOther().toUuid(), id2);
@@ -131,15 +131,15 @@ qx.Class.define("zx.test.io.persistence.TestPersistence", {
       await db.put(ref2);
       await db.put(ref1);
 
-      data = await db.getDataFromUuid(id1);
+      data = await db.getDataFromUuid(zx.test.io.persistence.DemoReferences, id1);
       this.assertEquals(data.json.other._uuid, id2);
-      data = await db.getDataFromUuid(id2);
+      data = await db.getDataFromUuid(zx.test.io.persistence.DemoReferences, id2);
       this.assertEquals(data.json.other._uuid, id1);
       ref1 = null;
       ref2 = null;
 
-      ref1 = await ctlr.getByUuid(id1);
-      ref2 = await ctlr.getByUuid(id2);
+      ref1 = await ctlr.getByUuid(zx.test.io.persistence.DemoReferences, id1);
+      ref2 = await ctlr.getByUuid(zx.test.io.persistence.DemoReferences, id2);
 
       this.assertTrue(!!ref1.getOther());
       this.assertEquals(ref1.toUuid(), id1);
@@ -179,7 +179,7 @@ qx.Class.define("zx.test.io.persistence.TestPersistence", {
       let idParent = parent.toUuid();
       this.info(`idParent = ${idParent}`);
 
-      let data = await db.getDataFromUuid(idParent);
+      let data = await db.getDataFromUuid(zx.test.io.persistence.DemoReferences, idParent);
       this.assertEquals(data.json.myArray.length, 20);
       for (let i = 0; i < 20; i += 2) {
         let childJson = data.json.myArray[i];
@@ -219,7 +219,7 @@ qx.Class.define("zx.test.io.persistence.TestPersistence", {
       let idParent = parent.toUuid();
       this.info(`idParent = ${idParent}`);
 
-      let data = await db.getDataFromUuid(idParent);
+      let data = await db.getDataFromUuid(zx.test.io.persistence.DemoReferences, idParent);
       let uuid = child.toUuid();
       this.assertEquals(Object.keys(data.json.myMap).length, 4);
       this.assertEquals(data.json.myMap["a"], "one");
@@ -231,7 +231,7 @@ qx.Class.define("zx.test.io.persistence.TestPersistence", {
 
       let ctlr2 = new zx.io.persistence.DatabaseController();
       ctlr2.addEndpoint(db);
-      let parent2 = await ctlr2.getByUuid(idParent);
+      let parent2 = await ctlr2.getByUuid(zx.test.io.persistence.DemoReferences, idParent);
       let values2 = parent2.getMyMap();
       this.assertEquals(values2.getKeys().getLength(), 4);
       this.assertEquals(values2.getValues().getLength(), 3);

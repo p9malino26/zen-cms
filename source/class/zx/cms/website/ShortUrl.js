@@ -1,21 +1,21 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
-qx.Class.define("zx.cms.system.ShortUrl", {
+qx.Class.define("zx.cms.website.ShortUrl", {
   extend: zx.server.Object,
 
   properties: {
@@ -23,10 +23,7 @@ qx.Class.define("zx.cms.system.ShortUrl", {
     url: {
       check: "String",
       event: "changeUrl",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** The unique short code */
@@ -35,10 +32,7 @@ qx.Class.define("zx.cms.system.ShortUrl", {
       nullable: true,
       check: "String",
       event: "changeShortCode",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** Optional descriptive title */
@@ -47,10 +41,7 @@ qx.Class.define("zx.cms.system.ShortUrl", {
       nullable: true,
       check: "String",
       event: "changeTitle",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** Type or action, controls how this URL is interpretter */
@@ -58,10 +49,7 @@ qx.Class.define("zx.cms.system.ShortUrl", {
       init: "impersonate",
       check: ["redirect", "impersonate"],
       event: "changeType",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     },
 
     /** Optional data stored with the short url, probably JSON as a string */
@@ -70,10 +58,7 @@ qx.Class.define("zx.cms.system.ShortUrl", {
       nullable: true,
       check: "String",
       event: "changeValue",
-      "@": [
-        zx.io.persistence.anno.Property.DEFAULT,
-        zx.io.remote.anno.Property.DEFAULT
-      ]
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT]
     }
   },
 
@@ -88,9 +73,9 @@ qx.Class.define("zx.cms.system.ShortUrl", {
       let server = zx.server.Standalone.getInstance();
       let url = this.getUrl();
       while (true) {
-        let shortened = zx.cms.system.ShortUrl.shorten(url, pass);
-        let data = await server.getDb().findOne({
-          _classname: "zx.cms.system.ShortUrl",
+        let shortened = zx.cms.website.ShortUrl.shorten(url, pass);
+        let data = await server.getDb().findOne(zx.cms.website.ShortUrl, {
+          _classname: "zx.cms.website.ShortUrl",
           shortCode: shortened
         });
         if (!data) {
@@ -110,11 +95,11 @@ qx.Class.define("zx.cms.system.ShortUrl", {
      * Loads a ShortUrl by looking up the short code
      *
      * @param {String} shortCode
-     * @returns {zx.cms.system.ShortUrl}
+     * @returns {zx.cms.website.ShortUrl}
      */
     async getShortUrlByShortCode(shortCode) {
       let server = zx.server.Standalone.getInstance();
-      let shortUrl = await server.findOneObjectByType(zx.cms.system.ShortUrl, {
+      let shortUrl = await server.findOneObjectByType(zx.cms.website.ShortUrl, {
         shortCode: shortCode
       });
       return shortUrl;
@@ -130,12 +115,12 @@ qx.Class.define("zx.cms.system.ShortUrl", {
     shorten(str, index) {
       const util = require("util");
       let encoder = new util.TextEncoder("utf-8");
-      if (index) str += zx.cms.system.ShortUrl.__intToString(index);
+      if (index) str += zx.cms.website.ShortUrl.__intToString(index);
       let bytes = encoder.encode(str);
       let fletcher = new zx.utils.Fletcher32();
       fletcher.append(bytes);
       let result = fletcher.result();
-      let shortened = zx.cms.system.ShortUrl.__intToString(result);
+      let shortened = zx.cms.website.ShortUrl.__intToString(result);
       return shortened;
     },
 
@@ -152,7 +137,7 @@ qx.Class.define("zx.cms.system.ShortUrl", {
       let value = srcValue & 0x7fffffff;
 
       // encode
-      const DICT = zx.cms.system.ShortUrl.__DICT;
+      const DICT = zx.cms.website.ShortUrl.__DICT;
       let dictLength = DICT.length;
       while (value != 0) {
         let remainder = Math.floor(Math.abs(value % dictLength));

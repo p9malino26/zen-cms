@@ -33,7 +33,7 @@ qx.Class.define("zx.server.Object", {
      */
     async deleteFromDatabase() {
       let uuid = this.toUuid();
-      await zx.server.Standalone.getInstance().getDb().removeByUuid(uuid);
+      await zx.server.Standalone.getInstance().getDb().removeByUuid(this.classname, uuid);
     },
 
     toString() {

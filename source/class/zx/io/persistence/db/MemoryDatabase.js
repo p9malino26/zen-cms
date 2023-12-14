@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const fs = zx.utils.Promisify.fs;
 const path = require("path");
@@ -80,8 +79,7 @@ qx.Class.define("zx.io.persistence.db.MemoryDatabase", {
       let result = [];
       for (let uuid in this._db.jsonByUuid) {
         let json = this._db.jsonByUuid[uuid];
-        if (zx.io.persistence.db.Utils.matchQuery(json, query))
-          result.push(json);
+        if (zx.io.persistence.db.Utils.matchQuery(json, query)) result.push(json);
       }
       return result;
     },
@@ -89,7 +87,7 @@ qx.Class.define("zx.io.persistence.db.MemoryDatabase", {
     /*
      * @Override
      */
-    getDataFromUuid(uuid) {
+    getDataFromUuid(clazz, uuid) {
       let data = this._db.jsonByUuid[uuid] || null;
       if (!data) {
         this.warn("Cannot find document with uuid=" + uuid);

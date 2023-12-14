@@ -65,7 +65,7 @@ qx.Class.define("zx.app.pages.UrlTreeNavigator", {
 
       prefix += "/";
 
-      let cursor = await zx.server.Standalone.getInstance().getDb().find(query, { _uuid: 1, url: 1 });
+      let cursor = await zx.server.Standalone.getInstance().getDb().find(zx.cms.content.Page, query, { _uuid: 1, url: 1 });
       let docs = [];
       let rootDoc = null;
       await cursor.sort("url").forEach(doc => {

@@ -28,7 +28,6 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
     this.base(arguments);
     this.__uri = options.uri;
     this.__databaseName = options.databaseName;
-    this.__collectionName = options.collectionName;
   },
 
   destruct() {
@@ -44,17 +43,11 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
     /** @type{String} the name of the database */
     __databaseName: null,
 
-    /** @type{String} the name of the collection */
-    __collectionName: null,
-
     /** @type{MongoClient} the Mongo client instance */
     __mongoClient: null,
 
     /** @type{MongoClient.DB} the Mongo database */
     __db: null,
-
-    /** @type{MongoClient.Collection} the Mongo collection */
-    __collection: null,
 
     /** @type{Boolean} true if the collection did not exist when the database was opened */
     __newDatabase: false,
@@ -68,11 +61,16 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
       await this.__mongoClient.connect();
       this.__db = this.__mongoClient.db(this.__databaseName);
       let collections = await this.__db.collections();
-      let exists = collections.find(coll => coll.collectionName == this.__collectionName);
+      let exists = collections.find(coll => coll.collectionName == "zx.server.cms.Page");
       this.__newDatabase = !exists;
-      this.__collection = this.__db.collection(this.__collectionName);
 
       return await this.base(arguments);
+    },
+
+    async getCollection(clazz) {
+      let classname = clazz.classname || clazz.toString();
+      let collections = await this.__db.collections();
+      return this.__db.collection(classname);
     },
 
     /**
@@ -110,7 +108,6 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
         this.__mongoClient.close();
         this.__mongoClient = null;
         this.__db = null;
-        this.__collection = null;
       }
       await this.base(arguments);
     },
@@ -146,24 +143,26 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
     /*
      * @Override
      */
-    async find(query, projection, options) {
-      let result = await this.__collection.find(query, this.__createOptions(projection, options));
+    async find(clazz, query, projection, options) {
+      let collection = await this.getCollection(clazz);
+      let result = await collection.find(query, this.__createOptions(projection, options));
       return result;
     },
 
     /*
      * @Override
      */
-    async findOne(query, projection, options) {
-      let json = await this.__collection.findOne(query, this.__createOptions(projection, options));
+    async findOne(clazz, query, projection, options) {
+      let collection = await this.getCollection(clazz);
+      let json = await collection.findOne(query, this.__createOptions(projection, options));
       return json;
     },
 
     /*
      * @Override
      */
-    async getDataFromUuid(uuid) {
-      let data = await this.findOne({ _id: uuid });
+    async getDataFromUuid(clazz, uuid) {
+      let data = await this.findOne(clazz, { _id: uuid });
       if (!data) {
         return null;
       }
@@ -175,8 +174,8 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
     /*
      * @Override
      */
-    async getDataFromQuery(query, projection) {
-      let data = await this.findOne(query, projection);
+    async getDataFromQuery(clazz, query, projection) {
+      let data = await this.findOne(clazz, query, projection);
       if (!data) return null;
       return {
         json: data
@@ -188,22 +187,25 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
      */
     async _sendJson(uuid, json) {
       json._id = json._uuid;
-      await this.__collection.replaceOne({ _id: uuid }, json, { upsert: true });
+      let collection = await this.getCollection(json._classname);
+      await collection.replaceOne({ _id: uuid }, json, { upsert: true });
     },
 
     /*
      * @Override
      */
-    async removeByUuid(uuid) {
-      await this.__collection.deleteOne({ _id: uuid }, {});
+    async removeByUuid(clazz, uuid) {
+      let collection = await this.getCollection(clazz);
+      await collection.deleteOne({ _id: uuid }, {});
       return true;
     },
 
     /*
      * @Override
      */
-    async findAndRemove(query) {
-      await this.__collection.deleteMany(query, {});
+    async findAndRemove(clazz, query) {
+      let collection = await this.getCollection(clazz);
+      await collection.deleteMany(query, {});
       return true;
     }
   }

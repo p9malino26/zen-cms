@@ -15,7 +15,7 @@
  *
  * ************************************************************************ */
 
-qx.Class.define("zx.cms.system.UrlRule", {
+qx.Class.define("zx.cms.website.UrlRule", {
   extend: zx.io.persistence.Object,
   implement: [zx.io.remote.IProxied],
 

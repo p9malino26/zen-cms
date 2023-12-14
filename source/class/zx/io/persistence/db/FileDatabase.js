@@ -98,7 +98,7 @@ qx.Class.define("zx.io.persistence.db.FileDatabase", {
     /*
      * @Override
      */
-    getDataFromUuid(uuid) {
+    getDataFromUuid(clazz, uuid) {
       let indexData = this._db.ids[uuid];
       if (!indexData) {
         this.warn("Cannot find document with uuid=" + uuid);

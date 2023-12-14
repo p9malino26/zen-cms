@@ -176,7 +176,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
     /**
      * @Override
      */
-    getDataFromUuid(uuid) {
+    getDataFromUuid(clazz, uuid) {
       if (!this.__availableJson[uuid]) {
         return null;
       }
@@ -544,8 +544,12 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           }
           return value;
         }
-        if (typeof value._uuid == "string" && typeof value._classname == "string" && qx.Class.getByName(value._classname)) {
-          let obj = await this.getController().getByUuid(value._uuid);
+        if (typeof value._uuid == "string" && typeof value._classname == "string") {
+          let clazz = qx.Class.getByName(value._classname);
+          if (!clazz) {
+            throw new Error(`Cannot return ${value._uuid} because there is no class called ${value._classname}`);
+          }
+          let obj = await this.getController().getByUuid(clazz, value._uuid);
           if (obj) {
             value = obj;
           }
@@ -580,7 +584,11 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
         let packet = packets[i];
 
         if (packet.type == "sendObject") {
-          let obj = await qx.Promise.resolve(this.getController().getByUuidNoWait(packet.uuid, true));
+          let clazz = qx.Class.getByName(packet.json._classname);
+          if (!clazz) {
+            throw new Error(`Cannot receive object of class ${packet.json._classname} because it does not exist`);
+          }
+          let obj = await qx.Promise.resolve(this.getController().getByUuidNoWait(clazz, packet.uuid, true));
           if (obj) {
             if (this.__sentUuids[packet.uuid] && this.__sentUuids[packet.uuid] !== "receiving") {
               this.error(`Received sendObject multiple times for UUID ${packet.uuid}, status=${this.__sentUuids[packet.uuid]}`);
@@ -600,13 +608,13 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           if (!packet.uuid) {
             this.getController().addUriMapping(packet.uri, null);
           } else {
-            let obj = await this.getController().getByUuidNoWait(packet.uuid, true);
+            let obj = await this.getController().getByUuidNoWait(null, packet.uuid, true);
             this.getController().receiveUriMapping(packet.uri, obj);
           }
         } else if (packet.type == "callMethod") {
           await waitForAll();
           let controller = this.getController();
-          let object = await controller.getByUuid(packet.uuid);
+          let object = await controller.getByUuid(null, packet.uuid);
           let args = packet.args || [];
 
           for (let i = 0; i < args.length; i++) {
@@ -618,7 +626,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
             }
             if (qx.core.Environment.get("qx.debug")) this.assertTrue(!!arg.uuid);
 
-            let obj = await this.getController().getByUuid(arg.uuid);
+            let obj = await this.getController().getByUuid(null, arg.uuid);
             args[i] = obj;
           }
 
@@ -661,7 +669,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
         } else if (packet.type == "upload") {
           await waitForAll();
 
-          let source = packet.sourceUuid ? await this.getController().getByUuid(packet.sourceUuid) : null;
+          let source = packet.sourceUuid ? await this.getController().getByUuid(null, packet.sourceUuid) : null;
           if (!source && packet.sourceQxObjectId) {
             source = qx.core.Id.getQxObject(packet.sourceQxObjectId);
           }
@@ -750,7 +758,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
               }
             }
 
-            let target = await controller.getByUuid(fields.targetUuid);
+            let target = await controller.getByUuid(null, fields.targetUuid);
             if (!target) {
               throw new Error(`Cannot find target for upload for ${JSON.stringify(fields)}`);
             }

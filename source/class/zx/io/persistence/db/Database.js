@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Base class for database implementations
@@ -51,11 +50,12 @@ qx.Class.define("zx.io.persistence.db.Database", {
      * implementation, but a facility to compare objects (see NeDB or MongoDB)
      * is expected.
      *
+     * @param clazz {qx.Class} the class for the collection
      * @param query {Object} NeDB query
      * @param projection {Object?} NeDB projection
      * @return {Object?} the matched data, or null
      */
-    async findOne(query, projection) {
+    async findOne(clazz, query, projection) {
       throw new Error(`No implementation for ${this.classname}.findOne`);
     },
 
@@ -65,11 +65,12 @@ qx.Class.define("zx.io.persistence.db.Database", {
      * implementation, but a facility to compare objects (see NeDB or MongoDB)
      * is expected.
      *
+     * @param clazz {qx.Class} the class for the collection
      * @param query {Object} NeDB query
      * @param projection {Object?} NeDB projection
      * @return {Object[]} the matched data, or empty array
      */
-    async find(query, projection) {
+    async find(clazz, query, projection) {
       throw new Error(`No implementation for ${this.classname}.find`);
     },
 
@@ -79,10 +80,11 @@ qx.Class.define("zx.io.persistence.db.Database", {
      * implementation, but a facility to compare objects (see NeDB or MongoDB)
      * is expected.
      *
+     * @param clazz {qx.Class} the class for the collection
      * @param query {Object} NeDB query
      * @return {Object[]} the matched data, or empty array
      */
-    async findAndRemove(query) {
+    async findAndRemove(clazz, query) {
       throw new Error(`No implementation for ${this.classname}.findAndRemove`);
     }
   }

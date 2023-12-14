@@ -117,6 +117,9 @@ qx.Class.define("zx.server.WebServer", {
     /** @type{Object[]} array of objects describing url rules */
     __urlRules: null,
 
+    /** @type{Buffer} the proxy servers public key, used for remote authentication */
+    __proxyPublicKey: undefined,
+
     /**
      * Called to start the server
      */
@@ -552,6 +555,8 @@ qx.Class.define("zx.server.WebServer", {
         }
       }
 
+      this._handleProxyLogin(request, reply);
+
       let url = request.url.toLowerCase();
       let pos = url.indexOf("?");
       let query = "";
@@ -668,8 +673,80 @@ qx.Class.define("zx.server.WebServer", {
       }
     },
 
+    /**
+     * Handles login as instructed by the proxy server, required X-Authorization and X-Authorisation-Signature
+     *
+     * @param {Fastify.Request} request
+     * @param {Fastify.Reply} reply
+     * @returns {Boolean} whether the user was changed
+     */
+    async _handleProxyLogin(request, reply) {
+      let auth = request.headers["x-authorization"];
+      let authSignature = request.headers["x-authorisation-signature"];
+
+      if (auth && auth.startsWith("Proxy")) {
+        const crypto = require("crypto");
+        if (this.__proxyPublicKey === undefined) {
+          let strPublicKey = this._config.proxyPublicKey;
+          this.__proxyPublicKey = strPublicKey
+            ? crypto.createPublicKey({
+                key: strPublicKey,
+                format: "pem"
+              })
+            : null;
+        }
+
+        if (!this.__proxyPublicKey) {
+          this.error("Not logging in user " + email + " because no public key");
+          reply.code(403);
+          return false;
+        }
+
+        let payload = auth.substring("Proxy".length).trim();
+        payload = Buffer.from(payload, "base64");
+        authSignature = Buffer.from(authSignature, "base64");
+        let email = payload.toString("utf8");
+
+        let verifier = crypto.createVerify("RSA-SHA256");
+        verifier.update(payload);
+
+        //const signatureBuf = Buffer.fromString(authSignature, "hex");
+        const result = verifier.verify(this.__proxyPublicKey, authSignature);
+
+        if (!result) {
+          this.error("Not logging in user " + email + " because signature is invalid");
+          reply.code(403);
+          return false;
+        }
+
+        let currentUser = await zx.server.auth.User.getUserFromSession(request);
+        if (currentUser && currentUser.getUsername().toLowerCase() != email.toLowerCase()) {
+          await new qx.Promise(resolve => request.destroySession(resolve));
+          currentUser = null;
+        }
+
+        if (!currentUser) {
+          let user = await this.getUserDiscovery().getUserFromEmail(email, true);
+          if (user) {
+            user.login(request);
+            currentUser = user;
+          }
+        }
+
+        return !!currentUser;
+      }
+
+      return false;
+    },
+
+    /**
+     * Handler for impersonate URL
+     *
+     * @param {Fastify.Request} request
+     * @param {Fastify.Reply} reply
+     */
     async __impersonate(request, reply) {
-      let shortUrl = await zx.cms.system.ShortUrl.getShortUrlByShortCode(request.params.shortCode);
+      let shortUrl = await zx.cms.website.ShortUrl.getShortUrlByShortCode(request.params.shortCode);
       if (!shortUrl || shortUrl.getType() != "impersonate") {
         this.sendErrorPage(request, reply, 404);
         return;
@@ -691,14 +768,28 @@ qx.Class.define("zx.server.WebServer", {
       }
 
       if (!currentUser) {
-        let user = await zx.server.auth.User.getUserFromEmail(data.username);
-        if (user != null) user.login(request, false);
+        let user = await this.getUserDiscovery().getUserFromEmail(data.username);
+        if (user != null) {
+          user.login(request, false);
+        }
       }
       reply.redirect(data.redirectTo || "/");
     },
 
+    /**
+     * Handler for short URLs
+     *
+     * @param {Fastify.Request} request
+     * @param {Fastify.Reply} reply
+     */
     __shortUrl(request, reply) {},
 
+    /**
+     * Handler for Blobs
+     *
+     * @param {Fastify.Request} request
+     * @param {Fastify.Reply} reply
+     */
     __blobs(request, reply) {
       let uuid = request.params.uuid.toLowerCase();
       let pos = uuid.lastIndexOf(".");
@@ -799,34 +890,26 @@ qx.Class.define("zx.server.WebServer", {
       // Get the page
       if (url.endsWith(".html")) {
         let dbUrl = (url = "pages" + url.substring(0, url.length - 5));
-        let object = await this.getObjectByUrl(dbUrl);
+        let object = await this.getObjectByUrl(zx.cms.content.Page, dbUrl);
         if (!object) {
           throw new zx.utils.Http.HttpError(404, `Cannot find ${url}`);
         }
 
-        if (qx.Class.hasInterface(object.constructor, zx.cms.render.IViewable)) {
-          let rendering = new zx.cms.render.FastifyRendering(req, reply);
-          try {
-            await this._renderer.renderViewable(rendering, object);
-          } catch (ex) {
-            throw new zx.utils.Http.HttpError(500, ex.message);
-          }
-        } else {
-          throw new zx.utils.Http.HttpError(500, `Cannot render object for ${url} because it is not viewable, it is ${object.classname}: ${object}`);
+        let rendering = new zx.cms.render.FastifyRendering(req, reply);
+        try {
+          await this._renderer.renderViewable(rendering, object);
+        } catch (ex) {
+          throw new zx.utils.Http.HttpError(500, ex.message);
         }
         return;
       } else if (url.endsWith(".csv")) {
         let dbUrl = (url = "pages" + url.substring(0, url.length - 4));
-        let object = await this.getObjectByUrl(dbUrl);
+        let object = await this.getObjectByUrl(zx.cms.content.CsvDownload, dbUrl);
         if (!object) {
           throw new zx.utils.Http.HttpError(404, `Cannot find ${url}`);
         }
 
-        if (qx.Class.hasInterface(object.constructor, zx.cms.render.IRawViewable)) {
-          await object.generate(req, reply);
-        } else {
-          throw new zx.utils.Http.HttpError(500, `Cannot render object for ${url} because it is not viewable, it is ${object.classname}: ${object}`);
-        }
+        await object.generate(req, reply);
         return;
       }
 

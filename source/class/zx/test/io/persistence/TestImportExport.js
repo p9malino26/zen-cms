@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.test.io.persistence.TestImportExport", {
   extend: qx.dev.unit.TestCase,
@@ -29,7 +28,7 @@ qx.Class.define("zx.test.io.persistence.TestImportExport", {
       await ie.importToDb();
       let json;
 
-      json = await db.findOne({
+      json = await db.findOne(zx.test.io.persistence.Site, {
         _uuid: "9a946080-b923-11e9-81cd-e3ec9930a628"
       });
       this.assertTrue(!!json);

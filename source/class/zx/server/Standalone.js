@@ -26,7 +26,7 @@ const path = require("path");
  * @use(zx.cms.content.ContentPiece)
  * @use(zx.cms.content.ThinClientCodePiece)
  * @use(zx.cms.content.FeaturePiece)
- * @use(zx.cms.system.Site)
+ * @use(zx.cms.website.Site)
  * @use(zx.utils.BigNumber)
  *
  * @asset(zx/thin/theme/materials/*)
@@ -61,7 +61,7 @@ qx.Class.define("zx.server.Standalone", {
     /** {zx.io.persistence.DatabaseController} the database persistance controller */
     _dbController: null,
 
-    /** {zx.cms.system.Site} site configuration data */
+    /** {zx.cms.website.Site} site configuration data */
     _site: null,
 
     /** {zx.cms.render.Renderer} the renderer for generating content */
@@ -69,6 +69,9 @@ qx.Class.define("zx.server.Standalone", {
 
     /** Cache Data for object retrieved from the database */
     _objectsUrlsToId: null,
+
+    /** @type{zx.server.auth.UserDiscovery} where to find zx.server.auth.User objects */
+    __userDiscovery: null,
 
     /**
      * Called to start the server
@@ -85,6 +88,7 @@ qx.Class.define("zx.server.Standalone", {
       await this._openDatabase();
       await this._initSite();
       await this._initRenderer();
+      await this._initUserDiscovery();
     },
 
     /**
@@ -171,14 +175,14 @@ qx.Class.define("zx.server.Standalone", {
      * Inits the site data from the database
      */
     async _initSite() {
-      let site = (this._site = await this.getObjectByUrl("configuration/site"));
+      let site = (this._site = await this.getObjectByUrl(zx.cms.website.Site, "configuration/site"));
       return site;
     },
 
     /**
      * Returns the site configuration
      *
-     * @returns {zx.cms.system.Site}
+     * @returns {zx.cms.website.Site}
      */
     getSite() {
       return this._site;
@@ -207,6 +211,32 @@ qx.Class.define("zx.server.Standalone", {
     },
 
     /**
+     * Initialises User Discovery
+     */
+    async _initUserDiscovery() {
+      this.__userDiscovery = this._createUserDiscovery();
+      await this.__userDiscovery.initialise();
+    },
+
+    /**
+     * Creates the user discovery instance
+     *
+     * @return {zx.server.auth.UserDiscovery  }
+     */
+    _createUserDiscovery() {
+      return new zx.server.auth.UserDiscovery();
+    },
+
+    /**
+     * Returns the user discovery instance
+     *
+     * @return {zx.server.auth.UserDiscovery  }
+     */
+    getUserDiscovery() {
+      return this.__userDiscovery;
+    },
+
+    /**
      * Returns a filename that can be used to store blobs (or any other data, EG it could be a folder)
      * based on a UUID.
      *
@@ -226,11 +256,14 @@ qx.Class.define("zx.server.Standalone", {
 
     /**
      * Loads a object
+     *
+     * @param {qx.Class} clazz
+     * @param {String} uuid
      */
-    async getObjectByUrl(url) {
+    async getObjectByUrl(clazz, url) {
       let uuid = this._objectsUrlsToId[url];
       if (uuid) {
-        let object = await this._dbController.getByUuid(uuid);
+        let object = await this._dbController.getByUuid(clazz, uuid);
         if (object) {
           return object;
         }
@@ -239,12 +272,12 @@ qx.Class.define("zx.server.Standalone", {
         url = url.substring(0, url.length - 5);
       }
 
-      let data = await this._db.findOne({ url }, { _uuid: 1 });
+      let data = await this._db.findOne(clazz, { url }, { _uuid: 1 });
       uuid = (data && data._uuid) || null;
       if (!uuid) {
         return null;
       }
-      let object = await this._dbController.getByUuid(uuid);
+      let object = await this._dbController.getByUuid(clazz, uuid);
       if (object) {
         this._objectsUrlsToId[url] = uuid;
       }
@@ -268,9 +301,8 @@ qx.Class.define("zx.server.Standalone", {
     async objectExistsByType(clazz, query, create) {
       let properties = query ? qx.lang.Object.clone(query) : {};
       query = this.__createCorrectedQuery(query);
-      query._classname = clazz.classname;
 
-      let data = await this._db.findOne(query, { _uuid: 1 });
+      let data = await this._db.findOne(clazz, query, { _uuid: 1 });
       let uuid = (data && data._uuid) || null;
       return !!uuid;
     },
@@ -286,14 +318,17 @@ qx.Class.define("zx.server.Standalone", {
     async findOneObjectByType(clazz, query, create) {
       let properties = query ? qx.lang.Object.clone(query) : {};
       query = this.__createCorrectedQuery(query);
-      query._classname = clazz.classname;
 
-      let data = await this._db.findOne(query, { _uuid: 1 });
+      let data = await this._db.findOne(clazz, query, { _uuid: 1 });
       let uuid = (data && data._uuid) || null;
       if (uuid) {
         let object = zx.io.persistence.ObjectCaches.getInstance().findObjectByUuid(uuid);
-        if (!object) object = await this._dbController.getByUuid(uuid);
-        if (qx.core.Environment.get("qx.debug")) this.assertTrue(!!object);
+        if (!object) {
+          object = await this._dbController.getByUuid(clazz, uuid);
+        }
+        if (qx.core.Environment.get("qx.debug")) {
+          this.assertTrue(!!object);
+        }
         return object;
       }
 
@@ -316,9 +351,8 @@ qx.Class.define("zx.server.Standalone", {
      */
     async findObjectsByType(clazz, query, limit) {
       query = this.__createCorrectedQuery(query);
-      query._classname = clazz.classname;
 
-      let data = await this._db.find(query, { _uuid: 1 });
+      let data = await this._db.find(clazz, query, { _uuid: 1 });
       let all = await data
         .limit(limit || 0)
         .map(async data => {
@@ -331,7 +365,7 @@ qx.Class.define("zx.server.Standalone", {
             return object;
           }
 
-          object = await this._dbController.getByUuid(uuid);
+          object = await this._dbController.getByUuid(clazz, uuid);
           return object;
         })
         .toArray();
@@ -394,9 +428,8 @@ qx.Class.define("zx.server.Standalone", {
       if (!query) {
         query = {};
       }
-      query._classname = clazz.classname;
 
-      await this._db.findAndRemove(query);
+      await this._db.findAndRemove(clazz, query);
     },
 
     /**

@@ -70,9 +70,14 @@ qx.Class.define("zx.io.persistence.db.ImportExport", {
           let data = await fs.readFile(filename, { encoding: "utf8" });
           data = data.trim();
           if (!data.length) {
-            let current = this.__db.findOne({ url: json.url });
+            let clazz = qx.Class.getByName(json._classname);
+            if (!clazz) {
+              this.error(`Cannot find class ${json._classname}`);
+              continue;
+            }
+            let current = this.__db.findOne(clazz, { url: json.url });
             if (current) {
-              await this.__db.removeByUuid(json._uuid);
+              await this.__db.removeByUuid(clazz, json._uuid);
             }
           } else {
             let json;
@@ -97,7 +102,12 @@ qx.Class.define("zx.io.persistence.db.ImportExport", {
             }
 
             if (!json._uuid) {
-              let current = await this.__db.findOne({ url: fileUrl });
+              let clazz = qx.Class.getByName(json._classname);
+              if (!clazz) {
+                this.error(`Cannot find class ${json._classname}`);
+                continue;
+              }
+              let current = await this.__db.findOne(clazz, { url: fileUrl });
               if (current) {
                 json._uuid = current._uuid;
               } else {
@@ -120,9 +130,7 @@ qx.Class.define("zx.io.persistence.db.ImportExport", {
       let docs = await this.__db.find({});
       for (let i = 0; i < docs.length; i++) {
         let doc = docs[i];
-        let filename = doc.url
-          ? path.join(this.__rootDir, doc.url + ".json")
-          : path.join(this.__rootDir, "_uuids", doc._uuid);
+        let filename = doc.url ? path.join(this.__rootDir, doc.url + ".json") : path.join(this.__rootDir, "_uuids", doc._uuid);
         await fs.ensureDir(path.dirname(filename));
         await fs.writeFile(filename, JSON.stringify(doc, null, 2), {
           encoding: "utf8"

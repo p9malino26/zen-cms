@@ -100,10 +100,11 @@ qx.Class.define("zx.io.persistence.Endpoint", {
      * @property {Long} mtime the modification time epoch
      * @property {Function} isStale a function to call to determine if the data is out of date (which can return a promise)
      *
+     * @param {qx.Class} clazz
      * @param {String} uuid
      * @return {DataFromUuid}
      */
-    async getDataFromUuid(uuid) {
+    async getDataFromUuid(clazz, uuid) {
       throw new Error(`No such implementation for ${this.classname}.getDataFromUuid`);
     },
 
@@ -213,8 +214,7 @@ qx.Class.define("zx.io.persistence.Endpoint", {
       let passes = 0;
       while (await scanForMore()) {
         passes++;
-        if (passes > zx.io.persistence.Controller.MAX_PUT_PASSES)
-          throw new Error(`Failed to save because putQueue produces an endless stream of changes`);
+        if (passes > zx.io.persistence.Controller.MAX_PUT_PASSES) throw new Error(`Failed to save because putQueue produces an endless stream of changes`);
       }
     },
 
@@ -229,8 +229,7 @@ qx.Class.define("zx.io.persistence.Endpoint", {
       let uuid = obj.toUuid();
 
       if (!this.__putDependentObjects) this.__putDependentObjects = {};
-      if (this.__putDependentObjects[uuid] && this.__putDependentObjects[uuid] !== obj)
-        throw new Error(`Unexpected change in UUID discovered for ${uuid}: ${obj}`);
+      if (this.__putDependentObjects[uuid] && this.__putDependentObjects[uuid] !== obj) throw new Error(`Unexpected change in UUID discovered for ${uuid}: ${obj}`);
       if (this.__controller._getKnownObject(uuid)) {
         qx.core.Assert.assertTrue(this.__controller._getKnownObjectStatus(uuid) === "success");
       } else {

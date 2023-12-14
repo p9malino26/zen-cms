@@ -19,102 +19,88 @@
   
 
  */
-qx.Class.define("zx.cms.system.ShortUrl", {
+qx.Class.define("zx.cms.website.ShortUrl", {
   extend: zx.server.Object,
-  
 
   construct(...vargs) {
     this.base(arguments, ...vargs);
-    zx.io.remote.NetworkEndpoint.initialiseRemoteClass(zx.cms.system.ShortUrl);
+    zx.io.remote.NetworkEndpoint.initialiseRemoteClass(zx.cms.website.ShortUrl);
   },
 
   properties: {
-    
-      url: {
-        
-        
-           check: "String", 
-          nullable: false,
-           event: "changeUrl", 
-           apply: "_applyUrl", 
-          
-        
-        "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
-      },
-    
-      shortCode: {
-         init: null, 
-        
-           check: "String", 
-          nullable: true,
-           event: "changeShortCode", 
-           apply: "_applyShortCode", 
-          
-        
-        "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
-      },
-    
-      title: {
-         init: null, 
-        
-           check: "String", 
-          nullable: true,
-           event: "changeTitle", 
-           apply: "_applyTitle", 
-          
-        
-        "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
-      },
-    
-      type: {
-         init: "impersonate", 
-        
-           check: ["redirect","impersonate"], 
-          nullable: false,
-           event: "changeType", 
-           apply: "_applyType", 
-          
-        
-        "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
-      },
-    
-      value: {
-         init: null, 
-        
-           check: "String", 
-          nullable: true,
-           event: "changeValue", 
-           apply: "_applyValue", 
-          
-        
-        "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
-      },
-    
+    url: {
+      check: "String",
+      nullable: false,
+      event: "changeUrl",
+      apply: "_applyUrl",
+
+      "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
+    },
+
+    shortCode: {
+      init: null,
+
+      check: "String",
+      nullable: true,
+      event: "changeShortCode",
+      apply: "_applyShortCode",
+
+      "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
+    },
+
+    title: {
+      init: null,
+
+      check: "String",
+      nullable: true,
+      event: "changeTitle",
+      apply: "_applyTitle",
+
+      "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
+    },
+
+    type: {
+      init: "impersonate",
+
+      check: ["redirect", "impersonate"],
+      nullable: false,
+      event: "changeType",
+      apply: "_applyType",
+
+      "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
+    },
+
+    value: {
+      init: null,
+
+      check: "String",
+      nullable: true,
+      event: "changeValue",
+      apply: "_applyValue",
+
+      "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
+    }
   },
 
   members: {
-    
-      _applyUrl(value, oldValue) {
-        // Nothing - to be overridden
-      },
-    
-      _applyShortCode(value, oldValue) {
-        // Nothing - to be overridden
-      },
-    
-      _applyTitle(value, oldValue) {
-        // Nothing - to be overridden
-      },
-    
-      _applyType(value, oldValue) {
-        // Nothing - to be overridden
-      },
-    
-      _applyValue(value, oldValue) {
-        // Nothing - to be overridden
-      },
-    
+    _applyUrl(value, oldValue) {
+      // Nothing - to be overridden
+    },
 
-    
+    _applyShortCode(value, oldValue) {
+      // Nothing - to be overridden
+    },
+
+    _applyTitle(value, oldValue) {
+      // Nothing - to be overridden
+    },
+
+    _applyType(value, oldValue) {
+      // Nothing - to be overridden
+    },
+
+    _applyValue(value, oldValue) {
+      // Nothing - to be overridden
+    }
   }
 });

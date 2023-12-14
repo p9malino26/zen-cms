@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 const fs = require("fs");
 const path = require("path");
@@ -45,10 +44,7 @@ qx.Class.define("zx.io.persistence.db.NedbDatabase", {
      * @Override
      */
     async open() {
-      if (!fs.existsSync(this.__rootDir))
-        throw new Error(
-          "Cannot find root directory for database: " + this.__rootDir
-        );
+      if (!fs.existsSync(this.__rootDir)) throw new Error("Cannot find root directory for database: " + this.__rootDir);
       const Nedb = require("nedb");
       this.__nedb = new Nedb({
         filename: path.join(this.__rootDir, "documents.nedb")
@@ -92,7 +88,7 @@ qx.Class.define("zx.io.persistence.db.NedbDatabase", {
     /*
      * @Override
      */
-    async find(query, projection) {
+    async find(clazz, query, projection) {
       let result = await this.__nedb.find(query, projection);
       return result;
     },
@@ -100,17 +96,15 @@ qx.Class.define("zx.io.persistence.db.NedbDatabase", {
     /*
      * @Override
      */
-    async findOne(query, projection) {
-      let json = await zx.utils.Promisify.call(cb =>
-        this.__nedb.findOne(query, projection, cb)
-      );
+    async findOne(clazz, query, projection) {
+      let json = await zx.utils.Promisify.call(cb => this.__nedb.findOne(query, projection, cb));
       return json;
     },
 
     /*
      * @Override
      */
-    async findAndRemove(query) {
+    async findAndRemove(clazz, query) {
       await zx.utils.Promisify.call(cb => this.__nedb.remove(query, {}, cb));
       return true;
     },
@@ -118,8 +112,8 @@ qx.Class.define("zx.io.persistence.db.NedbDatabase", {
     /*
      * @Override
      */
-    async getDataFromUuid(uuid) {
-      let data = await this.findOne({ _id: uuid });
+    async getDataFromUuid(clazz, uuid) {
+      let data = await this.findOne(clazz, { _id: uuid });
       return {
         json: data
       };
@@ -131,22 +125,17 @@ qx.Class.define("zx.io.persistence.db.NedbDatabase", {
     async _sendJson(uuid, json) {
       json._id = json._uuid;
       await zx.utils.Promisify.call(cb => {
-        this.__nedb.update(
-          { _id: uuid },
-          json,
-          { upsert: true },
-          (err, numAffected, affectedDocuments, upsert) => {
-            //console.log("Update: " + JSON.stringify({err, numAffected, affectedDocuments, upsert}));
-            cb(err);
-          }
-        );
+        this.__nedb.update({ _id: uuid }, json, { upsert: true }, (err, numAffected, affectedDocuments, upsert) => {
+          //console.log("Update: " + JSON.stringify({err, numAffected, affectedDocuments, upsert}));
+          cb(err);
+        });
       });
     },
 
     /*
      * @Override
      */
-    async removeByUuid(uuid) {
+    async removeByUuid(clazz, uuid) {
       await this.findAndRemove({ _id: uuid });
       return true;
     }

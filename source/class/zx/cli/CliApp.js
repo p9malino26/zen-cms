@@ -51,7 +51,7 @@ qx.Class.define("zx.cli.CliApp", {
      */
     _createRootCommand() {
       let rootCmd = new zx.cli.Command("*");
-      rootCmd.addSubcommand(zx.cli.commands.ServeCommand.createCliCommand());
+      rootCmd.addSubcommand(new zx.cli.commands.ServeCommand());
       rootCmd.addSubcommand(zx.cli.commands.DbCommand.createCliCommand());
       rootCmd.addSubcommand(zx.cli.commands.GetCommand.createCliCommand());
       rootCmd.addSubcommand(zx.cli.commands.CreateProxiesCommand.createCliCommand());

@@ -21,99 +21,79 @@
   
 
  */
-qx.Class.define("zx.cms.system.NavItem", {
+qx.Class.define("zx.cms.website.NavItem", {
   extend: zx.io.persistence.Object,
-  
 
   construct(...vargs) {
     this.base(arguments, ...vargs);
-    zx.io.remote.NetworkEndpoint.initialiseRemoteClass(zx.cms.system.NavItem);
+    zx.io.remote.NetworkEndpoint.initialiseRemoteClass(zx.cms.website.NavItem);
   },
 
   properties: {
-    
-      url: {
-        
-        
-           check: "String", 
-          nullable: false,
-           event: "changeUrl", 
-           apply: "_applyUrl", 
-          
-        
-        "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
-      },
-    
-      title: {
-        
-        
-           check: "String", 
-          nullable: false,
-           event: "changeTitle", 
-           apply: "_applyTitle", 
-          
-        
-        "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
-      },
-    
-      cssClass: {
-         init: "", 
-        
-           check: "String", 
-          nullable: false,
-           event: "changeCssClass", 
-           apply: "_applyCssClass", 
-          
-        
-        "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
-      },
-    
-      children: {
-        
-        
-           check: "qx.data.Array", 
-          nullable: false,
-           event: "changeChildren", 
-           apply: "_applyChildren", 
-           transform: "_transformChildren", 
-        
-        "@": [new zx.io.persistence.anno.Property().set({ "embed": true }), new zx.io.remote.anno.Property()]
-      },
-    
+    url: {
+      check: "String",
+      nullable: false,
+      event: "changeUrl",
+      apply: "_applyUrl",
+
+      "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
+    },
+
+    title: {
+      check: "String",
+      nullable: false,
+      event: "changeTitle",
+      apply: "_applyTitle",
+
+      "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
+    },
+
+    cssClass: {
+      init: "",
+
+      check: "String",
+      nullable: false,
+      event: "changeCssClass",
+      apply: "_applyCssClass",
+
+      "@": [new zx.io.persistence.anno.Property(), new zx.io.remote.anno.Property()]
+    },
+
+    children: {
+      check: "qx.data.Array",
+      nullable: false,
+      event: "changeChildren",
+      apply: "_applyChildren",
+      transform: "_transformChildren",
+
+      "@": [new zx.io.persistence.anno.Property().set({ embed: true }), new zx.io.remote.anno.Property()]
+    }
   },
 
   members: {
-    
-      _applyUrl(value, oldValue) {
-        // Nothing - to be overridden
-      },
-    
-      _applyTitle(value, oldValue) {
-        // Nothing - to be overridden
-      },
-    
-      _applyCssClass(value, oldValue) {
-        // Nothing - to be overridden
-      },
-    
-      _applyChildren(value, oldValue) {
-        // Nothing - to be overridden
-      },
-    
+    _applyUrl(value, oldValue) {
+      // Nothing - to be overridden
+    },
 
-    
-      
+    _applyTitle(value, oldValue) {
+      // Nothing - to be overridden
+    },
 
-      
-        _transformChildren(value, oldValue) {
-        if (oldValue) {
-          oldValue.replace(value);
-          return oldValue;
-        }
+    _applyCssClass(value, oldValue) {
+      // Nothing - to be overridden
+    },
 
-        return value;
-      },
-      
-    
+    _applyChildren(value, oldValue) {
+      // Nothing - to be overridden
+    },
+
+    _transformChildren(value, oldValue) {
+      if (oldValue) {
+        oldValue.replace(value);
+        return oldValue;
+      }
+
+      return value;
+    }
   }
 });

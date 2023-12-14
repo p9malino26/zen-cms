@@ -21,14 +21,23 @@
  * @use(zx.test.io.remote.RemoteThinXhrFeature)
  */
 qx.Class.define("zx.cli.commands.ServeCommand", {
-  extend: qx.core.Object,
+  extend: zx.cli.Command,
 
-  properties: {
-    listenPort: {
-      init: null,
-      nullable: true,
-      check: "Integer"
-    }
+  construct() {
+    super("serve");
+
+    this.set({
+      description: "Runs the CMS Web Server",
+      run: async () => await this.run()
+    });
+
+    this.addFlag(
+      new zx.cli.Flag("port").set({
+        shortCode: "p",
+        description: "Port to listen on",
+        type: "integer"
+      })
+    );
   },
 
   environment: {
@@ -39,12 +48,13 @@ qx.Class.define("zx.cli.commands.ServeCommand", {
     __url: null,
 
     async run() {
+      let { flags } = this.getValues();
       let config = await zx.server.Config.getConfig();
 
       let classname = qx.core.Environment.get("zx.cli.ServeCommand.ServerClassname");
       let clazz = qx.Class.getByName(classname);
       let server = new clazz();
-      let port = this.getListenPort() || config.port;
+      let port = flags.port || config.port;
       if (port) {
         server.setListenPort(port);
       }
@@ -61,36 +71,7 @@ qx.Class.define("zx.cli.commands.ServeCommand", {
 
   statics: {
     createCliCommand() {
-      let cmd = new zx.cli.Command("serve").set({
-        description: "Runs the CMS Web Server",
-        run: async function () {
-          let cmd = new zx.cli.commands.ServeCommand();
-          let { flags } = this.getValues();
-          if (flags.port) {
-            cmd.setListenPort(flags.port);
-          }
-          if (flags.config) {
-            cmd.setConfigFilename(flags.config);
-          }
-          return await cmd.run();
-        }
-      });
-
-      cmd.addFlag(
-        new zx.cli.Flag("port").set({
-          shortCode: "p",
-          description: "Port to listen on",
-          type: "integer"
-        })
-      );
-      cmd.addFlag(
-        new zx.cli.Flag("config").set({
-          shortCode: "c",
-          description: "config file to use, defaults to cms.json",
-          type: "string"
-        })
-      );
-      return cmd;
+      return new zx.cli.commands.ServeCommand();
     }
   }
 });

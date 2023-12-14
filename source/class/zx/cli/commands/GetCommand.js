@@ -36,7 +36,7 @@ qx.Class.define("zx.cli.commands.GetCommand", {
       if (url[0] != "/") url = "/" + url;
       if (url.endsWith(".html")) {
         let dbUrl = (url = "pages" + url.substring(0, url.length - 5));
-        let object = await server.getObjectByUrl(dbUrl);
+        let object = await server.getObjectByUrl(zx.cms.content.Page, dbUrl);
         if (!object) {
           this.error(`Cannot find ${url}`);
           return -1;

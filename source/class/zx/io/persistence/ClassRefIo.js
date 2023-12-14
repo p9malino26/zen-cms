@@ -79,7 +79,7 @@ qx.Class.define("zx.io.persistence.ClassRefIo", {
         return null;
       }
 
-      let obj = endpoint.getController().getByUuidNoWait(json._uuid, true);
+      let obj = endpoint.getController().getByUuidNoWait(clazz, json._uuid, true);
       return obj;
     },
 

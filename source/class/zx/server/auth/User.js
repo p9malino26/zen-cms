@@ -26,8 +26,14 @@ qx.Class.define("zx.server.auth.User", {
     clientMixins: "zx.server.auth.MUser"
   }),
 
-  construct() {
+  /**
+   * Constructor
+   *
+   * @param {Boolean} virtualUser whether this user is virtual, ie created from remote auth and not to be persisted
+   */
+  construct(virtualUser) {
     this.base(arguments);
+    this.__virtualUser = !!virtualUser;
     this.set({
       permissions: new zx.data.IndexedArray().set({
         keyGenerator: perm => perm.getShortCode()
@@ -98,6 +104,31 @@ qx.Class.define("zx.server.auth.User", {
   },
 
   members: {
+    /** @type{Boolean} whether this is a virtual user, ie not to be persisted */
+    __virtualUser: false,
+
+    /**
+     * @Override
+     */
+    async save() {
+      if (this.__virtualUser) {
+        this.error("Refusing to save a virtual user " + this);
+      } else {
+        super.save();
+      }
+    },
+
+    /**
+     * @Override
+     */
+    async deleteFromDatabase() {
+      if (this.__virtualUser) {
+        this.error("Refusing to delete a virtual user " + this);
+      } else {
+        super.deleteFromDatabase();
+      }
+    },
+
     /**
      * Logs the user into the current session
      *
@@ -249,30 +280,6 @@ qx.Class.define("zx.server.auth.User", {
       let user = await server.findOneObjectByType(clazz, {
         _uuid: data.userUuid
       });
-      return user;
-    },
-
-    /**
-     * Gets a user from the email address; returns null unless `create` is true, in which case
-     * the user will be created if it does not already exist
-     *
-     * @param {String} email
-     * @param {Boolean?} create
-     * @return {zx.server.auth.User}
-     */
-    async getUserFromEmail(email, create) {
-      let server = zx.server.Standalone.getInstance();
-      let clazz = zx.server.auth.User.getUserClass();
-      let user = await server.findOneObjectByType(clazz, {
-        username: email.toLowerCase()
-      });
-      if (!user && create) {
-        user = new clazz().set({
-          username: email,
-          fullName: ""
-        });
-        await user.save();
-      }
       return user;
     }
   }

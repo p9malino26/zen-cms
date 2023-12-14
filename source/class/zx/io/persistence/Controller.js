@@ -131,11 +131,12 @@ qx.Class.define("zx.io.persistence.Controller", {
      * Loads an object from the data source, but will not complete until all
      * nested objects to be loaded are complete
      *
+     * @param clazz {qx.Class} the class of the object to load
      * @param uuid {String} the UUID to load
      * @return {qx.core.Object?} the loaded object, null if not found
      */
-    async getByUuid(uuid) {
-      let p = this.getByUuidNoWait(uuid);
+    async getByUuid(clazz, uuid) {
+      let p = this.getByUuidNoWait(clazz, uuid);
       await this.waitForAll();
       return await p;
     },
@@ -150,11 +151,12 @@ qx.Class.define("zx.io.persistence.Controller", {
      *
      * NOTE: may return a promise
      *
+     * @param clazz {qx.Class} the class of the object to load
      * @param uuid {String} the UUID to load
      * @param allowIncomplete {Boolean} if true, allows incomplete objects to be returned
      * @return {qx.core.Object?} the loaded object, null if not found
      */
-    getByUuidNoWait(uuid, allowIncomplete) {
+    getByUuidNoWait(clazz, uuid, allowIncomplete) {
       let knownObject = this._knownObjectsByUuid[uuid];
       if (knownObject) {
         if (knownObject.complete === "error") {
@@ -195,7 +197,7 @@ qx.Class.define("zx.io.persistence.Controller", {
       let endpoint = null;
       for (let i = 0; !data && i < this.__endpoints.length; i++) {
         endpoint = this.__endpoints[i];
-        data = endpoint.getDataFromUuid(uuid);
+        data = endpoint.getDataFromUuid(clazz, uuid);
       }
       if (!data) {
         this._knownObjectsByUuid[uuid].promise.resolve(null);
@@ -218,6 +220,9 @@ qx.Class.define("zx.io.persistence.Controller", {
         let clz = qx.Class.getByName(data.json._classname);
         if (!clz) {
           throw new Error(`Cannot create object with UUID ${uuid} because the class ${data.json._classname} does not exist`);
+        }
+        if (!qx.Class.isSubClassOf(clz, clazz)) {
+          throw new Error(`Cannot create object with UUID ${uuid} because the class ${data.json._classname} does not derive from ${clazz.classname}`);
         }
 
         let io = this.__classIos.getClassIo(clz);

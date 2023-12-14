@@ -41,16 +41,12 @@ qx.Class.define("zx.app.AbstractClientApp", {
 
   members: {
     async main() {
-      if (this.__endpoint) {
-        debugger;
-        throw new Error("Application initialised multiple times!");
-      }
-      await this.base(arguments);
+      await super.main();
 
       qx.log.appender.Native;
       await this._zxInitialise();
 
-      let loginApi = await this.__netController.getUriMapping(zx.server.auth.LoginApi.classname);
+      let loginApi = await this.getNetController().getUriMapping(zx.server.auth.LoginApi.classname);
       let user = await loginApi.getCurrentUser();
       this.setUser(user);
     },

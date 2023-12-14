@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.server.CmsConfiguration", {
   extend: zx.io.persistence.Object,
@@ -69,10 +69,8 @@ qx.Class.define("zx.server.CmsConfiguration", {
      */
     registerApi(apiName, clazz, check) {
       let checkFn = check;
-      if (typeof check == "string")
-        checkFn = user => user && user.hasPermission(check);
-      if (checkFn && qx.core.Environment.get("qx.debug"))
-        this.assertTrue(typeof checkFn == "function");
+      if (typeof check == "string") checkFn = user => user && user.hasPermission(check);
+      if (checkFn && qx.core.Environment.get("qx.debug")) this.assertTrue(typeof checkFn == "function");
       this.__registeredApis[apiName] = {
         apiName,
         apiClass: clazz,
@@ -89,7 +87,7 @@ qx.Class.define("zx.server.CmsConfiguration", {
      */
     "@getPageAtUrl": zx.io.remote.anno.Method.DEFAULT,
     getPageAtUrl(url) {
-      let page = zx.server.Standalone.getInstance().getObjectByUrl(url);
+      let page = zx.server.Standalone.getInstance().getObjectByUrl(zx.cms.content.Page, url);
       return page;
     },
 
@@ -116,8 +114,7 @@ qx.Class.define("zx.server.CmsConfiguration", {
      * Apply for `urlPages`
      */
     __applyUrlPages(value, oldValue) {
-      if (oldValue)
-        throw new Error(`Unexpected change of ${this.classname}.urlPages`);
+      if (oldValue) throw new Error(`Unexpected change of ${this.classname}.urlPages`);
     }
   }
 });

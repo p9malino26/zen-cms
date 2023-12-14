@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.server.auth.LoginApiAdmin", {
   extend: zx.server.Object,
@@ -53,15 +52,11 @@ qx.Class.define("zx.server.auth.LoginApiAdmin", {
     async createImpersonateCode(user, redirectTo) {
       let currentUser = await zx.server.auth.User.getUserFromSession();
       if (!currentUser.hasPermission("zx-super-user")) {
-        this.error(
-          `Cannot impersonate ${user} because this user (${currentUser}) is does not have suitable permissions`
-        );
+        this.error(`Cannot impersonate ${user} because this user (${currentUser}) is does not have suitable permissions`);
         return null;
       }
       if (user.hasPermission("zx-super-user")) {
-        this.error(
-          `Cannot impersonate ${user} because their permissions prevent it (they are a super user)`
-        );
+        this.error(`Cannot impersonate ${user} because their permissions prevent it (they are a super user)`);
         return null;
       }
 
@@ -71,7 +66,7 @@ qx.Class.define("zx.server.auth.LoginApiAdmin", {
       };
       if (redirectTo) data.redirectTo = redirectTo;
 
-      let shortUrl = new zx.cms.system.ShortUrl().set({
+      let shortUrl = new zx.cms.website.ShortUrl().set({
         url: "zx/impersonate/" + qx.util.Uuid.createUuidV4(),
         type: "impersonate",
         title: "Impersonate " + user.getUsername(),
@@ -88,12 +83,12 @@ qx.Class.define("zx.server.auth.LoginApiAdmin", {
     "@createUser": zx.io.remote.anno.Method.DEFAULT,
     async createUser(username, fullName, password) {
       debugger;
-      let user = await zx.server.auth.User.getUserFromEmail(username);
+      let user = await zx.server.Standalone.getInstance().getUserDiscovery().getUserFromEmail(username);
       let status = null;
       if (user) {
         status = "exists";
       } else {
-        user = await zx.server.auth.User.getUserFromEmail(username, true);
+        user = await zx.server.Standalone.getInstance().getUserDiscovery().getUserFromEmail(username, true);
         if (fullName) user.setFullName(fullName);
         if (password) user.setPassword(password);
         await user.save();
@@ -104,7 +99,7 @@ qx.Class.define("zx.server.auth.LoginApiAdmin", {
       let query = {
         _uuid: user.toUuid()
       };
-      let json = await db.findOne(query, {
+      let json = await db.findOne(zx.server.auth.User, query, {
         username: 1,
         fullName: 1,
         _uuid: 1

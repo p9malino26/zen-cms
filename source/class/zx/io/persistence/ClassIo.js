@@ -234,9 +234,8 @@ qx.Class.define("zx.io.persistence.ClassIo", {
 
       if (value.$query) {
         let query = qx.lang.Object.clone(value.$query);
-        query._classname = value._classname;
         return endpoint
-          .findOne(query, { _uuid: 1, _classname: 1 })
+          .findOne(qx.Class.getByName(value._classname), query, { _uuid: 1, _classname: 1 })
           .then(newJson =>
             newJson ? this.__convertObjectFromJson(endpoint, propertyDef, newJson, defaultType) : null
           );

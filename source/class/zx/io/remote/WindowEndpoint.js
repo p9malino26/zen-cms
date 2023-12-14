@@ -1,20 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2022 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
-
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Provides an endpoint implementation for postMessage via `window`
@@ -43,10 +42,7 @@ qx.Class.define("zx.io.remote.WindowEndpoint", {
      */
     __startFlushTimer() {
       this.__cancelFlushTimer();
-      this.__flushTimerId = setTimeout(
-        () => this.__onFlushTimeout(),
-        zx.io.remote.WindowEndpoint.__MAX_DELAY_BEFORE_FLUSHING
-      );
+      this.__flushTimerId = setTimeout(() => this.__onFlushTimeout(), zx.io.remote.WindowEndpoint.__MAX_DELAY_BEFORE_FLUSHING);
     },
 
     /**
@@ -80,7 +76,7 @@ qx.Class.define("zx.io.remote.WindowEndpoint", {
       this.__cancelFlushTimer();
       this.__window.postMessage({
         signature: this.classname,
-        packets: queuedPackets,
+        packets: queuedPackets
       });
     },
 
@@ -102,18 +98,18 @@ qx.Class.define("zx.io.remote.WindowEndpoint", {
 
       let msgData = event.data;
       if (msgData.signature !== this.classname) return;
-      let responses = await this._receivePackets(msgData.packets);
+      let responses = await this._receivePackets(null, null, msgData.packets);
       if (responses && responses.length) {
         this.__window.postMessage({
           signature: this.classname,
-          packets: responses,
+          packets: responses
         });
       }
-    },
+    }
   },
 
   statics: {
     /** @type{Integer} max time to wait before flushing the queue, in milliseconds */
-    __MAX_DELAY_BEFORE_FLUSHING: 500,
-  },
+    __MAX_DELAY_BEFORE_FLUSHING: 500
+  }
 });
