@@ -61,7 +61,11 @@ qx.Class.define("zx.server.CmsConfiguration", {
      * Registers an API name; the `apiName` is the well-known name that it is published as, and is often the
      * classname but actually can be anything you like.
      *
-     * @param {String} apiName published name of the API
+     * The function tries to be helpful - if you only pass `apiName`, and it is a string, then it will find a
+     * class of that name; if `apiName` is a class, then it will use that class and the `apiName` will be the
+     * fully qualified classname.
+     *
+     * @param {String|Class} apiName published name of the API
      * @param {Class} clazz the class that implements the API
      * @param {Function|String?} check if a string, then it's permission that the user must have, otherwise it
      *  is a function that is called (with the user object as a parameter) and which must return `true` if the user
@@ -72,8 +76,18 @@ qx.Class.define("zx.server.CmsConfiguration", {
       if (typeof check == "string") {
         checkFn = user => user && user.hasPermission(check);
       }
-      if (checkFn && qx.core.Environment.get("qx.debug")) {
-        this.assertTrue(typeof checkFn == "function");
+      if (!clazz) {
+        if (typeof apiName == "string") {
+          clazz = qx.Class.getByName(apiName);
+        } else if (typeof apiName.constructor == "function") {
+          clazz = apiName;
+          apiName = clazz.classname;
+        }
+      }
+      if (qx.core.Environment.get("qx.debug")) {
+        if (checkFn) {
+          this.assertTrue(typeof checkFn == "function");
+        }
       }
       this.__registeredApis[apiName] = {
         apiName,

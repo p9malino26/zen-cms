@@ -15,6 +15,10 @@
  *
  * ************************************************************************ */
 
+/**
+ * @use(zx.server.CmsConfiguration)
+ * @use(zx.server.auth.LoginApi)
+ */
 qx.Mixin.define("zx.app.MClientApp", {
   members: {
     /** @type{zx.io.remote.NetworkController} the network controller */
@@ -87,12 +91,17 @@ qx.Mixin.define("zx.app.MClientApp", {
     },
 
     /**
-     * Gets a named API from the server
+     * Gets a named API from the server; the API must be registered in the server.
      *
-     * @param {String} apiName
+     * If the `apiName` is a class, then the classname is used
+     *
+     * @param {String|Class} apiName
      * @returns {qx.core.Object}
      */
     async getApi(apiName) {
+      if (typeof apiName.constructor == "function") {
+        apiName = apiName.classname;
+      }
       let cmsConfig = await this.getNetController().getUriMapping("zx.server.CmsConfiguration");
       let api = cmsConfig.getApi(apiName);
       return api;

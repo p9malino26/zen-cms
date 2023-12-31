@@ -117,8 +117,8 @@ qx.Class.define("zx.server.WebServer", {
     /** @type{Object[]} array of objects describing url rules */
     __urlRules: null,
 
-    /** @type{Buffer} the proxy servers public key, used for remote authentication */
-    __proxyPublicKey: undefined,
+    /** @type{zx.utils.PublicPrivate} the proxy servers encryption, used for remote authentication */
+    __proxyPublicPrivate: undefined,
 
     /**
      * Called to start the server
@@ -209,8 +209,8 @@ qx.Class.define("zx.server.WebServer", {
       this._networkController.putUriMapping("zx.server.CmsConfiguration", config);
       this._networkController.putUriMapping("zx.server.auth.LoginApi", new zx.server.auth.LoginApi());
 
-      config.registerApi("zx.server.auth.LoginApi", zx.server.auth.LoginApi);
-      config.registerApi("zx.server.auth.LoginApiAdmin", zx.server.auth.LoginApiAdmin, "zx-super-user");
+      config.registerApi(zx.server.auth.LoginApi);
+      config.registerApi(zx.server.auth.LoginApiAdmin, null, "zx-super-user");
       return config;
     },
 
@@ -694,21 +694,19 @@ qx.Class.define("zx.server.WebServer", {
      */
     async _handleProxyLogin(request, reply) {
       let auth = request.headers["x-authorization"];
-      let authSignature = request.headers["x-authorisation-signature"];
+      let authSignature = request.headers["x-authorization-signature"];
 
       if (auth && auth.startsWith("Proxy")) {
-        const crypto = require("crypto");
-        if (this.__proxyPublicKey === undefined) {
-          let strPublicKey = this._config.proxyPublicKey;
-          this.__proxyPublicKey = strPublicKey
-            ? crypto.createPublicKey({
-                key: strPublicKey,
-                format: "pem"
-              })
-            : null;
+        if (this.__proxyPublicPrivate === undefined) {
+          if (this._config.proxyPrivateKeyFile) {
+            this.__proxyPublicPrivate = new zx.utils.PublicPrivate();
+            await this.__proxyPublicPrivate.init(this._config.proxyPrivateKeyFile);
+          } else {
+            this.__proxyPublicPrivate = null;
+          }
         }
 
-        if (!this.__proxyPublicKey) {
+        if (!this.__proxyPublicPrivate) {
           this.error("Not logging in user " + email + " because no public key");
           reply.code(403);
           return false;
@@ -719,13 +717,9 @@ qx.Class.define("zx.server.WebServer", {
         authSignature = Buffer.from(authSignature, "base64");
         let email = payload.toString("utf8");
 
-        let verifier = crypto.createVerify("RSA-SHA256");
-        verifier.update(payload);
+        let verified = this.__proxyPublicPrivate.verify(payload, authSignature);
 
-        //const signatureBuf = Buffer.fromString(authSignature, "hex");
-        const result = verifier.verify(this.__proxyPublicKey, authSignature);
-
-        if (!result) {
+        if (!verified) {
           this.error("Not logging in user " + email + " because signature is invalid");
           reply.code(403);
           return false;
