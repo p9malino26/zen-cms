@@ -494,16 +494,34 @@ qx.Class.define("zx.cli.Command", {
         process.exit(-1);
       }
 
-      let run = (cmd && cmd.getRun()) || null;
-      if (!cmd || run === null || errors || cmd.getFlag("help").getValue()) {
+      if (!cmd || errors || cmd.getFlag("help").getValue()) {
         console.log((cmd || this).usage());
         process.exit(0);
       }
 
-      let exitCode = await run.call(cmd, cmd.getValues(), cmd);
+      let exitCode = await cmd.run();
       if (typeof exitCode == "number") {
         process.exit(exitCode);
       }
+    },
+
+    /**
+     * Runs the command
+     * @returns
+     */
+    async run() {
+      let fn = this.getRun();
+      if (fn != null) {
+        return await fn(this.getValues(), this);
+      }
+      return await this._runImpl();
+    },
+
+    /**
+     * Implementation of run, provided that the `run` property is null
+     */
+    async runImpl() {
+      throw new Error("No implemention for " + this.classname + "._runImpl");
     },
 
     toString() {
