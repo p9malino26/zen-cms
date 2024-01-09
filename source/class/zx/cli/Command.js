@@ -520,7 +520,7 @@ qx.Class.define("zx.cli.Command", {
     /**
      * Implementation of run, provided that the `run` property is null
      */
-    async runImpl() {
+    async _runImpl() {
       throw new Error("No implemention for " + this.classname + "._runImpl");
     },
 
