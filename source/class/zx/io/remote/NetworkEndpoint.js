@@ -589,6 +589,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
     async _receivePacketsImpl(context) {
       let { packets } = context;
 
+      if (!packets) return;
       packets.forEach(packet => {
         if (packet.type == "sendObject") {
           this.__sentUuids[packet.uuid] = "receiving";
