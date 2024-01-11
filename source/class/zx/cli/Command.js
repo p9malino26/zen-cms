@@ -512,7 +512,7 @@ qx.Class.define("zx.cli.Command", {
     async run() {
       let fn = this.getRun();
       if (fn != null) {
-        return await fn(this.getValues(), this);
+        return await fn.call(this, this.getValues(), this);
       }
       return await this._runImpl();
     },
