@@ -593,7 +593,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
     async _receivePacketsImpl(context) {
       let { packets } = context;
 
-      if (!packets) return;
+      if (!packets) {
+        return;
+      }
       packets.forEach(packet => {
         if (packet.type == "sendObject") {
           this.__sentUuids[packet.uuid] = "receiving";
@@ -819,6 +821,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
               type: "upload",
               sourceUuid: fields.sourceUuid,
               sourceQxObjectId: fields.sourceQxObjectId,
+              sourceQxHashCode: fields.sourceQxHashCode,
               result: await this._serializeReturnValue(result)
             };
 

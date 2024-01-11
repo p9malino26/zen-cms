@@ -71,7 +71,8 @@ qx.Mixin.define("zx.app.MClientApp", {
         this.__uploadMgr = new com.zenesis.qx.upload.UploadMgr(null, url);
         this.__uploadMgr.getUploadHandler().setExtraHeaders({
           "X-Zx-Io-Remote-SessionUuid": this.__endpoint.getUuid(),
-          "X-Zx-Io-Remote-ApplicationName": qx.core.Environment.get("qx.compiler.applicationName")
+          "X-Zx-Io-Remote-ApplicationName": qx.core.Environment.get("qx.compiler.applicationName"),
+          "X-Zx-Io-Remote-Share-Connection": "" + this.__endpoint.getShareConnection()
         });
 
         this.__uploadMgr.addListener("addFile", evt => {
