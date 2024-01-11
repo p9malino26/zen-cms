@@ -534,13 +534,17 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           }
           return {
             _uuid: uuid,
-            _classname: value.classname
+            _classname: value.classname,
+            _isObject: true
           };
         } else if (value instanceof qx.core.Object) {
           throw new Error(`Cannot return ${value} because it is ${value.classname} which is not capable of being sent remotely`);
         } else if (value instanceof Date || TYPEOF_PRIMITIVES[typeof value]) {
           return value;
         } else if (qx.lang.Type.isObject(value)) {
+          if (typeof value._uuid == "string" && typeof value._classname == "string" && value._isObject === true) {
+            throw new Error(`Cannot return ${value} because it has _uuid, _classname, and _isObject properties which means that it is not an object - instantiate it first`);
+          }
           let result = {};
           for (let key in value) {
             result[key] = await serializeValue(value[key]);
@@ -567,7 +571,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           }
           return value;
         }
-        if (typeof value._uuid == "string" && typeof value._classname == "string") {
+        if (typeof value._uuid == "string" && typeof value._classname == "string" && value._isObject === true) {
           let clazz = qx.Class.getByName(value._classname);
           if (!clazz) {
             throw new Error(`Cannot return ${value._uuid} because there is no class called ${value._classname}`);
@@ -589,6 +593,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
     async _receivePacketsImpl(context) {
       let { packets } = context;
 
+      if (!packets) return;
       packets.forEach(packet => {
         if (packet.type == "sendObject") {
           this.__sentUuids[packet.uuid] = "receiving";

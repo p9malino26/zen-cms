@@ -165,7 +165,7 @@ qx.Class.define("zx.io.persistence.Controller", {
           throw new knownObject.exceptionThrown();
         }
         if (knownObject.complete === "success" || (allowIncomplete && knownObject.obj)) {
-          // No way to know if the bject has changed on disk
+          // No way to know if the object has changed on disk
           if (!knownObject.isStale) {
             return knownObject.obj;
           }
@@ -190,8 +190,7 @@ qx.Class.define("zx.io.persistence.Controller", {
       } else {
         knownObject = this._knownObjectsByUuid[uuid] = {
           obj: null,
-          promise: new qx.Promise(),
-          a: 1
+          promise: new qx.Promise()
         };
       }
 
@@ -229,7 +228,7 @@ qx.Class.define("zx.io.persistence.Controller", {
 
         let io = this.__classIos.getClassIo(clz);
         return zx.utils.Promisify.resolveNow(io.fromJson(endpoint, data.json), () => {
-          if (knownObject.status == "success") {
+          if (knownObject.complete == "success") {
             return knownObject.obj;
           }
           return knownObject.promise;
