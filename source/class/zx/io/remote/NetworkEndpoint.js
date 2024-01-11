@@ -712,6 +712,9 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           if (!source && packet.sourceQxObjectId) {
             source = qx.core.Id.getQxObject(packet.sourceQxObjectId);
           }
+          if (!source && packet.sourceQxHashCode) {
+            source = qx.core.ObjectRegistry.fromHashCode(packet.sourceQxHashCode);
+          }
           let result = await this._deserializeReturnValue(packet.result);
           if (source) {
             await source.onUploadCompleted(result);
