@@ -706,16 +706,16 @@ qx.Class.define("zx.server.WebServer", {
           }
         }
 
+        let payload = auth.substring("Proxy".length).trim();
+        payload = Buffer.from(payload, "base64");
+        authSignature = Buffer.from(authSignature, "base64");
+        let email = payload.toString("utf8");
+
         if (!this.__proxyPublicPrivate) {
           this.error("Not logging in user " + email + " because no public key");
           reply.code(403);
           return false;
         }
-
-        let payload = auth.substring("Proxy".length).trim();
-        payload = Buffer.from(payload, "base64");
-        authSignature = Buffer.from(authSignature, "base64");
-        let email = payload.toString("utf8");
 
         let verified = this.__proxyPublicPrivate.verify(payload, authSignature);
 
