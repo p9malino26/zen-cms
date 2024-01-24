@@ -59,7 +59,7 @@ qx.Class.define("zx.ui.files.FileUpload", {
           return lbl;
         }
         case "btn-upload": {
-          let btn = new com.zenesis.qx.upload.UploadButton("Choose File", "@FontAwesome/upload/16");
+          let btn = new com.zenesis.qx.upload.UploadButton("Browse", "@FontAwesome/upload/16");
           return btn;
         }
         case "btn-delete": {
