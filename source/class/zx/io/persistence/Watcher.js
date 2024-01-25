@@ -134,7 +134,7 @@ qx.Class.define("zx.io.persistence.Watcher", {
       if (!info) {
         return;
       }
-      this.__unwatchObject(uuid, ...args);
+      this.__unwatchObjectImpl(uuid, ...args);
     },
 
     /**
@@ -146,14 +146,14 @@ qx.Class.define("zx.io.persistence.Watcher", {
       Object.keys(this.__objectInfoByUuid).forEach(uuid => {
         let info = this.__objectInfoByUuid[uuid];
         if (this._isWatchingImpl(info, ...args)) {
-          this.__unwatchObject(uuid, ...args);
+          this.__unwatchObjectImpl(uuid, ...args);
         }
       });
     },
 
-    __unwatchObject(uuid, ...args) {
+    __unwatchObjectImpl(uuid, ...args) {
       let info = this.__objectInfoByUuid[uuid];
-      
+
       if (!this._detachObject(info, ...args)) return;
 
       this.__status.numWatchedObjects--;
