@@ -85,7 +85,7 @@ qx.Class.define("zx.server.files.DataFile", {
     "@deleteFromDisk": zx.io.remote.anno.Method.DEFAULT,
     async deleteFromDisk() {
       let fileName = this.getFilename();
-      fs.rmSync(fileName);
+      await fs.promises.rm(fileName);
 
       let server = zx.server.Standalone.getInstance();
       await server.deleteObject(this);
