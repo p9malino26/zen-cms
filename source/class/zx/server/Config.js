@@ -115,14 +115,14 @@ qx.Class.define("zx.server.Config", {
      * Helper method to resolve a filename relative to the application directory
      */
     resolveApp(...args) {
-      return path.resolve(path.join(this._config.appDirectory || ".", ...args));
+      return path.resolve(path.join(...args));
     },
 
     /**
      * Helper method to resolve a filename relative to the data directory
      */
     resolveData(...args) {
-      return path.resolve(path.join(this._config.appDirectory || ".", ...args));
+      return path.resolve(path.join(this._config.directory || ".", ...args));
     }
   },
 

@@ -67,9 +67,8 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
       return await super.open();
     },
 
-    async getCollection(clazz) {
+    getCollection(clazz) {
       let classname = clazz.classname || clazz.toString();
-      let collections = await this.__db.collections();
       return this.__db.collection(classname);
     },
 
@@ -154,6 +153,11 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
      */
     async findOne(clazz, query, projection, options) {
       let collection = await this.getCollection(clazz);
+      if (qx.core.Environment.get("qx.debug")) {
+        if ((await collection.countDocuments(query)) > 1) {
+          throw new Error("More than one document found");
+        }
+      }
       let json = await collection.findOne(query, this.__createOptions(projection, options));
       return json;
     },

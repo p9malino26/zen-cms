@@ -107,6 +107,9 @@ qx.Class.define("zx.cli.Command", {
      * @param {zx.cli.Flag} flag
      */
     addFlag(flag) {
+      if (qx.core.Environment.get("qx.debug")) {
+        this.assertTrue(flag instanceof zx.cli.Flag, "flag must be an instance of zx.cli.Flag");
+      }
       this.__flags.push(flag);
     },
 
@@ -132,6 +135,9 @@ qx.Class.define("zx.cli.Command", {
      * @param {zx.cli.Argument} argument
      */
     addArgument(argument) {
+      if (qx.core.Environment.get("qx.debug")) {
+        this.assertTrue(argument instanceof zx.cli.Argument, "argument must be an instance of zx.cli.Argument");
+      }
       this.__arguments.push(argument);
     },
 
@@ -521,7 +527,7 @@ qx.Class.define("zx.cli.Command", {
      * Implementation of run, provided that the `run` property is null
      */
     async _runImpl() {
-      throw new Error("No implemention for " + this.classname + "._runImpl");
+      console.log(this.usage());
     },
 
     toString() {

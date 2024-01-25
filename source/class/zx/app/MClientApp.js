@@ -51,7 +51,7 @@ qx.Mixin.define("zx.app.MClientApp", {
       }));
 
       if (!endpoint.isPolling()) {
-        this.warn(" *************** POLLING TURNED OFF IN CODE ********* ");
+        this.warn(" *************** POLLING TURNED OFF IN CODE (uploads will be broken) ********* ");
       }
       this.__netController.addEndpoint(endpoint);
       await endpoint.open();
