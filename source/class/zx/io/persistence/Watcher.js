@@ -134,11 +134,7 @@ qx.Class.define("zx.io.persistence.Watcher", {
       if (!info) {
         return;
       }
-      if (this._detachObject(info, ...args)) {
-        this.__status.numWatchedObjects--;
-        delete this.__objectInfoByUuid[uuid];
-        info.listenerIds.forEach(id => object.removeListenerById(id));
-      }
+      this.__unwatchObject(uuid, ...args);
     },
 
     /**
@@ -150,11 +146,24 @@ qx.Class.define("zx.io.persistence.Watcher", {
       Object.keys(this.__objectInfoByUuid).forEach(uuid => {
         let info = this.__objectInfoByUuid[uuid];
         if (this._isWatchingImpl(info, ...args)) {
-          if (this._detachObject(info, ...args)) {
-            this.__status.numWatchedObjects--;
-            delete this.__objectInfoByUuid[uuid];
-            info.listenerIds.forEach(id => info.object.removeListenerById(id));
-          }
+          this.__unwatchObject(uuid, ...args);
+        }
+      });
+    },
+
+    __unwatchObject(uuid, ...args) {
+      let info = this.__objectInfoByUuid[uuid];
+      
+      if (!this._detachObject(info, ...args)) return;
+
+      this.__status.numWatchedObjects--;
+      delete this.__objectInfoByUuid[uuid];
+      info.listenerIds.forEach(id => info.object.removeListenerById(id));
+      Object.keys(info.properties).forEach(propertyName => {
+        const arrayChangeListenerId = info.properties[propertyName].arrayChangeListenerId;
+        if (arrayChangeListenerId) {
+          info.object.get(propertyName).removeListenerById(arrayChangeListenerId);
+          info.properties[propertyName].arrayChangeListenerId = null;
         }
       });
     },

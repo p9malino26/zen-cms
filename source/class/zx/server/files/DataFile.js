@@ -80,6 +80,15 @@ qx.Class.define("zx.server.files.DataFile", {
       let dirname = path.dirname(filename);
       fs.mkdirSync(dirname, { recursive: true });
       return filename;
+    },
+
+    "@deleteFromDisk": zx.io.remote.anno.Method.DEFAULT,
+    async deleteFromDisk() {
+      let fileName = this.getFilename();
+      fs.rmSync(fileName);
+
+      let server = zx.server.Standalone.getInstance();
+      await server.deleteObject(this);
     }
   }
 });
