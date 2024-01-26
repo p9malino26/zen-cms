@@ -10,6 +10,7 @@ qx.Class.define("zx.cli.puppeteer.PuppeteerCommand", {
       });
 
       cmd.addSubcommand(zx.cli.puppeteer.ScreenshotCommand.createCliCommand());
+      cmd.addSubcommand(zx.cli.puppeteer.EmailCommand.createCliCommand());
 
       let sub = new zx.cli.Command("hold").set({
         description: `Holds Chromium in a container for testing and mdebugging`,

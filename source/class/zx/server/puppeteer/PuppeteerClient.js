@@ -404,7 +404,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
      * Creates and caches an instance of a remote API
      *
      * @param {qx.Class} clazz
-     * @returns {zx.server.puppeteer.AbstractRemoteApi}
+     * @returns {zx.server.puppeteer.AbstractServerApi}
      */
     createRemoteApi(clazz) {
       let api = this.__remoteApis[clazz.classname];
