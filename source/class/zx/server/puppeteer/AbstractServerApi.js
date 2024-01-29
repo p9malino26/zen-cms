@@ -10,7 +10,7 @@
  *
  * All methods are asynchronous and return a Promise.
  */
-qx.Class.define("zx.server.puppeteer.AbstractRemoteApi", {
+qx.Class.define("zx.server.puppeteer.AbstractServerApi", {
   extend: qx.core.Object,
 
   /**
