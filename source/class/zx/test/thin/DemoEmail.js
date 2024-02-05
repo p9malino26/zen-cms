@@ -5,21 +5,24 @@ qx.Class.define("zx.test.thin.DemoEmail", {
 
   construct() {
     super();
-    this.add(
-      <div>
-        <h1>Hello Email Recipient!</h1>
-        <p>This is an HTML email rendered on the fly by ZenCMS</p>
-      </div>
-    );
 
-    let emailParameters = {
-      to: "test@example.com",
-      subject: "Hello Email Recipient!"
-    };
+    if (qx.core.Environment.get("zx.io.remote.NetworkEndpoint.server")) {
+      this.add(
+        <div>
+          <h1>Hello Email Recipient!</h1>
+          <p>This is an HTML email rendered on the fly by ZenCMS</p>
+        </div>
+      );
 
-    let scriptTag = <script type="text/plain" id="parameters"></script>;
-    scriptTag.add(JSON.stringify(emailParameters, null, 2));
-    this.add(scriptTag);
+      let emailParameters = {
+        to: "test@example.com",
+        subject: "Hello Email Recipient!"
+      };
+
+      let scriptTag = <script type="text/plain" id="parameters"></script>;
+      scriptTag.add(JSON.stringify(emailParameters, null, 2));
+      this.add(scriptTag);
+    }
   },
 
   members: {
