@@ -85,6 +85,8 @@ qx.Class.define("zx.server.Standalone", {
 
         await zx.server.puppeteer.ChromiumDocker.cleanupOldContainers();
       }
+      await zx.server.email.EmailJS.initialise();
+      await zx.server.email.SMTPClient.initialise();
       await this._openDatabase();
       await this._initSite();
       await this._initRenderer();
