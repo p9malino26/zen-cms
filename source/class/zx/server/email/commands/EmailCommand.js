@@ -15,5 +15,6 @@ qx.Class.define("zx.server.email.commands.EmailCommand", {
     this.addSubcommand(new zx.server.email.commands.FlushCommand());
     this.addSubcommand(new zx.server.email.commands.SendCommand());
     this.addSubcommand(new zx.server.email.commands.ShowQueueCommand());
+    this.addSubcommand(new zx.server.email.commands.DeleteCommand());
   }
 });
