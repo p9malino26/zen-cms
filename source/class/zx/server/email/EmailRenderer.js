@@ -25,12 +25,11 @@ qx.Class.define("zx.server.email.EmailRenderer", {
         let promiseFinished = new qx.Promise();
 
         api.addListener("sendEmail", evt => {
-          let { html, parameters } = evt.getData();
+          let { html, textBody, parameters } = evt.getData();
           console.log("Email body to send: " + html);
           console.log("Email parameters: " + JSON.stringify(parameters, null, 2));
           
-
-          zx.server.email.Message.compose({ from: parameters.from ?? null, to: parameters.to, subject: parameters.subject ?? null, htmlBody: html });
+          zx.server.email.Message.compose({ from: parameters.from ?? null, to: parameters.to, subject: parameters.subject ?? null, htmlBody: html, textBody});
           api.next();
         });
 
