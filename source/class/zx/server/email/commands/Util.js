@@ -25,14 +25,14 @@ qx.Class.define("zx.server.email.commands.Util", {
       let htmlBody = email.getHtmlBody();
 
       let config = await zx.server.Config.getConfig();
-
+      
       const message = new Message({
-        from: email.getFrom(),
+        from: config.smtpServer.fromAddr,
         to: email.getTo(),
         subject: email.getSubject(),
-        attachment: [{ data: htmlBody, alternative: true }],
-        text: "Cannot show HTML email",
-        "reply-to": config.smtpServer.replyTo
+        attachment: htmlBody ? [{ data: htmlBody, alternative: true }] : undefined,
+        text: email.getTextBody(),
+        "reply-to": email.getFrom(),
       });
 
       let client = zx.server.email.SMTPClient.getInstance();
