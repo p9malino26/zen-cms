@@ -384,22 +384,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
       } else if (check === "Array") {
         value = this.__convertArrayFromJson(endpoint, propertyDef, value);
       } else if (check === "Date") {
-        if (typeof value == "string") {
-          try {
-            value = new Date(value);
-          } catch (ex) {
-            this.warn(`Cannot parse date: property=${propertyPath}, value=${JSON.stringify(value)}`);
-            value = null;
-          }
-          if (value != null && isNaN(value.getTime())) {
-            this.warn(`Cannot parse date: property=${propertyPath}, value=${JSON.stringify(value)} (invalid date)`);
-            value = null;
-          }
-        } else {
-          this.warn(`Cannot parse date which is not a string: property=${propertyPath}, value=${JSON.stringify(value)}`);
-
-          value = null;
-        }
+        value = endpoint.convertDateFromJson(value);
       } else if (check === "Integer") {
         value = parseInt(value, 10);
         if (isNaN(value)) {
@@ -532,10 +517,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
       }
 
       if (value instanceof Date) {
-        if (isNaN(value.getTime())) {
-          value = null;
-        } else value = value.toISOString();
-        return value;
+        return endpoints[0].convertDateToJson(value);
       }
 
       if (value instanceof qx.core.Object) {

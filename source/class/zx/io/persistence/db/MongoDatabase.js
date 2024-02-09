@@ -213,6 +213,19 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
       let collection = await this.getCollection(clazz);
       await collection.deleteMany(query, {});
       return true;
+    },
+
+    /**@override */
+    async convertDateToJson(value) {
+      return value;
+    },
+
+    /**@override */
+    async convertDateFromJson(value) {
+      if (value instanceof string) {
+        return super.convertDateFromJson(value);
+      }
+      return value;
     }
   }
 });
