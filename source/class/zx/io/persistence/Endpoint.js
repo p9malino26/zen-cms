@@ -172,44 +172,21 @@ qx.Class.define("zx.io.persistence.Endpoint", {
     },
 
     /**
-     * Serializes a date before sending across this endpoint. Override this function to customize how it's serialized.
-     * This implementation converts a date into a string
-     * @param {Date} value 
+     * Serializes a property before sending across this endpoint. Override this method to customize how it's serialized.
+     * @param {*} value
      * @returns {string}
      */
-    convertDateToJson(value) {
-      if (isNaN(value.getTime())) {
-        value = null;
-      } else {
-        value = value.toISOString();
-      }
-      return value;
+    encodeValue(value) {
+      return zx.utils.Json.encodeJsonValue(value);
     },
 
     /**
-     * Marshals/deserializes a data value from JSON to a Qooxdoo object; this is called by the deserialization.
-     * This implementation assumes the input date is an ISO string.
-     * @param {*} value 
-     * @returns {Date}
+     * Marshals/deserializes a value after receiving. Override this method to customize how it's deserialized.
+     * @param {string} value
+     * @returns {*}
      */
-    convertDateFromJson(value) {
-      if (typeof value == "string") {
-        try {
-          value = new Date(value);
-        } catch (ex) {
-          this.warn(`Cannot parse date: property=${propertyPath}, value=${JSON.stringify(value)}`);
-          value = null;
-        }
-        if (value != null && isNaN(value.getTime())) {
-          this.warn(`Cannot parse date: property=${propertyPath}, value=${JSON.stringify(value)} (invalid date)`);
-          value = null;
-        }
-      } else {
-        this.warn(`Cannot parse date which is not a string: property=${propertyPath}, value=${JSON.stringify(value)}`);
-
-        value = null;
-      }
-      return value;
+    decodeValue(value) {
+      return zx.utils.Json.decodeJsonValue(value);
     },
 
     /**

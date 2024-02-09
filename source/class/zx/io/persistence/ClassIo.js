@@ -365,6 +365,8 @@ qx.Class.define("zx.io.persistence.ClassIo", {
         check = cls;
       }
 
+      value = endpoint.decodeValue(value);
+
       // If the check is a class which exists, then check will be that class
       if (check && typeof check != "string") {
         if (qx.Class.isSubClassOf(check, qx.data.Array)) {
@@ -383,8 +385,6 @@ qx.Class.define("zx.io.persistence.ClassIo", {
         }
       } else if (check === "Array") {
         value = this.__convertArrayFromJson(endpoint, propertyDef, value);
-      } else if (check === "Date") {
-        value = endpoint.convertDateFromJson(value);
       } else if (check === "Integer") {
         value = parseInt(value, 10);
         if (isNaN(value)) {
@@ -516,8 +516,8 @@ qx.Class.define("zx.io.persistence.ClassIo", {
         return value;
       }
 
-      if (value instanceof Date) {
-        return endpoints[0].convertDateToJson(value);
+      if (value instanceof Date || value instanceof BigNumber) {
+        return endpoints[0].encodeValue(value);
       }
 
       if (value instanceof qx.core.Object) {

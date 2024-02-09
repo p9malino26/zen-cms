@@ -39,58 +39,9 @@ qx.Class.define("zx.utils.Json", {
       if (str === null || !str.trim()) {
         return null;
       }
-      const PREFIX = zx.utils.Json.__JSON_PREFIX;
-      const SUFFIX = zx.utils.Json.__JSON_SUFFIX;
-
-      function reviverImpl(key, value) {
-        if (typeof value === "string" && value.startsWith(PREFIX) && value.endsWith(SUFFIX)) {
-          let str = value.slice(PREFIX.length, -SUFFIX.length /* subtract 1 to strip trailing `)` */ - 1);
-          const [constructorName, argumentStr] = str.split("(");
-          switch (constructorName) {
-            case "Date": {
-              return new Date(argumentStr);
-              // the above should work in all browsers/versions w/ babel transpile. Original implementation kept below for reference/posterity:
-              /*
-                  let dt = zx.utils.Dates.parseISO(argumentStr);
-                  if (qx.core.Environment.get("qx.debug")) {
-                    if (dt && zx.utils.Dates.formatISO(dt) !== argumentStr) {
-                      qx.log.Logger.error("date parsing (iso), str=" + str + ", strDt=" + argumentStr + ", dt=" + dt + ", iso=" + zx.utils.Dates.formatISO(dt));
-                    }
-                  }
-                  return dt;
-                  */
-            }
-            case "BigNumber": {
-              return new BigNumber(argumentStr);
-            }
-            default: {
-              if (typeof reviver == "function") {
-                try {
-                  const result = reviver(key, value);
-                  if (result) {
-                    return result;
-                  }
-                } catch (e) {
-                  // errors here simply mean the reviver was not equipped to handle this value
-                  // this error effectively bubbles to the lines below
-                }
-              }
-              const eMsg = "Unknown constructor " + constructorName;
-              if (qx.core.Environment.get("qx.debug")) {
-                qx.log.Logger.error(eMsg);
-              }
-              return new Error(eMsg);
-            }
-          }
-        }
-        if (typeof reviver == "function") {
-          return reviver(key, value);
-        }
-        return value;
-      }
 
       try {
-        let result = JSON.parse(str, reviverImpl);
+        let result = JSON.parse(str, (key, value) => zx.utils.Json.decodeJsonValue(value));
         return result;
       } catch (ex) {
         qx.log.Logger.error("============= failed to parse:\n" + str + "\n======================\nException: " + (ex.stack || ex));
@@ -107,23 +58,65 @@ qx.Class.define("zx.utils.Json", {
      * @returns {String}
      */
     stringifyJson(obj, replacer, space) {
+      function replacer(key, value) {
+        return zx.utils.Json.encodeJsonValue(this[key]);
+      }
+
+      var result = JSON.stringify(obj, replacer, space);
+      return result;
+    },
+
+    /**
+     * Encodes a value to a string, specially encoding dates and BigNumbers
+     * 
+     * @param {*} value 
+     * @returns {string}
+     */
+    encodeJsonValue(value) {
       const PREFIX = zx.utils.Json.__JSON_PREFIX;
       const SUFFIX = zx.utils.Json.__JSON_SUFFIX;
 
-      function replacerImpl(key, value) {
-        if (this[key] instanceof Date) {
-          value = PREFIX + "Date(" + zx.utils.Dates.formatISO(this[key]) + ")" + SUFFIX;
-        } else if (this[key] instanceof BigNumber) {
-          value = PREFIX + "BigNumber(" + this[key] + ")" + SUFFIX;
-        }
-        if (typeof replacer == "function") {
-          value = replacer(key, value);
-        }
-        return value;
+      if (value instanceof Date) {
+        value = PREFIX + "Date(" + zx.utils.Dates.formatISO(value) + ")" + SUFFIX;
+      } else if (value instanceof BigNumber) {
+        value = PREFIX + "BigNumber(" + value + ")" + SUFFIX;
       }
 
-      var result = JSON.stringify(obj, replacerImpl, space);
-      return result;
+      return value;
+    },
+
+    /**
+     * Decodes a value from a string, specially decoding dates and BigNumbers
+     * @param {string} value 
+     * @returns {*}
+     */
+    decodeJsonValue(value) {
+      const PREFIX = zx.utils.Json.__JSON_PREFIX;
+      const SUFFIX = zx.utils.Json.__JSON_SUFFIX;
+
+      if (typeof value === "string" && value.startsWith(PREFIX) && value.endsWith(SUFFIX)) {
+        let str = value.slice(PREFIX.length, -SUFFIX.length /* subtract 1 to strip trailing `)` */ - 1);
+        let [constructorName, argumentStr] = str.split("(");
+        switch (constructorName) {
+          case "Date":
+            return new Date(argumentStr);
+          // the above should work in all browsers/versions w/ babel transpile. Original implementation kept below for reference/posterity:
+          /*
+                  let dt = zx.utils.Dates.parseISO(argumentStr);
+                  if (qx.core.Environment.get("qx.debug")) {
+                    if (dt && zx.utils.Dates.formatISO(dt) !== argumentStr) {
+                      qx.log.Logger.error("date parsing (iso), str=" + str + ", strDt=" + argumentStr + ", dt=" + dt + ", iso=" + zx.utils.Dates.formatISO(dt));
+                    }
+                  }
+                  return dt;
+                  */
+
+          case "BigNumber":
+            return new BigNumber(argumentStr);
+        }
+      }
+
+      return value;
     },
 
     /**

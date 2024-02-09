@@ -48,7 +48,7 @@ qx.Class.define("zx.io.remote.FastifyXhrEndpoint", {
       if (req.method.toUpperCase() == "POST" && contentType && contentType.startsWith("multipart/form-data")) {
         this._uploadFile(req, reply);
       } else {
-        let body = (req.body && JSON.parse(req.body)) || null;
+        let body = (req.body && zx.utils.Json.parseJson(req.body)) || null;
         let responses = await this._receivePackets(req, reply, body);
         // responses is POJO, and Fastify will convert to JSON
         await reply.send(responses);

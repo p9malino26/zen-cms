@@ -216,15 +216,12 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
     },
 
     /**@override */
-    async convertDateToJson(value) {
+    encodeValue(value) {
       return value;
     },
 
     /**@override */
-    async convertDateFromJson(value) {
-      if (value instanceof string) {
-        return super.convertDateFromJson(value);
-      }
+    decodeValue(value) {
       return value;
     }
   }
