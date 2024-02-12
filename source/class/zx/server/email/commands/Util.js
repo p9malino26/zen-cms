@@ -20,13 +20,11 @@ qx.Class.define("zx.server.email.commands.Util", {
      * @returns {boolean} If the email was successfully sent
      */
     async attemptSendEmail(email) {
-      const { Message } = zx.server.email.EmailJS.getInstance();
-
       let htmlBody = email.getHtmlBody();
 
       let config = await zx.server.Config.getConfig();
       
-      const message = new Message({
+      const message = zx.server.email.EmailJS.createNewMessage({
         from: config.smtpServer.fromAddr,
         to: email.getTo(),
         subject: email.getSubject(),
