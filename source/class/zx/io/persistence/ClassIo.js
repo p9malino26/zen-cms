@@ -14,6 +14,9 @@
  *    John Spackman (john.spackman@zenesis.com, @johnspackman)
  *
  * ************************************************************************ */
+/*
+ * @ignore(Buffer)
+ */
 
 /**
  * Handles persistence for a specific class derived from qx.core.Object

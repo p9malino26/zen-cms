@@ -14,6 +14,10 @@
  *    John Spackman (john.spackman@zenesis.com, @johnspackman)
  *
  * ************************************************************************ */
+/* 
+* @ignore(Buffer)
+*/
+
 
 const fs = require("fs");
 const path = require("path");
