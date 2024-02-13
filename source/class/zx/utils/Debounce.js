@@ -49,6 +49,9 @@ qx.Class.define("zx.utils.Debounce", {
     /** @type{Boolean} that there is a repeated invocation queued */
     __queuedRepeat: false,
 
+    _applyRepeatedTrigger() {
+    },
+
     /**
      * Apply for `repeatedTrigger`
      *
