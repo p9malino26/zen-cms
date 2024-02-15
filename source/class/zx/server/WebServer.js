@@ -26,6 +26,7 @@ const { AsyncLocalStorage } = require("async_hooks");
  *
  * @use(zx.cms.app.auth.LoginFormFeature)
  * @use(zx.cms.app.auth.LogoutFeature)
+ * @ignore(Buffer)
  */
 qx.Class.define("zx.server.WebServer", {
   extend: zx.server.Standalone,

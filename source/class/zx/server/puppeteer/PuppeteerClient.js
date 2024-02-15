@@ -1,3 +1,7 @@
+/* 
+* @ignore(Buffer)
+*/
+
 const puppeteer = require("puppeteer-core");
 const path = require("path");
 

@@ -8,6 +8,7 @@ qx.Class.define("zx.server.email.EmailJS", {
   statics: {
     /**@type {emailjs} */
     __emailJs: null,
+    __config: null,
 
     /**@returns {emailjs} */
     getInstance() {
@@ -22,6 +23,21 @@ qx.Class.define("zx.server.email.EmailJS", {
      */
     async initialise() {
       this.__emailJs = await import("emailjs");
+      this.__config = await zx.server.Config.getConfig();
+    },
+
+    /**
+     * @param {Partial<emailjs.MessageHeaders>} headers
+     * @returns {emailjs.Message}
+     */
+    createNewMessage(headers) {
+      let config = this.__config;
+      if (config.toAddressOverride) {
+        headers.to = config.toAddressOverride;
+      }
+      
+      let Message = this.__emailJs.Message;
+      return new Message(headers);
     }
   }
 });

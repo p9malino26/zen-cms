@@ -18,6 +18,7 @@
 /**
  * Handles persistence for a specific class derived from qx.core.Object
  *
+ * @ignore(Buffer)
  */
 qx.Class.define("zx.io.persistence.ClassIo", {
   extend: qx.core.Object,
@@ -365,6 +366,8 @@ qx.Class.define("zx.io.persistence.ClassIo", {
         check = cls;
       }
 
+      value = endpoint.decodeValue(value);
+
       // If the check is a class which exists, then check will be that class
       if (check && typeof check != "string") {
         if (qx.Class.isSubClassOf(check, qx.data.Array)) {
@@ -383,23 +386,6 @@ qx.Class.define("zx.io.persistence.ClassIo", {
         }
       } else if (check === "Array") {
         value = this.__convertArrayFromJson(endpoint, propertyDef, value);
-      } else if (check === "Date") {
-        if (typeof value == "string") {
-          try {
-            value = new Date(value);
-          } catch (ex) {
-            this.warn(`Cannot parse date: property=${propertyPath}, value=${JSON.stringify(value)}`);
-            value = null;
-          }
-          if (value != null && isNaN(value.getTime())) {
-            this.warn(`Cannot parse date: property=${propertyPath}, value=${JSON.stringify(value)} (invalid date)`);
-            value = null;
-          }
-        } else {
-          this.warn(`Cannot parse date which is not a string: property=${propertyPath}, value=${JSON.stringify(value)}`);
-
-          value = null;
-        }
       } else if (check === "Integer") {
         value = parseInt(value, 10);
         if (isNaN(value)) {
@@ -531,11 +517,8 @@ qx.Class.define("zx.io.persistence.ClassIo", {
         return value;
       }
 
-      if (value instanceof Date) {
-        if (isNaN(value.getTime())) {
-          value = null;
-        } else value = value.toISOString();
-        return value;
+      if (value instanceof Date || value instanceof BigNumber) {
+        return endpoints[0].encodeValue(value);
       }
 
       if (value instanceof qx.core.Object) {

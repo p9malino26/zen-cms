@@ -230,6 +230,20 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
       let collection = await this.getCollection(clazz);
       await collection.deleteMany(query, {});
       return true;
+    },
+
+    /*
+     * @Override
+     */
+    encodeValue(value) {
+      return value;
+    },
+
+    /*
+     * @Override
+     */
+    decodeValue(value) {
+      return value;
     }
   }
 });

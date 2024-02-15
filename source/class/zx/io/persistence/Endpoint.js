@@ -172,6 +172,24 @@ qx.Class.define("zx.io.persistence.Endpoint", {
     },
 
     /**
+     * Serializes a property before sending across this endpoint. Override this method to customize how it's serialized.
+     * @param {*} value
+     * @returns {string}
+     */
+    encodeValue(value) {
+      return zx.utils.Json.encodeJsonValue(value);
+    },
+
+    /**
+     * Marshals/deserializes a value after receiving. Override this method to customize how it's deserialized.
+     * @param {string} value
+     * @returns {*}
+     */
+    decodeValue(value) {
+      return zx.utils.Json.decodeJsonValue(value);
+    },
+
+    /**
      * Grabs the put queue; this is a reference counting mechanism to allow code to suppress
      * flushing of the put queue and must be matched by a call to `releasePutQueue`.  Calls to
      * grab/releasePutQueue may be nested
