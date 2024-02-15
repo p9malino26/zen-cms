@@ -33,7 +33,10 @@ qx.Class.define("zx.cli.CliApp", {
     async main() {
       qx.log.appender.Native;
       await zx.utils.LogFilter.loadFiltersAutoDetect();
-      await this.runCli();
+      if (qx.core.Environment.get("qx.debug")) {
+        zx.test.TestRunner.runAll(zx.test.cli.TestCli);
+      }
+      if (qx) await this.runCli();
     },
 
     /**

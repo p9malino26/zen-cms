@@ -27,7 +27,8 @@ qx.Class.define("zx.server.email.SMTPClient", {
       let config = await zx.server.Config.getConfig();
 
       if (!config.smtpServer) {
-        throw new Error("No smtpServer configuration found in the cms config file");
+        qx.log.Logger.error("No smtpServer configuration found in the cms config file - email sending will not work");
+        return;
       }
 
       let username = config.smtpServer.username;

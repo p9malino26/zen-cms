@@ -86,6 +86,21 @@ qx.Class.define("zx.io.persistence.db.Database", {
      */
     async findAndRemove(clazz, query) {
       throw new Error(`No implementation for ${this.classname}.findAndRemove`);
+    },
+
+    /**
+     * Updates or adds a JSON object to the database; if query is null, then the object
+     * is added, otherwise the database is first searched and either an existing object is
+     * updated if found, or a new object is added if not found.
+     *
+     * An update must find at most one record, otherwise an exception is raised.
+     *
+     * @param {qx.Class} clazz
+     * @param {*} query
+     * @param {*} json
+     */
+    async updateOne(clazz, query, json) {
+      throw new Error(`No implementation for ${this.classname}.updateOne`);
     }
   }
 });

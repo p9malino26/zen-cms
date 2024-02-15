@@ -165,6 +165,23 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
     /*
      * @Override
      */
+    async updateOne(clazz, query, json) {
+      let collection = await this.getCollection(clazz);
+      if (query) {
+        if (qx.core.Environment.get("qx.debug")) {
+          if ((await collection.countDocuments(query)) > 1) {
+            throw new Error("More than one document found");
+          }
+        }
+        await collection.replaceOne(query, json, { upsert: true });
+      } else {
+        await collection.insertOne(json);
+      }
+    },
+
+    /*
+     * @Override
+     */
     async getDataFromUuid(clazz, uuid) {
       let data = await this.findOne(clazz, { _id: uuid });
       if (!data) {

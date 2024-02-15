@@ -100,11 +100,102 @@ qx.Class.define("zx.cli.AbstractValue", {
       return qx.lang.String.hyphenate(this.getName());
     },
 
+    /**
+     * @Override
+     */
     toString() {
       return this.getName() || this.getDescription() || this.classname;
     },
 
-    parse(cmdName, fnGetMore) {
+    /**
+     * Returns a function that can be called to get the next value from the command line
+     *
+     * @param {String?} initialValue returned only once, the first time
+     * @param {zx.cli.ArgvIterator} argvIterator
+     * @returns {Function}
+     */
+    _valueParser(initialValue, argvIterator) {
+      let type = this.getType();
+      let eatAll = false;
+
+      function next() {
+        if (initialValue !== null) {
+          let value = initialValue;
+          initialValue = null;
+          return value;
+        }
+        if (eatAll) {
+          return argvIterator.pop();
+        }
+        let value = argvIterator.peek();
+        if (value == "--") {
+          eatAll = true;
+          argvIterator.skip();
+          value = argvIterator.pop();
+        } else if (value && value.startsWith("--")) {
+          return null;
+        } else {
+          argvIterator.skip();
+        }
+
+        return value;
+      }
+
+      const parseNext = () => {
+        switch (type) {
+          case "string":
+          case null:
+            return next();
+
+          case "boolean":
+            var arg = next();
+            if (arg === null) {
+              return true;
+            }
+            if (arg == "true" || arg == "yes" || arg == "1") {
+              return true;
+            }
+            if (arg == "false" || arg == "no" || arg == "0") {
+              return false;
+            }
+            throw new Error("Invalid value for " + this.toString() + ", expected nothing (true) or the words true or false");
+
+          case "integer":
+            var arg = next();
+            if (arg === null) {
+              return null;
+            }
+            var value = parseInt(arg, 10);
+            if (isNaN(arg)) {
+              throw new Error(`Invalid value for ${this.toString()}, expected an integer`);
+            }
+            return value;
+
+          case "float":
+            var arg = next();
+            if (arg === null) {
+              return null;
+            }
+            var value = parseFloat(arg);
+            if (isNaN(arg)) {
+              throw new Error(`Invalid value for ${this.toString()}, expected a number`);
+            }
+            return value;
+        }
+
+        return next();
+      };
+
+      return parseNext;
+    },
+
+    /**
+     * Called to parse the value
+     *
+     * @param {String} initialValue
+     * @param {zx.cli.ArgvIterator} argvIterator the command line arguments
+     */
+    parse(initialValue, argvIterator) {
       throw new Error(`No such implementation for ${this.classname}`);
     }
   }

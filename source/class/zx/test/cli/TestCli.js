@@ -70,6 +70,116 @@ qx.Class.define("zx.test.cli.TestCli", {
       this.assertTrue(arr[3] === "seven");
       console.log(cmd.usage());
       console.log(root.usage());
+    },
+
+    testBooleanArrayFlag() {
+      let root = new zx.cli.Command("*");
+
+      let sub1 = new zx.cli.Command("boolean-array-flag-cmd");
+      root.addSubcommand(sub1);
+      sub1.addFlag(
+        new zx.cli.Flag("boolean-array").set({
+          type: "boolean",
+          array: true
+        })
+      );
+
+      sub1.addArgument(new zx.cli.Argument("arg-one"));
+      sub1.addArgument(new zx.cli.Argument("arg-two"));
+      sub1.addArgument(new zx.cli.Argument("arg-three"));
+
+      let cmd = root.parseRoot(["xxx", "boolean-array-flag-cmd", "--boolean-array=true", "--no-boolean-array", "--boolean-array", "--boolean-array=false", "argone", "argtwo"]);
+      this.assertArrayEquals([true, false, true, false], cmd.getFlag("boolean-array").getValue());
+      this.assertEquals("arg-one", cmd.getArgument(0).getValue());
+      this.assertEquals("arg-two", cmd.getArgument(1).getValue());
+      this.assertNull(cmd.getArgument(2).getValue());
+    },
+
+    testIntegerArrayFlag() {
+      let root = new zx.cli.Command("*");
+
+      let sub1 = new zx.cli.Command("integer-array-flag-cmd");
+      root.addSubcommand(sub1);
+      sub1.addFlag(
+        new zx.cli.Flag("integer-array").set({
+          type: "integer",
+          array: true
+        })
+      );
+
+      sub1.addArgument(new zx.cli.Argument("arg-one"));
+      sub1.addArgument(new zx.cli.Argument("arg-two"));
+      sub1.addArgument(new zx.cli.Argument("arg-three"));
+
+      let cmd = root.parseRoot(["xxx", "integer-array-flag-cmd", "--integer-array=1", "--integer-array", "2", "argone", "argtwo"]);
+      this.assertArrayEquals([1, 2], cmd.getFlag("integer-array").getValue());
+      this.assertEquals("arg-one", cmd.getArgument(0).getValue());
+      this.assertEquals("arg-two", cmd.getArgument(1).getValue());
+      this.assertNull(cmd.getArgument(2).getValue());
+    },
+
+    testIntegerNotArrayFlag() {
+      let root = new zx.cli.Command("*");
+
+      let sub1 = new zx.cli.Command("integer-not-array-flag-cmd");
+      root.addSubcommand(sub1);
+      sub1.addFlag(
+        new zx.cli.Flag("integer").set({
+          type: "integer"
+        })
+      );
+
+      sub1.addArgument(new zx.cli.Argument("arg-one"));
+      sub1.addArgument(new zx.cli.Argument("arg-two"));
+      sub1.addArgument(new zx.cli.Argument("arg-three"));
+
+      let cmd = root.parseRoot(["xxx", "integer-not-array-flag-cmd", "--integer=1", "argone", "argtwo"]);
+      this.assertEquals(1, cmd.getFlag("integer").getValue());
+      this.assertEquals("arg-one", cmd.getArgument(0).getValue());
+      this.assertEquals("arg-two", cmd.getArgument(1).getValue());
+      this.assertNull(cmd.getArgument(2).getValue());
+
+      cmd = root.parseRoot(["xxx", "integer-not-array-flag-cmd", "--integer=1", "--integer", "2", "argone", "argtwo"]);
+      this.assertTrue(cmd === null);
+    },
+
+    testArgsArray() {
+      let root = new zx.cli.Command("*");
+
+      let sub1 = new zx.cli.Command("args-array-cmd");
+      root.addSubcommand(sub1);
+      sub1.addArgument(
+        new zx.cli.Argument("string-arg").set({
+          type: "string",
+          array: true,
+          required: true
+        })
+      );
+
+      let cmd = root.parseRoot(["xxx", "args-array-cmd", "argone", "argtwo"]);
+      this.assertArrayEquals(["argone", "argtwo"], cmd.getArgument("string-arg").getValue());
+    },
+
+    testCaptureHyphenatedArg() {
+      let root = new zx.cli.Command("*");
+
+      let sub1 = new zx.cli.Command("capture-hypehated-arg-cmd");
+      root.addSubcommand(sub1);
+      sub1.addFlag(
+        new zx.cli.Flag("string-flag").set({
+          type: "string"
+        })
+      );
+
+      sub1.addArgument(new zx.cli.Argument("arg-one"));
+      sub1.addArgument(new zx.cli.Argument("arg-two"));
+      sub1.addArgument(new zx.cli.Argument("arg-three"));
+
+      let cmd = root.parseRoot(["xxx", "capture-hypehated-arg-cmd", "--string-flag", "--", "--string-flag", "argone", "argtwo"]);
+      this.assertEquals("--string-flag", cmd.getFlag("string-flag").getValue());
+      this.assertEquals("arg-one", cmd.getArgument(0).getValue());
+      this.assertEquals("arg-two", cmd.getArgument(1).getValue());
+      this.assertNull(cmd.getArgument(2).getValue());
     }
   }
 });

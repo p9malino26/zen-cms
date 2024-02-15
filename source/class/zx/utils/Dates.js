@@ -393,6 +393,24 @@ qx.Class.define("zx.utils.Dates", {
         }
       }
       return 0;
+    },
+
+    /**
+     * Tests to see whether a date is between two other dates
+     *
+     * @param {Date} dt date to test
+     * @param {Date?} start earliest date
+     * @param {Date?} end latest date
+     * @returns {Boolean}
+     */
+    between(dt, start, end) {
+      if (start && this.compareDates(dt, start) < 0) {
+        return false;
+      }
+      if (end && this.compareDates(dt, end) > 0) {
+        return false;
+      }
+      return true;
     }
   }
 });

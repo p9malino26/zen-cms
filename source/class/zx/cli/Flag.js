@@ -41,7 +41,7 @@ qx.Class.define("zx.cli.Flag", {
       }
       if (arg.startsWith("--")) {
         let tmp = qx.lang.String.camelCase(arg.substring(2));
-        return tmp == this.getName();
+        return tmp == this.getName() || "no" + tmp == this.getName();
       } else if (arg.startsWith("-")) {
         return arg.substring(1) == this.getShortCode();
       }
@@ -55,7 +55,7 @@ qx.Class.define("zx.cli.Flag", {
      * @return {String}
      */
     usage() {
-      let str = "--" + qx.lang.String.hyphenate(this.getName());
+      let str = "--" + this.getHyphenatedName();
       if (this.getShortCode()) {
         str += "|-" + this.getShortCode();
       }
@@ -83,119 +83,42 @@ qx.Class.define("zx.cli.Flag", {
      * Parses the flag
      *
      * @param {*} cmdName
-     * @param {*} fnGetMore
+     * @param {zx.cli.ArgvIterator} argvIterator the command line arguments
      */
-    parse(cmdName, fnGetMore) {
+    parse(cmdName, argvIterator) {
+      let type = this.getType();
       let pos = cmdName.indexOf("=");
       let initialValue = null;
       if (pos > -1) {
         initialValue = cmdName.substring(pos + 1);
         cmdName = cmdName.substring(0, pos);
+      } else if (type == "boolean") {
+        if (cmdName.startsWith("--no-")) {
+          initialValue = "false";
+        } else {
+          initialValue = "true";
+        }
       }
 
-      let eatAll = false;
-      let argIndex = 0;
+      let parseNext = this._valueParser(initialValue, argvIterator);
 
-      function getArg(index) {
-        if (initialValue !== null) {
-          return index == 0 ? initialValue : fnGetMore(index - 1);
-        }
-        return fnGetMore(index);
-      }
-
-      function next() {
-        let value = getArg(argIndex++);
-        if (value == "--") {
-          eatAll = true;
-          value = getArg(argIndex++);
-        }
-        if (!eatAll && value) {
-          if (value[0] == "-") {
-            value = null;
-          }
-        }
-        if (value === null) {
-          argIndex--;
-        }
-        return value;
-      }
-
-      let type = this.getType();
-
-      const parseNext = (arg, pass) => {
-        switch (type) {
-          case "string":
-          case null:
-            if (arg === null) {
-              return null;
-            }
-            if (initialValue === null && pass == 0) {
-              argIndex--;
-            }
-            return arg;
-
-          case "boolean":
-            if (arg === null) {
-              return true;
-            }
-            if (arg == "true" || arg == "yes" || arg == "1") {
-              return true;
-            }
-            if (arg == "false" || arg == "no" || arg == "0") {
-              return false;
-            }
-            if (initialValue === null && pass == 0) {
-              argIndex--;
-              return true;
-            }
-            throw new Error("Invalid value for " + this.toString() + ", expected nothing (true) or the words true or false");
-
-          case "integer":
-            if (arg === null) {
-              throw new Error(`Invalid value for ${this.toString()}, expected an integer`);
-            }
-            var value = parseInt(arg, 10);
-            if (isNaN(arg)) {
-              throw new Error(`Invalid value for ${this.toString()}, expected an integer`);
-            }
-            return value;
-
-          case "float":
-            if (arg === null) {
-              throw new Error(`Invalid value for ${this.toString()}, expected a number`);
-            }
-            var value = parseFloat(arg);
-            if (isNaN(arg)) {
-              throw new Error(`Invalid value for ${this.toString()}, expected a number`);
-            }
-            return value;
-        }
-
-        if (arg === null) {
-          throw new Error(`Invalid value for ${this.toString()}, expected a string`);
-        }
-        return arg;
-      };
-
-      let arg = next();
       let result = null;
       if (this.isArray()) {
-        if (arg === null) {
-          throw new Error(`Invalid value for ${this.toString()}, expected at least one value`);
-        }
-        result = [];
-        do {
-          let value = parseNext(arg, result.length);
+        result = this.getValue() || [];
+        let value = parseNext();
+        if (value !== null) {
           result.push(value);
-          arg = next();
-        } while (arg);
+        }
+        if (result.length == 0 && this.isRequired()) {
+          throw new Error(`Invalid value for ${this}, expected at least one value`);
+        }
       } else {
-        result = parseNext(arg, 0);
+        result = parseNext();
+        if (result === null && this.isRequired()) {
+          throw new Error(`Invalid value for ${this}, expected a value`);
+        }
       }
 
-      if (initialValue) {
-        fnGetMore(argIndex - 1, true);
-      } else fnGetMore(argIndex, true);
       this.setValue(result);
     }
   }

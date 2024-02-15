@@ -290,7 +290,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
       }
       console.log("Going to " + url);
       let response = await page.goto(url, {
-        //waitUntil: "networkidle2",
+        waitUntil: "networkidle0",
         timeout: 0
       });
 

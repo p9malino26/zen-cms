@@ -168,36 +168,12 @@ qx.Class.define("zx.cli.Command", {
     },
 
     /**
-     * Parses the command, where this is the root of the command structure
+     * Returns the hyphenated version of the `name` property (which is always held as camelCase)
      *
-     * @param {String[]?} argv arguments, where argv[0] is the command name (typically the filename, what would be `$0` in bash)
+     * @returns {String}
      */
-    parseRoot(argv) {
-      if (!argv) {
-        argv = qx.lang.Array.clone(process.argv);
-        qx.lang.Array.removeAt(argv, 0);
-      }
-
-      let exe = argv[0];
-      let pos = exe.lastIndexOf("/");
-      if (pos > -1) {
-        exe = exe.substring(pos + 1);
-      }
-      this.setName(exe);
-
-      let argvIndex = 1;
-      function fnGetMore(index, rebase) {
-        let value = null;
-        if (argv.length > index + argvIndex) {
-          value = argv[index + argvIndex];
-        }
-        if (rebase) {
-          argvIndex += index;
-        }
-        return value;
-      }
-
-      return this.parse(argv[0], fnGetMore);
+    getHyphenatedName() {
+      return qx.lang.String.hyphenate(this.getName());
     },
 
     /**
@@ -224,7 +200,7 @@ qx.Class.define("zx.cli.Command", {
 
       let verbs = [];
       for (let tmp = this; tmp; tmp = tmp.getParent()) {
-        verbs.unshift(qx.lang.String.hyphenate(tmp.getName()));
+        verbs.unshift(tmp.getHyphenatedName());
       }
 
       println("USAGE:");
@@ -339,36 +315,42 @@ qx.Class.define("zx.cli.Command", {
     },
 
     /**
+     * Parses the command, where this is the root of the command structure
+     *
+     * @param {String[]?} argv arguments, where argv[0] is the command name (typically the filename, what would be `$0` in bash)
+     */
+    parseRoot(argv) {
+      if (!argv) {
+        argv = qx.lang.Array.clone(process.argv);
+        qx.lang.Array.removeAt(argv, 0);
+      }
+
+      let exe = argv[0];
+      let pos = exe.lastIndexOf("/");
+      if (pos > -1) {
+        exe = exe.substring(pos + 1);
+      }
+      this.setName(exe);
+
+      let argvIterator = new zx.cli.ArgvIterator(argv);
+      let cmd = this.parse(argv[0], argvIterator);
+      if (argvIterator.peek() !== null) {
+        this._error(`More arguments than expected, starting from ${argvIterator.peek()}`);
+      }
+      return cmd;
+    },
+
+    /**
      * Parses the command
      *
      * @param {String} cmdName the name
-     * @param {Function} fnGetMore look ahead function
+     * @param {zx.cli.ArgvIterator} argvIterator the command line arguments
      * @returns {zx.cli.Command} the command to execute after parsing
      */
-    parse(cmdName, fnGetMore) {
-      let argvIndex = 0;
-      function nextCmdName() {
-        let value = fnGetMore(argvIndex++);
-        if (value && value[0] == "-") {
-          value = null;
-        }
-        if (value === null) {
-          argvIndex--;
-        }
-        return value;
-      }
-
-      function fnGetMoreForChildren(index, reset) {
-        let value = fnGetMore(argvIndex + index);
-        if (reset) {
-          argvIndex += index;
-        }
-        return value;
-      }
-
+    parse(cmdName, argvIterator) {
       const parseArgument = (argument, value) => {
         try {
-          argument.parse(value, fnGetMoreForChildren);
+          argument.parse(value, argvIterator);
         } catch (ex) {
           this._error(ex.message);
         }
@@ -376,7 +358,7 @@ qx.Class.define("zx.cli.Command", {
 
       const parseFlag = (flag, value) => {
         try {
-          flag.parse(value, fnGetMoreForChildren);
+          flag.parse(value, argvIterator);
         } catch (ex) {
           this._error(ex.message);
         }
@@ -408,14 +390,15 @@ qx.Class.define("zx.cli.Command", {
       let currentArgumentIndex = 0;
       let scanningForArguments = false;
       while (!done) {
-        let value = fnGetMore(argvIndex++);
+        let value = argvIterator.peek();
         if (!value) {
           break;
         }
 
         // Once we hit "--", then it's positional arguments only thereafter
         if (value == "--") {
-          while ((value = fnGetMore(argvIndex++))) {
+          argvIterator.pop();
+          while ((value = argvIterator.pop())) {
             if (currentArgumentIndex < this.__arguments.length) {
               let argument = this.__arguments[currentArgumentIndex++];
               parseArgument(argument, value);
@@ -428,15 +411,17 @@ qx.Class.define("zx.cli.Command", {
         if (value[0] == "-") {
           let flag = findFlag(value);
           if (!flag) {
-            throw Error(`Unrecognised flag ${value} passed to ${this}`);
+            throw Error(`Unrecognised flag ${value} passed to ${this.getHyphenatedName()}`);
           }
+          argvIterator.pop();
           parseFlag(flag, value);
         } else {
           if (!scanningForArguments) {
             // Sub command processing
             let subcommand = findSubcommand(value);
             if (subcommand) {
-              finalCommand = subcommand.parse(value, fnGetMoreForChildren);
+              argvIterator.pop();
+              finalCommand = subcommand.parse(value, argvIterator);
             }
 
             // After a sub command, any argv that the subcommand has not consumed now
@@ -449,8 +434,11 @@ qx.Class.define("zx.cli.Command", {
 
           // Positional arguments
           if (currentArgumentIndex < this.__arguments.length) {
+            argvIterator.skip();
             let argument = this.__arguments[currentArgumentIndex++];
             parseArgument(argument, value);
+          } else {
+            break;
           }
         }
       }
@@ -461,7 +449,7 @@ qx.Class.define("zx.cli.Command", {
         while (currentArgumentIndex < this.__arguments.length) {
           let argument = this.__arguments[currentArgumentIndex++];
           if (argument.isRequired()) {
-            this._error(`Not enough positional arguments for ${this}`);
+            this._error(`Not enough positional arguments for ${this.getHyphenatedName()}`);
             break;
           }
         }
@@ -473,8 +461,6 @@ qx.Class.define("zx.cli.Command", {
           }
         });
       }
-
-      fnGetMore(argvIndex, true);
 
       // Return the command (or sub command) to execute
       return finalCommand;
@@ -496,6 +482,7 @@ qx.Class.define("zx.cli.Command", {
       }
       let errors = (cmd && cmd.getErrors()) || null;
       if (errors) {
+        console.error((cmd || this).usage());
         console.error(errors.join("\n"));
         process.exit(-1);
       }
