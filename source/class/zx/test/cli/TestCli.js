@@ -90,8 +90,8 @@ qx.Class.define("zx.test.cli.TestCli", {
 
       let cmd = root.parseRoot(["xxx", "boolean-array-flag-cmd", "--boolean-array=true", "--no-boolean-array", "--boolean-array", "--boolean-array=false", "argone", "argtwo"]);
       this.assertArrayEquals([true, false, true, false], cmd.getFlag("boolean-array").getValue());
-      this.assertEquals("arg-one", cmd.getArgument(0).getValue());
-      this.assertEquals("arg-two", cmd.getArgument(1).getValue());
+      this.assertEquals("argone", cmd.getArgument(0).getValue());
+      this.assertEquals("argtwo", cmd.getArgument(1).getValue());
       this.assertNull(cmd.getArgument(2).getValue());
     },
 
@@ -113,8 +113,8 @@ qx.Class.define("zx.test.cli.TestCli", {
 
       let cmd = root.parseRoot(["xxx", "integer-array-flag-cmd", "--integer-array=1", "--integer-array", "2", "argone", "argtwo"]);
       this.assertArrayEquals([1, 2], cmd.getFlag("integer-array").getValue());
-      this.assertEquals("arg-one", cmd.getArgument(0).getValue());
-      this.assertEquals("arg-two", cmd.getArgument(1).getValue());
+      this.assertEquals("argone", cmd.getArgument(0).getValue());
+      this.assertEquals("argtwo", cmd.getArgument(1).getValue());
       this.assertNull(cmd.getArgument(2).getValue());
     },
 
@@ -135,12 +135,12 @@ qx.Class.define("zx.test.cli.TestCli", {
 
       let cmd = root.parseRoot(["xxx", "integer-not-array-flag-cmd", "--integer=1", "argone", "argtwo"]);
       this.assertEquals(1, cmd.getFlag("integer").getValue());
-      this.assertEquals("arg-one", cmd.getArgument(0).getValue());
-      this.assertEquals("arg-two", cmd.getArgument(1).getValue());
+      this.assertEquals("argone", cmd.getArgument(0).getValue());
+      this.assertEquals("argtwo", cmd.getArgument(1).getValue());
       this.assertNull(cmd.getArgument(2).getValue());
 
       cmd = root.parseRoot(["xxx", "integer-not-array-flag-cmd", "--integer=1", "--integer", "2", "argone", "argtwo"]);
-      this.assertTrue(cmd === null);
+      this.assertEquals(2, cmd.getFlag("integer").getValue());
     },
 
     testArgsArray() {
@@ -177,8 +177,8 @@ qx.Class.define("zx.test.cli.TestCli", {
 
       let cmd = root.parseRoot(["xxx", "capture-hypehated-arg-cmd", "--string-flag", "--", "--string-flag", "argone", "argtwo"]);
       this.assertEquals("--string-flag", cmd.getFlag("string-flag").getValue());
-      this.assertEquals("arg-one", cmd.getArgument(0).getValue());
-      this.assertEquals("arg-two", cmd.getArgument(1).getValue());
+      this.assertEquals("argone", cmd.getArgument(0).getValue());
+      this.assertEquals("argtwo", cmd.getArgument(1).getValue());
       this.assertNull(cmd.getArgument(2).getValue());
     }
   }

@@ -389,6 +389,7 @@ qx.Class.define("zx.cli.Command", {
       let finalCommand = this;
       let currentArgumentIndex = 0;
       let scanningForArguments = false;
+      let flagsAlreadyParsed = [];
       while (!done) {
         let value = argvIterator.peek();
         if (!value) {
@@ -412,6 +413,13 @@ qx.Class.define("zx.cli.Command", {
           let flag = findFlag(value);
           if (!flag) {
             throw Error(`Unrecognised flag ${value} passed to ${this.getHyphenatedName()}`);
+          }
+          if (flagsAlreadyParsed.indexOf(flag) > -1) {
+            if (!flag.isArray()) {
+              this.warn("Flag " + flag + " specified more than once");
+            }
+          } else {
+            flagsAlreadyParsed.push(flag);
           }
           argvIterator.pop();
           parseFlag(flag, value);

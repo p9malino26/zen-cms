@@ -19,6 +19,7 @@
  * Handles persistence for a specific class derived from qx.core.Object
  *
  * @ignore(Buffer)
+ * @ignore(BigNumber)
  */
 qx.Class.define("zx.io.persistence.ClassIo", {
   extend: qx.core.Object,

@@ -67,7 +67,7 @@ qx.Class.define("zx.cli.Argument", {
      * @Override
      */
     parse(initialValue, argvIterator) {
-      let parseNext = this._valueParser(null, argvIterator);
+      let parseNext = this._valueParser(initialValue, argvIterator);
 
       let result = null;
       if (this.isArray()) {

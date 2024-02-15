@@ -39,9 +39,18 @@ qx.Class.define("zx.cli.Flag", {
       if (pos > -1) {
         arg = arg.substring(0, pos);
       }
+
       if (arg.startsWith("--")) {
-        let tmp = qx.lang.String.camelCase(arg.substring(2));
-        return tmp == this.getName() || "no" + tmp == this.getName();
+        arg = arg.substring(2);
+        let tmp = qx.lang.String.camelCase(arg);
+        if (tmp == this.getName()) {
+          return true;
+        }
+        if (arg.startsWith("no-")) {
+          arg = arg.substring(3);
+          tmp = qx.lang.String.camelCase(arg);
+          return tmp == this.getName();
+        }
       } else if (arg.startsWith("-")) {
         return arg.substring(1) == this.getShortCode();
       }
