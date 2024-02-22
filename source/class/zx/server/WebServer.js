@@ -920,7 +920,11 @@ qx.Class.define("zx.server.WebServer", {
           throw new zx.utils.Http.HttpError(404, `Cannot find ${url}`);
         }
 
-        await object.generate(req, reply);
+        try {
+          await object.generate(req, reply);
+        } catch (ex) {
+          throw new zx.utils.Http.HttpError(500, ex.message);
+        }
         return;
       }
 

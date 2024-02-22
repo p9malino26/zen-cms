@@ -83,6 +83,13 @@ qx.Class.define("zx.utils.mongo.MongoHelpers", {
      */
     partialMatch(query) {
       return { $regex: query, $options: "i" };
+    },
+
+    /**
+     * Case insensitive match
+     */
+    insensitiveMatch(query) {
+      return { $regex: "^" + query + "$", $options: "i" };
     }
   }
 });
