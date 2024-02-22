@@ -41,7 +41,7 @@ qx.Class.define("zx.cli.commands.ServeCommand", {
   },
 
   environment: {
-    "zx.cli.ServeCommand.ServerClassname": "zx.server.WebServer"
+    "zx.cli.ServeCommand.serverClassname": "zx.server.WebServer"
   },
 
   members: {
@@ -51,7 +51,7 @@ qx.Class.define("zx.cli.commands.ServeCommand", {
       let { flags } = this.getValues();
       let config = await zx.server.Config.getConfig();
 
-      let classname = qx.core.Environment.get("zx.cli.ServeCommand.ServerClassname");
+      let classname = qx.core.Environment.get("zx.cli.ServeCommand.serverClassname");
       let clazz = qx.Class.getByName(classname);
       let server = new clazz();
       let port = flags.port || config.port;

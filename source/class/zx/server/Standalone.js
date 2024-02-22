@@ -85,8 +85,12 @@ qx.Class.define("zx.server.Standalone", {
 
         await zx.server.puppeteer.ChromiumDocker.cleanupOldContainers();
       }
-      await zx.server.email.EmailJS.initialise();
-      await zx.server.email.SMTPClient.initialise();
+      if (this._config.smtpServer) {
+        await zx.server.email.EmailJS.initialise();
+        await zx.server.email.SMTPClient.initialise();
+      } else {
+        console.warn("No SMTP server configuration, so sending emails not possible.");
+      }
       await this._openDatabase();
       await this._initSite();
       await this._initRenderer();

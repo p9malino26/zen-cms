@@ -82,7 +82,7 @@
       "group": ["serve", "cli"],
       "include": ["zx.test.TestsAppServer"],
       "environment": {
-        "zx.cli.ServeCommand.ServerClassname": "zx.test.TestsAppServer"
+        "zx.cli.ServeCommand.serverClassname": "zx.test.TestsAppServer"
       }
     },
     {
