@@ -20,6 +20,7 @@
  *
  * @ignore(Buffer)
  * @ignore(BigNumber)
+ * @use(zx.utils.BigNumber)
  */
 qx.Class.define("zx.io.persistence.ClassIo", {
   extend: qx.core.Object,

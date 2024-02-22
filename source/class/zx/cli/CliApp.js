@@ -31,7 +31,8 @@ qx.Class.define("zx.cli.CliApp", {
 
   members: {
     async main() {
-      qx.log.appender.Native;
+      qx.log.Logger.register(zx.utils.NativeLogger);
+      qx.log.appender.Formatter.getFormatter().setFormatTimeAs("datetime");
       await zx.utils.LogFilter.loadFiltersAutoDetect();
       /*
       if (qx.core.Environment.get("qx.debug")) {

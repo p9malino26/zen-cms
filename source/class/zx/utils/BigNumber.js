@@ -3009,6 +3009,12 @@ qx.Class.define("zx.utils.BigNumber", {
   BigNumber = clone();
   BigNumber["default"] = BigNumber.BigNumber = BigNumber;
 
+  /*
+   * **********************************
+   * **********************************
+   * NOTE:: To include BigNumber like this, we do not use their loader and must use the globalObject syntax
+   * because otherwise when run in node, there will not be a global BigNumber
+   *
   // AMD.
   if (typeof define == "function" && define.amd) {
     define(function () {
@@ -3021,10 +3027,13 @@ qx.Class.define("zx.utils.BigNumber", {
 
     // Browser.
   } else {
-    if (!globalObject) {
-      globalObject = typeof self != "undefined" && self ? self : window;
-    }
-
-    globalObject.BigNumber = BigNumber;
+    */
+  if (!globalObject) {
+    globalObject = typeof self != "undefined" && self ? self : window;
   }
+
+  globalObject.BigNumber = BigNumber;
+  /*
+  }
+  */
 })(this);
