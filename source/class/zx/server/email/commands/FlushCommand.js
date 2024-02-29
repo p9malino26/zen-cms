@@ -1,6 +1,6 @@
 /**
  * Command to flush the email queue.
- * 
+ *
  * This command will attempt to send all emails in the queue, and remove the emails that have been successfully sent (if the clear-queue flag is set).
  */
 qx.Class.define("zx.server.email.commands.FlushCommand", {
@@ -23,7 +23,6 @@ qx.Class.define("zx.server.email.commands.FlushCommand", {
       await this.__doit(flags["clear-queue"]);
       console.log("Done.");
       return 0;
-
     });
   },
 
@@ -37,7 +36,7 @@ qx.Class.define("zx.server.email.commands.FlushCommand", {
       let toDeleteUuids = [];
       for await (const emailJson of emailsCursor) {
         let email = zx.utils.marshal.Marshal.toProxy(emailJson, zx.server.email.Message);
-        let success = await Util.attemptSendEmail(email);
+        let success = await email.sendEmail();
         if (success) {
           toDeleteUuids.push(email.toUuid());
         } else {

@@ -16,38 +16,12 @@ qx.Class.define("zx.server.email.commands.Util", {
     },
 
     /**
-     * @param {zx.server.email.Message} email zx.server.email.Message or alike
+     * @param {zx.server.email.Message} message zx.server.email.Message or alike
      * @returns {boolean} If the email was successfully sent
+     * @deprecated see `zx.server.email.Message.sendEmail`
      */
-    async attemptSendEmail(email) {
-      let htmlBody = email.getHtmlBody();
-
-      let config = await zx.server.Config.getConfig();
-      
-      const message = zx.server.email.EmailJS.createNewMessage({
-        from: config.smtpServer.fromAddr,
-        to: email.getTo(),
-        subject: email.getSubject(),
-        attachment: htmlBody ? [{ data: htmlBody, alternative: true }] : undefined,
-        text: email.getTextBody(),
-        "reply-to": email.getFrom(),
-      });
-
-      let client = zx.server.email.SMTPClient.getInstance();
-      let error = false;
-
-      await client.sendAsync(message).catch(async err => {
-        error = true;
-        if (!(email instanceof zx.server.email.Message)) {
-          let server = zx.server.Standalone.getInstance();
-          email = await server.findOneObjectByType(zx.server.email.Message, { _uuid: email.toUuid() });
-        }
-        email.setSendAttempts(email.getSendAttempts() + 1);
-        email.setLastErrorMessage(err ? err.message : null);
-        email.save();
-      });
-
-      return !error;
+    async attemptSendEmail(message) {
+      await message.sendEmail();
     },
 
     async getAllEmailsJson() {

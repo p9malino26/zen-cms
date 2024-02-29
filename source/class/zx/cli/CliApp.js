@@ -47,7 +47,12 @@ qx.Class.define("zx.cli.CliApp", {
      */
     async runCli() {
       let rootCmd = this._createRootCommand();
-      await rootCmd.execute();
+      try {
+        await rootCmd.execute();
+      } catch (ex) {
+        console.error(ex.stack || ex);
+        process.exit(1);
+      }
     },
 
     /**

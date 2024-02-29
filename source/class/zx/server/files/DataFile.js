@@ -23,6 +23,14 @@ qx.Class.define("zx.server.files.DataFile", {
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT, zx.server.anno.LastModified.DEFAULT, zx.utils.anno.Json.PUBLIC]
     },
 
+    /** A unique ID, human readable, that can be used to reliably find a file/blob by a known URI */
+    wellKnownId: {
+      init: null,
+      check: "String",
+      event: "changeWellKnownId",
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.DEFAULT, zx.server.anno.LastModified.DEFAULT, zx.utils.anno.Json.PUBLIC]
+    },
+
     /** Which object "owns" (ie uploaded) the file - a practice, a brand, or global etc */
     owner: {
       init: null,

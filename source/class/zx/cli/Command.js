@@ -18,9 +18,12 @@
 qx.Class.define("zx.cli.Command", {
   extend: qx.core.Object,
 
-  construct(name) {
+  construct(name, description) {
     super();
     this.setName(name);
+    if (description) {
+      this.setDescription(description);
+    }
     this.__subcommands = [];
     this.__flags = [];
     this.__arguments = [];

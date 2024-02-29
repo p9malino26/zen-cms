@@ -11,7 +11,7 @@ qx.Class.define("zx.server.email.EmailJS", {
     __config: null,
 
     /**@returns {emailjs} */
-    getInstance() {
+    getEmailJs() {
       if (!this.__emailJs) {
         throw new Error("EmailJS not initialized");
       }
@@ -35,7 +35,7 @@ qx.Class.define("zx.server.email.EmailJS", {
       if (config.toAddressOverride) {
         headers.to = config.toAddressOverride;
       }
-      
+
       let Message = this.__emailJs.Message;
       return new Message(headers);
     }

@@ -47,7 +47,7 @@ qx.Class.define("zx.server.email.commands.SendCommand", {
       let server = zx.server.Standalone.getInstance();
       let email = await server.findOneObjectByType(zx.server.email.Message, { _uuid: emailUuid });
 
-      let success = await Util.attemptSendEmail(email);
+      let success = await email.sendEmail();
 
       if (success && deleteFromQueue) {
         let server = zx.server.Standalone.getInstance();
