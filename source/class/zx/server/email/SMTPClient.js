@@ -6,14 +6,14 @@ const fs = require("fs").promises;
 qx.Class.define("zx.server.email.SMTPClient", {
   statics: {
     /**@type {emailjs.SMTPClient} */
-    __client: null,
+    __smtpClientImpl: null,
 
     /**@returns {emailjs.SMTPClient} */
-    getInstance() {
-      if (!this.__client) {
+    getSmtpClientImpl() {
+      if (!this.__smtpClientImpl) {
         throw new Error("SMTPClient not initialized");
       }
-      return this.__client;
+      return this.__smtpClientImpl;
     },
 
     /**
@@ -21,7 +21,7 @@ qx.Class.define("zx.server.email.SMTPClient", {
      * SMTP server settings are taken from the cms config file
      */
     async initialise() {
-      const emailJs = zx.server.email.EmailJS.getInstance();
+      const emailJs = zx.server.email.EmailJS.getEmailJs();
       const { SMTPClient } = emailJs;
 
       let config = await zx.server.Config.getConfig();
@@ -41,7 +41,7 @@ qx.Class.define("zx.server.email.SMTPClient", {
         ssl: true
       });
 
-      this.__client = client;
+      this.__smtpClientImpl = client;
     }
   }
 });

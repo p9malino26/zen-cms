@@ -244,6 +244,17 @@ qx.Class.define("zx.server.Standalone", {
     },
 
     /**
+     * Locates a "zx.server.files.DataFile` by its well known Id
+     *
+     * @param {String} id
+     * @returns {zx.server.files.DataFile?}
+     */
+    async getDataFileByWellKnownId(wellKnownId) {
+      let datafile = await this.findOneObjectByType(zx.server.files.DataFile, { wellKnownId });
+      return datafile;
+    },
+
+    /**
      * Returns a filename that can be used to store blobs (or any other data, EG it could be a folder)
      * based on a UUID.
      *
