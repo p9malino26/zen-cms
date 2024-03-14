@@ -75,8 +75,10 @@ qx.Class.define("zx.server.Config", {
     async _loadConfigImpl() {
       let filename = this._getConfigFilename();
       let config = await zx.utils.Json.loadJsonAsync(filename);
+      console.log("Using config from " + path.resolve(filename));
       let localFilename = "local-" + filename;
       if (fs.existsSync(localFilename)) {
+        console.log("Adding config from " + path.resolve(localFilename));
         let tmp = await zx.utils.Json.loadJsonAsync(localFilename);
         qx.lang.Object.mergeWith(config, tmp, true);
       }

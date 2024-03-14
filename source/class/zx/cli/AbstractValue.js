@@ -46,7 +46,14 @@ qx.Class.define("zx.cli.AbstractValue", {
     type: {
       init: null,
       nullable: true,
-      check: ["string", "boolean", "integer", "float"]
+      check: ["string", "boolean", "integer", "float", "enum"]
+    },
+
+    /** Allowed values if type is `enum` */
+    enumValues: {
+      init: null,
+      nullable: true,
+      check: "Array"
     },
 
     /** Whether this is an array */
@@ -181,6 +188,17 @@ qx.Class.define("zx.cli.AbstractValue", {
               throw new Error(`Invalid value for ${this.toString()}, expected a number`);
             }
             return value;
+
+          case "enum":
+            var arg = next();
+            if (arg === null) {
+              return null;
+            }
+            let enumValues = this.getEnumValues();
+            if (enumValues.indexOf(arg) < 0) {
+              throw new Error(`Invalid value for ${this.toString()}, expected one of ${enumValues.join(", ")} but found ${arg}`);
+            }
+            return arg;
         }
 
         return next();

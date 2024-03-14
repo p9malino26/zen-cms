@@ -44,7 +44,8 @@ qx.Class.define("zx.cli.Argument", {
         string: "String",
         boolean: "Boolean",
         integer: "Integer",
-        float: "Float"
+        float: "Float",
+        enum: "One of " + (this.getEnumValues() || []).join(", ")
       };
 
       let type = this.getType();
