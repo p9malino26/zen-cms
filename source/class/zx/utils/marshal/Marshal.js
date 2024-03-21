@@ -1,7 +1,7 @@
 /**
  * Helper functions to convert data that has been returned from Mongo into read-only Qooxdoo objects.
  * These objects behave in the exact same way as server objects, but changes to them aren't saved in the database.
- * 
+ *
  * Useful when we want Qooxdoo objects but don't want to instantiate full server objects
  * because doing that is expensive.
  */
@@ -17,10 +17,16 @@ qx.Class.define("zx.utils.marshal.Marshal", {
      * @param {Object[] | qx.data.Array<Object>} obj Array of POJOs
      * @return {qx.data.Array<qx.core.Object>} Array of Qooxdoo objects
      */
-    toProxies(obj) {
-      return zx.utils.marshal.Marshal.__doit(obj);
+    toProxies(obj, includeClientMixins = false) {
+      let proxies = zx.utils.marshal.Marshal.__doit(obj);
+      if (includeClientMixins) {
+        for (let proxy of proxies) {
+          zx.utils.marshal.Marshal.__includeMixinsForProxy(proxy);
+        }
+      }
+      return proxies;
     },
-    
+
     /**
      * Converts a POJO representing a server object to a Qooxdoo object.
      * The returned object will have a method toUuid().
@@ -28,8 +34,12 @@ qx.Class.define("zx.utils.marshal.Marshal", {
      * @param {Object} obj
      * @return {qx.core.Object}
      */
-    toProxy(obj) {
-      return zx.utils.marshal.Marshal.__doit(obj);
+    toProxy(obj, includeClientMixins = false) {
+      let proxy = zx.utils.marshal.Marshal.__doit(obj);
+      if (includeClientMixins) {
+        zx.utils.marshal.Marshal.__includeMixinsForProxy(proxy);
+      }
+      return proxy;
     },
 
     /**
@@ -61,6 +71,20 @@ qx.Class.define("zx.utils.marshal.Marshal", {
       obj = marshaller.toModel(obj, false);
 
       return obj;
+    },
+
+    /**
+     * Makes the proxy class include any mixins that the server object includes.
+     * @param {qx.core.Object} proxy
+     * @returns
+     */
+    __includeMixinsForProxy(proxy) {
+      let clazz = qx.Class.getByName(proxy.get_classname());
+      if (!clazz.$$includes) return;
+      for (let mixin of clazz.$$includes) {
+        qx.Class.patch(proxy.constructor, mixin);
+      }
+      return;
     }
   }
 });

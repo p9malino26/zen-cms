@@ -393,6 +393,20 @@ qx.Class.define("zx.server.Standalone", {
     },
 
     /**
+     * Instantiates server objects for a collection and then re-writes them back to Mongo.
+     * Useful when you've added new properties to a server object class and then want to write them to the database
+     * @param {Class<zx.io.persistence.IObject>} clazz
+     * @param {Object} query Mongo Query
+     * 
+     */
+    async rewriteCollection(clazz, query) {
+      query = query ? this.__createCorrectedQuery(query) : null;
+      let data = await this.findObjectsByType(clazz, query);
+      let saveAllPromises = data.map(doc => doc.save());
+      await qx.Promise.all(saveAllPromises);
+    },
+
+    /**
      * Creates a corrected version of a database query - principally, this means that `Date` objects
      * are converted into ISO strings so that range comparisons work
      *
