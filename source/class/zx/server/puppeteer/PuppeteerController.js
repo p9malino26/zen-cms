@@ -49,7 +49,9 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
 
       this.__puppeteer = new zx.server.puppeteer.PuppeteerClient().set({
         url,
-        chromiumEndpoint: this.__chromium.getEndpoint()
+        chromiumEndpoint: this.__chromium.getEndpoint(),
+        username: this.getUsername(),
+        password: this.getPassword()
       });
 
       this.debug("Puppeteer client created");
