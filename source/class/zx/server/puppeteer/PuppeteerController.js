@@ -80,8 +80,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
       this.__puppeteer = null;
       console.log("Puppeteer client stopped");
 
-      await this.__chromium.destroyContainer();
-      this.__chromium.dispose();
+      await this.__chromium.release();
       this.__chromium = null;
       console.log("Chromium released");
     },
