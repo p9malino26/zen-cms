@@ -42,14 +42,20 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
      * Visits a URL, creating an API instance to talk to the page
      *
      * @param {String} url
+     * @param {Object?} clientProperties Properties to set to the Puppeteer client. Must be properties of zx.server.puppeteer.PuppeteerClient
      */
-    async initialise(url) {
+    async initialise(url, clientProperties) {
       this.__chromium = await zx.server.puppeteer.ChromiumDocker.acquire();
       console.log("ChromiumDocker aquired");
 
+      clientProperties ??= {};
+
       this.__puppeteer = new zx.server.puppeteer.PuppeteerClient().set({
         url,
-        chromiumEndpoint: this.__chromium.getEndpoint()
+        chromiumEndpoint: this.__chromium.getEndpoint(),
+        username: this.getUsername(),
+        password: this.getPassword(),
+        ...clientProperties
       });
 
       this.debug("Puppeteer client created");
