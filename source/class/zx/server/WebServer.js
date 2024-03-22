@@ -900,7 +900,7 @@ qx.Class.define("zx.server.WebServer", {
 
       // Get the page
       if (url.endsWith(".html")) {
-        let dbUrl = (url = "pages" + url.substring(0, url.length - 5));
+        let dbUrl = (url = "pages" + url.replace(".json", ""));
         let object = await this.getObjectByUrl(zx.cms.content.Page, dbUrl);
         if (!object) {
           throw new zx.utils.Http.HttpError(404, `Cannot find ${url}`);
