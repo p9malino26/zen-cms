@@ -31,7 +31,7 @@ qx.Class.define("zx.utils.ChildProcess", {
      *    copyToConsole {Boolean?} if true, console output is copied to this process' console
      *    mergeOutput {Boolean?} if true, stderr is merged into stdout (this is the default)
      *
-     * @return {Map}:
+     * @return {Promise<Map>}:
      *    exitCode {Number}
      *    output: {String}
      *    error: *
