@@ -112,6 +112,8 @@ qx.Class.define("zx.thin.puppeteer.HeadlessPage", {
      * @param {*} data
      */
     _postResponse(data) {
+      data.signature = "zx.thin.puppeteer.HeadlessPage";
+
       // If the event source is this window, then we're being controlled from DevTools and the
       //  postMessage call is injected.  Our way back to DevTools is by embedding in console
       //  output and not via postMesssage (because that will cause an infinite loop)
@@ -210,6 +212,9 @@ qx.Class.define("zx.thin.puppeteer.HeadlessPage", {
       }
       if (!json) {
         apiError("No JSON in message " + msg);
+        return;
+      }
+      if (json.signature !== "zx.thin.puppeteer.HeadlessPage") {
         return;
       }
 
