@@ -1,6 +1,6 @@
-/* 
-* @ignore(Buffer)
-*/
+/*
+ * @ignore(Buffer)
+ */
 
 const puppeteer = require("puppeteer-core");
 const path = require("path");
@@ -470,6 +470,9 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
      * @param {*} data
      */
     _onReceiveMessage(data) {
+      if (data.signature != "zx.thin.puppeteer.HeadlessPage") {
+        return;
+      }
       var result = null;
       if (this.__closed) {
         return;
@@ -585,6 +588,8 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         callbackData.timeoutId = setTimeout(() => this._onTimeoutCallback(msg), data.timeout);
       }
 
+      msg.signature = "zx.thin.puppeteer.HeadlessPage";
+
       let strMsg = JSON.stringify(msg);
       try {
         /**
@@ -618,8 +623,8 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
      * @param {*} data
      */
     async _postMessage(type, data) {
-      var msg = { serialNo: this.__serialNo++, type: type, data: data };
-      msg = JSON.stringify(msg);
+      var msg = { serialNo: this.__serialNo++, type: type, data: data, signature: "zx.thin.puppeteer.HeadlessPage" };
+      strMsg = JSON.stringify(msg);
       try {
         /**
          * @preserve
@@ -627,13 +632,13 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
          */
         await this._page.evaluate(msg => {
           window.postMessage(msg, "*");
-        }, msg);
+        }, strMsg);
         /**
          * @preserve
          * javascript-obfuscator:enable
          */
       } catch (ex) {
-        this.error(`Error in _postMessage(type=${type}) for message #${msg.serialNo}: ${ex}`);
+        this.error(`Error in _postMessage(type=${type}) for message #${strMsg.serialNo}: ${ex}`);
 
         throw ex;
       }
@@ -747,7 +752,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         }
       };
 
-      return await this._page.screenshot(opts);
+      return this._page.screenshot(opts);
     },
 
     /**
