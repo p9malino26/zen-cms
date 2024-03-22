@@ -54,6 +54,14 @@ qx.Class.define("zx.thin.ThinClientApp", {
     }
   },
 
+  properties: {
+    /** Whether to start the network I/O server for talking to this app as an iframe inside another Zx app */
+    enableIframeServer: {
+      init: false,
+      check: "Boolean"
+    }
+  },
+
   members: {
     /** @type {qx.html.Root} the root window element */
     __root: null,
@@ -96,7 +104,7 @@ qx.Class.define("zx.thin.ThinClientApp", {
     async main() {
       await super.main();
 
-      if (window !== window.parent) {
+      if (this.isEnableIframeServer() && window !== window.parent) {
         // Controller manages the objects and their serialisation
         let ctlr = (this.__outerFrameController = new zx.io.remote.NetworkController());
         ctlr.addListener("uriMapping", evt => {
