@@ -15,9 +15,26 @@
  *
  * ************************************************************************ */
 
+/**
+ * Use when you want to bind an array to a callback. The callback gets called during the binding, and when the instance of the array changes, and when the array fires a change event
+ * @see {zx.utils.Target}
+ *
+ * @example {
+ * this.bind("foo.arrayProperty", new zx.utils.TargetArray((eventData, value, oldValue) => {
+ *  let newValue = value;
+ *  console.log("Array changed: ", JSON.stringify(value));
+ * });
+ *
+ * // Callback will call during the bind call, and when this.getFoo() fires "changeArrayProperty", and when this.getFoo().getArrayProperty() fires "change"
+ */
 qx.Class.define("zx.utils.TargetArray", {
   extend: qx.core.Object,
 
+  /**
+   *
+   * @param {(eventData: Object, value: qx.data.Array, oldValue: qx.data.Array) => void} callback
+   * @param {*} context `this` context for the callback
+   */
   construct(callback, context) {
     super();
     if (context) {
