@@ -29,14 +29,36 @@ qx.Class.define("zx.server.email.Message", {
     from: {
       check: "String",
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
-      event: "changeFrom"
+      event: "changeFrom",
+      nullable: true,
+      init: null
     },
 
-    /** To email address */
+    /** To email address(es) */
     to: {
-      check: "String",
+      validate(value) {
+        this.__isMaybeArrayString(value, "to");
+      },
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       event: "changeTo"
+    },
+
+    /** CC email address(es) */
+    cc: {
+      validate(value) {
+        this.__isMaybeArrayString(value, "cc");
+      },
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      event: "changeCc"
+    },
+
+    /** BCC email address(es) */
+    bcc: {
+      validate(value) {
+        this.__isMaybeArrayString(value, "bcc");
+      },
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      event: "changeBcc"
     },
 
     /** Email subject */
@@ -51,6 +73,17 @@ qx.Class.define("zx.server.email.Message", {
       check: "String",
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       event: "changeHtmlBody",
+      init: null,
+      nullable: true
+    },
+
+    /** Attachments for the email */
+    attachments: {
+      validate(value) {
+        this.__isAttachmentArray(value, "attachments");
+      },
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      event: "changeAttachments",
       init: null,
       nullable: true
     },
@@ -83,6 +116,23 @@ qx.Class.define("zx.server.email.Message", {
   },
 
   members: {
+    __isMaybeArrayString(value, propName) {
+      if (typeof value === "string" || (Array.isArray(value) && value.every(v => typeof v === "string"))) {
+        return;
+      }
+      throw new qx.core.ValidationError(
+        `Validation Error: value for property '${propName}' of class '${this.classname}' must either be a string, or an array of strings. Found ${value?.toString?.() ?? value}`
+      );
+    },
+    __isAttachmentArray(value, propName) {
+      if (Array.isArray(value) && value.every(v => v instanceof zx.server.email.Attachment)) {
+        return;
+      }
+      throw new qx.core.ValidationError(
+        `Validation Error: value for property '${propName}' of class '${this.classname}' must be an array of zx.server.email.Attachment. Found ${value?.toString?.() ?? value}`
+      );
+    },
+
     /**
      * @returns {boolean} If the email was successfully sent
      */
@@ -94,10 +144,12 @@ qx.Class.define("zx.server.email.Message", {
       const message = zx.server.email.EmailJS.createNewMessage({
         from: config.smtpServer.fromAddr,
         to: this.getTo(),
+        cc: this.getCc(),
+        bcc: this.getBcc(),
         subject: this.getSubject(),
-        attachment: htmlBody ? [{ data: htmlBody, alternative: true }] : undefined,
+        attachment: [...(htmlBody ? [zx.server.email.Attachment.compose({ data: htmlBody, alternative: true })] : []), ...(this.getAttachments() ?? [])].map(attachment => attachment.prepare()),
         text: this.getTextBody(),
-        "reply-to": this.getFrom()
+        ...(this.getFrom() ? { "reply-to": this.getFrom() } : {})
       });
 
       let client = zx.server.email.SMTPClient.getSmtpClientImpl();

@@ -32,10 +32,26 @@ qx.Class.define("zx.server.email.EmailJS", {
      */
     createNewMessage(headers) {
       let config = this.__config;
-      if (config.toAddressOverride) {
-        headers.to = config.toAddressOverride;
+      
+      if (config.smtpServer.toAddressOverride) {
+        let text = "";
+        text += "ORIGINAL HEADERS:\n\n";
+        text += `\tto: ${headers.to.join(",")}\n`;
+        text += `\tcc: ${headers.cc.join(",")}\n`;
+        text += `\tbcc: ${headers.bcc.join(",")}\n`;
+        headers.text = text + (headers.text ?? "");
+        headers.to = config.smtpServer.toAddressOverride;
+        headers.cc = [];
+        headers.bcc = [];
+      } else if (qx.core.Environment.get("qx.debug")) {
+        this.warn(
+          "Running in development environment without setting a toAddressOverride - the following email addresses will be sent the email:" +
+            `\tto: ${headers.to?.map(i => `<${i}>`).join(",") || "(no to address(es))"}\n` +
+            `\tcc: ${headers.cc?.map(i => `<${i}>`).join(",") || "(no cc address(es))"}\n` +
+            `\tbcc: ${headers.bcc?.map(i => `<${i}>`).join(",") || "(no bcc address(es))"}\n`
+        );
+        debugger;
       }
-
       let Message = this.__emailJs.Message;
       return new Message(headers);
     }
