@@ -50,7 +50,7 @@ qx.Class.define("zx.cli.CliApp", {
       try {
         await rootCmd.execute();
       } catch (ex) {
-        console.error(ex.stack || ex);
+        console.error(ex);
         process.exit(1);
       }
     },

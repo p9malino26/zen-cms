@@ -727,7 +727,7 @@ qx.Class.define("zx.server.WebServer", {
 
         let currentUser = await zx.server.auth.User.getUserFromSession(request);
         if (currentUser && currentUser.getUsername().toLowerCase() != email.toLowerCase()) {
-          await new qx.Promise(resolve => request.destroySession(resolve));
+          await zx.server.WebServer.getSessionManager().disposeSession(request);
           currentUser = null;
         }
 
