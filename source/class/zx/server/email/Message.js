@@ -46,8 +46,10 @@ qx.Class.define("zx.server.email.Message", {
     /** CC email address(es) */
     cc: {
       validate(value) {
-        this.__isMaybeArrayString(value, "cc");
+        value === null || this.__isMaybeArrayString(value, "cc");
       },
+      init: null,
+      nullable: true,
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       event: "changeCc"
     },
@@ -55,8 +57,10 @@ qx.Class.define("zx.server.email.Message", {
     /** BCC email address(es) */
     bcc: {
       validate(value) {
-        this.__isMaybeArrayString(value, "bcc");
+        value === null || this.__isMaybeArrayString(value, "bcc");
       },
+      init: null,
+      nullable: true,
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       event: "changeBcc"
     },
@@ -80,7 +84,7 @@ qx.Class.define("zx.server.email.Message", {
     /** Attachments for the email */
     attachments: {
       validate(value) {
-        this.__isAttachmentArray(value, "attachments");
+        value === null || this.__isAttachmentArray(value, "attachments");
       },
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       event: "changeAttachments",
