@@ -6,7 +6,7 @@ qx.Class.define("zx.server.puppeteer.api.EmailServerApi", {
   },
 
   events: {
-    sendEmail: "qx.event.type.Event",
+    sendEmail: "qx.event.type.Data",
     complete: "qx.event.type.Data"
   }
 });

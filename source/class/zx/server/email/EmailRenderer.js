@@ -10,7 +10,7 @@ qx.Class.define("zx.server.email.EmailRenderer", {
       try {
         let config = grasshopper.services.ServicesConfig.getInstance().getConfigData();
 
-        let ctlr = new zx.server.puppeteer.PuppeteerController(zx.server.puppeteer.api.PngServerApi).set({
+        let ctlr = new zx.server.puppeteer.PuppeteerController(zx.server.puppeteer.api.EmailServerApi).set({
           username: config.authUser,
           password: config.authTokens["grasshopper.automatedLogin"] || null
         });
