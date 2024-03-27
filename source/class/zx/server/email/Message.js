@@ -91,7 +91,7 @@ qx.Class.define("zx.server.email.Message", {
 
       let config = await zx.server.Config.getConfig();
 
-      const message = zx.server.email.EmailJS.createNewMessage({
+      let message = zx.server.email.EmailJS.createNewMessage({
         from: config.smtpServer.fromAddr,
         to: this.getTo(),
         subject: this.getSubject(),
