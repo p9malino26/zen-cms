@@ -624,7 +624,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
      */
     async _postMessage(type, data) {
       var msg = { serialNo: this.__serialNo++, type: type, data: data, signature: "zx.thin.puppeteer.HeadlessPage" };
-      strMsg = JSON.stringify(msg);
+      let strMsg = JSON.stringify(msg);
       try {
         /**
          * @preserve
@@ -633,13 +633,13 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         await this._page.evaluate(msg => {
           window.postMessage(msg, "*");
         }, strMsg);
+
         /**
          * @preserve
          * javascript-obfuscator:enable
          */
       } catch (ex) {
-        this.error(`Error in _postMessage(type=${type}) for message #${strMsg.serialNo}: ${ex}`);
-
+        this.error(`Error in _postMessage(type=${type}) for message #${msg.serialNo}: ${ex}`);
         throw ex;
       }
     },

@@ -26,15 +26,60 @@ qx.Class.define("zx.server.email.EmailJS", {
       this.__config = await zx.server.Config.getConfig();
     },
 
+    __ensureArray(value) {
+      if (Array.isArray(value)) {
+        return value;
+      }
+      if (value === null || value === undefined) {
+        return [];
+      }
+      return [value];
+    },
+
+    _parseHeaders(headers) {
+      const reEmailLike = /^.+@.+\..+$/;
+      const isEmailLike = addr => {
+        const match = reEmailLike.test(addr);
+        if (!match) {
+          qx.log.Logger.warn(`An address was found that does not look like an email address an will be ignored: '${addr}'`);
+        }
+        return match;
+      };
+
+      headers.to = this.__ensureArray(headers.to).filter(isEmailLike);
+      headers.cc = this.__ensureArray(headers.cc).filter(isEmailLike);
+      headers.bcc = this.__ensureArray(headers.bcc).filter(isEmailLike);
+
+      let config = this.__config;
+      if (config.smtpServer.toAddressOverride) {
+        let text = "";
+        text += "ORIGINAL HEADERS:\n\n";
+        text += `\tto: ${headers.to.map(i => `<${i}>`).join(", ")}\n`;
+        text += `\tcc: ${headers.cc.map(i => `<${i}>`).join(", ")}\n`;
+        text += `\tbcc: ${headers.bcc.map(i => `<${i}>`).join(", ")}\n`;
+        headers.text = text + (headers.text ?? "");
+        headers.to = config.smtpServer.toAddressOverride;
+        headers.cc = [];
+        headers.bcc = [];
+      } else if (qx.core.Environment.get("qx.debug")) {
+        qx.log.Logger.warn(
+          "Running in development environment without setting a toAddressOverride - the following email addresses will be sent the email:" +
+            `\tto: ${headers.to.map(i => `<${i}>`).join(", ") || "(no to address(es))"}\n` +
+            `\tcc: ${headers.cc.map(i => `<${i}>`).join(", ") || "(no cc address(es))"}\n` +
+            `\tbcc: ${headers.bcc.map(i => `<${i}>`).join(", ") || "(no bcc address(es))"}\n`
+        );
+        debugger;
+      }
+
+      return headers;
+    },
+
     /**
      * @param {Partial<emailjs.MessageHeaders>} headers
      * @returns {emailjs.Message}
      */
     createNewMessage(headers) {
-      let config = this.__config;
-      if (config.toAddressOverride) {
-        headers.to = config.toAddressOverride;
-      }
+      headers = this._parseHeaders(headers);
 
       let Message = this.__emailJs.Message;
       return new Message(headers);
