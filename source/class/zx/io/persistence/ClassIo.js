@@ -520,6 +520,9 @@ qx.Class.define("zx.io.persistence.ClassIo", {
       }
 
       if (value instanceof Date || value instanceof BigNumber) {
+        if (!endpoints.length) {
+          debugger;
+        }
         return endpoints[0].encodeValue(value);
       }
 
