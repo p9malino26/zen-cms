@@ -124,6 +124,7 @@ qx.Class.define("zx.server.email.Message", {
         `Validation Error: value for property '${propName}' of class '${this.classname}' must either be a string, or an array of strings. Found ${value?.toString?.() ?? value}`
       );
     },
+
     __isAttachmentArray(value, propName) {
       if (Array.isArray(value) && value.every(v => v instanceof zx.server.email.Attachment)) {
         return;
@@ -141,13 +142,40 @@ qx.Class.define("zx.server.email.Message", {
 
       let config = await zx.server.Config.getConfig();
 
+      let mime = (await import("mime")).default;
+      let attachmentDatas = [{ data: htmlBody, alternative: true }];
+      if (this.getAttachments()) {
+        this.getAttachments().forEach(attachment => {
+          let filename = attachment.getPath();
+          let stream = fs.createReadStream(filename);
+          let attachmentData = {};
+          if (stream) {
+            attachmentData.stream = stream;
+          } else {
+            attachmentData.path = filename;
+          }
+
+          let fileExt = path.extname(filename);
+          if (fileExt.startsWith(".")) {
+            fileExt = fileExt.substring(1);
+            let mimeType = mime.getType(fileExt);
+            if (mimeType) {
+              attachmentData.type = mimeType;
+            }
+          }
+
+          attachmentData.name = attachment.getName() || path.basename(filename);
+          attachmentDatas.push(attachmentData);
+        });
+      }
+
       const message = zx.server.email.EmailJS.createNewMessage({
         from: config.smtpServer.fromAddr,
         to: this.getTo(),
         cc: this.getCc(),
         bcc: this.getBcc(),
         subject: this.getSubject(),
-        attachment: [...(htmlBody ? [zx.server.email.Attachment.compose({ data: htmlBody, alternative: true })] : []), ...(this.getAttachments() ?? [])].map(attachment => attachment.prepare()),
+        attachment: attachmentDatas,
         text: this.getTextBody(),
         ...(this.getFrom() ? { "reply-to": this.getFrom() } : {})
       });
