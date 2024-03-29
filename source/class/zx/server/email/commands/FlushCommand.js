@@ -28,14 +28,13 @@ qx.Class.define("zx.server.email.commands.FlushCommand", {
 
   members: {
     async __doit(clearQueue = true) {
-      const Util = zx.server.email.commands.Util;
       let emailsCollection = await zx.server.Standalone.getInstance().getDb().getCollection("zx.server.email.Message");
 
       let emailsCursor = await emailsCollection.find({});
 
       let toDeleteUuids = [];
       for await (const emailJson of emailsCursor) {
-        let email = zx.utils.marshal.Marshal.toProxy(emailJson, zx.server.email.Message);
+        let email = await zx.server.Standalone.getInstance().findOneObjectByType(zx.server.email.Message, { _uuid: emailJson._uuid }, false);
         let success = await email.sendEmail();
         if (success) {
           toDeleteUuids.push(email.toUuid());
