@@ -5,8 +5,12 @@ qx.Class.define("zx.server.email.EmailRenderer", {
   statics: {
     /**
      * @param {string} url URL of the webpage with the email content
+     * @param {(msg: string) => void | null} log Function to log messages
      */
-    async run(url) {
+    async run(url, log) {
+      if (log === undefined) {
+        log = console.log;
+      }
       try {
         let config = grasshopper.services.ServicesConfig.getInstance().getConfigData();
 
@@ -16,22 +20,40 @@ qx.Class.define("zx.server.email.EmailRenderer", {
         });
 
         await ctlr.initialise(url);
+        log("Initialised browser controller");
 
         let pptr = ctlr.getPuppeteer();
         await pptr.waitForReadySignal();
+        log("Received ready signal");
 
         let api = ctlr.getApi();
         api.addListener("sendEmail", evt => {
           let { html, textBody, parameters } = evt.getData();
-          console.log("Email body to send: " + html);
-          console.log("Email parameters: " + JSON.stringify(parameters, null, 2));
+          log("Email body to send: " + html);
+          log("Email parameters: " + JSON.stringify(parameters, null, 2));
 
-          zx.server.email.Message.compose({ from: parameters.from ?? null, to: parameters.to, subject: parameters.subject ?? null, htmlBody: html, textBody });
+          let attachments = null;
+          if (parameters.attachments) {
+            attachments = new qx.data.Array();
+            for (let attachmentPojo of parameters.attachments) {
+              let attachment = new zx.server.email.Attachment();
+              attachment.set(attachmentPojo);
+              attachments.push(attachment);
+            }
+          }
+
+          if (typeof parameters.to == "array") {
+            parameters.to = new qx.data.Array(parameters.to);
+          }
+
+          zx.server.email.Message.compose({ from: parameters.from ?? null, to: parameters.to, subject: parameters.subject ?? null, htmlBody: html, textBody, attachments });
           api.next();
         });
 
         await api.start();
+        log("Started API");
         await ctlr.promiseFinished();
+        log("Finished browser controller");
       } catch (ex) {
         console.error("Exception in client: " + (ex.stack || ex));
       }
