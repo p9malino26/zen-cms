@@ -14,45 +14,58 @@ qx.Class.define("zx.server.email.EmailRenderer", {
       try {
         let config = grasshopper.services.ServicesConfig.getInstance().getConfigData();
 
-        let ctlr = new zx.server.puppeteer.PuppeteerController(zx.server.puppeteer.api.EmailServerApi).set({
+        let controller = new zx.server.puppeteer.PuppeteerController(zx.server.puppeteer.api.EmailServerApi).set({
           username: config.authUser,
           password: config.authTokens["grasshopper.automatedLogin"] || null
         });
 
-        await ctlr.initialise(url);
+        await controller.initialise(url);
         log("Initialised browser controller");
 
-        let pptr = ctlr.getPuppeteer();
-        await pptr.waitForReadySignal();
+        let puppeteer = controller.getPuppeteer();
+        await puppeteer.waitForReadySignal();
         log("Received ready signal");
 
-        let api = ctlr.getApi();
+        let api = controller.getApi();
         api.addListener("sendEmail", evt => {
-          let { html, textBody, parameters } = evt.getData();
-          log("Email body to send: " + html);
+          const {
+            htmlBody,
+            textBody,
+            /**@type {EmailParameters}*/
+            parameters
+          } = evt.getData();
+          log("Email body to send: " + htmlBody);
           log("Email parameters: " + JSON.stringify(parameters, null, 2));
 
-          let attachments = null;
           if (parameters.attachments) {
-            attachments = new qx.data.Array();
-            for (let attachmentPojo of parameters.attachments) {
-              let attachment = new zx.server.email.Attachment();
-              attachment.set(attachmentPojo);
-              attachments.push(attachment);
+            const attachments = new qx.data.Array();
+            for (let attachment of parameters.attachments) {
+              if (attachment instanceof zx.server.email.Attachment) {
+                attachments.push(attachment);
+                continue;
+              }
+              attachments.push(
+                new zx.server.email.Attachment().set({
+                  name: attachment.name,
+                  path: attachment.path
+                })
+              );
             }
+            parameters.attachments = attachments;
           }
 
-          if (typeof parameters.to == "array") {
-            parameters.to = new qx.data.Array(parameters.to);
+          // ensure all `undefined` values are replaced with `null`
+          for (const key in parameters) {
+            parameters[key] ??= null;
           }
 
-          zx.server.email.Message.compose({ from: parameters.from ?? null, to: parameters.to, subject: parameters.subject ?? null, htmlBody: html, textBody, attachments });
+          zx.server.email.Message.compose({ ...parameters, htmlBody, textBody });
           api.next();
         });
 
         await api.start();
         log("Started API");
-        await ctlr.promiseFinished();
+        await controller.promiseFinished();
         log("Finished browser controller");
       } catch (ex) {
         console.error("Exception in client: " + (ex.stack || ex));
