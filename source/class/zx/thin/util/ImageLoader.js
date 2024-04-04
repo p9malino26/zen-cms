@@ -89,7 +89,7 @@ qx.Class.define("zx.thin.util.ImageLoader", {
       var stats = zx.thin.util.ImageLoader;
 
       if (!image.height || !image.width) {
-        console.error("Image loaded but not ready, height=" + image.height + ", width=" + image.width + ", loadCount=" + this.loadCount + ", url=" + url);
+        console.error("Image loaded but not ready, height=" + image.height + ", width=" + image.width + ", loadCount=" + this.loadCount + ", url=" + this.__url);
 
         this.loadCount++;
         if (this.loadCount < 10) {
