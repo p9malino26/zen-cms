@@ -124,7 +124,7 @@ qx.Class.define("zx.server.email.Message", {
 
   members: {
     __isMaybeArrayString(value, propName) {
-      if (typeof value === "string" || (Array.isArray(value) && value.every(v => typeof v === "string"))) {
+      if (typeof value === "string" || (value instanceof qx.data.Array && value.every(v => typeof v === "string"))) {
         return;
       }
       throw new qx.core.ValidationError(
@@ -133,7 +133,7 @@ qx.Class.define("zx.server.email.Message", {
     },
 
     __isAttachmentArray(value, propName) {
-      if (Array.isArray(value) && value.every(v => v instanceof zx.server.email.Attachment)) {
+      if (value instanceof qx.data.Array && value.every(v => v instanceof zx.server.email.Attachment)) {
         return;
       }
       throw new qx.core.ValidationError(
