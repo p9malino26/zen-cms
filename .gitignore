@@ -5,3 +5,4 @@ test/persistence/website-db/_uuids/
 qx_packages
 .package-cache.json
 /tmp/
+website-data/database-status.json
