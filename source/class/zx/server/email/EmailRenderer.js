@@ -59,7 +59,7 @@ qx.Class.define("zx.server.email.EmailRenderer", {
             parameters[key] ??= null;
           }
 
-          zx.server.email.Message.compose({ ...parameters, htmlBody, textBody });
+          zx.server.email.Message.compose({ parameters, htmlBody, textBody });
           api.next();
         });
 

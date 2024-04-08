@@ -48,6 +48,7 @@ qx.Class.define("zx.thin.puppeteer.api.EmailBrowserApi", {
      * can be used verbatim in HTML emails.
      */
     inlineStylesForEmail: function (doc) {
+      qx.html.Element.flush();
       doc = doc || document;
       var body = doc.body;
 
