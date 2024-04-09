@@ -48,7 +48,7 @@ qx.Class.define("zx.server.email.commands.ComposeCommand", {
       await new zx.server.Standalone().start();
       let htmlBody = flags["html-body"] ? await fs.readFile(flags["html-body"], "utf8") : null;
       let textBody = flags["text-body"] ? await fs.readFile(flags["text-body"], "utf8") : null;
-      await zx.server.email.Message.compose({ from: flags.from, to: flags.to, subject: flags.subject, textBody, htmlBody });
+      await zx.server.email.Message.compose({ parameters: { from: flags.from, to: flags.to, subject: flags.subject }, textBody, htmlBody });
       console.log("Done.");
       return 0;
     });
