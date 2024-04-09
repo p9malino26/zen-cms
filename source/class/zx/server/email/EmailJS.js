@@ -68,7 +68,7 @@ qx.Class.define("zx.server.email.EmailJS", {
             `\tcc: ${headers.cc.map(i => `<${i}>`).join(", ") || "(no cc address(es))"}\n` +
             `\tbcc: ${headers.bcc.map(i => `<${i}>`).join(", ") || "(no bcc address(es))"}\n`
         );
-        debugger;
+        debugger; //! do not remove - this debugger may prevent accidental sending of emails to real addresses during development
       }
 
       return headers;

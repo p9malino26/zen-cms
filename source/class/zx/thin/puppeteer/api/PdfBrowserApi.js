@@ -34,8 +34,8 @@ qx.Class.define("zx.thin.puppeteer.api.PdfBrowserApi", {
     /**
      * Tells the puppeteer server to print the PDF
      */
-    printPdf() {
-      this.apiSendEvent("printPdf");
+    printPdf(data) {
+      this.apiSendEvent("printPdf", data);
     }
   }
 });

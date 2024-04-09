@@ -37,7 +37,7 @@ qx.Class.define("zx.test.thin.DemoEmail", {
         params = JSON.parse(params);
 
         email.inlineStylesForEmail();
-        email.sendEmail(document.body.outerHTML, params);
+        email.sendEmail(document.body.outerHTML, "Your email client does not support markup emails", params);
       });
 
       email.addListener("next", () => {

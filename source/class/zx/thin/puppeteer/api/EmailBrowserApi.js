@@ -34,20 +34,12 @@ qx.Class.define("zx.thin.puppeteer.api.EmailBrowserApi", {
     /**
      * Sends an email
      *
-     * @typedef Parameters
-     * @property {String} to the email address to send to
-     * @property {String} subject the subject of the email
-     *
-     * @param {String} html the HTML of the email to send
+     * @param {String} htmlBody the HTML of the email to send
      * @param {String} textBody the text body of the email to send
-     * @param {Parameters} params
+     * @param {EmailParameters} parameters see {@link zx.server.email.Message}
      */
-    sendEmail(html, textBody, params) {
-      this.apiSendEvent("sendEmail", {
-        html: html,
-        textBody,
-        parameters: params
-      });
+    sendEmail(htmlBody, textBody, parameters) {
+      this.apiSendEvent("sendEmail", { htmlBody, textBody, parameters });
     },
 
     /**

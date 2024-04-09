@@ -6,7 +6,7 @@ qx.Class.define("zx.server.puppeteer.api.PdfServerApi", {
   },
 
   events: {
-    printPdf: "qx.event.type.Event",
+    printPdf: "qx.event.type.Data",
     complete: "qx.event.type.Data"
   }
 });
