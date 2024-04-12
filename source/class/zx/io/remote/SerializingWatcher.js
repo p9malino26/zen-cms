@@ -37,6 +37,9 @@ qx.Class.define("zx.io.remote.SerializingWatcher", {
      * @override
      */
     _watchProperty(info, propertyName) {
+      if (info.endpoints?.length === 0) {
+        debugger;
+      }
       let object = info.object;
       let upname = qx.lang.String.firstUp(propertyName);
       let io = this.getClassIos().getClassIo(object.constructor);
