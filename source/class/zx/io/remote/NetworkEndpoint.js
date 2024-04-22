@@ -241,7 +241,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
 
       let promise = packet.promise;
       this._queuePacket(packet);
-      await this.flush();
+      this.flush();
 
       // NOTE:: you cannot await on `packet.promise`, because it will be deleted and then the result
       //  will always be `undefined`; this sounds like a bug, but WTH.  The fix is to get the promise
@@ -431,19 +431,15 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
     },
 
     /**
-     * @Override
+     * Flushes the queued data to the other end
      */
-    async _flushImpl() {
-      await super._flushImpl();
+    async flush() {
+      await super.flush();
       this._sendPropertyChanges();
-    },
-
-    _onFlushComplete() {
-      super._onFlushComplete();
       if (this._supportsPushPackets) {
         let queuedPackets = this.__takeQueuedPackets();
         if (queuedPackets) {
-          this._sendQueuedPacketsToRemote(queuedPackets);
+          this._flushImpl(queuedPackets);
         }
       }
     },
@@ -484,8 +480,8 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      *
      * @param queuedPackets {Object[]} the packets
      */
-    _sendQueuedPacketsToRemote(queuedPackets) {
-      throw new Error("No implementation for " + this.classname + "._sendQueuedPacketsToRemote");
+    _flushImpl(queuedPackets) {
+      throw new Error("No implementation for " + this.classname + "._flushImpl");
     },
 
     /**

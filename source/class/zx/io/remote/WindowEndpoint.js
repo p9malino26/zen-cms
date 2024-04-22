@@ -72,7 +72,7 @@ qx.Class.define("zx.io.remote.WindowEndpoint", {
     /**
      * @Override
      */
-    _sendQueuedPacketsToRemote(queuedPackets) {
+    _flushImpl(queuedPackets) {
       this.__cancelFlushTimer();
       this.__window.postMessage({
         signature: this.classname,

@@ -379,11 +379,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
         } else if (qx.Class.isSubClassOf(check, qx.core.Object)) {
           let refIo = getRefIo(check);
           if (refIo) {
-            let newValue = zx.utils.Promisify.resolveNow(refIo.fromJson(endpoint, value));
-            if (newValue === null && typeof value?._uuid == "string") {
-              this.error(`Cannot locate an object with UUID ${value._uuid} for property ${propertyPath}`);
-            }
-            value = newValue;
+            value = zx.utils.Promisify.resolveNow(refIo.fromJson(endpoint, value));
           } else {
             this.warn(`Missing ClassRefIo required to deserialized object: property=${propertyPath}, class=${check.classname}, value=${JSON.stringify(value)}`);
 
@@ -936,10 +932,6 @@ qx.Class.define("zx.io.persistence.ClassIo", {
       if (propertyDef.nullable !== true && value === null) {
         this.warn(`Cannot apply null value: property=${propertyPath}`);
         return null;
-      }
-
-      if (propertyName == "emailInfo") {
-        console.log(`Setting emailInfo to ${value}`);
       }
 
       if (qx.Promise.isPromise(value)) {
