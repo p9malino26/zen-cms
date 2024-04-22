@@ -138,7 +138,7 @@ qx.Class.define("zx.cms.content.SimpleFeature", {
       if (this._serverRenderObj) {
         let result = this._serverRenderObj.renderClientInstall(this._clientInstallerClassname, options);
 
-        if (result !== null || result !== undefined) {
+        if (result !== null && result !== undefined) {
           return result;
         }
       }
