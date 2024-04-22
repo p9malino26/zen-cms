@@ -82,7 +82,7 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
      * Handles the poll timeout
      */
     __onPollTimeout() {
-      this._flushImpl([], true);
+      this._sendQueuedPacketsToRemote([], true);
       this.__queueNextPoll();
     },
 
@@ -118,7 +118,7 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
     /*
      * @Override
      */
-    _flushImpl(queuedPackets, polling) {
+    _sendQueuedPacketsToRemote(queuedPackets, polling) {
       if (!queuedPackets.length && !polling) {
         return;
       }
@@ -177,7 +177,7 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
     async _receive(body) {
       let responses = await this._receivePackets(null, null, body);
       if (responses && responses.length) {
-        this._flushImpl(responses);
+        this._sendQueuedPacketsToRemote(responses);
       }
     },
 

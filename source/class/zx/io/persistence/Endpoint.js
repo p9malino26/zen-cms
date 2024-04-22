@@ -267,9 +267,34 @@ qx.Class.define("zx.io.persistence.Endpoint", {
     },
 
     /**
+     * Flushes the queued data to the other end
+     *
+     * @return {Promise}
+     */
+    __flushPromise: null,
+    flush() {
+      if (this.__flushPromise) {
+        return this.__flushPromise;
+      }
+      let promise = new qx.Promise((resolve, reject) => {
+        this._flushImpl().then(() => {
+          this._onFlushComplete();
+          this.__flushPromise = null;
+          resolve();
+        });
+      });
+      this.__flushPromise = promise;
+      return promise;
+    },
+
+    _onFlushComplete() {
+      // Nothing - intended to be overridden
+    },
+
+    /**
      * Flushes the queue
      */
-    async flush() {
+    async _flushImpl() {
       if (this.__putDependentObjects) {
         await this.__clearPutQueueDependentObjects();
       }
