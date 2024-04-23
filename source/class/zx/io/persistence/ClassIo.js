@@ -521,7 +521,8 @@ qx.Class.define("zx.io.persistence.ClassIo", {
 
       if (value instanceof Date || value instanceof BigNumber) {
         if (!endpoints.length) {
-          debugger;
+          this.warn(`Cannot serialize date or BigNumber without an endpoint: property=${propertyPath}, value=${value}`);
+          return value;
         }
         return endpoints[0].encodeValue(value);
       }
