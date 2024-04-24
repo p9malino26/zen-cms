@@ -511,6 +511,10 @@ qx.Class.define("zx.server.WebServer", {
         "*",
         this.wrapMiddleware(async (req, reply) => await this._defaultUrlHandler(req, reply))
       );
+      app.get(
+        "/",
+        this.wrapMiddleware(async (req, reply) => await this._defaultUrlHandler(req, reply))
+      );
     },
 
     /**
