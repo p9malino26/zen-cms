@@ -15,6 +15,14 @@ qx.Class.define("zx.server.email.commands.DeleteCommand", {
       })
     );
 
+    this.addFlag(
+      new zx.cli.Flag("skip-confirm").set({
+        description: "Skip user confirmation",
+        type: "boolean",
+        value: false
+      })
+    );
+
     this.setRun(async ({ flags, args }) => {
       await new zx.server.Standalone().start();
       if (args.id) {
@@ -22,10 +30,17 @@ qx.Class.define("zx.server.email.commands.DeleteCommand", {
       } else {
         const reader = readline.createInterface({
           input: process.stdin,
-          output: process.stdout,
+          output: process.stdout
         });
-        const confirm = await reader.question("Are you sure you want to delete all emails? (yes/[no]) ");
-        if (confirm === "yes") {
+
+        let confirm;
+        if (flags["skip-confirm"]) {
+          confirm = true;
+        } else {
+          confirm = (await reader.question("Are you sure you want to delete all emails? (yes/[no]) ")) === "yes";
+        }
+
+        if (confirm) {
           await this.__deleteAll();
         } else {
           console.log("Abort.");
