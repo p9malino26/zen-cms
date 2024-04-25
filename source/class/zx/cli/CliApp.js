@@ -71,6 +71,7 @@ qx.Class.define("zx.cli.CliApp", {
       rootCmd.addSubcommand(zx.cli.commands.ShortenCommand.createCliCommand());
       rootCmd.addSubcommand(zx.cli.commands.LicenseCommand.createCliCommand());
       rootCmd.addSubcommand(zx.cli.puppeteer.PuppeteerCommand.createCliCommand());
+      rootCmd.addSubcommand(new zx.server.email.commands.EmailCommand());
       return rootCmd;
     }
   }
