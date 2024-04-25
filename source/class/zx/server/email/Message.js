@@ -60,7 +60,7 @@ qx.Class.define("zx.server.email.Message", {
     to: {
       transform: "__ensureQxArray",
       check(value) {
-       return this.__isStringArray(value);
+        return this.__isStringArray(value);
       },
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       event: "changeTo"
