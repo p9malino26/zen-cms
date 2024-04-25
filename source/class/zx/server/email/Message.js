@@ -230,7 +230,9 @@ qx.Class.define("zx.server.email.Message", {
       let client = zx.server.email.SMTPClient.getSmtpClientImpl();
       let error = false;
 
-      await client.sendAsync(message).catch(async err => {
+      try {
+        await client.sendAsync(message);
+      } catch (err) {
         error = true;
         if (!(message instanceof zx.server.email.Message)) {
           let server = zx.server.Standalone.getInstance();
@@ -239,7 +241,7 @@ qx.Class.define("zx.server.email.Message", {
         this.setSendAttempts(this.getSendAttempts() + 1);
         this.setLastErrorMessage(err ? err.message : null);
         this.save();
-      });
+      }
 
       return !error;
     }
