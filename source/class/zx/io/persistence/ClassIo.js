@@ -244,6 +244,14 @@ qx.Class.define("zx.io.persistence.ClassIo", {
       );
     },
 
+    /**
+     * Helper method to determine the `zx.io.persistence.ClassRefIo` to use for a
+     * property; uses fallbacks to always return a value.
+     *
+     * @param {*} propertyDef
+     * @param {Class} clazz
+     * @returns {zx.io.persistence.ClassRefIo}
+     */
     __getRefIo(propertyDef, clazz) {
       if (propertyDef) {
         if (propertyDef.refIo) {
@@ -256,6 +264,16 @@ qx.Class.define("zx.io.persistence.ClassIo", {
       return this.__classIos.getDefaultRefIo(clazz);
     },
 
+    /**
+     * Part of the internal implementation of `fromJson`; this will query the database if
+     * `value.$query` is set, and will convert the JSON into an actual object.
+     *
+     * @param {zx.io.persistence.Endpoint} endpoint
+     * @param {*} propertyDef
+     * @param {*} value the JSON to convert
+     * @param {Class} defaultType the class to use if the JSON does not specify a classname
+     * @returns {zx.io.persistence.IObject}
+     */
     __convertObjectFromJson(endpoint, propertyDef, value, defaultType) {
       if (value === null) {
         return null;
@@ -290,6 +308,15 @@ qx.Class.define("zx.io.persistence.ClassIo", {
       return value;
     },
 
+    /**
+     * Part of the internal implementation of `fromJson`; this will iterate the array and
+     * load each entry; if the array is not an array, it will be converted into an array.
+     *
+     * @param {zx.io.persistence.Endpoint} endpoint
+     * @param {*} propertyDef
+     * @param {Object[]|Object} arr the array of JSON objects to convert
+     * @returns {zx.io.persistence.IObject[]}
+     */
     __convertArrayFromJson(endpoint, propertyDef, arr) {
       if (!qx.lang.Type.isArray(arr)) {
         arr = [arr];
@@ -303,6 +330,15 @@ qx.Class.define("zx.io.persistence.ClassIo", {
       return zx.utils.Promisify.allNow(arr);
     },
 
+    /**
+     * Part of the internal implementation of `fromJson`; this will iterate the map and
+     * load each entry
+     *
+     * @param {zx.io.persistence.Endpoint} endpoint
+     * @param {*} propertyDef
+     * @param {Object} map the map (key/value pairs) where the values are to be converted
+     * @returns {zx.io.persistence.IObject[]}
+     */
     __convertMapFromJson(endpoint, propertyDef, map) {
       map = qx.lang.Object.clone(map);
       let promises = [];
@@ -440,6 +476,10 @@ qx.Class.define("zx.io.persistence.ClassIo", {
         let value = obj["get" + qx.lang.String.firstUp(propertyName)]();
         let jsonValue = await this.toJsonValue(endpoints, value, propertyDef, propertyPath);
         json[propertyName] = jsonValue;
+      }
+
+      if (qx.Class.hasInterface(obj.constructor, zx.io.persistence.IObjectNotifications)) {
+        await obj.receiveDataNotification(zx.io.persistence.IObjectNotifications.WRITE_TO_JSON_COMPLETE, json);
       }
 
       return json;

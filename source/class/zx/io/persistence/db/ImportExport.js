@@ -115,6 +115,7 @@ qx.Class.define("zx.io.persistence.db.ImportExport", {
                 json._uuid = this.__db.createUuid();
               }
             }
+            json.websiteName = zx.server.Standalone.getInstance().getWebsiteName();
             await this.__db._sendJson(json._uuid, json);
           }
         }

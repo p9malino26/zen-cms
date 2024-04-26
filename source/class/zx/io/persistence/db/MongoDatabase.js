@@ -28,6 +28,7 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
     super();
     this.__uri = options.uri;
     this.__databaseName = options.databaseName;
+    this.__collectionNamesForClasses = {};
   },
 
   destruct() {
@@ -52,6 +53,9 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
     /** @type{Boolean} true if the collection did not exist when the database was opened */
     __newDatabase: false,
 
+    /** @type{Object<String,String>} lookup table of the collection names to use for given classnames */
+    __collectionNamesForClasses: null,
+
     /*
      * @Override
      */
@@ -67,9 +71,31 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
       return await super.open();
     },
 
+    /**
+     * Returns the collection for a class
+     * @param {*} clazz
+     * @returns
+     */
     getCollection(clazz) {
       let classname = clazz.classname || clazz.toString();
-      return this.__db.collection(classname);
+      let collectionName = this.__collectionNamesForClasses[classname];
+      if (collectionName === undefined) {
+        let tmp = clazz;
+        if (typeof tmp == "string") {
+          tmp = qx.Class.getByName(classname);
+        }
+        if (tmp) {
+          let annos = qx.Annotation.getClass(clazz, zx.io.persistence.anno.Class);
+          if (annos) {
+            collectionName = annos.find(anno => !!anno.getCollectionName())?.getCollectionName() || null;
+          }
+        }
+        if (!collectionName) {
+          collectionName = classname;
+        }
+        this.__collectionNamesForClasses[classname] = collectionName;
+      }
+      return this.__db.collection(collectionName);
     },
 
     /**

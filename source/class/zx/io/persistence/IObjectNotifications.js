@@ -25,7 +25,10 @@ qx.Interface.define("zx.io.persistence.IObjectNotifications", {
     CREATED: "created",
 
     /** Sent after loading */
-    DATA_LOAD_COMPLETE: "dataLoadComplete"
+    DATA_LOAD_COMPLETE: "dataLoadComplete",
+
+    /** Sent after loading */
+    WRITE_TO_JSON_COMPLETE: "beforeWriteJson"
   },
 
   members: {

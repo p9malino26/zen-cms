@@ -435,6 +435,10 @@ qx.Class.define("zx.server.WebServer", {
 
       const send = require("@fastify/send");
       app.decorateReply("sendFileAbsolute", function (filename) {
+        if (filename == null) {
+          throw new Error("Calling sendFileAbsolute with null filename");
+        }
+
         send(this.request.raw, filename).pipe(this.raw);
         return this;
       });
@@ -487,6 +491,26 @@ qx.Class.define("zx.server.WebServer", {
         "/zx/theme/*",
         this.wrapMiddleware(async (req, reply) => await this._renderer.getTheme().middleware(req, reply))
       );
+
+      // Configured static paths
+      if (this._config.statics) {
+        for (let static of this._config.statics) {
+          if (typeof static == "string") {
+            static = { path: static };
+          }
+          if (!static.path) {
+            this.error(`No path specified for static: ${JSON.stringify(static)}`);
+            continue;
+          } else {
+            let root = zx.server.Config.resolveApp(static.path);
+            let prefix = static.url || static.path;
+            if (prefix[0] != "/") {
+              prefix = "/" + prefix;
+            }
+            app.register(fastifyStatic, { root, prefix, decorateReply: false });
+          }
+        }
+      }
 
       // REST API
       const ARAS = zx.server.rest.RestApiServer;
@@ -738,6 +762,9 @@ qx.Class.define("zx.server.WebServer", {
         if (!currentUser) {
           let user = await this.getUserDiscovery().getUserFromEmail(email, true);
           if (user) {
+            if (!request.session) {
+              this.__sessionManager.newSession(request);
+            }
             user.login(request);
             currentUser = user;
           }
@@ -780,6 +807,9 @@ qx.Class.define("zx.server.WebServer", {
       if (!currentUser) {
         let user = await this.getUserDiscovery().getUserFromEmail(data.username);
         if (user != null) {
+          if (!request.session) {
+            this.__sessionManager.newSession(request);
+          }
           user.login(request, false);
         }
       }

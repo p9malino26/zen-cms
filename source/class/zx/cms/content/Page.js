@@ -23,9 +23,13 @@
  */
 qx.Class.define("zx.cms.content.Page", {
   extend: zx.io.persistence.Object,
-  implement: [zx.cms.render.IViewable, zx.io.remote.IProxied],
+  implement: [zx.cms.render.IViewable, zx.io.remote.IProxied, zx.io.persistence.IObjectNotifications],
   include: [zx.server.MObjectLastModified],
-  "@": [new zx.io.remote.anno.Class().set({ clientMixins: "zx.cms.content.MPage" }), zx.server.anno.LastModified.DEFAULT],
+  "@": [
+    new zx.io.remote.anno.Class().set({ clientMixins: "zx.cms.content.MPage" }),
+    new zx.io.persistence.anno.Class().set({ collectionName: "zx.cms.content.Page" }),
+    zx.server.anno.LastModified.DEFAULT
+  ],
 
   construct() {
     super();
@@ -156,9 +160,25 @@ qx.Class.define("zx.cms.content.Page", {
       }
     },
 
+    /**
+     * @Override
+     */
+    async receiveDataNotification(key, data) {
+      if (key == zx.io.persistence.IObjectNotifications.WRITE_TO_JSON_COMPLETE) {
+        data.websiteName = zx.server.Standalone.getInstance().getWebsiteName();
+      }
+    },
+
     "@save": zx.io.remote.anno.Method.DEFAULT,
     save() {
       zx.server.Standalone.getInstance().putObject(this);
+    },
+
+    /**
+     * @Override
+     */
+    toString() {
+      return this.toUuid() + " :: " + this.getUrl();
     }
   }
 });
