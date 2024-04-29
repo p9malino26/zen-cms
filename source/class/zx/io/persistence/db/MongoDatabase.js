@@ -67,6 +67,10 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
       return await super.open();
     },
 
+    /**
+     * @param {string|qx.Class} clazz
+     * @returns {import("mongodb").Collection}
+     */
     getCollection(clazz) {
       let classname = clazz.classname || clazz.toString();
       return this.__db.collection(classname);
