@@ -299,7 +299,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
      * @typedef {Object} Configuration
      * @property {Boolean|String} debug whether to enable debugging, and if so, how
      * @property {Object<String,*>} env environment variables to set
-     * @property {Integer} maxPool the minimum size of the pool
+     * @property {Integer} maxPool the maximum size of the pool
      * @property {Integer} minPort the minimum port number
      * @property {Integer} maxPort the maximum port number
      * @property {String} imageName the name of the image to use
