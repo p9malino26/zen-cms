@@ -6,8 +6,9 @@ const fs = require("fs").promises;
  */
 qx.Class.define("zx.server.email.EmailJS", {
   statics: {
-    /**@type {emailjs} */
+    /**@type {emailjs} emailjs library*/
     __emailJs: null,
+    /**@type {Object} Zen CMS server config*/
     __config: null,
 
     /**@returns {emailjs} */
@@ -26,7 +27,7 @@ qx.Class.define("zx.server.email.EmailJS", {
       this.__config = await zx.server.Config.getConfig();
     },
 
-    __ensureArray(value) {
+    __ensureNativeArray(value) {
       if (value instanceof qx.data.Array) {
         return value.toArray();
       }
@@ -40,18 +41,17 @@ qx.Class.define("zx.server.email.EmailJS", {
     },
 
     _parseHeaders(headers) {
-      const reEmailLike = /^.+@.+\..+$/;
       const isEmailLike = addr => {
-        const match = reEmailLike.test(addr);
+        const match = zx.utils.Email.validate(addr);
         if (!match) {
           qx.log.Logger.warn(`An address was found that does not look like an email address and will be ignored: '${addr}'`);
         }
         return match;
       };
 
-      headers.to = this.__ensureArray(headers.to).filter(isEmailLike);
-      headers.cc = this.__ensureArray(headers.cc).filter(isEmailLike);
-      headers.bcc = this.__ensureArray(headers.bcc).filter(isEmailLike);
+      headers.to = this.__ensureNativeArray(headers.to).filter(isEmailLike);
+      headers.cc = this.__ensureNativeArray(headers.cc).filter(isEmailLike);
+      headers.bcc = this.__ensureNativeArray(headers.bcc).filter(isEmailLike);
 
       let config = this.__config;
       if (config.smtpServer.toAddressOverride) {

@@ -37,6 +37,9 @@ qx.Class.define("zx.io.remote.SerializingWatcher", {
      * @override
      */
     _watchProperty(info, propertyName) {
+      if (info.endpoints?.length === 0) {
+        debugger;
+      }
       let object = info.object;
       let upname = qx.lang.String.firstUp(propertyName);
       let io = this.getClassIos().getClassIo(object.constructor);
@@ -74,6 +77,11 @@ qx.Class.define("zx.io.remote.SerializingWatcher", {
         };
 
         const onArrayChange = evt => {
+          if (info.endpoints.length == 0) {
+            // No point serialising anything if there are no endpoints to send it to (this also avoids a warning) in toJsonValue
+            // about it being impossible to serialise some values without an endpoint)
+            return;
+          }
           let data = evt.getData();
           if (data.type == "order") {
             let value = io.toJsonValue(info.endpoints, evt.getTarget(), propertyDef, propertyPath);
@@ -95,6 +103,11 @@ qx.Class.define("zx.io.remote.SerializingWatcher", {
         };
 
         const onValueChange = evt => {
+          if (info.endpoints.length == 0) {
+            // No point serialising anything if there are no endpoints to send it to (this also avoids a warning) in toJsonValue
+            // about it being impossible to serialise some values without an endpoint)
+            return;
+          }
           let data = evt.getData();
           let oldData = evt.getOldData();
           if (propState.arrayChangeListenerId) {
@@ -140,6 +153,11 @@ qx.Class.define("zx.io.remote.SerializingWatcher", {
         };
 
         const onMapContentsChange = evt => {
+          if (info.endpoints.length == 0) {
+            // No point serialising anything if there are no endpoints to send it to (this also avoids a warning) in toJsonValue
+            // about it being impossible to serialise some values without an endpoint)
+            return;
+          }
           let data = evt.getData();
           if (data.type == "order") {
             let value = io.toJsonValue(info.endpoints, evt.getTarget(), propertyDef, propertyPath);
@@ -161,6 +179,11 @@ qx.Class.define("zx.io.remote.SerializingWatcher", {
         };
 
         const onValueChange = evt => {
+          if (info.endpoints.length == 0) {
+            // No point serialising anything if there are no endpoints to send it to (this also avoids a warning) in toJsonValue
+            // about it being impossible to serialise some values without an endpoint)
+            return;
+          }
           let data = evt.getData();
           let oldData = evt.getOldData();
           if (propState.arrayChangeListenerId) {
@@ -185,6 +208,11 @@ qx.Class.define("zx.io.remote.SerializingWatcher", {
         // Normal values
       } else {
         propState.changeListenerId = object.addListener("change" + upname, evt => {
+          if (info.endpoints.length == 0) {
+            // No point serialising anything if there are no endpoints to send it to (this also avoids a warning) in toJsonValue
+            // about it being impossible to serialise some values without an endpoint)
+            return;
+          }
           let value = io.toJsonValue(info.endpoints, evt.getData(), propertyDef, propertyPath);
           return zx.utils.Promisify.resolveNow(value, value => this._onSerializedPropertyChange(object, propertyName, "setValue", value));
         });

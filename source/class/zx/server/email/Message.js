@@ -60,7 +60,7 @@ qx.Class.define("zx.server.email.Message", {
     to: {
       transform: "__ensureQxArray",
       check(value) {
-       return this.__isStringArray(value);
+        return this.__isStringArray(value);
       },
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       event: "changeTo"
@@ -131,15 +131,11 @@ qx.Class.define("zx.server.email.Message", {
 
     /**
      * Attachments for the email
-     * @type {qx.data.Array<zx.server.email.Attachment>} read value
-     * @type {qx.data.Array<zx.server.email.Attachment> || zx.server.email.Attachment[] || zx.server.email.Attachment || null} accepted incoming values
+     * @type {qx.data.Array<zx.server.email.Attachment>}
      */
     attachments: {
-      transform: "__ensureQxArray",
-      check(value) {
-        return this.__isAttachmentArray(value);
-      },
-      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      check: "qx.data.Array",
+      "@": [zx.io.persistence.anno.Property.EMBED, zx.io.remote.anno.Property.PROTECTED],
       event: "changeAttachments",
       init: null,
       nullable: true
@@ -234,7 +230,9 @@ qx.Class.define("zx.server.email.Message", {
       let client = zx.server.email.SMTPClient.getSmtpClientImpl();
       let error = false;
 
-      await client.sendAsync(message).catch(async err => {
+      try {
+        await client.sendAsync(message);
+      } catch (err) {
         error = true;
         if (!(message instanceof zx.server.email.Message)) {
           let server = zx.server.Standalone.getInstance();
@@ -243,7 +241,7 @@ qx.Class.define("zx.server.email.Message", {
         this.setSendAttempts(this.getSendAttempts() + 1);
         this.setLastErrorMessage(err ? err.message : null);
         this.save();
-      });
+      }
 
       return !error;
     }

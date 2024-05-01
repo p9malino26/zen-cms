@@ -98,6 +98,15 @@ qx.Class.define("zx.server.Standalone", {
     },
 
     /**
+     * Returns the name of the website; used to identify urls when the database is shared between multiple websites
+     *
+     * @returns {String} "localhost" if not configured
+     */
+    getWebsiteName() {
+      return this._config?.websiteName || "localhost";
+    },
+
+    /**
      * Called to stop the server
      */
     async stop() {
@@ -290,7 +299,7 @@ qx.Class.define("zx.server.Standalone", {
         url = url.substring(0, url.length - 5);
       }
 
-      let data = await this._db.findOne(clazz, { url }, { _uuid: 1 });
+      let data = await this._db.findOne(clazz, { websiteName: this.getWebsiteName(), url }, { _uuid: 1 });
       uuid = (data && data._uuid) || null;
       if (!uuid) {
         return null;
@@ -397,7 +406,7 @@ qx.Class.define("zx.server.Standalone", {
      * Useful when you've added new properties to a server object class and then want to write them to the database
      * @param {Class<zx.io.persistence.IObject>} clazz
      * @param {Object} query Mongo Query
-     * 
+     *
      */
     async rewriteCollection(clazz, query) {
       query = query ? this.__createCorrectedQuery(query) : null;

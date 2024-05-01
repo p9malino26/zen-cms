@@ -36,6 +36,13 @@ qx.Class.define("zx.io.persistence.anno.Class", {
       init: null,
       nullable: true,
       check: "zx.io.persistence.ClassIo"
+    },
+
+    /** Specify the name of the collection to be used when saving in the database, defaults to the object's `classname` */
+    collectionName: {
+      init: null,
+      nullable: true,
+      check: "String"
     }
   }
 });
