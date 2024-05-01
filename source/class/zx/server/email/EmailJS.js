@@ -27,6 +27,9 @@ qx.Class.define("zx.server.email.EmailJS", {
     },
 
     __ensureArray(value) {
+      if (value instanceof qx.data.Array) {
+        return value.toArray();
+      }
       if (Array.isArray(value)) {
         return value;
       }
