@@ -69,8 +69,10 @@ qx.Class.define("zx.utils.ChildProcess", {
             console.log(data);
           }
           result.output += data;
+
           if (opts.onConsole) {
-            opts.onConsole(data, "stdout");
+            let log = opts.onConsole.log ?? opts.onConsole;
+            log(data, "stdout");
           }
         }
         function onStderr(data) {

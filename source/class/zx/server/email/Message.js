@@ -216,7 +216,7 @@ qx.Class.define("zx.server.email.Message", {
         });
       }
 
-      let message = zx.server.email.EmailJS.createNewMessage({
+      let emailJsMessage = zx.server.email.EmailJS.createNewMessage({
         from: config.smtpServer.fromAddr,
         to: this.getTo(),
         cc: this.getCc(),
@@ -231,12 +231,12 @@ qx.Class.define("zx.server.email.Message", {
       let error = false;
 
       try {
-        await client.sendAsync(message);
+        await client.sendAsync(emailJsMessage);
       } catch (err) {
         error = true;
-        if (!(message instanceof zx.server.email.Message)) {
+        if (!(emailJsMessage instanceof zx.server.email.Message)) {
           let server = zx.server.Standalone.getInstance();
-          message = await server.findOneObjectByType(zx.server.email.Message, { _uuid: this.toUuid() });
+          emailJsMessage = await server.findOneObjectByType(zx.server.email.Message, { _uuid: this.toUuid() });
         }
         this.setSendAttempts(this.getSendAttempts() + 1);
         this.setLastErrorMessage(err ? err.message : null);
