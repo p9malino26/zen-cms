@@ -797,7 +797,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
      *
      * @param {Object} store
      * @param {String} propertyName the name of the property that changed
-     * @param {qx.io.persistence.ClassIo~WatchForChangesChangeType} changeType the type of change, eg "setValue", "arrayChange", etc
+     * @param {WatchForChangesChangeType} changeType the type of change, eg "setValue", "arrayChange", etc
      * @param {Object} value native JSON representation of the property
      */
     storeChange(store, propertyName, changeType, value) {
@@ -1001,7 +1001,7 @@ qx.Class.define("zx.io.persistence.ClassIo", {
     /**
      * Returns the properties
      *
-     * @return {Map<String,PropertyDef} A map of property definitions, indexed by property name
+     * @return {Map<String,PropertyDef>} A map of property definitions, indexed by property name
      */
     getProperties() {
       return this.__properties;
