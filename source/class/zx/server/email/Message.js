@@ -22,7 +22,7 @@ qx.Class.define("zx.server.email.Message", {
     /**
      * Composes an email message and saves it in the queue
      * @param {{ parameters?: EmailParameters; textBody?: string; htmlBody?: string; }} params
-     * @returns {zx.server.email.Message}
+     * @returns {Promise<zx.server.email.Message>}
      */
     async compose({ parameters, textBody, htmlBody }) {
       let email = new zx.server.email.Message().set({ ...parameters, textBody, htmlBody, dateQueued: new Date() });
@@ -182,7 +182,7 @@ qx.Class.define("zx.server.email.Message", {
     },
 
     /**
-     * @returns {boolean} If the email was successfully sent
+     * @returns {Promise<boolean>} If the email was successfully sent
      */
     async sendEmail() {
       let htmlBody = this.getHtmlBody();

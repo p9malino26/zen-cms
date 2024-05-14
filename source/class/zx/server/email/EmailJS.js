@@ -28,15 +28,23 @@ qx.Class.define("zx.server.email.EmailJS", {
     },
 
     __ensureNativeArray(value) {
-      if (value instanceof qx.data.Array) return value.toArray();
-      return value ?? [];
+      if (value instanceof qx.data.Array) {
+        return value.toArray();
+      }
+      if (Array.isArray(value)) {
+        return value;
+      }
+      if (value === null || value === undefined) {
+        return [];
+      }
+      return [value];
     },
 
     _parseHeaders(headers) {
       const isEmailLike = addr => {
         const match = zx.utils.Email.validate(addr);
         if (!match) {
-          qx.log.Logger.warn(`An address was found that does not look like an email address an will be ignored: '${addr}'`);
+          qx.log.Logger.warn(`An address was found that does not look like an email address and will be ignored: '${addr}'`);
         }
         return match;
       };
