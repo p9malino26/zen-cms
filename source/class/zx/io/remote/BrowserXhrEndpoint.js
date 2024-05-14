@@ -135,16 +135,23 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
         if (options.statusCode == 200) {
           let packets = zx.utils.Json.parseJson(options.content);
           await this._receive(packets);
-        } else await this._error(options.statusCode);
+        } else {
+          for (let packet of queuedPackets) {
+            let promise = this._pendingPromises[packet.packetId];
+            delete this._pendingPromises[packet.packetId];
+            if (!promise) {
+              continue;
+            }
+            promise.reject(new Error(options.statusMessage));
+          }
+          await this._error(options.statusCode);
+        }
 
         if (this.__sendQueue) {
           let sendQueue = this.__sendQueue;
           this.__sendQueue = null;
-          this._send({
-            handler: onComplete,
-            body: sendQueue
-          });
-
+          this.__inSend = false;
+          this._flushImpl(sendQueue, false);
           return;
         }
 
