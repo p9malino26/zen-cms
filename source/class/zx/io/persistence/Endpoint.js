@@ -76,6 +76,15 @@ qx.Class.define("zx.io.persistence.Endpoint", {
     },
 
     /**
+     * Detects whether this endpoint is detached from the controller
+     *
+     * @returns {Boolean} true if detached
+     */
+    isDetachedFromController() {
+      return this.__detachedFromController;
+    },
+
+    /**
      * Returns a unique key that can be used to lookup this endpoint from the controller, typically
      * this would be (for example) a session ID, and is specific to the implementation.  If this returns
      * null, then that's allowed but it just means that it cannot be found by indexing.

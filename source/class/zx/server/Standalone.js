@@ -114,10 +114,13 @@ qx.Class.define("zx.server.Standalone", {
       this._site = null;
       this._renderer.dispose();
       this._renderer = null;
+      await this._dbController.stop();
       this._dbController.dispose();
       this._dbController = null;
-      this._db.close();
-      this._db.dispose();
+      if (this._db != null) {
+        this._db.close();
+        this._db.dispose();
+      }
       this._db = null;
     },
 
@@ -148,6 +151,11 @@ qx.Class.define("zx.server.Standalone", {
       }
 
       this._dbController.addEndpoint(this._db);
+      this._db.addListenerOnce("close", () => {
+        let db = this._db;
+        this._db = null;
+        this._dbController.removeEndpoint(db);
+      });
       if (database.statusFile) {
         let directory = this._config.directory || ".";
         this._dbController.setStatusFile(path.join(directory, database.statusFile));

@@ -10,15 +10,11 @@ qx.Class.define("zx.utils.NativeLogger", {
      * @param entry {Map} The entry to process
      */
     process(entry) {
-      let level = entry.level;
-
-      // Node suppresses debug messages except in the debugger
-      if (level == "debug" && qx.core.Environment.get("qx.compiler.applicationType") == "node") {
-        level = "log";
-      }
       var formatter = qx.log.appender.Formatter.getFormatter();
       var args = formatter.toText(entry);
-      console[level](args);
+
+      // Node suppresses debug messages except in the debugger
+      console.log(args);
     }
   }
 });

@@ -47,6 +47,18 @@ qx.Class.define("zx.io.persistence.DatabaseController", {
     /** @type{zx.io.persistence.Watcher} the object watcher */
     __watcher: null,
 
+    /** @type{Boolean} true if the controller is shutting down */
+    __stopping: false,
+
+    /**
+     * Shuts down the controller
+     */
+    async stop() {
+      this.__stopping = true;
+      await this.__debounceSaveDirty.join();
+      await this.removeAllEndpoints();
+    },
+
     /**
      * @Override
      */
@@ -63,7 +75,9 @@ qx.Class.define("zx.io.persistence.DatabaseController", {
       let obj = evt.getData();
       let uuid = obj.toUuid();
       this.__dirtyObjectUuids[uuid] = true;
-      await this.__debounceSaveDirty.run();
+      if (!this.__stopping) {
+        await this.__debounceSaveDirty.run();
+      }
     },
 
     /**

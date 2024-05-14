@@ -275,7 +275,7 @@ qx.Class.define("zx.server.auth.User", {
         req = zx.server.WebServer.getCurrentRequest();
       }
       let classname = qx.core.Environment.get("zx.server.auth.User.classname") || zx.server.auth.User.classname;
-      let data = req.session.get(classname);
+      let data = req.session?.get(classname);
       if (!data || !data.userUuid) {
         return null;
       }

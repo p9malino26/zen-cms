@@ -593,7 +593,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
     async _receivePacketsImpl(context) {
       let { packets } = context;
 
-      if (!packets) {
+      if (!packets || this.isDetachedFromController()) {
         return;
       }
       packets.forEach(packet => {
@@ -671,6 +671,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           let resultPacket = {
             originPacketId: packet.packetId,
             type: "return",
+            methodName: packet.methodName, // methodName only really needed for debugging
             result: await this._serializeReturnValue(result)
           };
 
@@ -695,7 +696,8 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           let promise = this._pendingPromises[packet.originPacketId];
           delete this._pendingPromises[packet.originPacketId];
           if (!promise) {
-            throw new Error("No promise to return to!");
+            this.error("No promise to return to! - methodName=" + packet.methodName);
+            return;
           }
 
           let result = this._deserializeReturnValue(packet.result);

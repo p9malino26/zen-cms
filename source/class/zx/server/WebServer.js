@@ -125,6 +125,7 @@ qx.Class.define("zx.server.WebServer", {
      * Called to start the server
      */
     async start() {
+      debugger;
       await super.start();
       if (this._config.createProxies) {
         let proxiesOutputPath = this._config.createProxies?.outputPath;
@@ -381,11 +382,11 @@ qx.Class.define("zx.server.WebServer", {
         } catch (ex) {
           if (ex instanceof zx.utils.Http.HttpError) {
             if (ex.statusCode < 400 || ex.statusCode >= 500) {
-              this.error(`Exception raised:\n${ex}`);
+              this.error(`Exception raised:\n${ex.fullMessage || ex.message}`);
             }
             await this.sendErrorPage(req, reply, ex.statusCode, ex.message);
           } else {
-            this.error(`Exception raised:\n${ex}`);
+            this.error(`Exception raised:\n${ex.fullMessage || ex.message}`);
             await this.sendErrorPage(req, reply, 500, ex.message);
           }
         }
@@ -944,7 +945,7 @@ qx.Class.define("zx.server.WebServer", {
         try {
           await this._renderer.renderViewable(rendering, object);
         } catch (ex) {
-          throw new zx.utils.Http.HttpError(500, ex.message);
+          throw new zx.utils.Http.HttpError(500, ex);
         }
         return;
       } else if (url.endsWith(".csv")) {
@@ -957,7 +958,7 @@ qx.Class.define("zx.server.WebServer", {
         try {
           await object.generate(req, reply);
         } catch (ex) {
-          throw new zx.utils.Http.HttpError(500, ex.message);
+          throw new zx.utils.Http.HttpError(500, ex);
         }
         return;
       }

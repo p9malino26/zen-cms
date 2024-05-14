@@ -47,6 +47,7 @@ qx.Class.define("zx.io.persistence.db.ImportExport", {
      * Imports from disk to the database
      */
     async importToDb() {
+      let websiteName = zx.server.Standalone.getInstance().getWebsiteName();
       const scan = async (dir, url) => {
         let files = await fs.readdir(dir, {
           encoding: "utf8",
@@ -76,7 +77,7 @@ qx.Class.define("zx.io.persistence.db.ImportExport", {
               this.error(`Cannot find class ${json._classname}`);
               continue;
             }
-            let current = this.__db.findOne(clazz, { url: json.url });
+            let current = this.__db.findOne(clazz, { websiteName, url: json.url });
             if (current) {
               await this.__db.removeByUuid(clazz, json._uuid);
             }
@@ -108,14 +109,14 @@ qx.Class.define("zx.io.persistence.db.ImportExport", {
                 this.error(`Cannot find class ${json._classname}`);
                 continue;
               }
-              let current = await this.__db.findOne(clazz, { url: fileUrl });
+              let current = await this.__db.findOne(clazz, { websiteName, url: fileUrl });
               if (current) {
                 json._uuid = current._uuid;
               } else {
                 json._uuid = this.__db.createUuid();
               }
             }
-            json.websiteName = zx.server.Standalone.getInstance().getWebsiteName();
+            json.websiteName = websiteName;
             await this.__db._sendJson(json._uuid, json);
           }
         }

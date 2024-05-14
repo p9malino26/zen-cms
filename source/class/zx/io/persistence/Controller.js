@@ -94,7 +94,9 @@ qx.Class.define("zx.io.persistence.Controller", {
      * Removes all endpoints
      */
     async removeAllEndpoints() {
-      for (let endpoint of this.__endpoints) await endpoint.close();
+      for (let endpoint of this.__endpoints) {
+        await endpoint.close();
+      }
     },
 
     /**

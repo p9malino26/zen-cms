@@ -104,7 +104,8 @@ qx.Class.define("zx.utils.Http", {
 
   defer(statics) {
     class HttpError extends Error {
-      constructor(statusCode, message) {
+      constructor(statusCode, exceptionOrMessage) {
+        let message = exceptionOrMessage instanceof Error ? exceptionOrMessage.message : exceptionOrMessage;
         super(message);
         if (typeof statusCode == "string") {
           let tmp = parseInt(statusCode, 10);
@@ -114,6 +115,10 @@ qx.Class.define("zx.utils.Http", {
           } else {
             statusCode = tmp;
           }
+        }
+        this.fullMessage = message;
+        if (exceptionOrMessage instanceof Error) {
+          this.fullMessage += "\n" + exceptionOrMessage.stack;
         }
         this.statusCode = statusCode || 500;
       }

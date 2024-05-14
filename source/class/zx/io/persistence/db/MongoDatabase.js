@@ -181,7 +181,7 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
       let collection = await this.getCollection(clazz);
       if (qx.core.Environment.get("qx.debug")) {
         if ((await collection.countDocuments(query)) > 1) {
-          throw new Error("More than one document found");
+          throw new Error(`More than one document found in ${clazz.classname || clazz} for query ${JSON.stringify(query)}`);
         }
       }
       let json = await collection.findOne(query, this.__createOptions(projection, options));
@@ -196,7 +196,7 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
       if (query) {
         if (qx.core.Environment.get("qx.debug")) {
           if ((await collection.countDocuments(query)) > 1) {
-            throw new Error("More than one document found");
+            throw new Error(`More than one document found ${clazz.classname || clazz} for query ${JSON.stringify(query)}`);
           }
         }
         await collection.replaceOne(query, json, { upsert: true });

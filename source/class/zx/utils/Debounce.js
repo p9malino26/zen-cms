@@ -49,8 +49,7 @@ qx.Class.define("zx.utils.Debounce", {
     /** @type{Boolean} that there is a repeated invocation queued */
     __queuedRepeat: false,
 
-    _applyRepeatedTrigger() {
-    },
+    _applyRepeatedTrigger() {},
 
     /**
      * Apply for `repeatedTrigger`
@@ -90,6 +89,16 @@ qx.Class.define("zx.utils.Debounce", {
       this._startTimer();
       promise = this.__runPromise = new qx.Promise();
       return await promise;
+    },
+
+    /**
+     * Returns a promise that will resolve when the debounce has completed
+     */
+    async join() {
+      if (this.__runPromise) {
+        return await this.__runPromise;
+      }
+      return null;
     },
 
     /**
