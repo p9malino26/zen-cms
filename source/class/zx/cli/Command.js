@@ -222,21 +222,24 @@ qx.Class.define("zx.cli.Command", {
         println();
         println("FLAGS:");
         let data = [];
-        this.__flags.forEach(flag => data.push(flag.usage().split(/\s+::\s+/)));
+        let sorted = qx.lang.Array.clone(this.__flags).sort((l, r) => l.getName() - r.getName());
+        sorted.forEach(flag => data.push(flag.usage().split(/\s+::\s+/)));
         table(data);
       }
       if (this.__subcommands.length > 0) {
         println();
         println("COMMANDS:");
         let data = [];
-        this.__subcommands.forEach(cmd => data.push(cmd._quickUsage().split(/\s+::\s+/)));
+        let sorted = qx.lang.Array.clone(this.__subcommands).sort((l, r) => l.getName() - r.getName());
+        sorted.forEach(cmd => data.push(cmd._quickUsage().split(/\s+::\s+/)));
         table(data);
       }
       if (this.__arguments.length > 0) {
         println();
         println("ARGUMENTS:");
         let data = [];
-        this.__arguments.forEach(argument => data.push(argument.usage().split(/\s+::\s+/)));
+        let sorted = qx.lang.Array.clone(this.__arguments).sort((l, r) => l.getName() - r.getName());
+        sorted.forEach(argument => data.push(argument.usage().split(/\s+::\s+/)));
         table(data);
       }
       return out.join("\n");

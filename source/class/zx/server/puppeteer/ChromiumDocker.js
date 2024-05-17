@@ -223,7 +223,11 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
         this.__running = true;
         await this.__container.start();
 
+        let pass = 0;
+        const TIME_BETWEEN_PASSES_MS = 3000;
+        let maxPasses = zx.server.puppeteer.ChromiumDocker.getConfiguration().maxTimeToWaitForChromium / (TIME_BETWEEN_PASSES_MS / 1000);
         while (true) {
+          pass++;
           try {
             let get = await zx.utils.Http.httpGet("http://localhost:" + this.__portNumber + "/json/version");
             let json = get.body;
@@ -233,9 +237,12 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
               break;
             }
           } catch (ex) {
-            this.warn("Chromium not yet started, waiting 3 seconds");
+            this.warn(`Chromium not yet available on 'http://localhost:${this.__portNumber}/json/version', waiting 3 seconds: ${ex}`);
           }
-          await zx.utils.Promisify.waitFor(3000);
+          if (pass > maxPasses) {
+            throw new Error("Chromium not available after " + pass + " attempts");
+          }
+          await zx.utils.Promisify.waitFor(TIME_BETWEEN_PASSES_MS);
         }
 
         this.__watchdog = new zx.utils.Timeout(1000, () => {
@@ -322,6 +329,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
       maxPool: 10,
       minPort: 9000,
       maxPort: 9100,
+      maxTimeToWaitForChromium: 240,
       imageName: "zenesisuk/zx-puppeteer-server:latest"
     },
 

@@ -46,12 +46,15 @@ qx.Class.define("zx.utils.Path", {
       filename = path.normalize(filename);
       let segs = filename.split(path.sep);
       let made = "";
+      if (segs.length && segs[0] == "") {
+        made = "/";
+        segs.shift();
+      }
       for (let i = 0; i < segs.length; i++) {
-        let seg = segs[i];
-        if (made.length || !seg.length) {
+        if (made.length && made != "/") {
           made += "/";
         }
-        made += seg;
+        made += segs[i];
         if (!(await fs.existsAsync(made))) {
           try {
             await fs.mkdirAsync(made);
