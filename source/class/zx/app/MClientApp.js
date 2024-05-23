@@ -100,7 +100,7 @@ qx.Mixin.define("zx.app.MClientApp", {
      * @returns {qx.core.Object}
      */
     async getApi(apiName) {
-      if (typeof apiName.constructor == "function") {
+      if (typeof apiName !== "string") {
         apiName = apiName.classname;
       }
       let cmsConfig = await this.getNetController().getUriMapping("zx.server.CmsConfiguration");
