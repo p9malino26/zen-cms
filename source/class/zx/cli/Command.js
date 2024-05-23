@@ -206,6 +206,14 @@ qx.Class.define("zx.cli.Command", {
         verbs.unshift(tmp.getHyphenatedName());
       }
 
+      const sortByName = arr => {
+        return qx.lang.Array.clone(arr).sort((l, r) => {
+          l = l.getName();
+          r = r.getName();
+          return l < r ? -1 : l > r ? 1 : 0;
+        });
+      };
+
       println("USAGE:");
       print(`   ${verbs.join(" ")}`);
       if (this.__flags.length > 0) {
@@ -222,24 +230,21 @@ qx.Class.define("zx.cli.Command", {
         println();
         println("FLAGS:");
         let data = [];
-        let sorted = qx.lang.Array.clone(this.__flags).sort((l, r) => l.getName() - r.getName());
-        sorted.forEach(flag => data.push(flag.usage().split(/\s+::\s+/)));
+        sortByName(this.__flags).forEach(flag => data.push(flag.usage().split(/\s+::\s+/)));
         table(data);
       }
       if (this.__subcommands.length > 0) {
         println();
         println("COMMANDS:");
         let data = [];
-        let sorted = qx.lang.Array.clone(this.__subcommands).sort((l, r) => l.getName() - r.getName());
-        sorted.forEach(cmd => data.push(cmd._quickUsage().split(/\s+::\s+/)));
+        sortByName(this.__subcommands).forEach(cmd => data.push(cmd._quickUsage().split(/\s+::\s+/)));
         table(data);
       }
       if (this.__arguments.length > 0) {
         println();
         println("ARGUMENTS:");
         let data = [];
-        let sorted = qx.lang.Array.clone(this.__arguments).sort((l, r) => l.getName() - r.getName());
-        sorted.forEach(argument => data.push(argument.usage().split(/\s+::\s+/)));
+        sortByName(this.__arguments).forEach(argument => data.push(argument.usage().split(/\s+::\s+/)));
         table(data);
       }
       return out.join("\n");
@@ -457,6 +462,8 @@ qx.Class.define("zx.cli.Command", {
         }
       }
 
+      this._validate();
+
       let helpRequested = finalCommand.getFlag("help").getValue();
       if (!helpRequested) {
         // Check for missing mandatory arguments
@@ -478,6 +485,13 @@ qx.Class.define("zx.cli.Command", {
 
       // Return the command (or sub command) to execute
       return finalCommand;
+    },
+
+    /**
+     * Called to provide extra validation by the command; call `-error()` to add an error message
+     */
+    _validate() {
+      // Nothing
     },
 
     /**
