@@ -142,16 +142,6 @@ qx.Class.define("zx.server.email.Message", {
     },
 
     /**
-     * Number of times the email was attempted to be sent
-     */
-    sendAttempts: {
-      check: "Integer",
-      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
-      event: "changeSendAttempts",
-      init: 0
-    },
-
-    /**
      * Last error message if the email was not sent
      */
     lastErrorMessage: {

@@ -15,7 +15,7 @@ qx.Class.define("zx.server.email.FlushQueue", {
     async run(clearQueue = true) {
       let emailsCollection = await zx.server.Standalone.getInstance().getDb().getCollection("zx.server.email.Message");
 
-      let emailsCursor = await emailsCollection.find({});
+      let emailsCursor = await emailsCollection.find({ lastErrorMessage: null });
 
       let toDeleteUuids = [];
       for await (const emailJson of emailsCursor) {
