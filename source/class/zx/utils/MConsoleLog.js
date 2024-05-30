@@ -17,6 +17,13 @@ qx.Mixin.define("zx.utils.MConsoleLog", {
     }
   },
 
+  events: {
+    /**
+     * Fired when `this.log` was called
+     */
+    log: "qx.event.type.Data"
+  },
+
   members: {
     /** @type {string[]} the output lines */
     __logOutput: null,
@@ -31,6 +38,7 @@ qx.Mixin.define("zx.utils.MConsoleLog", {
       if (this.getLogOutputToConsole()) {
         console.log(str);
       }
+      this.fireDataEvent("log", { message: str });
     },
 
     /**

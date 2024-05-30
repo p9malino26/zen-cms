@@ -172,14 +172,19 @@ qx.Class.define("zx.server.email.Message", {
     },
 
     /**
+     * @param {(message: string) => void)} log Callback for logging
      * @returns {Promise<boolean>} If the email was successfully sent
      */
-    async sendEmail() {
+    async sendEmail(log) {
+      if (log === undefined) {
+        log = console.log;
+      }
       let htmlBody = this.getHtmlBody();
 
       let config = await zx.server.Config.getConfig();
 
       let attachmentsData = [{ data: htmlBody, alternative: true }];
+      log("Before getting attachments");
       if (this.getAttachments()) {
         let mime = (await import("mime")).default;
         this.getAttachments().forEach(attachment => {
@@ -206,6 +211,8 @@ qx.Class.define("zx.server.email.Message", {
         });
       }
 
+      log("Before getting creating emailJsMessage");
+
       let emailJsMessage = zx.server.email.EmailJS.createNewMessage({
         from: config.smtpServer.fromAddr,
         to: this.getTo(),
@@ -221,14 +228,16 @@ qx.Class.define("zx.server.email.Message", {
       let error = false;
 
       try {
+        log("Before sending message via emailJs"); //!!do tbem 1 by 1
         await client.sendAsync(emailJsMessage);
+        log("After sending message via emailJs"); //!!do tbem 1 by 1
       } catch (err) {
         error = true;
         if (!(emailJsMessage instanceof zx.server.email.Message)) {
           let server = zx.server.Standalone.getInstance();
           emailJsMessage = await server.findOneObjectByType(zx.server.email.Message, { _uuid: this.toUuid() });
         }
-        this.setSendAttempts(this.getSendAttempts() + 1);
+        log("error sending email: " + err.message);
         this.setLastErrorMessage(err ? err.message : null);
         this.save();
       }
