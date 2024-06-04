@@ -492,7 +492,7 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      */
     async _receivePackets(req, reply, packets) {
       if (qx.core.Environment.get("zx.io.remote.NetworkEndpoint.traceIo")) {
-        if (packets.length) {
+        if (packets?.length) {
           console.log(`${this.classname}: receive = ${JSON.stringify(packets, null, 2)}`);
         }
       }
