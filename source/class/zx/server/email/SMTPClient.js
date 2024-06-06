@@ -38,7 +38,10 @@ qx.Class.define("zx.server.email.SMTPClient", {
         user: username,
         password: password,
         host: config.smtpServer.host,
-        ssl: true
+        port: config.smtpServer.port ?? undefined,
+        ssl: config.smtpServer.ssl ?? false,
+        tls: config.smtpServer.tls ?? false,
+        timeout: config.smtpServer.timeout ?? undefined
       });
 
       this.__smtpClientImpl = client;
