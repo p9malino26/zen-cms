@@ -1012,7 +1012,11 @@ qx.Class.define("zx.server.WebServer", {
      * @returns {fastify.Request}
      */
     getCurrentRequest() {
-      return zx.server.Standalone.getInstance().getRequestContext().request;
+      let instance = zx.server.Standalone.getInstance();
+      if (!(instance instanceof zx.server.WebServer)) {
+        return null;
+      }
+      return instance.getRequestContext().request;
     },
 
     /**
@@ -1022,7 +1026,11 @@ qx.Class.define("zx.server.WebServer", {
      * @returns {fastify.Response}
      */
     getCurrentReponse() {
-      return zx.server.Standalone.getInstance().getRequestContext().response;
+      let instance = zx.server.Standalone.getInstance();
+      if (!(instance instanceof zx.server.WebServer)) {
+        return null;
+      }
+      return instance.getRequestContext().response;
     },
 
     /**
@@ -1031,7 +1039,11 @@ qx.Class.define("zx.server.WebServer", {
      * @returns {zx.server.SessionManager}
      */
     getSessionManager() {
-      return zx.server.Standalone.getInstance().getSessionManager();
+      let instance = zx.server.Standalone.getInstance();
+      if (!(instance instanceof zx.server.WebServer)) {
+        return null;
+      }
+      return instance.getSessionManager();
     }
   }
 });
