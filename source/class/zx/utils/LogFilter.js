@@ -16,8 +16,8 @@ qx.Class.define("zx.utils.LogFilter", {
         if (!appData) {
           return;
         }
-        for (let appenderId of appData) {
-          let filters = data.default[appenderId];
+        for (let appenderId in appData) {
+          let filters = appData[appenderId];
           for (let key of filters) {
             qx.log.Logger.addFilter(new RegExp(key), appenderId, filters[key]);
           }

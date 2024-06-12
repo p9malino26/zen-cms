@@ -42,6 +42,15 @@ qx.Class.define("zx.server.email.Message", {
     },
 
     /**
+     * Date when the email was successfully delivered
+     */
+    dateDelivered: {
+      check: "Date",
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      event: "changeDateDelivered"
+    },
+
+    /**
      * From email address
      */
     from: {
@@ -230,6 +239,8 @@ qx.Class.define("zx.server.email.Message", {
       try {
         log("Before sending message via emailJs"); //!!do tbem 1 by 1
         await client.sendAsync(emailJsMessage);
+        this.setDateDelivered(new Date());
+        await this.save();
         log("After sending message via emailJs"); //!!do tbem 1 by 1
       } catch (err) {
         error = true;
@@ -238,8 +249,8 @@ qx.Class.define("zx.server.email.Message", {
           emailJsMessage = await server.findOneObjectByType(zx.server.email.Message, { _uuid: this.toUuid() });
         }
         log("error sending email: " + err.message);
-        this.setLastErrorMessage(err ? err.message : null);
-        this.save();
+        this.setLastErrorMessage(err ? err.message : "Unknown error when sending email");
+        await this.save();
       }
 
       return !error;

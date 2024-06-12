@@ -10,16 +10,15 @@ qx.Class.define("zx.server.email.FlushQueue", {
      *
      * @param {boolean} clearQueue If true, we will delete emails that have been successfully sent from the queue.
      *  Otherwise, all emails (even the sent ones) will remain in the queue.
-     *  Useful for testing.
      */
     async run(clearQueue = true) {
       let emailsCollection = await zx.server.Standalone.getInstance().getDb().getCollection("zx.server.email.Message");
       this.debug("Got emails collection.");
 
-      let emailsCursor = await emailsCollection.find({ lastErrorMessage: null });
+      let emailsCursor = await emailsCollection.find({ lastErrorMessage: null, dateDelivered: null });
       this.debug("Got emails cursor.");
 
-      let toDeleteUuids = [];
+      let sentUuids = [];
       for await (const emailJson of emailsCursor) {
         let email = await zx.server.Standalone.getInstance().findOneObjectByType(zx.server.email.Message, { _uuid: emailJson._uuid }, false);
         this.debug(`Before sending email ${email.toUuid()}.`);
@@ -27,7 +26,7 @@ qx.Class.define("zx.server.email.FlushQueue", {
         this.debug(`After sending email ${email.toUuid()}.`);
         if (success) {
           this.log(`Email ${email.toUuid()} sent successfully: ${success}`);
-          toDeleteUuids.push(email.toUuid());
+          sentUuids.push(email.toUuid());
         } else {
           this.log(`ERROR: Failed to send email ${email.toUuid()}. Message: ${email.getLastErrorMessage()}`);
         }
@@ -36,7 +35,7 @@ qx.Class.define("zx.server.email.FlushQueue", {
       this.debug("Traversed email queue.");
       if (clearQueue) {
         let server = zx.server.Standalone.getInstance();
-        await server.deleteObjectsByType(zx.server.email.Message, { _id: { $in: toDeleteUuids } });
+        await server.deleteObjectsByType(zx.server.email.Message, { _id: { $in: sentUuids } });
       }
       this.log("Email queue flushed");
     },
