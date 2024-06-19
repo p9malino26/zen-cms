@@ -60,8 +60,18 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
 
       this.debug("Puppeteer client created");
 
-      await this.__puppeteer.start();
-      this.debug("Puppeteer client started");
+      try {
+        // This can throw an exception if the URL is refused or other reasons
+        await this.__puppeteer.start();
+        this.debug("Puppeteer client started");
+      } catch (ex) {
+        try {
+          this.__closeDown();
+        } catch (ex2) {
+          this.error("Exception in closeDown after exception: " + (ex2.stack || ex2));
+        }
+        throw ex;
+      }
 
       this.__api = this.__puppeteer.createRemoteApi(this.__apiClass);
       let apiFinished = new qx.Promise();
