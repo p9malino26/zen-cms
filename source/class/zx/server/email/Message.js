@@ -47,7 +47,9 @@ qx.Class.define("zx.server.email.Message", {
     dateDelivered: {
       check: "Date",
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
-      event: "changeDateDelivered"
+      event: "changeDateDelivered",
+      init: null,
+      nullable: true
     },
 
     /**
