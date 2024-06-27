@@ -6,8 +6,10 @@ qx.Class.define("zx.server.email.EmailRenderer", {
     /**
      * @param {string} url URL of the webpage with the email content
      * @param {(msg: string) => void | null} log Function to log messages
+     * @returns {Promise<zx.server.email.Message[]>} Array of messages to send
      */
     async run(url, log) {
+      let messages = [];
       if (log === undefined) {
         log = console.log;
       }
@@ -27,7 +29,7 @@ qx.Class.define("zx.server.email.EmailRenderer", {
         log("Received ready signal");
 
         let api = controller.getApi();
-        api.addListener("sendEmail", evt => {
+        api.addListener("sendEmail", async evt => {
           const {
             htmlBody,
             textBody,
@@ -59,7 +61,8 @@ qx.Class.define("zx.server.email.EmailRenderer", {
             parameters[key] ??= null;
           }
 
-          zx.server.email.Message.compose({ parameters, htmlBody, textBody });
+          let message = await zx.server.email.Message.compose({ parameters, htmlBody, textBody });
+          messages.push(message);
           api.next();
         });
 
@@ -70,6 +73,7 @@ qx.Class.define("zx.server.email.EmailRenderer", {
       } catch (ex) {
         console.error("Exception in client: " + (ex.stack || ex));
       }
+      return messages;
     }
   }
 });
