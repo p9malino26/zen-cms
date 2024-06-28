@@ -108,7 +108,7 @@ qx.Class.define("zx.server.rest.RestApiServer", {
     __apis: {},
 
     /** @type {String} prefix for all URIs */
-    __endPoint: "/zx/api/v1/",
+    __endPoint: "/zx/api/v1/*",
 
     /**
      * Returns the prefix for all URIS
