@@ -170,9 +170,9 @@ qx.Class.define("zx.server.rest.RestApiServer", {
       // Get the API instance
       let endPoint = zx.server.rest.RestApiServer.getEndpoint();
       if (qx.core.Environment.get("qx.debug")) {
-        qx.core.Assert.assertTrue(path.startsWith(endPoint), "Cannot interpret web API uri for " + path);
+        qx.core.Assert.assertTrue(path.startsWith(endPoint.slice(0, -1)), "Cannot interpret web API uri for " + path);
       }
-      path = path.substring(endPoint.length);
+      path = path.substring(endPoint.length - 1);
       var match = path.match(/^([^/]+)\/(.*)$/);
       if (!match || match.length != 3) {
         throw new Error("Cannot interpret web API uri for " + path);
