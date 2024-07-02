@@ -44,7 +44,7 @@ qx.Class.define("zx.io.remote.anno.Class", {
 
     /** If "never", then this class is not rewritten as a proxy for the client, instead it is loaded
      * in the client through normal dependency injection and the code is the same on client and server;
-     * if "always" then a proxyw ill be generated */
+     * if "always" then a proxy will be generated */
     proxy: {
       init: "always",
       check: ["never", "always"],

@@ -48,8 +48,8 @@ qx.Class.define("zx.server.email.Message", {
       check: "Date",
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       event: "changeDateDelivered",
-      init: null,
-      nullable: true
+      nullable: true,
+      init: null
     },
 
     /**
@@ -183,7 +183,7 @@ qx.Class.define("zx.server.email.Message", {
     },
 
     /**
-     * @param {(message: string) => void)} log Callback for logging
+     * @param {(message: string) => void)} [log] Callback for logging
      * @returns {Promise<boolean>} If the email was successfully sent
      */
     async sendEmail(log) {
