@@ -173,16 +173,17 @@ qx.Class.define("zx.server.rest.RestApiServer", {
         qx.core.Assert.assertTrue(path.startsWith(endPoint.slice(0, -1)), "Cannot interpret web API uri for " + path);
       }
       path = path.substring(endPoint.length - 1);
-      var match = path.match(/^([^/]+)\/(.*)$/);
-      if (!match || match.length != 3) {
-        throw new Error("Cannot interpret web API uri for " + path);
+      let url = new URL(path, "http://localhost"); // protocol and hostname are required for url
+      let urlPathName = url.pathname;
+      let segments = urlPathName.split("/").filter(Boolean);
+      if (segments.length !== 2) {
+        throw new Error(`Cannot interpret web API for '${path}': expected the format 'apiName/methodName'`);
       }
-      var apiName = match[1];
-      var methodName = match[2];
+      let [apiName, methodName] = segments;
 
       let api = zx.server.rest.RestApiServer.getApi(apiName);
       if (!api) {
-        throw new Error("Cannot find widget API for uri " + path);
+        throw new Error(`Cannot find API for '${path}'`);
       }
 
       return await api.handleApiCallback(req, reply, apiName, methodName);
