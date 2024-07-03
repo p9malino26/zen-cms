@@ -55,7 +55,7 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
         await this._receive(req, reply);
       } catch (ex) {
         qx.log.Logger.error(`Exception during API call to '${path}': ${ex.stack || ex}`);
-        reply.code(500).send("" + (ex.message || ex));
+        reply.code(500).send("Internal Server Error");
       }
     },
 

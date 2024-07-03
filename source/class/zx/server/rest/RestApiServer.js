@@ -92,30 +92,33 @@ qx.Class.define("zx.server.rest.RestApiServer", {
 
       this.debug(`API Call ${req.method} ${apiName}.${methodName}: body: ${JSON.stringify(req.body)}`);
       try {
+
+        const thiz = this;
+        let originalSend = reply.send;
+        reply.send = function (data) {
+          thiz.debug(`API Call ${req.method} ${apiName}.${methodName}: response: ${JSON.stringify(data)}`);
+          return originalSend.call(this, data);
+        };
+
         let result = await qx.Promise.resolve(method.call(this, req, reply));
-        if (result !== undefined) {
-          reply.send({
-            status: "ok",
-            result: result
-          });
-
-          this.debug(`API Call ${req.method} ${apiName}.${methodName}: response: ${JSON.stringify(result)}`);
-        } else {
-          reply.send({
-            status: "ok"
-          });
-
-          this.debug(`API Call ${req.method} ${apiName}.${methodName}: response is undefined`);
+        if (qx.core.Environment.get("qx.debug")) {
+          if (result !== undefined) {
+            console.warn(
+              [
+                "WARNING: detected a value returned from rest api call.",
+                "To respond to a request with data, use `reply.send(...)` or `reply.code(...).send(...)`",
+                "For more information on replying to requests, see <https://fastify.dev/docs/latest/Reference/Reply/#reply>"
+              ].join("\n\t")
+            );
+            debugger;
+          }
         }
       } catch (ex) {
         if (!qx.log.Logger.isLoggerEnabled(this, "debug")) {
           this.debug(`API Call ${req.method} ${apiName}.${methodName}: body: ${JSON.stringify(req.body)}`);
         }
         this.error(`Exception during API ${apiName}.${methodName}: ${ex.stack || ex}`);
-        reply.send({
-          status: "error",
-          message: ex.message || "" + ex
-        });
+        reply.code(500).send("Internal Server Error");
       }
     }
   },
@@ -219,7 +222,7 @@ qx.Class.define("zx.server.rest.RestApiServer", {
         await ARAS.handleApiCallback(req, reply);
       } catch (ex) {
         qx.log.Logger.error(`Exception during API call to '${path}': ${ex}`);
-        reply.code(500).send("" + (ex.message || ex));
+        reply.code(500).send("Internal Server Error");
       }
     }
   }

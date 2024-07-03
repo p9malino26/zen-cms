@@ -14,7 +14,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerApi", {
      */
     async _httpGetHello(req, rep) {
       this.debug("GET gello requested");
-      return { hello: "world" };
+      rep.code(200).send({ status: "ok", result: { hello: "world" } });
     },
 
     /**
@@ -27,7 +27,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerApi", {
 
       // Dont await this, as it will never return until this request has completed
       zx.server.puppeteer.WebServer.INSTANCE.stop();
-      return {};
+      rep.code(200).send({ status: "ok" });
     }
   }
 });
