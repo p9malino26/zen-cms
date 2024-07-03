@@ -40,6 +40,23 @@ qx.Class.define("zx.server.rest.RestApiServer", {
 
   members: {
     /**
+     * Simple ping method to check the api is working. Defunct in production.
+     * @param {import("fastify").FastifyRequest} req
+     * @param {import("fastify").FastifyReply} rep
+     */
+    async _httpGetPing(req, rep) {
+      if (qx.core.Environment.get("qx.debug")) {
+        this.debug("ping");
+        rep.status(200).send({
+          ping: "pong",
+          time: Date.now()
+        });
+      } else {
+        rep.status(404).send();
+      }
+    },
+
+    /**
      * Handles the API call for this API
      *
      * @param {import("fastify").FastifyRequest} req the request
