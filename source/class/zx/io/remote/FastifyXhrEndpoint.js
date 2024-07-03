@@ -40,8 +40,8 @@ qx.Class.define("zx.io.remote.FastifyXhrEndpoint", {
     /**
      * Called by the FastifyXhrListener to handle the request
      *
-     * @param {http.request} req
-     * @param {Fastify.Reply} reply
+     * @param {import("fastify").FastifyRequest} req
+     * @param {import("fastify").FastifyReply} reply
      */
     async _receive(req, reply) {
       let contentType = req.headers["content-type"];

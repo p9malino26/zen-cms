@@ -42,10 +42,10 @@ qx.Class.define("zx.server.rest.RestApiServer", {
     /**
      * Handles the API call for this API
      *
-     * @param req {http.Request} the request
-     * @param reply {Fastify.Reply} the response
-     * @param apiName {String} the API name in the URI
-     * @param methodName {String} the method name to call
+     * @param {import("fastify").FastifyRequest} req the request
+     * @param {import("fastify").FastifyReply} reply the response
+     * @param {String} apiName the API name in the URI
+     * @param {String} methodName the method name to call
      */
     async handleApiCallback(req, reply, apiName, methodName) {
       if (!methodName || methodName[0] == "_") {
@@ -161,8 +161,8 @@ qx.Class.define("zx.server.rest.RestApiServer", {
     /**
      * Called by the web server to handle API calls
      *
-     * @param req {http.Request} the request
-     * @param reply {Fastify.Reply} the response
+     * @param {import("fastify").FastifyRequest} req the request
+     * @param {import("fastify").FastifyReply} reply the response
      */
     async handleApiCallback(req, reply) {
       let path = req.url;
@@ -191,8 +191,8 @@ qx.Class.define("zx.server.rest.RestApiServer", {
     /**
      * Fastify handler for API calls
      *
-     * @param req {http.Request} the request
-     * @param reply {Fastify.Reply} the response
+     * @param {import("fastify").FastifyRequest} req the request
+     * @param {import("fastify").FastifyReply} reply the response
      */
     async middleware(req, reply) {
       const ARAS = zx.server.rest.RestApiServer;

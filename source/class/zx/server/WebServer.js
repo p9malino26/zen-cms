@@ -105,8 +105,8 @@ qx.Class.define("zx.server.WebServer", {
 
     /**
      * @typedef {Object} AlsRequestContext
-     * @property {Fastify.Request} request
-     * @property {Fastify.Reply} reply
+     * @property {import("fastify").FastifyRequest} request
+     * @property {import("fastify").FastifyReply} reply
      *
      * @type{AsyncLocalStorage<AlsRequestContext>} used for the current request/reply
      */
@@ -397,7 +397,7 @@ qx.Class.define("zx.server.WebServer", {
     /**
      * Initialises the Fastify
      *
-     * @param app {Fastify}
+     * @param {import("fastify").FastifyInstance} app
      */
     async _initApplication(app) {
       const fastifyStatic = require("@fastify/static");
@@ -578,8 +578,8 @@ qx.Class.define("zx.server.WebServer", {
     /**
      * Fastify hook to check for appropriate URL rules
      *
-     * @param {Fastify.Request} request
-     * @param {Fastify.Reply} reply
+     * @param {import("fastify").FastifyRequest} request
+     * @param {import("fastify").FastifyReply} reply
      */
     async _onRequestHook(request, reply) {
       if (!this.isTrustProxy()) {
@@ -717,8 +717,8 @@ qx.Class.define("zx.server.WebServer", {
     /**
      * Handles login as instructed by the proxy server, required X-Authorization and X-Authorisation-Signature
      *
-     * @param {Fastify.Request} request
-     * @param {Fastify.Reply} reply
+     * @param {import("fastify").FastifyRequest} request
+     * @param {import("fastify").FastifyReply} reply
      * @returns {Boolean} whether the user was changed
      */
     async _handleProxyLogin(request, reply) {
@@ -780,8 +780,8 @@ qx.Class.define("zx.server.WebServer", {
     /**
      * Handler for impersonate URL
      *
-     * @param {Fastify.Request} request
-     * @param {Fastify.Reply} reply
+     * @param {import("fastify").FastifyRequest} request
+     * @param {import("fastify").FastifyReply} reply
      */
     async __impersonate(request, reply) {
       let shortUrl = await zx.cms.website.ShortUrl.getShortUrlByShortCode(request.params.shortCode);
@@ -820,16 +820,16 @@ qx.Class.define("zx.server.WebServer", {
     /**
      * Handler for short URLs
      *
-     * @param {Fastify.Request} request
-     * @param {Fastify.Reply} reply
+     * @param {import("fastify").FastifyRequest} request
+     * @param {import("fastify").FastifyReply} reply
      */
     __shortUrl(request, reply) {},
 
     /**
      * Handler for Blobs
      *
-     * @param {Fastify.Request} request
-     * @param {Fastify.Reply} reply
+     * @param {import("fastify").FastifyRequest} request
+     * @param {import("fastify").FastifyReply} reply
      */
     __blobs(request, reply) {
       let uuid = request.params.uuid.toLowerCase();
@@ -843,8 +843,8 @@ qx.Class.define("zx.server.WebServer", {
     /**
      * Called to handle a custom action for a url rule
      *
-     * @param {Fastify.Request} req
-     * @param {Fastify.Reply} reply
+     * @param {import("fastify").FastifyRequest} req
+     * @param {import("fastify").FastifyReply} reply
      * @param {String} customCode
      */
     async _handleCustomAction(req, reply, customCode) {
@@ -1009,7 +1009,7 @@ qx.Class.define("zx.server.WebServer", {
      * Returns the request currently being processed.  This will throw an
      * exception if called outside of a request
      *
-     * @returns {fastify.Request}
+     * @returns {import("fastify").FastifyRequest}
      */
     getCurrentRequest() {
       let instance = zx.server.Standalone.getInstance();

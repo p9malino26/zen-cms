@@ -130,8 +130,8 @@ qx.Class.define("zx.cms.render.Theme", {
     /**
      * Fastify middleware so that theme files can be served
      *
-     * @param req {http.Request}
-     * @param reply {Fastify.Reply}
+     * @param {import("fastify").FastifyRequest} req
+     * @param {import("fastify").FastifyReply} reply
      */
     async middleware(req, reply) {
       let url = req.url;

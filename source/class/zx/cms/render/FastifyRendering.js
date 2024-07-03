@@ -92,7 +92,7 @@ qx.Class.define("zx.cms.render.FastifyRendering", {
     /**
      * Returns the underlying request
      *
-     * @returns {Fastify.Request}
+     * @returns {import("fastify").FastifyRequest}
      */
     getRequest() {
       return this.__req;
@@ -101,7 +101,7 @@ qx.Class.define("zx.cms.render.FastifyRendering", {
     /**
      * Returns the underlying reply
      *
-     * @returns {Fastify.Reply}
+     * @returns {import("fastify").FastifyReply}
      */
     getReply() {
       return this.__reply;

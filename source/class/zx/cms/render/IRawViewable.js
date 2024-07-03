@@ -6,8 +6,8 @@ qx.Interface.define("zx.cms.render.IRawViewable", {
   members: {
     /**
      * Called to handle the request and generate output
-     * @param {Fastify.Request} request
-     * @param {Fastify.Reply} reply
+     * @param {import("fastify").FastifyRequest} request
+     * @param {import("fastify").FastifyReply} reply
      */
     async generate(request, reply) {}
   }
