@@ -103,7 +103,7 @@ qx.Class.define("zx.server.SessionManager", {
     /**
      * Creates a new session and replaces whatever is there
      *
-     * @param {Fastify.Request} request
+     * @param {import("fastify").FastifyRequest} request
      * @returns {zx.server.Session} the new session
      */
     newSession(request) {
@@ -116,7 +116,7 @@ qx.Class.define("zx.server.SessionManager", {
     /**
      * Clears the session and deletes it from the database
      *
-     * @param {Fastify.Request} request
+     * @param {import("fastify").FastifyRequest} request
      * @returns {zx.server.Session} the new session
      */
     async disposeSession(request) {
@@ -131,7 +131,7 @@ qx.Class.define("zx.server.SessionManager", {
     /**
      * Clears the session from the request, without actually deleting it
      *
-     * @param {Fastify.Request} request
+     * @param {import("fastify").FastifyRequest} request
      */
     clearSession(request) {
       if (request.session) {
@@ -154,8 +154,8 @@ qx.Class.define("zx.server.SessionManager", {
     /**
      * onRequest Hook
      *
-     * @param {Fastify.Request} request
-     * @param {Fastify.Reply} reply
+     * @param {import("fastify").FastifyRequest} request
+     * @param {import("fastify").FastifyReply} reply
      */
     async _onRequest(request, reply) {
       let cookieOptions = this.getCookieOptions();
@@ -192,8 +192,8 @@ qx.Class.define("zx.server.SessionManager", {
     /**
      * onSend Hook
      *
-     * @param {Fastify.Request} request
-     * @param {Fastify.Reply} reply
+     * @param {import("fastify").FastifyRequest} request
+     * @param {import("fastify").FastifyReply} reply
      * @param {var} payload
      */
     async _onSend(request, reply, payload) {
@@ -213,8 +213,8 @@ qx.Class.define("zx.server.SessionManager", {
     /**
      * onResponse Hook
      *
-     * @param {Fastify.Request} request
-     * @param {Fastify.Reply} reply
+     * @param {import("fastify").FastifyRequest} request
+     * @param {import("fastify").FastifyReply} reply
      */
     async _onResponse(request, reply) {
       const session = request.session;
@@ -230,7 +230,7 @@ qx.Class.define("zx.server.SessionManager", {
     /**
      * Test for whether the session should be persisted
      *
-     * @param {Fastify.Request} request
+     * @param {import("fastify").FastifyRequest} request
      * @returns {Boolean}
      */
     __shouldSaveSession(request) {
@@ -251,7 +251,7 @@ qx.Class.define("zx.server.SessionManager", {
     /**
      * Gets the protocol
      *
-     * @param {Fastify.Request} request
+     * @param {import("fastify").FastifyRequest} request
      * @returns {Boolean}
      */
     __getRequestProto(request) {
@@ -261,7 +261,7 @@ qx.Class.define("zx.server.SessionManager", {
     /**
      * Test for whether the connection is secure
      *
-     * @param {Fastify.Request} request
+     * @param {import("fastify").FastifyRequest} request
      * @returns {Boolean}
      */
     __isConnectionSecure(request) {
@@ -274,7 +274,7 @@ qx.Class.define("zx.server.SessionManager", {
     /**
      * Test for whether the connection is encrypted
      *
-     * @param {Fastify.Request} request
+     * @param {import("fastify").FastifyRequest} request
      * @returns {Boolean}
      */
     __isConnectionEncrypted(request) {

@@ -267,7 +267,7 @@ qx.Class.define("zx.server.auth.User", {
      * Get the currently logged in user; if `req` is null, then it will attempt to use
      * the current request
      *
-     * @param {fastify.Request?} req
+     * @param {import("fastify").FastifyRequest} [req]
      * @return {zx.server.auth.User}
      */
     async getUserFromSession(req) {

@@ -8,18 +8,26 @@ qx.Class.define("zx.server.puppeteer.PuppeteerApi", {
   },
 
   members: {
-    async _httpGetHello(req, res) {
+    /**
+     * @param {import("fastify").FastifyRequest} req
+     * @param {import("fastify").FastifyReply} rep
+     */
+    async _httpGetHello(req, rep) {
       this.debug("GET gello requested");
-      return { hello: "world" };
+      rep.code(200).send({ status: "ok", result: { hello: "world" } });
     },
 
-    async _httpGetShutdown(req, res) {
+    /**
+     * @param {import("fastify").FastifyRequest} req
+     * @param {import("fastify").FastifyReply} rep
+     */
+    async _httpGetShutdown(req, rep) {
       this.debug("Shutdown requested");
       await fs.promises.writeFile(".shutdown-docker", "shutdown");
 
       // Dont await this, as it will never return until this request has completed
       zx.server.puppeteer.WebServer.INSTANCE.stop();
-      return {};
+      rep.code(200).send({ status: "ok" });
     }
   }
 });

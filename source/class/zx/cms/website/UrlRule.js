@@ -148,7 +148,7 @@ qx.Class.define("zx.cms.website.UrlRule", {
     /**
      * Whether the current user is logged in and is granted all required permissions
      *
-     * @param {Fastify.Request} req
+     * @param {import("fastify").FastifyRequest} req
      * @returns {Boolean}
      */
     async isGranted(req) {
@@ -168,7 +168,7 @@ qx.Class.define("zx.cms.website.UrlRule", {
      * no required permissions, then this will return `false` because anonymous users
      * are allowed
      *
-     * @param {Fastify.Request} req
+     * @param {import("fastify").FastifyRequest} req
      * @returns {Boolean}
      */
     async isDenied(req) {

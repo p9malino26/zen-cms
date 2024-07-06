@@ -46,8 +46,8 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
     /**
      * ExpressJS/Fastify middleware for API calls
      *
-     * @param req {http.Request} the request
-     * @param reply {Fastify.Reply} the response
+     * @param {import("fastify").FastifyRequest} req the request
+     * @param {import("fastify").FastifyReply} reply the response
      */
     async middleware(req, reply) {
       const path = req.url;
@@ -55,14 +55,14 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
         await this._receive(req, reply);
       } catch (ex) {
         qx.log.Logger.error(`Exception during API call to '${path}': ${ex.stack || ex}`);
-        reply.code(500).send("" + (ex.message || ex));
+        reply.code(500).send("Internal Server Error");
       }
     },
 
     /**
      * Obtains an endpoint for the request.  This MUST be synchronous.
      *
-     * @param req {http.Request} the request
+     * @param {import("fastify").FastifyRequest} req the request
      * @return zx.io.remote.NetworkEndpoint
      */
     _getOrCreateEndpoint(req) {
@@ -196,8 +196,8 @@ qx.Class.define("zx.io.remote.FastifyXhrListener", {
     /**
      * Handles the API call for this API
      *
-     * @param req {http.Request} the request
-     * @param reply {Fastify.Reply} the response
+     * @param {import("fastify").FastifyRequest} req the request
+     * @param {import("fastify").FastifyReply} reply the response
      */
     async _receive(req, reply) {
       let endpoint = this._getOrCreateEndpoint(req);
