@@ -239,11 +239,11 @@ qx.Class.define("zx.server.email.Message", {
       let error = false;
 
       try {
-        log("Before sending message via emailJs"); //!!do tbem 1 by 1
+        log("Before sending message via emailJs");
         await client.sendAsync(emailJsMessage);
         this.setDateDelivered(new Date());
         await this.save();
-        log("After sending message via emailJs"); //!!do tbem 1 by 1
+        log("After sending message via emailJs");
       } catch (err) {
         error = true;
         if (!(emailJsMessage instanceof zx.server.email.Message)) {
