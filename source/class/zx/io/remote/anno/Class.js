@@ -53,6 +53,7 @@ qx.Class.define("zx.io.remote.anno.Class", {
   },
 
   statics: {
+    DEFAULT: null,
     NOPROXY: null
   },
 
