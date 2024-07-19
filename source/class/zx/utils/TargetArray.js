@@ -25,7 +25,7 @@
  *  console.log("Array changed: ", JSON.stringify(value));
  * });
  *
- * // Callback will call during the bind call, and when this.getFoo() fires "changeArrayProperty", and when this.getFoo().getArrayProperty() fires "change"
+ * Callback will call during the bind call, and when this.getFoo() fires "changeArrayProperty", and when this.getFoo().getArrayProperty() fires "change"
  */
 qx.Class.define("zx.utils.TargetArray", {
   extend: qx.core.Object,

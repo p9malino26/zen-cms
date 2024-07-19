@@ -224,10 +224,15 @@ qx.Class.define("zx.io.remote.BrowserXhrEndpoint", {
       const onFailure = evt => {
         let content = req.getResponseText();
         let statusCode = req.getStatus();
+        let statusMessage = req.getStatusText();
+        if (!statusMessage || !statusMessage.length) {
+          statusMessage = content || "Unknown error";
+        }
+        this.debug(`XHR Failure: statusCode=${statusCode}, statusMessage=${statusMessage}, content=${content}`);
         req.dispose();
         options.handler({
-          content: content,
-          statusCode: statusCode,
+          statusMessage,
+          statusCode,
           type: evt.getType(),
           handlerContextData: options.handlerContextData
         });
