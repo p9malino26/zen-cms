@@ -15,7 +15,8 @@ qx.Class.define("zx.server.email.FlushQueue", {
       let emailsCollection = await zx.server.Standalone.getInstance().getDb().getCollection("zx.server.email.Message");
       this.debug("Got emails collection.");
 
-      let emailsCursor = await emailsCollection.find({ lastErrorMessage: null, dateDelivered: null });
+      let websiteName = zx.server.Standalone.getInstance().getWebsiteName();
+      let emailsCursor = await emailsCollection.find({ lastErrorMessage: null, dateDelivered: null, websiteName });
       this.debug("Got emails cursor.");
 
       let sentUuids = [];

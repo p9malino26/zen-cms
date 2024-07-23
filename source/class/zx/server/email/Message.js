@@ -25,13 +25,25 @@ qx.Class.define("zx.server.email.Message", {
      * @returns {Promise<zx.server.email.Message>}
      */
     async compose({ parameters, textBody, htmlBody }) {
-      let email = new zx.server.email.Message().set({ ...parameters, textBody, htmlBody, dateQueued: new Date() });
+      let websiteName = zx.server.Standalone.getInstance().getWebsiteName();
+      let email = new zx.server.email.Message().set({ ...parameters, textBody, htmlBody, dateQueued: new Date(), websiteName });
       await email.save();
       return email;
     }
   },
 
   properties: {
+    /**
+     * Name of the website that the email is being sent from
+     * Set from zx.server.Standalone.getInstance().getWebsiteName()
+     */
+    websiteName: {
+      check: "String",
+      init: null,
+      nullable: true,
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      event: "changeWebsiteName"
+    },
     /**
      * Date when the email was put into the queue
      */
