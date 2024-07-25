@@ -603,6 +603,18 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
         }
       });
 
+      const sortSendPropertyChangesFirst = (l, r) => {
+        if (l.type == "sendPropertyChanges" && r.type != "sendPropertyChanges") {
+          return -1;
+        } else if (l.type == "sendPropertyChanges" && r.type != "sendPropertyChanges") {
+          return 1;
+        }
+        return 0;
+      };
+
+      //sort the packets so we handle sendPropertyChanges first.
+      packets.sort(sortSendPropertyChangesFirst);
+
       let waitForAll = async () => {
         if (this.getController()) {
           await this.getController().waitForAll();
@@ -1060,7 +1072,8 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
      * This is the implementation behind `__createRemoteMethod`, and makes the remote call actually happen
      *
      * @param object {zx.io.persistence.Object} the object instance
-     * @param methodName {String} the name of the method
+     * @param name {String} the name of the method
+     * @param varargs {[...]} the arguments to the method
      * @return {Promise<*>}
      */
     async callRemoteMethod(object, name, varargs) {
