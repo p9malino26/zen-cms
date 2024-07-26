@@ -42,6 +42,20 @@ qx.Class.define("zx.server.email.FlushQueue", {
     },
 
     /**
+     * Runs the `run` method in a loop with a specified interval.
+     * @param {number} intervalMs
+     */
+    async runLoop(intervalMs = 10000) {
+      try {
+        await this.run();
+      } catch (e) {
+        this.log("Exception has occused in " + this.classname + ".runLoop(): " + e.stack);
+      } finally {
+        setTimeout(() => this.runLoop(), intervalMs);
+      }
+    },
+
+    /**
      * Temporary for debugging statements while we fix a bug
      * @param {string} msg
      */
