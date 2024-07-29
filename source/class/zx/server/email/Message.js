@@ -262,7 +262,7 @@ qx.Class.define("zx.server.email.Message", {
           let server = zx.server.Standalone.getInstance();
           emailJsMessage = await server.findOneObjectByType(zx.server.email.Message, { _uuid: this.toUuid() });
         }
-        log("error sending email: " + err.message);
+        log(`Error sending email with UUID: ${this.toUuid()}. Stack: ${err?.stack ?? "(no stack trace)"}`);
         this.setLastErrorMessage(err ? err.message : "Unknown error when sending email");
         await this.save();
       }
