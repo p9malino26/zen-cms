@@ -14,9 +14,13 @@
  *    John Spackman (john.spackman@zenesis.com, @johnspackman)
  *
  * ************************************************************************ */
+/*
+ * @ignore (BigNumber)
+ */
 
 const fs = require("fs");
 const path = require("path");
+const { Decimal128 } = require("mongodb");
 
 /**
  * Implements a database using MongoDB
@@ -262,6 +266,9 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
      * @Override
      */
     encodeValue(value) {
+      if (value instanceof BigNumber) {
+        return Decimal128.fromString(value.toString());
+      }
       return value;
     },
 
@@ -269,6 +276,9 @@ qx.Class.define("zx.io.persistence.db.MongoDatabase", {
      * @Override
      */
     decodeValue(value) {
+      if (value instanceof Decimal128) {
+        return new BigNumber(value.toString());
+      }
       return value;
     }
   }
