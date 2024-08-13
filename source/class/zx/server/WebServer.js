@@ -81,12 +81,6 @@ qx.Class.define("zx.server.WebServer", {
       init: null,
       nullable: true,
       check: "String"
-    },
-
-    /** Adds extra debug output */
-    debug: {
-      init: false,
-      check: "Boolean"
     }
   },
 

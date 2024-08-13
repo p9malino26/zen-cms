@@ -51,6 +51,14 @@ qx.Class.define("zx.server.Standalone", {
     }
   },
 
+  properties: {
+    /** Adds extra debug output */
+    debug: {
+      init: false,
+      check: "Boolean"
+    }
+  },
+
   members: {
     /** {zx.server.Config} config */
     _config: null,
