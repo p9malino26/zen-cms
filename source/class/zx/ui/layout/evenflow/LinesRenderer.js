@@ -39,7 +39,7 @@ qx.Class.define("zx.ui.layout.evenflow.LinesRenderer", {
 
     /**
      * @type {qx.ui.core.Widget[]}
-     * Queue of children that are left to be positioned and rendered
+     * Queue of children that are yet to be positioned and rendered
      */
     __childrenToRender: null,
 
@@ -73,7 +73,7 @@ qx.Class.define("zx.ui.layout.evenflow.LinesRenderer", {
       this.__previousLine = lineInfo;
 
       //Update state variables
-      this.__lineYStart += lineInfo.height;
+      this.__lineYStart += lineInfo.height + this.__context.layoutMgr.getSpacingY();
       this.__lineCount++;
 
       return {

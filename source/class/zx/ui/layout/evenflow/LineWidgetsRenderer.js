@@ -13,8 +13,8 @@
  *
  * @typedef ChildMeta
  * @property {qx.ui.core.Widget} widget The widget that was added to the line
- * @property {number} initialLeft The left position of the widget when it was added to the line in the first pass
- * @property {number} finalWidth The final calculated width of the widget after the second pass
+ * @property {number} initialLeft The horizontal position of the widget when it was added to the line in the first pass
+ * @property {number} finalWidth The final calculated width of the widget after the second pass (currently, widget's width doesn't change)
  * @property {number} finalCentre The final horizontal position of centre of the widget in the line, after the second pass
  */
 qx.Class.define("zx.ui.layout.evenflow.LineWidgetsRenderer", {
