@@ -29,7 +29,6 @@ const path = require("upath");
  * @external(qx/tool/loadsass.js)
  * @ignore(loadSass)
  */
-const sass = window.loadSass();
 
 /**
  * Compiles a SCSS file into CSS, and supports
@@ -76,6 +75,7 @@ qx.Class.define("zx.cms.util.ScssFile", {
       let inputFileData = await this.loadSource(this.__filename);
 
       await new qx.Promise((resolve, reject) => {
+        const sass = window.loadSass();
         sass.render(
           {
             // Always have file so that the source map knows the name of the original
