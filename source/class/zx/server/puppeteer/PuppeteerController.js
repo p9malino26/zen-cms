@@ -29,7 +29,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
     /** @type{zx.server.puppeteer.AbstractServerApi} the API instance */
     __api: null,
 
-    /** @type{zx.server.puppeteer.ChromiumDocker} the Chromium instance */
+    /** @type{zx.server.puppeteer.chromiumdocker.ChromiumDocker} the Chromium instance */
     __chromium: null,
 
     /** @type{zx.server.puppeteer.PuppeteerClient} the Puppeteer instance attached to the Chromium instance */
@@ -45,7 +45,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
      * @param {Object?} clientProperties Properties to set to the Puppeteer client. Must be properties of zx.server.puppeteer.PuppeteerClient
      */
     async initialise(url, clientProperties) {
-      this.__chromium = await zx.server.puppeteer.ChromiumDocker.acquire();
+      this.__chromium = await zx.server.puppeteer.chromiumdocker.ChromiumDocker.acquire();
       console.log("ChromiumDocker aquired");
 
       clientProperties ??= {};
