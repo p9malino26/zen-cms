@@ -173,7 +173,7 @@ qx.Class.define("zx.server.puppeteer.chromiumdocker.ChromiumDocker", {
       this.debug("Creating container: " + JSON.stringify(containerConfig, null, 2));
       mgr.initialise();
       try {
-        this.__container = await mgr.getDocker().createContainer(containerConfig); //!!
+        this.__container = await mgr.getDocker().createContainer(containerConfig);
       } catch (ex) {
         console.error("Cannot create container: " + (ex.stack || ex));
         throw ex;
