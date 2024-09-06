@@ -18,38 +18,24 @@ const path = require("path");
 qx.Class.define("zx.server.email.Message", {
   extend: zx.server.Object,
 
-  statics: {
-    /**
-     * Composes an email message and saves it in the queue
-     * @param {{ parameters?: EmailParameters; textBody?: string; htmlBody?: string; }} params
-     * @returns {Promise<zx.server.email.Message>}
-     */
-    async compose({ parameters, textBody, htmlBody }) {
-      let websiteName = zx.server.Standalone.getInstance().getWebsiteName();
-      let email = new zx.server.email.Message().set({ ...parameters, textBody, htmlBody, dateQueued: new Date(), websiteName });
-      await email.save();
-      return email;
-    }
-  },
-
   properties: {
     /**
      * Name of the website that the email is being sent from
      * Set from zx.server.Standalone.getInstance().getWebsiteName()
      */
     websiteName: {
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       check: "String",
       init: null,
       nullable: true,
-      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       event: "changeWebsiteName"
     },
     /**
      * Date when the email was put into the queue
      */
     dateQueued: {
-      check: "Date",
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      check: "Date",
       event: "changeDateQueued"
     },
 
@@ -57,8 +43,8 @@ qx.Class.define("zx.server.email.Message", {
      * Date when the email was successfully delivered
      */
     dateDelivered: {
-      check: "Date",
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      check: "Date",
       event: "changeDateDelivered",
       nullable: true,
       init: null
@@ -68,8 +54,8 @@ qx.Class.define("zx.server.email.Message", {
      * From email address
      */
     from: {
-      check: "String",
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      check: "String",
       event: "changeFrom",
       nullable: true,
       init: null
@@ -78,46 +64,43 @@ qx.Class.define("zx.server.email.Message", {
     /**
      * To email address(es)
      * @type {qx.data.Array<string>} read value
-     * @type {qx.data.Array<string> || string[] || string || null} accepted incoming values
      */
     to: {
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       transform: "__ensureQxArray",
       check(value) {
         return this.__isStringArray(value);
       },
-      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       event: "changeTo"
     },
 
     /**
      * CC email address(es)
      * @type {qx.data.Array<string>} read value
-     * @type {qx.data.Array<string> || string[] || string || null} accepted incoming values
      */
     cc: {
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       transform: "__ensureQxArray",
       check(value) {
         return this.__isStringArray(value);
       },
       init: null,
       nullable: true,
-      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       event: "changeCc"
     },
 
     /**
      * BCC email address(es)
      * @type {qx.data.Array<string>} read value
-     * @type {qx.data.Array<string> || string[] || string || null} accepted incoming values
      */
     bcc: {
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       transform: "__ensureQxArray",
       check(value) {
         return this.__isStringArray(value);
       },
       init: null,
       nullable: true,
-      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       event: "changeBcc"
     },
 
@@ -125,8 +108,8 @@ qx.Class.define("zx.server.email.Message", {
      * Email subject
      */
     subject: {
-      check: "String",
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      check: "String",
       event: "changeSubject"
     },
 
@@ -134,8 +117,8 @@ qx.Class.define("zx.server.email.Message", {
      * HTML body of the email
      */
     htmlBody: {
-      check: "String",
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      check: "String",
       event: "changeHtmlBody",
       init: null,
       nullable: true
@@ -145,8 +128,8 @@ qx.Class.define("zx.server.email.Message", {
      * Text body of the email
      */
     textBody: {
-      check: "String",
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      check: "String",
       event: "changeTextBody",
       init: null,
       nullable: true
@@ -157,8 +140,8 @@ qx.Class.define("zx.server.email.Message", {
      * @type {qx.data.Array<zx.server.email.Attachment>}
      */
     attachments: {
-      check: "qx.data.Array",
       "@": [zx.io.persistence.anno.Property.EMBED, zx.io.remote.anno.Property.PROTECTED],
+      check: "qx.data.Array",
       event: "changeAttachments",
       init: null,
       nullable: true
@@ -168,8 +151,8 @@ qx.Class.define("zx.server.email.Message", {
      * Last error message if the email was not sent
      */
     lastErrorMessage: {
-      check: "String",
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      check: "String",
       event: "changeLastErrorMessage",
       init: null,
       nullable: true
@@ -195,7 +178,7 @@ qx.Class.define("zx.server.email.Message", {
     },
 
     /**
-     * @param {(message: string) => void)} [log] Callback for logging
+     * @param {(message: string) => void} [log] Callback for logging
      * @returns {Promise<boolean>} If the email was successfully sent
      */
     async sendEmail(log) {
@@ -206,6 +189,7 @@ qx.Class.define("zx.server.email.Message", {
 
       let config = await zx.server.Config.getConfig();
 
+      /** @type {Array<Record<keyof any, any>>} */
       let attachmentsData = [{ data: htmlBody, alternative: true }];
       log("Before getting attachments");
       if (this.getAttachments()) {
@@ -220,12 +204,16 @@ qx.Class.define("zx.server.email.Message", {
             attachmentData.path = filename;
           }
 
-          let fileExt = path.extname(filename);
-          if (fileExt.startsWith(".")) {
-            fileExt = fileExt.substring(1);
-            let mimeType = mime.getType(fileExt);
-            if (mimeType) {
-              attachmentData.type = mimeType;
+          if (attachment.getContentType()) {
+            attachmentData.type = attachment.getContentType();
+          } else {
+            let fileExt = path.extname(filename);
+            if (fileExt.startsWith(".")) {
+              fileExt = fileExt.substring(1);
+              let mimeType = mime.getType(fileExt);
+              if (mimeType) {
+                attachmentData.type = mimeType;
+              }
             }
           }
 
@@ -268,6 +256,20 @@ qx.Class.define("zx.server.email.Message", {
       }
 
       return !error;
+    }
+  },
+
+  statics: {
+    /**
+     * Composes an email message and saves it in the queue
+     * @param {{ parameters?: EmailParameters; textBody?: string; htmlBody?: string; }} params
+     * @returns {Promise<zx.server.email.Message>}
+     */
+    async compose({ parameters, textBody, htmlBody }) {
+      let websiteName = zx.server.Standalone.getInstance().getWebsiteName();
+      let email = new zx.server.email.Message().set({ ...parameters, textBody, htmlBody, dateQueued: new Date(), websiteName });
+      await email.save();
+      return email;
     }
   }
 });
