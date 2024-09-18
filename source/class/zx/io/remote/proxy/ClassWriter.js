@@ -102,6 +102,8 @@ qx.Class.define("zx.io.remote.proxy.ClassWriter", {
                 refType = arrayType;
               } else if (qx.Class.isSubClassOf(info.check, qx.core.Object)) {
                 refType = info.check;
+              } else {
+                delete info.check
               }
             }
           }
