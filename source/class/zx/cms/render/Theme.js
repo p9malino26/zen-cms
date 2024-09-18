@@ -154,7 +154,10 @@ qx.Class.define("zx.cms.render.Theme", {
         }
       }
 
-      return await reply.sendFile(path.basename(filename), path.dirname(filename));
+      if (typeof reply.sendFile == "function") {
+        return await reply.sendFile(path.basename(filename), path.dirname(filename));
+      }
+      return await reply.sendFileAbsolute(filename);
     },
 
     /**
