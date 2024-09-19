@@ -88,6 +88,7 @@ qx.Class.define("zx.server.puppeteer.chromiumdocker.AcquisitionManager", {
 
       let lengthToDequeue = queue.length; ///Because stuff may be added to the queue while we are in the loop below,
       /// we only dequeue everything that is in the queue at the start of this
+      console.log("debug: " + this.classname + " chromium docker pool size: " + pool.numUsed());
       for (let i = 0; i < lengthToDequeue && pool.numUsed() < mgr.maxPool; i++) {
         let item = queue.shift();
         let pendingAcquire = await pool.acquire();
