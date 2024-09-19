@@ -209,6 +209,15 @@ qx.Class.define("zx.server.WebServer", {
     },
 
     /**
+     * Called to register optional apis
+     *
+     * @param {zx.server.CmsConfiguration} cmsConfig
+     */
+    _registerOptionalUrls(cmsConfig) {
+      cmsConfig.registerApi("zx.server.email.EmailApi", zx.server.email.EmailApi);
+    },
+
+    /**
      * Creates an instance of zx.server.CmsConfiguration
      *
      * @returns {zx.server.CmsConfiguration}
