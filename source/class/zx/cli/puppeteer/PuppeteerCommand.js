@@ -16,13 +16,13 @@ qx.Class.define("zx.cli.puppeteer.PuppeteerCommand", {
         async run() {
           const { args, flags } = this.getValues();
           if (flags.config) {
-            let dockerConfig = zx.server.puppeteer.chromiumdocker.ChromiumDocker.getConfiguration();
+            let dockerConfig = zx.server.puppeteer.ChromiumDocker.getConfiguration();
             let data = await zx.utils.Json.loadJsonAsync(flags.config);
             qx.lang.Object.mergeWith(dockerConfig, data, true);
           }
 
           try {
-            let chromium = await zx.server.puppeteer.chromiumdocker.ChromiumDocker.acquire();
+            let chromium = await zx.server.puppeteer.ChromiumDocker.acquire();
             this.info("ChromiumDocker aquired");
 
             let puppeteer = new zx.server.puppeteer.PuppeteerClient().set({

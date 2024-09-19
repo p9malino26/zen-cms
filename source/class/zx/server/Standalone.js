@@ -88,10 +88,10 @@ qx.Class.define("zx.server.Standalone", {
       let config = zx.server.Config.getInstance();
       this._config = await zx.server.Config.getConfig();
       if (this._config.docker) {
-        let dockerConfig = zx.server.puppeteer.chromiumdocker.ChromiumDocker.getConfiguration();
+        let dockerConfig = zx.server.puppeteer.ChromiumDocker.getConfiguration();
         qx.lang.Object.mergeWith(dockerConfig, this._config.docker, true);
 
-        await zx.server.puppeteer.chromiumdocker.ChromiumDocker.cleanupOldContainers();
+        await zx.server.puppeteer.ChromiumDocker.cleanupOldContainers();
       }
       if (this._config.smtpServer) {
         await zx.server.email.EmailJS.initialise();

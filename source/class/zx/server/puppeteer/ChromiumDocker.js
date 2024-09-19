@@ -4,7 +4,7 @@ const path = require("path");
 /**
  * Manages an instance of docker containers with the zx-puppeteer-server image
  */
-qx.Class.define("zx.server.puppeteer.chromiumdocker.ChromiumDocker", {
+qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
   extend: qx.core.Object,
 
   destruct() {

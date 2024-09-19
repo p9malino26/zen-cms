@@ -55,7 +55,7 @@ qx.Class.define("zx.server.puppeteer.chromiumdocker.PoolManager", {
     /** @type{Docker} the connection to the Docker daemon */
     __docker: null,
 
-    /** @type{Map<String,zx.server.puppeteer.chromiumdocker.ChromiumDocker} instances indexed by hash code */
+    /** @type{Map<String,zx.server.puppeteer.ChromiumDocker} instances indexed by hash code */
     __instances: {},
 
     /**
@@ -171,20 +171,20 @@ qx.Class.define("zx.server.puppeteer.chromiumdocker.PoolManager", {
     /**
      * Creates an instance
      *
-     * @return {zx.server.puppeteer.chromiumdocker.ChromiumDocker}
+     * @return {zx.server.puppeteer.ChromiumDocker}
      */
     createInstance() {
       const CD = this;
       CD.initialise();
 
-      let instance = new zx.server.puppeteer.chromiumdocker.ChromiumDocker();
+      let instance = new zx.server.puppeteer.ChromiumDocker();
       return (CD.__instances[instance.toHashCode()] = instance);
     },
 
     /**
      * Deletes an instance
      *
-     * @param {zx.server.puppeteer.chromiumdocker.ChromiumDocker} instance
+     * @param {zx.server.puppeteer.ChromiumDocker} instance
      */
     async deleteInstance(instance) {
       const CD = this;
@@ -221,7 +221,7 @@ qx.Class.define("zx.server.puppeteer.chromiumdocker.PoolManager", {
     },
 
     /**
-     * @returns {qx.Promise<zx.server.puppeteer.chromiumdocker.ChromiumDocker>}
+     * @returns {qx.Promise<zx.server.puppeteer.ChromiumDocker>}
      */
     async acquire() {
       return this.__acquisitionManager.acquire();
@@ -230,7 +230,7 @@ qx.Class.define("zx.server.puppeteer.chromiumdocker.PoolManager", {
     /**
      * Releases to the pool
      *
-     * @return {zx.server.puppeteer.chromiumdocker.ChromiumDocker}
+     * @return {zx.server.puppeteer.ChromiumDocker}
      */
     async release(instance) {
       const CD = this;

@@ -39,7 +39,7 @@ qx.Class.define("zx.server.puppeteer.chromiumdocker.AcquisitionManager", {
      * we wait until one is available.
      * An exception is thrown if one isn't available within the timeout.
      *
-     * @returns {qx.Promise<zx.server.puppeteer.chromiumdocker.ChromiumDocker>}
+     * @returns {qx.Promise<zx.server.puppeteer.ChromiumDocker>}
      */
     acquire() {
       let promise = new qx.Promise();

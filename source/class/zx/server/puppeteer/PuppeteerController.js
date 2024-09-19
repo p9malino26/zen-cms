@@ -36,7 +36,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
     /** @type{zx.server.puppeteer.AbstractServerApi} the API instance */
     __api: null,
 
-    /** @type{zx.server.puppeteer.chromiumdocker.ChromiumDocker} the Chromium instance */
+    /** @type{zx.server.puppeteer.ChromiumDocker} the Chromium instance */
     __chromium: null,
 
     /** @type{zx.server.puppeteer.PuppeteerClient} the Puppeteer instance attached to the Chromium instance */
