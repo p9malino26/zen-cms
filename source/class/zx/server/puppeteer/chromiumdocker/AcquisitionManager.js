@@ -78,7 +78,7 @@ qx.Class.define("zx.server.puppeteer.chromiumdocker.AcquisitionManager", {
       // reject all promises for timed out acquisition requests
       for (let i = queue.length - 1; i >= 0; i--) {
         if (queue[i].expiryTime < new Date().getTime()) {
-          queue[i].promise.reject(new Error("Timeout waiting for Chromium docker acquire."));
+          queue[i].promise.reject(new Error("Timeout waiting for Chromium Docker acquire."));
           queue.splice(i, 1);
         }
       }
