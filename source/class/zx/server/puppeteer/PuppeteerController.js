@@ -22,6 +22,13 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
     }
   },
 
+  events: {
+    /**
+     * Fired when the Puppeteer client prints a message in the console
+     */
+    consoleLog: "qx.event.type.Data"
+  },
+
   members: {
     /** @type{qx.Class<zx.server.puppeteer.AbstractServerApi>} the API class */
     __apiClass: null,
@@ -45,7 +52,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
      * @param {Object?} clientProperties Properties to set to the Puppeteer client. Must be properties of zx.server.puppeteer.PuppeteerClient
      */
     async initialise(url, clientProperties) {
-      this.__chromium = await zx.server.puppeteer.ChromiumDocker.acquire();
+      this.__chromium = await zx.server.puppeteer.chromiumdocker.PoolManager.getInstance().acquire();
       console.log("ChromiumDocker aquired");
 
       clientProperties ??= {};
@@ -57,6 +64,8 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
         password: this.getPassword(),
         ...clientProperties
       });
+
+      this.__puppeteer.addListener("log", evt => this.fireDataEvent("consoleLog", evt.getData()));
 
       this.debug("Puppeteer client created");
 
@@ -75,7 +84,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
 
       this.__api = this.__puppeteer.createRemoteApi(this.__apiClass);
       let apiFinished = new qx.Promise();
-      this.__promiseFinished = apiFinished.then(async () => await this.__closeDown());
+      this.__promiseFinished = apiFinished.then(() => this.__closeDown());
 
       this.__api.addListener("complete", evt => apiFinished.resolve());
     },

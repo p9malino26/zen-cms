@@ -309,7 +309,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
           url: this.getUrl()
         };
 
-        this.error("Page navigation error : " + JSON.stringify(result, null, 2));
+        throw new Error("Page navigation error : " + JSON.stringify(result, null, 2));
       } else {
         this.__sentParentReady = true;
         await this._postMessage("parent-ready");

@@ -119,7 +119,6 @@ qx.Class.define("zx.server.WebServer", {
      * Called to start the server
      */
     async start() {
-      debugger;
       await super.start();
       if (this._config.createProxies) {
         let proxiesOutputPath = this._config.createProxies?.outputPath;
