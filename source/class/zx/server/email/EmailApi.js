@@ -1,7 +1,6 @@
 qx.Class.define("zx.server.email.EmailApi", {
   extend: zx.server.Object,
   "@": new zx.io.remote.anno.Class(),
-  include: [uk.co.spar.services.MMongoClient],
 
   construct() {
     super();
