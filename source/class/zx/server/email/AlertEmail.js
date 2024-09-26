@@ -34,6 +34,12 @@ qx.Class.define("zx.server.email.AlertEmail", {
      * @param {string} text Full text or message of the alert
      */
     alert(title, text) {
+      const config = zx.server.Config.getInstance().getConfigData();
+      if (!config.alertsEmail) {
+        console.warn("Alerts email not set, cannot send alert email with title: " + title);
+        return;
+      }
+
       let message = [
         `================== Alert at ${new Date().toISOString()} ==================`,
         `================== Title: ${title ?? "No title"} ==================`,
