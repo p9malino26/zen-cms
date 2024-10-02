@@ -13,7 +13,7 @@ qx.Class.define("zx.server.email.AlertEmail", {
   construct() {
     super();
     const MINUTE = 60 * 1000;
-    const INTERVAL_MS = 5 * this.constructor.INTERVAL_MINUTES * MINUTE;
+    const INTERVAL_MS = this.constructor.INTERVAL_MINUTES * MINUTE;
     // const INTERVAL_MS = 2000;//for testing
     this.__debounce = new zx.utils.Debounce(this.__sendEmail.bind(this), INTERVAL_MS).set({ repeatedTrigger: "ignore" });
   },
@@ -87,6 +87,6 @@ qx.Class.define("zx.server.email.AlertEmail", {
     /**
      * Every how many minutes minimum to send an alert email
      */
-    INTERVAL_MINUTES: 5
+    INTERVAL_MINUTES: 1
   }
 });
