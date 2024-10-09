@@ -36,7 +36,7 @@ qx.Mixin.define("zx.utils.MConsoleLog", {
     log(str) {
       this.__logOutput.push(str);
       if (this.getLogOutputToConsole()) {
-        console.log(str);
+        console.log(new Date().toISOString() + ": " + this + ": " + str);
       }
       this.fireDataEvent("log", { message: str });
     },
