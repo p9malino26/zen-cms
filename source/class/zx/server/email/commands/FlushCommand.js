@@ -20,7 +20,7 @@ qx.Class.define("zx.server.email.commands.FlushCommand", {
     this.setRun(async ({ flags, args }) => {
       await new zx.server.Standalone().start();
 
-      let flushObj = new zx.server.email.FlushQueue().set({ logOutputToConsole: true });
+      let flushObj = new zx.server.email.FlushQueue().set({ copyLogOutputTo: "info" });
       await flushObj.run(flags["clear-queue"]);
       console.log("Done.");
       return 0;
