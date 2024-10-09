@@ -66,7 +66,9 @@ qx.Class.define("zx.server.email.EmailRenderer", {
           parameters[key] ??= null;
         }
 
+        log("Composing email...");
         let message = await zx.server.email.Message.compose({ parameters, htmlBody, textBody });
+        log("Email composed");
         messages.push(message);
         api.next();
       });
