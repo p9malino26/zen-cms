@@ -32,7 +32,6 @@ qx.Class.define("zx.server.email.EmailRenderer", {
       let puppeteer = controller.getPuppeteer();
       await puppeteer.waitForReadySignal();
       log("Received ready signal");
-
       let api = controller.getApi();
       api.addListener("sendEmail", async evt => {
         const {
@@ -41,6 +40,9 @@ qx.Class.define("zx.server.email.EmailRenderer", {
           /**@type {EmailParameters}*/
           parameters
         } = evt.getData();
+        parameters.to = parameters.to.split(",") ?? [];
+        parameters.cc = parameters.cc.split(",") ?? [];
+        parameters.bcc = parameters.bcc.split(",") ?? [];
         log("Email body to send: " + htmlBody);
         log("Email parameters: " + JSON.stringify(parameters, null, 2));
 

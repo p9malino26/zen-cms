@@ -4,16 +4,14 @@
  * The log buffer can be retrieved using `getLogOutput`.
  */
 qx.Mixin.define("zx.utils.MConsoleLog", {
-  construct() {
-    this.__logOutput = [];
-  },
-  /**
-   * If we want the log output to be printed to the console.
-   */
   properties: {
-    logOutputToConsole: {
-      init: false,
-      check: "Boolean"
+    /**
+     * If we want the log output to be printed to the console.
+     */
+    copyLogOutputTo: {
+      init: null,
+      nullable: true,
+      check: ["debug", "error", "info", "log", "warn"]
     }
   },
 
@@ -34,9 +32,13 @@ qx.Mixin.define("zx.utils.MConsoleLog", {
      * @param {string} str the line to add
      */
     log(str) {
+      if (!this.__logOutput) {
+        this.__logOutput = [];
+      }
       this.__logOutput.push(str);
-      if (this.getLogOutputToConsole()) {
-        console.log(new Date().toISOString() + ": " + this + ": " + str);
+      let copyLogOutputTo = this.getCopyLogOutputTo();
+      if (copyLogOutputTo) {
+        this[copyLogOutputTo](str);
       }
       this.fireDataEvent("log", { message: str });
     },
@@ -47,7 +49,7 @@ qx.Mixin.define("zx.utils.MConsoleLog", {
      * @returns {String}
      */
     getLogOutput() {
-      return this.__logOutput.join("\n");
+      return this.__logOutput ? this.__logOutput.join("\n") : "";
     }
   }
 });
