@@ -41,8 +41,8 @@ qx.Class.define("zx.server.email.EmailRenderer", {
           parameters
         } = evt.getData();
         parameters.to = parameters.to.split(",") ?? [];
-        parameters.cc = parameters.cc.split(",") ?? [];
-        parameters.bcc = parameters.bcc.split(",") ?? [];
+        parameters.cc = parameters.cc?.split(",") ?? [];
+        parameters.bcc = parameters.bcc?.split(",") ?? [];
         log("Email body to send: " + htmlBody);
         log("Email parameters: " + JSON.stringify(parameters, null, 2));
 
