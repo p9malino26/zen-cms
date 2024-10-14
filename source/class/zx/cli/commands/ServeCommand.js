@@ -58,13 +58,7 @@ qx.Class.define("zx.cli.commands.ServeCommand", {
       if (port) {
         server.setListenPort(port);
       }
-      try {
-        await server.start();
-        //new zx.test.io.remote.RemoteXhrServer();
-      } catch (ex) {
-        console.error("Cannot start server: " + (ex.stack || ex));
-      }
-
+      await server.start();
       return null;
     }
   },

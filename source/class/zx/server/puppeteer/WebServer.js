@@ -1,5 +1,9 @@
 const puppeteer = require("puppeteer");
+const path = require("node:path");
 
+/**
+ * @asset(zx/server/puppeteer/dev/*)
+ */
 qx.Class.define("zx.server.puppeteer.WebServer", {
   extend: qx.core.Object,
 
@@ -43,59 +47,53 @@ qx.Class.define("zx.server.puppeteer.WebServer", {
      * Starts the web server
      */
     async start() {
-      let app = await this._createApplication();
-
       try {
-        let chromePort = this.getChromePort();
-        if (chromePort === null || chromePort < 1) {
-          chromePort = this.getListenPort() + 1;
-        }
+        const app = await this._createApplication();
+
+        const chromePort = this.getChromePort() ?? this.getListenPort() + 1;
+        if (chromePort < 1 || chromePort > 65535) throw new Error(`Invalid chromePort '${chromePort}'. Expected 1-65535`);
+
         const options = {
           headless: true,
           devtools: true,
-          args: ["--remote-debugging-port=" + chromePort, "--remote-debugging-address=0.0.0.0", "--no-sandbox"]
+          args: [
+            `--remote-debugging-port=${chromePort}`,
+            "--remote-debugging-address=0.0.0.0",
+            "--no-sandbox",
+            "--ignore-certificate-errors",
+            "--disable-setuid-sandbox",
+            "--disable-accelerated-2d-canvas",
+            "--disable-gpu"
+          ]
         };
 
-        // launch headless Chromium browser
         this.__browser = await puppeteer.launch(options);
-        console.log("Chrome launched on port " + chromePort);
+        console.log(`Chrome launched on port ${chromePort}`);
 
-        let get = await zx.utils.Http.httpGet(`http://localhost:${chromePort}/json/version`);
-        let jsonVersion = get.body;
-        console.log("Chrome configuration: \n" + JSON.stringify(jsonVersion, null, 2));
+        const response = await zx.utils.Http.httpGet(`http://127.0.0.1:${chromePort}/json/version`);
+        let jsonVersion = response.body;
+        console.log("Chrome configuration:");
+        console.log(JSON.stringify(jsonVersion, null, 2));
 
-        let upstreamDebuggerUrl = jsonVersion.webSocketDebuggerUrl;
-        let m = upstreamDebuggerUrl.match(/^ws:\/\/[^/]+(.*)$/);
-        let url = m[1];
-        jsonVersion.webSocketDebuggerUrl = `ws://localhost:${this.getListenPort()}${url}`;
+        if (qx.core.Environment.get("qx.debug")) {
+          app.register(require("@fastify/static"), {
+            root: path.dirname(qx.util.ResourceManager.getInstance().toUri("zx/server/puppeteer/dev/MARKER")),
+            prefix: "/dev/",
+            redirect: true
+          });
+        }
 
-        app.get("/json/version", (req, reply) => {
-          reply.json(jsonVersion);
-        });
+        app.get("/json/version", (req, rep) => rep.status(404).send("Not found"));
+        app.get("/json/list", (req, rep) => rep.status(404).send("Not found"));
+        app.get("*", (req, rep) => console.log("GET", req.url, "- UNKNOWN"));
 
-        const proxy = require("@fastify/http-proxy");
-        app.register(proxy, {
-          prefix: url,
-          websocket: true,
-          upstream: upstreamDebuggerUrl
-        });
-
-        console.log(`webSocketDebuggerUrl is ${jsonVersion.webSocketDebuggerUrl}`);
-      } catch (err) {
-        console.log(`Error: ${err.message}`);
-      }
-
-      try {
-        await app.listen({
-          port: this.getListenPort(),
-          host: "0.0.0.0"
-        });
-      } catch (err) {
-        console.error("Error when starting the server: " + err);
+        await app.listen({ port: this.getListenPort(), host: "0.0.0.0" });
+        console.log(`Webserver started on http://127.0.0.1:${this.getListenPort()}`);
+      } catch (cause) {
+        // TODO: something causes the thrown error to print a minimal and unhelpful representation of the error
+        console.error(cause);
         process.exit(1);
       }
-
-      console.log(`Webserver started on http://localhost:${this.getListenPort()}`);
     },
 
     /**
@@ -178,7 +176,7 @@ qx.Class.define("zx.server.puppeteer.WebServer", {
       const RAS = zx.server.rest.RestApiServer;
       app.route({
         method: ["GET", "POST"],
-        url: RAS.getEndpoint() + "*",
+        url: RAS.getEndpoint(),
         handler: this.wrapMiddleware(RAS.middleware)
       });
 

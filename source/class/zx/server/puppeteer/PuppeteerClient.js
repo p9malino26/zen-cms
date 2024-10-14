@@ -3,7 +3,6 @@
  */
 
 const puppeteer = require("puppeteer-core");
-const path = require("path");
 
 /**
  * Wraps the puppeteer instance and adds API callbacks and low level integration
@@ -77,13 +76,13 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
 
     /** Width of the page */
     viewportWidth: {
-      init: 1366,
+      init: 1920,
       check: "Integer"
     },
 
     /** Height of the page */
     viewportHeight: {
-      init: 768,
+      init: 1080,
       check: "Integer"
     },
 
@@ -101,6 +100,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
   },
 
   members: {
+    /** @type {import("puppeteer-core").Browser | null} */
     _browser: null,
     _page: null,
     __localApis: null,
@@ -142,7 +142,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         }
       };
 
-      if (true || (this.isDebug() && this.isAllowHeadfull())) {
+      if ((this.isDebug() && this.isAllowHeadfull()) || (qx.core.Environment.get("qx.debug") && qx.core.Environment.get("zx.docker.useLocalContainer"))) {
         opts.headless = false;
         opts.slowMo = 200;
         opts.devtools = true;
@@ -150,37 +150,34 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
 
       opts.args = ["--no-sandbox", "--disable-setuid-sandbox"];
 
-      let startupPromise = new qx.Promise((resolve, reject) => {
-        let pass = 0;
-        const startup = async () => {
+      /** @type {Promise<import("puppeteer-core").Browser>} */
+      const startup = async () => {
+        const maxPasses = 10;
+        for (let pass = 0; true; pass++) {
           try {
-            console.log(`connecting to puppeteer #${pass} opts: ${JSON.stringify(opts, null, 2)}`);
-            let browser = await puppeteer.connect(opts);
-            resolve(browser);
+            console.log(`[attempt:${pass}/${maxPasses}] connecting to puppeteer - opts: ${JSON.stringify(opts, null, 2)}`);
+            return await puppeteer.connect(opts);
           } catch (ex) {
             pass++;
-            if (pass > 10) {
-              throw reject(ex);
+            if (pass > maxPasses) {
+              throw ex;
             }
-            setTimeout(() => startup(), pass * 1000);
+            await new Promise(res => setTimeout(res, pass * 1000));
           }
-        };
-        startup();
-      });
-      this._browser = await startupPromise;
+        }
+      };
+
+      this._browser = await startup();
 
       this.info("Started Puppeteer - " + this.getChromiumEndpoint().replace(/^ws:/, "http:"));
 
       let result = null;
+
       let page = (this._page = await this._browser.newPage());
+
+      console.log("new page viewport", { width: this.getViewportWidth(), height: this.getViewportHeight() });
+      page.setViewport({ width: this.getViewportWidth(), height: this.getViewportHeight() });
       let url = this.getUrl();
-      /*
-      ["disconnected", "targetdestroyed", "targetcreated", "targetchanged"].forEach(name => {
-        this._browser.on(name, data => {
-          console.log("Page " + name + ", " + data);
-        });
-      });
-      */
 
       let username = this.getUsername();
       let password = this.getPassword();
@@ -191,14 +188,8 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         } else url += "?";
         url += "X-Authorization=Basic%20" + authHeader + "&X-Auth-Login=true";
         console.log("Setting auth header Basic " + authHeader);
-        /*
-        await page.setExtraHTTPHeaders({
-          Authorization: "Basic " + authHeader
-        });
-        */
       }
 
-      //await page.setDefaultNavigationTimeout(this.getNavigationTimeout() * 1000);
       page.setDefaultNavigationTimeout(0);
 
       // Catch console log messages so that we can read the protocol
@@ -219,84 +210,21 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         this.fireEvent("close");
       });
 
-      /*
-      [
-        "close",
-        "dialog",
-        "domcontentloaded",
-        "error",
-        "frameattached",
-        "framedetached",
-        "framenavigated",
-        "load",
-        "metrics",
-        "pageerror",
-        "popup",
-        "request",
-        "requestfailed",
-        "requestfinished",
-        "requestservedfromcache",
-        "response",
-        "workercreated",
-        "workerdestroyed"
-      ].forEach(name => {
-        page.on(name, () => console.log("Page " + name));
-      });
-       */
-
-      /*
-      await page.setRequestInterception(true);
-      let haveSetHeaders = false;
-      page.on("request", request => {
-        if (haveSetHeaders || !request.url().match(/^http/)) {
-          request.continue();
-          return;
-        }
-        if (request.redirectChain().length > 0) {
-          console.log("request intercept: " + request.method() + ": " + request.url() + "; redirect chain length=" + request.redirectChain().length);
-          request.continue();
-          return;
-        }
-        haveSetHeaders = true;
-        console.log("request intercept: " + request.method() + ": " + request.url() + "; redirect chain length=" + request.redirectChain().length);
-        let username = this.getUsername();
-        let password = this.getPassword();
-        let overrides = {
-          headers: Object.assign({}, request.headers()),
-          url: request.url(),
-          method: request.method()
-        };
-        let postData = request.postData();
-        if (postData !== undefined) {
-          overrides.postData = postData;
-        }
-        if (username && password) {
-          var authHeader = new Buffer.from(username + ":" + password).toString("base64");
-          overrides.headers["authorization"] = "Basic " + authHeader;
-        }
-        request.continue(overrides);
-      });
-      */
-
       this.__readyPromise = new qx.Promise();
 
       if (this.isDebugOnStartup()) {
-        /*
-        await page.evaluate(() => {
-          window.DEBUG_ON_STARTUP = true;
-          while (window.DEBUG_ON_STARTUP) {
-            debugger;
-          }
-        });
-        */
-        url += url.indexOf("?") > -1 ? "&" : "?";
-        url += "DEBUG_ON_STARTUP=true";
+        url = `http://127.0.0.1:9000/dev/puppeteer-debug-corral?redirect=${encodeURIComponent(url)}`;
       }
       console.log("Going to " + url);
-      let response = await page.goto(url, {
-        waitUntil: "networkidle0",
-        timeout: 0
-      });
+      let response;
+      try {
+        response = await page.goto(url, {
+          waitUntil: "networkidle0",
+          timeout: 0
+        });
+      } catch (e) {
+        debugger;
+      }
 
       console.log(" ********** At " + url);
 

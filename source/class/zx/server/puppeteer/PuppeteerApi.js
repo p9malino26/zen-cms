@@ -13,7 +13,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerApi", {
      * @param {import("fastify").FastifyReply} rep
      */
     async _httpGetHello(req, rep) {
-      this.debug("GET gello requested");
+      this.debug("GET hello requested");
       rep.code(200).send({ status: "ok", result: { hello: "world" } });
     },
 
