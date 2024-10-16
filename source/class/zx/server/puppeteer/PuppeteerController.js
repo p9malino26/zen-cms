@@ -57,8 +57,14 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
 
       clientProperties ??= {};
 
+      let debugOnStartup = false;
+      if (qx.core.Environment.get("qx.debug")) {
+        // you may want to set `debugOnStartup` to `true`
+        debugger;
+      }
       this.__puppeteer = new zx.server.puppeteer.PuppeteerClient().set({
         url,
+        debugOnStartup,
         chromiumEndpoint: this.__chromium.getEndpoint(),
         username: this.getUsername(),
         password: this.getPassword(),

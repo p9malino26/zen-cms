@@ -268,7 +268,6 @@ qx.Class.define("zx.server.WebServer", {
       }
       const app = (this._app = require("fastify")(options));
       app.register(require("@fastify/cookie"));
-      app.register(require("fastify-prettier"));
       app.register(require("@fastify/multipart"), {
         limits: {
           fieldNameSize: 100, // Max field name size in bytes

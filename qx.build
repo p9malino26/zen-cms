@@ -1,0 +1,18 @@
+{
+  "$schema": "https://raw.githubusercontent.com/zenesisUK/qx-build-vscode/refs/heads/main/src/qx.build.schema.json",
+  "autostart": "ZenCMS",
+  "builders": [
+    {
+      "name": "ZenCMS",
+      "workDir": ".",
+      "compilerArgs": [
+        "-T"
+      ],
+      "preBuild": [],
+      "postBuild": [],
+      "sourcePaths": [
+        "compile.json#libraries"
+      ]
+    }
+  ]
+}

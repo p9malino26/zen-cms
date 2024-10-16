@@ -1,0 +1,2 @@
+This file exists so that zx.server.puppeteer.WebServer can find the rootdir of this static serve directory.
+This is needed because Qooxdoo does not support resolving non-file paths in resources.

@@ -5,6 +5,10 @@ set -x
 echo "Starting..."
 pwd
 
+if [ -n "$ZX_NODE_INSPECT" ] ; then
+  socat TCP4-LISTEN:9002,fork,reuseaddr TCP:127.0.0.1:9001 &
+fi
+
 echo "Auto restart: $ZX_AUTO_RESTART"
 while true ; do
   # Make sure there is no artifact left over
@@ -19,7 +23,7 @@ while true ; do
     echo "Shutdown detected" >> ./console.log
     exit 0
   fi
-  
+
   if [[ "$ZX_AUTO_RESTART" != "true" ]] ; then
     break
   else

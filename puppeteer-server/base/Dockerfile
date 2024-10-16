@@ -10,8 +10,11 @@ RUN apk add --no-cache \
     ca-certificates \
     ttf-freefont \
     git \
-    nodejs npm \
-    yarn
+    nodejs \
+    npm \
+    yarn \
+    socat \
+    openssl
 
 RUN apk add vim
 

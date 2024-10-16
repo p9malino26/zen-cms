@@ -28,12 +28,7 @@ qx.Class.define("zx.cli.puppeteer.LaunchCommand", {
       if (flags.port) {
         server.setListenPort(flags.port);
       }
-
-      try {
-        await server.start();
-      } catch (ex) {
-        console.error("Cannot start server: " + (ex.stack || ex));
-      }
+      await server.start();
     }
   },
 
