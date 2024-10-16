@@ -72,7 +72,7 @@ qx.Class.define("zx.ui.email.EmailViewer", {
 
     // START(meta)
     compMeta() {
-      const compMeta = new qx.ui.container.Composite(new qx.ui.layout.HBox(10)).set({ padding: 4 });
+      const compMeta = new qx.ui.container.Composite(new qx.ui.layout.VBox(10)).set({ padding: 4 });
       compMeta.add(this.getQxObject("grpFields"));
       compMeta.add(this.getQxObject("grpAttachments"));
       return compMeta;
@@ -122,7 +122,7 @@ qx.Class.define("zx.ui.email.EmailViewer", {
 
     fieldDate() {
       const fieldDate = new qx.ui.form.DateField().set({ enabled: false });
-      this.bind("parsedEmail.dateDelivered", fieldDate, "value");
+      this.bind("parsedEmail.dateQueued", fieldDate, "value");
       fieldDate.getChildControl("button").setVisibility("excluded");
       return fieldDate;
     },
