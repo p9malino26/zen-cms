@@ -73,9 +73,15 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
         result.exposed[`${ports[key].outer}/tcp`] = {};
         result.boundTo[key] = target;
       };
-      if (webServer) append("webServer");
-      if (chromium) append("chromium");
-      if (nodeDebug) append("nodeDebug");
+      if (webServer) {
+        append("webServer");
+      }
+      if (chromium) {
+        append("chromium");
+      }
+      if (nodeDebug) {
+        append("nodeDebug");
+      }
       return result;
     },
 
@@ -191,9 +197,11 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
       this.debug("Creating container: " + JSON.stringify(containerConfig, null, 2));
       mgr.initialise();
       try {
-        const setupNormal = async () => (this.__container = await mgr.getDocker().createContainer(containerConfig));
+        const setupNormal = async () => {
+          this.__container = await mgr.getDocker().createContainer(containerConfig);
+        };
         if (qx.core.Environment.get("qx.debug")) {
-          if (qx.core.Environment.get("zx.docker.useLocalContainer")) {
+          if (qx.core.Environment.get("zx.server.puppeteer.ChromiumDocket.useLocalContainer")) {
             const allPorts = this.__generatePorts({ webServer: true, chromium: true, nodeDebug: true });
             console.warn(["", "* * * * * * * * * * * * *", "* USING LOCAL CONTAINER *", "* * * * * * * * * * * * *"].join("\n"));
             containerConfig.Cmd = ["/bin/bash", "/home/pptruser/start.sh"];
@@ -207,8 +215,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
             containerConfig.Tty = true;
 
             /** @type {import("dockerode")} */
-            const managerDocker = mgr.getDocker();
-            this.__container = await managerDocker.createContainer(containerConfig);
+            this.__container = await mgr.getDocker().createContainer(containerConfig);
           } else {
             await setupNormal();
           }
@@ -269,7 +276,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
         while (true) {
           pass++;
           try {
-            let get = await zx.utils.Http.httpGet(`http://localhost:${this.__remoteChromiumPort}/json/version`);
+            let get = await zx.utils.Http.httpGet(`http://127.0.0.1:${this.__remoteChromiumPort}/json/version`);
             let json = get.body;
             if (json) {
               this.__chromiumJson = json;
@@ -277,7 +284,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
               break;
             }
           } catch (ex) {
-            this.warn(`Chromium not yet available on 'http://localhost:${this.__remoteChromiumPort}/json/version', waiting 3 seconds: ${ex}`);
+            this.warn(`Chromium not yet available on 'http://127.0.0.1:${this.__remoteChromiumPort}/json/version', waiting 3 seconds: ${ex}`);
           }
           if (pass > maxPasses) {
             throw new Error("Chromium not available after " + pass + " attempts");
@@ -439,5 +446,9 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
     async release(instance) {
       return zx.server.puppeteer.chromiumdocker.PoolManager.getInstance().release(instance);
     }
+  },
+
+  environment: {
+    "zx.server.puppeteer.ChromiumDocket.useLocalContainer": false
   }
 });
