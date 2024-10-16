@@ -142,7 +142,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         }
       };
 
-      if ((this.isDebug() && this.isAllowHeadfull()) || (qx.core.Environment.get("qx.debug") && qx.core.Environment.get("zx.docker.useLocalContainer"))) {
+      if ((this.isDebug() && this.isAllowHeadfull()) || (qx.core.Environment.get("qx.debug") && qx.core.Environment.get("zx.server.puppeteer.ChromiumDocket.useLocalContainer"))) {
         opts.headless = false;
         opts.slowMo = 200;
         opts.devtools = true;
@@ -186,7 +186,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         if (url.indexOf("?") > -1) {
           url += "&";
         } else url += "?";
-        url += "X-Authorization=Basic%20" + authHeader + "&X-Auth-Login=true";
+        url += "X-Authorization=" + encodeURIComponent("Basic " + authHeader) + "&X-Auth-Login=true";
         console.log("Setting auth header Basic " + authHeader);
       }
 
