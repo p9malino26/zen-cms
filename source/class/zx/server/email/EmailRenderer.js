@@ -40,7 +40,7 @@ qx.Class.define("zx.server.email.EmailRenderer", {
           /**@type {EmailParameters}*/
           parameters
         } = evt.getData();
-        parameters.to = parameters.to.split(",") ?? [];
+        parameters.to = parameters.to?.split(",") ?? [];
         parameters.cc = parameters.cc?.split(",") ?? [];
         parameters.bcc = parameters.bcc?.split(",") ?? [];
         log("Email body to send: " + htmlBody);
