@@ -7,10 +7,10 @@ docker login
 echo "Building for platform linux/amd64"
 
 cd base
-docker buildx build --platform linux/amd64 --push -t zenesisuk/zx-puppeteer-server-base .
+docker buildx build --platform linux/amd64,linux/arm64 --push -t zenesisuk/zx-puppeteer-server-base .
 cd ..
 
 cd release
-docker buildx build --platform linux/amd64 --push -t zenesisuk/zx-puppeteer-server .
+docker buildx build --platform linux/amd64,linux/arm64 --push -t zenesisuk/zx-puppeteer-server .
 cd ..
 
