@@ -19,7 +19,7 @@ while true ; do
     echo "Shutdown detected" >> ./console.log
     exit 0
   fi
-  
+
   if [[ "$ZX_AUTO_RESTART" != "true" ]] ; then
     break
   else

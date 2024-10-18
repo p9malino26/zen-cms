@@ -1,5 +1,12 @@
-const puppeteer = require("puppeteer");
+const playwright = require("playwright-core");
+const puppeteer = require("puppeteer-core");
+const PUPPETEER_VERSION = require("puppeteer-core/package.json")["version"];
+const fs = require("node:fs");
+const path = require("node:path");
 
+/**
+ * @asset(zx/server/puppeteer/dev/*)
+ */
 qx.Class.define("zx.server.puppeteer.WebServer", {
   extend: qx.core.Object,
 
@@ -43,59 +50,75 @@ qx.Class.define("zx.server.puppeteer.WebServer", {
      * Starts the web server
      */
     async start() {
-      let app = await this._createApplication();
-
       try {
-        let chromePort = this.getChromePort();
-        if (chromePort === null || chromePort < 1) {
-          chromePort = this.getListenPort() + 1;
+        const app = await this._createApplication();
+
+        const chromePort = this.getChromePort() ?? this.getListenPort() + 1;
+        if (chromePort < 1 || chromePort > 65535) throw new Error(`Invalid chromePort '${chromePort}'. Expected 1-65535`);
+
+        const executablePath = playwright.chromium.executablePath();
+        if (!fs.existsSync(executablePath)) {
+          throw new Error(`Chromium executable not found at ${executablePath}`);
         }
         const options = {
           headless: true,
           devtools: true,
-          args: ["--remote-debugging-port=" + chromePort, "--remote-debugging-address=0.0.0.0", "--no-sandbox"]
+          executablePath,
+          args: [`--remote-debugging-port=${chromePort}`, "--remote-debugging-address=0.0.0.0", `--no-sandbox`]
         };
 
-        // launch headless Chromium browser
         this.__browser = await puppeteer.launch(options);
-        console.log("Chrome launched on port " + chromePort);
+        console.log(`Chrome launched on port ${chromePort}`);
 
-        let get = await zx.utils.Http.httpGet(`http://localhost:${chromePort}/json/version`);
-        let jsonVersion = get.body;
-        console.log("Chrome configuration: \n" + JSON.stringify(jsonVersion, null, 2));
+        const response = await fetch(`http://127.0.0.1:${chromePort}/json/version`);
+        let data = await response.json();
+        console.log("Chromium ready", JSON.stringify({ version: data["Browser"], userAgent: data["User-Agent"] }, null, 2));
 
-        let upstreamDebuggerUrl = jsonVersion.webSocketDebuggerUrl;
-        let m = upstreamDebuggerUrl.match(/^ws:\/\/[^/]+(.*)$/);
-        let url = m[1];
-        jsonVersion.webSocketDebuggerUrl = `ws://localhost:${this.getListenPort()}${url}`;
+        if (qx.core.Environment.get("qx.debug")) {
+          app.register(require("@fastify/static"), {
+            root: path.dirname(qx.util.ResourceManager.getInstance().toUri("zx/server/puppeteer/dev/MARKER")),
+            prefix: "/dev/",
+            redirect: true
+          });
+        }
 
-        app.get("/json/version", (req, reply) => {
-          reply.json(jsonVersion);
-        });
-
-        const proxy = require("@fastify/http-proxy");
-        app.register(proxy, {
-          prefix: url,
+        app.register(require("@fastify/http-proxy"), {
+          wsUpstream: `ws://127.0.0.1:${chromePort}`,
           websocket: true,
-          upstream: upstreamDebuggerUrl
+          prefix: "/"
         });
 
-        console.log(`webSocketDebuggerUrl is ${jsonVersion.webSocketDebuggerUrl}`);
-      } catch (err) {
-        console.log(`Error: ${err.message}`);
-      }
-
-      try {
-        await app.listen({
-          port: this.getListenPort(),
-          host: "0.0.0.0"
+        const recursivePatchChromiumReply = (data, newHost, newPort) => {
+          if (Array.isArray(data)) {
+            data.map(d => recursivePatchChromiumReply(d, newHost, newPort));
+          }
+          if (data && typeof data === "object") {
+            for (const key in data) {
+              data[key] = recursivePatchChromiumReply(data[key], newHost, newPort);
+            }
+          }
+          if (typeof data === "string" && data.includes(`127.0.0.1:${chromePort}`)) {
+            return data.replace(`127.0.0.1:${chromePort}`, `${newHost}:${newPort}`);
+          }
+          return data;
+        };
+        app.get("/json/*", async (req, rep) => {
+          const response = await fetch(`http://127.0.0.1:${chromePort}${req.url}`);
+          const data = await response.json();
+          debugger;
+          rep.json(recursivePatchChromiumReply(data, req.hostname, req.port));
         });
-      } catch (err) {
-        console.error("Error when starting the server: " + err);
+
+        app.get("/version", (req, rep) => rep.json({ version: PUPPETEER_VERSION }));
+
+        await app.listen({ port: this.getListenPort(), host: "0.0.0.0" });
+        console.log(`Webserver started on http://127.0.0.1:${this.getListenPort()}`);
+      } catch (cause) {
+        // TODO: if the error is thrown, something causes it to print as a minimal and unhelpful representation,
+        // showing only the last stack trace and the code snippet. Once fixed, this try/catch can be removed.
+        console.error(cause);
         process.exit(1);
       }
-
-      console.log(`Webserver started on http://localhost:${this.getListenPort()}`);
     },
 
     /**
@@ -178,7 +201,7 @@ qx.Class.define("zx.server.puppeteer.WebServer", {
       const RAS = zx.server.rest.RestApiServer;
       app.route({
         method: ["GET", "POST"],
-        url: RAS.getEndpoint() + "*",
+        url: RAS.getEndpoint(),
         handler: this.wrapMiddleware(RAS.middleware)
       });
 
