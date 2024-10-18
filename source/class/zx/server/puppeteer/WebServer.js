@@ -1,4 +1,7 @@
-const puppeteer = require("puppeteer");
+const playwright = require("playwright-core");
+const puppeteer = require("puppeteer-core");
+const PUPPETEER_VERSION = require("puppeteer-core/package.json")["version"];
+const fs = require("node:fs");
 const path = require("node:path");
 
 /**
@@ -53,27 +56,23 @@ qx.Class.define("zx.server.puppeteer.WebServer", {
         const chromePort = this.getChromePort() ?? this.getListenPort() + 1;
         if (chromePort < 1 || chromePort > 65535) throw new Error(`Invalid chromePort '${chromePort}'. Expected 1-65535`);
 
+        const executablePath = playwright.chromium.executablePath();
+        if (!fs.existsSync(executablePath)) {
+          throw new Error(`Chromium executable not found at ${executablePath}`);
+        }
         const options = {
           headless: true,
           devtools: true,
-          args: [
-            `--remote-debugging-port=${chromePort}`,
-            "--remote-debugging-address=0.0.0.0",
-            "--no-sandbox",
-            "--ignore-certificate-errors",
-            "--disable-setuid-sandbox",
-            "--disable-accelerated-2d-canvas",
-            "--disable-gpu"
-          ]
+          executablePath,
+          args: [`--remote-debugging-port=${chromePort}`, "--remote-debugging-address=0.0.0.0", `--no-sandbox`]
         };
 
         this.__browser = await puppeteer.launch(options);
         console.log(`Chrome launched on port ${chromePort}`);
 
-        const response = await zx.utils.Http.httpGet(`http://127.0.0.1:${chromePort}/json/version`);
-        let jsonVersion = response.body;
-        console.log("Chrome configuration:");
-        console.log(JSON.stringify(jsonVersion, null, 2));
+        const response = await fetch(`http://127.0.0.1:${chromePort}/json/version`);
+        let data = await response.json();
+        console.log("Chromium ready", JSON.stringify({ version: data["Browser"], userAgent: data["User-Agent"] }, null, 2));
 
         if (qx.core.Environment.get("qx.debug")) {
           app.register(require("@fastify/static"), {
@@ -83,14 +82,40 @@ qx.Class.define("zx.server.puppeteer.WebServer", {
           });
         }
 
-        app.get("/json/version", (req, rep) => rep.status(404).send("Not found"));
-        app.get("/json/list", (req, rep) => rep.status(404).send("Not found"));
-        app.get("*", (req, rep) => console.log("GET", req.url, "- UNKNOWN"));
+        app.register(require("@fastify/http-proxy"), {
+          wsUpstream: `ws://127.0.0.1:${chromePort}`,
+          websocket: true,
+          prefix: "/"
+        });
+
+        const recursivePatchChromiumReply = (data, newHost, newPort) => {
+          if (Array.isArray(data)) {
+            data.map(d => recursivePatchChromiumReply(d, newHost, newPort));
+          }
+          if (data && typeof data === "object") {
+            for (const key in data) {
+              data[key] = recursivePatchChromiumReply(data[key], newHost, newPort);
+            }
+          }
+          if (typeof data === "string" && data.includes(`127.0.0.1:${chromePort}`)) {
+            return data.replace(`127.0.0.1:${chromePort}`, `${newHost}:${newPort}`);
+          }
+          return data;
+        };
+        app.get("/json/*", async (req, rep) => {
+          const response = await fetch(`http://127.0.0.1:${chromePort}${req.url}`);
+          const data = await response.json();
+          debugger;
+          rep.json(recursivePatchChromiumReply(data, req.hostname, req.port));
+        });
+
+        app.get("/version", (req, rep) => rep.json({ version: PUPPETEER_VERSION }));
 
         await app.listen({ port: this.getListenPort(), host: "0.0.0.0" });
         console.log(`Webserver started on http://127.0.0.1:${this.getListenPort()}`);
       } catch (cause) {
-        // TODO: something causes the thrown error to print a minimal and unhelpful representation of the error
+        // TODO: if the error is thrown, something causes it to print as a minimal and unhelpful representation,
+        // showing only the last stack trace and the code snippet. Once fixed, this try/catch can be removed.
         console.error(cause);
         process.exit(1);
       }

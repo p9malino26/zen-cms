@@ -1,3 +1,5 @@
+const PUPPETEER_VERSION = require("puppeteer-core/package.json")["version"];
+
 qx.Class.define("zx.server.puppeteer.PuppeteerController", {
   extend: qx.core.Object,
 
@@ -49,13 +51,36 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
      * Visits a URL, creating an API instance to talk to the page
      *
      * @param {String} url
-     * @param {Object?} clientProperties Properties to set to the Puppeteer client. Must be properties of zx.server.puppeteer.PuppeteerClient
+     * @param {Object} [clientProperties] Properties to set to the Puppeteer client. Must be properties of zx.server.puppeteer.PuppeteerClient
      */
-    async initialise(url, clientProperties) {
+    async initialise(url, clientProperties = {}) {
       this.__chromium = await zx.server.puppeteer.chromiumdocker.PoolManager.getInstance().acquire();
       console.log("ChromiumDocker aquired");
 
-      clientProperties ??= {};
+      $checkPuppeteerVersion: {
+        const response = await fetch(`http://127.0.0.1:${this.__chromium.getPortNumber()}/version`);
+        const remoteVersion = (await response.json()).version;
+        const remoteVersionSegments = remoteVersion.split(".").map(x => parseInt(x));
+        if (remoteVersionSegments.some(x => isNaN(x)) || remoteVersionSegments.length !== 3) {
+          throw new Error(`Invalid version number from remote container '${remoteVersion}'. Expected restricted SemVer format 'major.minor.patch'`);
+        }
+
+        const localVersion = PUPPETEER_VERSION;
+        const localVersionSegments = localVersion.split(".").map(x => parseInt(x));
+        if (localVersionSegments.some(x => isNaN(x)) || localVersionSegments.length !== 3) {
+          throw new Error(`Invalid version number for local server '${localVersion}'. Expected restricted SemVer format 'major.minor.patch'`);
+        }
+
+        if (remoteVersionSegments[0] !== localVersionSegments[0]) {
+          throw new Error(`Incompatible Puppeteer versions. Local server uses ${localVersion}, remote container uses ${remoteVersion}`);
+        }
+        if (remoteVersionSegments[1] !== localVersionSegments[1]) {
+          console.warn(`WARNING: Puppeteer minor versions differ. Local server uses ${localVersion}, remote container uses ${remoteVersion}`);
+        }
+        if (remoteVersionSegments[2] !== localVersionSegments[2]) {
+          console.info(`Puppeteer patch versions differ - did you forget to update? Local server uses ${localVersion}, remote container uses ${remoteVersion}`);
+        }
+      }
 
       let debugOnStartup = false;
       if (qx.core.Environment.get("qx.debug")) {

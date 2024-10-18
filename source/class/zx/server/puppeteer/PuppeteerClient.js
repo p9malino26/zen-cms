@@ -142,7 +142,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         }
       };
 
-      if ((this.isDebug() && this.isAllowHeadfull()) || (qx.core.Environment.get("qx.debug") && qx.core.Environment.get("zx.server.puppeteer.ChromiumDocket.useLocalContainer"))) {
+      if ((this.isDebug() && this.isAllowHeadfull()) || (qx.core.Environment.get("qx.debug") && qx.core.Environment.get("zx.server.puppeteer.ChromiumDocker.useLocalContainer"))) {
         opts.headless = false;
         opts.slowMo = 200;
         opts.devtools = true;
@@ -162,7 +162,9 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
             if (pass > maxPasses) {
               throw ex;
             }
-            await new Promise(res => setTimeout(res, pass * 1000));
+            const timeout = pass * 1000;
+            console.log(`Failed to connect to puppeteer, retrying in ${timeout}ms`);
+            await new Promise(res => setTimeout(res, timeout));
           }
         }
       };
@@ -237,7 +239,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
           url: this.getUrl()
         };
 
-        throw new Error("Page navigation error : " + JSON.stringify(result, null, 2));
+        throw new Error(`Page navigation error: ${JSON.stringify(result, null, 2)}`);
       } else {
         this.__sentParentReady = true;
         await this._postMessage("parent-ready");

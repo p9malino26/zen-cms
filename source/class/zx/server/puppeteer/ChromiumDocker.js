@@ -30,9 +30,6 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
     /** @type {number} the port to access the WebServer */
     __remoteServerPort: null,
 
-    /** @type {number} the port to access chromium debugger */
-    __remoteChromiumPort: null,
-
     /** @type{Docker.Container} the container */
     __container: null,
 
@@ -55,33 +52,28 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
      * Returns the URL for the Chromium endpoint
      */
     getUrl() {
-      return `ws://127.0.0.1:${this.__remoteChromiumPort}`;
+      return `ws://127.0.0.1:${this.__remoteServerPort}`;
     },
 
-    __generatePorts({ webServer = false, chromium = false, nodeDebug = false }) {
+    /**
+     * To configure docker ports, go via this method to prevent code duplication
+     * @param {("webServer" | "nodeDebug")[]} purposes
+     * @returns {Record<"bindings" | "exposed" | "boundTo", Object>}
+     */
+    __generatePorts(...purposes) {
       const config = zx.server.puppeteer.chromiumdocker.PoolManager.getInstance().getConfiguration();
       const portOffset = this.__remoteServerPort - config.minPort;
       const ports = {
-        webServer: { outer: 9000, inner: 9000 },
-        chromium: { outer: 9002, inner: 9100 },
-        nodeDebug: { outer: 9229, inner: 9300 }
+        webServer: { system: 9000, docker: 9000 },
+        nodeDebug: { system: 9329, docker: 9229 }
       };
       const result = { bindings: {}, exposed: {}, boundTo: {} };
-      const append = key => {
-        const target = `${ports[key].inner + portOffset}`;
-        result.bindings[`${ports[key].outer}/tcp`] = [{ HostPort: target }];
-        result.exposed[`${ports[key].outer}/tcp`] = {};
-        result.boundTo[key] = target;
-      };
-      if (webServer) {
-        append("webServer");
-      }
-      if (chromium) {
-        append("chromium");
-      }
-      if (nodeDebug) {
-        append("nodeDebug");
-      }
+      purposes.forEach(purpose => {
+        const target = `${ports[purpose].system + portOffset}`;
+        result.bindings[`${ports[purpose].docker}/tcp`] = [{ HostPort: target }];
+        result.exposed[`${ports[purpose].docker}/tcp`] = {};
+        result.boundTo[purpose] = target;
+      });
       return result;
     },
 
@@ -136,7 +128,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
       }
 
       let appConfig = zx.server.puppeteer.chromiumdocker.PoolManager.getInstance().getConfiguration();
-      const webServerPorts = this.__generatePorts({ webServer: true });
+      const webServerPorts = this.__generatePorts("webServer");
       let containerConfig = {
         Image: appConfig.imageName,
         name: "puppeteer-" + this.__remoteServerPort,
@@ -159,7 +151,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
 
       // This is for debugging our web server in the docker container from the host
       if (appConfig.debug) {
-        const debugPorts = this.__generatePorts({ nodeDebug: true });
+        const debugPorts = this.__generatePorts("nodeDebug");
         containerConfig.HostConfig.PortBindings = { ...containerConfig.HostConfig.PortBindings, ...debugPorts.bindings };
         containerConfig.ExposedPorts = { ...containerConfig.ExposedPorts, ...debugPorts.exposed };
         if (typeof appConfig.debug === "string") {
@@ -169,14 +161,6 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
             containerConfig.HostConfig.PortBindings["9229/tcp"] = [{ HostPort: hostPort }];
           }
         }
-      }
-
-      // for access to chromium
-      const chromiumPorts = this.__generatePorts({ chromium: true });
-      this.__remoteChromiumPort = chromiumPorts.boundTo.chromium;
-      if (appConfig.debug) {
-        containerConfig.HostConfig.PortBindings = { ...containerConfig.HostConfig.PortBindings, ...chromiumPorts.bindings };
-        containerConfig.ExposedPorts = { ...containerConfig.ExposedPorts, ...chromiumPorts.exposed };
       }
 
       if (appConfig.extraHosts) {
@@ -201,13 +185,27 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
           this.__container = await mgr.getDocker().createContainer(containerConfig);
         };
         if (qx.core.Environment.get("qx.debug")) {
-          if (qx.core.Environment.get("zx.server.puppeteer.ChromiumDocket.useLocalContainer")) {
-            const allPorts = this.__generatePorts({ webServer: true, chromium: true, nodeDebug: true });
+          if (qx.core.Environment.get("zx.server.puppeteer.ChromiumDocker.useLocalContainer")) {
+            const allPorts = this.__generatePorts("webServer", "nodeDebug");
             console.warn(["", "* * * * * * * * * * * * *", "* USING LOCAL CONTAINER *", "* * * * * * * * * * * * *"].join("\n"));
             containerConfig.Cmd = ["/bin/bash", "/home/pptruser/start.sh"];
             containerConfig.Env = ["ZX_NODE_INSPECT=--inspect=0.0.0.0", "ZX_AUTO_RESTART=true"];
             containerConfig.ExposedPorts = allPorts.exposed;
-            containerConfig.HostConfig.Binds = [`${path.join(qx.core.Environment.get("zx.docker.rootDir"), "compiled", "source-node")}:/home/pptruser/app`];
+            let localZenCmsRepo;
+            if (qx.core.Environment.get("zx.server.puppeteer.ChromiumDocker.localZenCmsRepo")) {
+              localZenCmsRepo = qx.core.Environment.get("zx.server.puppeteer.ChromiumDocker.localZenCmsRepo");
+            } else {
+              const err = new Error("Cannot find localZenCmsRepo - did you set the environment variable 'zx.server.puppeteer.ChromiumDocker.localZenCmsRepo'?");
+              if (qx.core.Environment.get("qx.debug")) {
+                debugger; // last chance to set `localZenCmsRepo` before error is thrown
+                if (!localZenCmsRepo) {
+                  throw err;
+                }
+              } else {
+                throw err;
+              }
+            }
+            containerConfig.HostConfig.Binds = [`${path.join(qx.core.Environment.get("zx.server.puppeteer.ChromiumDocker.localZenCmsRepo"), "compiled", "source-node")}:/home/pptruser/app`];
             containerConfig.HostConfig.CapAdd = ["SYS_ADMIN"];
             containerConfig.HostConfig.PortBindings = allPorts.bindings;
             containerConfig.Image = "zenesisuk/zx-puppeteer-server-base";
@@ -276,7 +274,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
         while (true) {
           pass++;
           try {
-            let get = await zx.utils.Http.httpGet(`http://127.0.0.1:${this.__remoteChromiumPort}/json/version`);
+            let get = await zx.utils.Http.httpGet(`http://127.0.0.1:${this.__remoteServerPort}/json/version`);
             let json = get.body;
             if (json) {
               this.__chromiumJson = json;
@@ -284,7 +282,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
               break;
             }
           } catch (ex) {
-            this.warn(`Chromium not yet available on 'http://127.0.0.1:${this.__remoteChromiumPort}/json/version', waiting 3 seconds: ${ex}`);
+            this.warn(`Chromium not yet available on 'http://127.0.0.1:${this.__remoteServerPort}/json/version', waiting 3 seconds: ${ex}`);
           }
           if (pass > maxPasses) {
             throw new Error("Chromium not available after " + pass + " attempts");
@@ -449,6 +447,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
   },
 
   environment: {
-    "zx.server.puppeteer.ChromiumDocket.useLocalContainer": false
+    "zx.server.puppeteer.ChromiumDocker.useLocalContainer": false,
+    "zx.server.puppeteer.ChromiumDocker.localZenCmsRepo": null
   }
 });
