@@ -545,6 +545,25 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
           if (typeof value._uuid == "string" && typeof value._classname == "string" && value._isObject === true) {
             throw new Error(`Cannot return ${value} because it has _uuid, _classname, and _isObject properties which means that it is not an object - instantiate it first`);
           }
+
+          if (value.constructor !== Object) {
+            const ac = zx.io.remote.NetworkEndpoint.__allowedConstructors.find(ac => ac.constructor === value.constructor);
+            if (!ac) {
+              throw new Error(`Cannot serialize; found an instance of ${value.constructor.name} which is not a serializable object`);
+            }
+            if ("method" in ac) {
+              const acMethodResult = value[method]();
+              if (typeof acMethodResult === "string") {
+                return acMethodResult;
+              }
+              if (typeof acMethodResult !== "object") {
+                throw new Error(`Cannot serialize; found an instance of ${value.constructor.name} which is not a serializable object`);
+              }
+              return serializeValue(acMethodResult);
+            }
+            return JSON.stringify(value);
+          }
+
           let result = {};
           for (let key in value) {
             result[key] = await serializeValue(value[key]);
@@ -879,6 +898,44 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
 
     /** @type{Map} map of all end points indexed by hash code */
     __allEndpoints: {},
+
+    /** @type {Array<{ constructor: new (...args: any[]) => any; method?: string }>} */
+    __allowedConstructors: [],
+
+    /**
+     * Add constructors which are permitted to be serialized.
+     *
+     * A method may be provided, which is the name of a method on the class which either;
+     * - returns a string representation of the object
+     * - returns a POJO representation of the object
+     * If the method returns a POJO, the POJO is used to continue serializing the object.
+     * If no method is provided, the object is serialized with `JSON.stringify` instead.
+     *
+     * Note: currently, the objects are not automatically deserialized into their original class on
+     * the client
+     *
+     * Note: if multiple constructors match due to inheritance, the earliest added constructor spec
+     * will be used regardless of if it is the most specific option
+     * @param {Array<{ constructor: new (...args: any[]) => any; method?: string }>} specs
+     * @example
+     * ```js
+     * qx.Class.define('app.MyClass', {
+     *   // ...
+     *   defer() {
+     *     zx.io.remote.NetworkEndpoint.addAllowedConstructors(
+     *       { constructor: SomeLibraryClass },
+     *       {
+     *         constructor: OtherLibraryClass,
+     *         method: 'asJson'
+     *       },
+     *     );
+     *   }
+     * })
+     * ```
+     */
+    addAllowedConstructors(...specs) {
+      this.__allowedConstructors.push(...specs);
+    },
 
     /**
      * Adds a class which is remote capable, usually called automatically by `zx.io.persistence.ClassIo`; safe to
