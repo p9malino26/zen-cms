@@ -552,12 +552,12 @@ qx.Class.define("zx.io.remote.NetworkEndpoint", {
               throw new Error(`Cannot serialize; found an instance of ${value.constructor.name} which is not a serializable object`);
             }
             if ("method" in ac) {
-              const acMethodResult = value[method]();
+              const acMethodResult = value[ac.method]();
               if (typeof acMethodResult === "string") {
                 return acMethodResult;
               }
               if (typeof acMethodResult !== "object") {
-                throw new Error(`Cannot serialize; found an instance of ${value.constructor.name} which is not a serializable object`);
+                throw new Error(`Cannot serialize; result of ${value.constructor.name}.${ac.method} which is not a serializable object`);
               }
               return serializeValue(acMethodResult);
             }
