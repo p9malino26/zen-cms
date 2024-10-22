@@ -218,15 +218,10 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         url = `http://127.0.0.1:9000/dev/puppeteer-debug-corral?redirect=${encodeURIComponent(url)}`;
       }
       console.log("Going to " + url);
-      let response;
-      try {
-        response = await page.goto(url, {
-          waitUntil: "networkidle0",
-          timeout: 0
-        });
-      } catch (e) {
-        debugger;
-      }
+      let response = await page.goto(url, {
+        waitUntil: "networkidle0",
+        timeout: 0
+      });
 
       console.log(" ********** At " + url);
 
