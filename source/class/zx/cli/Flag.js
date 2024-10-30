@@ -74,7 +74,7 @@ qx.Class.define("zx.cli.Flag", {
         boolean: "Boolean",
         integer: "Integer",
         float: "Float",
-        enum: "One of " + (this.getEnumValues() || []).join(", ")
+        enum: "One of: " + (this.getEnumValues() || []).join(", ")
       };
 
       let type = this.getType();
