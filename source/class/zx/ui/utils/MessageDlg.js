@@ -139,7 +139,9 @@ qx.Class.define("zx.ui.utils.MessageDlg", {
         dlg = zx.ui.utils.MessageDlg._WINDOW = new zx.ui.utils.MessageDlg(type);
         var doc = qx.core.Init.getApplication().getRoot();
         doc.add(dlg);
-      } else dlg.setType(type);
+      } else {
+        dlg.setType(type);
+      }
 
       msg = msg.replace(/\n/g, "<br>");
       dlg.setMessage(msg);
