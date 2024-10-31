@@ -1,3 +1,6 @@
+/**
+ * @ignore (fetch)
+ */
 const PUPPETEER_VERSION = require("puppeteer-core/package.json")["version"];
 
 qx.Class.define("zx.server.puppeteer.PuppeteerController", {
