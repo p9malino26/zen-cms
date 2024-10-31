@@ -196,7 +196,7 @@ qx.Class.define("zx.cli.AbstractValue", {
             }
             let enumValues = this.getEnumValues();
             if (enumValues.indexOf(arg) < 0) {
-              throw new Error(`Invalid value for ${this.toString()}, expected one of ${enumValues.join(", ")} but found ${arg}`);
+              throw new Error(`Invalid value for ${this.toString()}, expected one of: ${enumValues.join(", ")} but found ${arg}`);
             }
             return arg;
         }
