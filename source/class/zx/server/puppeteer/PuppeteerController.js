@@ -86,7 +86,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
       }
 
       let debugOnStartup = false;
-      if (qx.core.Environment.get("qx.debug")) {
+      if (qx.core.Environment.get(this.classname + ".askDebugOnStartup")) {
         // you may want to set `debugOnStartup` to `true`
         debugger;
       }
