@@ -62,7 +62,11 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
 
       $checkPuppeteerVersion: {
         const response = await fetch(`http://127.0.0.1:${this.__chromium.getPortNumber()}/version`);
-        const remoteVersion = (await response.json()).version;
+        const responseJson = await response.json();
+        if (!responseJson) {
+          throw new Error("Failed to get version from remote container. Please make sure you are using the latest docker image.");
+        }
+        const remoteVersion = responseJson.version;
         const remoteVersionSegments = remoteVersion.split(".").map(x => parseInt(x));
         if (remoteVersionSegments.some(x => isNaN(x)) || remoteVersionSegments.length !== 3) {
           throw new Error(`Invalid version number from remote container '${remoteVersion}'. Expected restricted SemVer format 'major.minor.patch'`);
