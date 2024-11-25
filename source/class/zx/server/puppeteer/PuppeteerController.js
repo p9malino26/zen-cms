@@ -34,6 +34,11 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
     consoleLog: "qx.event.type.Data"
   },
 
+  environment: {
+    /** Whether to trigger a debugger statement to assist debugging a page */
+    "zx.server.puppeteer.PuppeteerController.askDebugOnStartup": false
+  },
+
   members: {
     /** @type{qx.Class<zx.server.puppeteer.AbstractServerApi>} the API class */
     __apiClass: null,

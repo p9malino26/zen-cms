@@ -4,6 +4,9 @@ qx.Interface.define("zx.io.api.transport.ITransport", {
   },
 
   members: {
-    postMessage() {}
+    postMessage() {},
+
+    supportsServerPush() {},
+    supportsMessageReturn() {}
   }
 });
