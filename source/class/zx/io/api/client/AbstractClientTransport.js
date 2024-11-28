@@ -1,3 +1,6 @@
+/**
+ * Basic implementation of the IClientTransport interface.
+ */
 qx.Class.define("zx.io.api.client.AbstractClientTransport", {
   type: "abstract",
   extend: qx.core.Object,
@@ -8,6 +11,18 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
      * @type {[hostname: string]: number} Maps hostnames to the number of subscriptions to that hostname
      */
     this.__subscriptions = {};
+
+    /**
+     * @type {{[hostname: string]: string}}
+     */
+    this.__sessionUuidForHostname = {};
+  },
+  events: {
+    /**
+     * @type {zx.io.api.IRequestJson}
+     * This event needs to be fired when a message is received from the server.
+     */
+    message: "qx.event.type.Data"
   },
   members: {
     /**
@@ -15,7 +30,6 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
      */
     _getSubscribedHostnames() {
       let out = [];
-
       let keys = Object.keys(this.__subscriptions);
       for (let key of keys) {
         if (key == "none") {
@@ -41,6 +55,30 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
       if (this.__subscriptions[hostname] === 0) {
         delete this.__subscriptions[hostname];
       }
+    },
+
+    /**
+     * Gets a session UUID for a particular hostname of a client API URI
+     * @param {string?} hostname
+     */
+    getSessionUuid(hostname) {
+      hostname ??= "none";
+      return this.__sessionUuidForHostname[hostname];
+    },
+
+    /**
+     * Returns a session UUID for a particular hostname of a client API URI
+     * The implementation must be able to store a session UUID for a null hostname as well
+     * @param {string?} hostname
+     * @param {string} sessionUuid
+     */
+    setSessionUuid(hostname, sessionUuid) {
+      hostname ??= "none";
+      let existingUuid = this.__sessionUuidForHostname[hostname];
+      if (existingUuid && existingUuid != sessionUuid) {
+        this.warn(`Session UUID for hostname ${hostname} is being overwritten`);
+      }
+      this.__sessionUuidForHostname[hostname] = sessionUuid;
     }
   }
 });

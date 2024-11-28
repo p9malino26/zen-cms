@@ -1,12 +1,7 @@
 qx.Class.define("zx.server.puppeteer.api.EmailServerApi", {
-  extend: zx.server.puppeteer.AbstractServerApi,
-
-  construct(puppeteer) {
-    super(puppeteer, ["start", "next"]);
-  },
-
-  events: {
-    sendEmail: "qx.event.type.Data",
-    complete: "qx.event.type.Data"
+  //actually the client api!
+  extend: zx.io.api.client.AbstractClientApi,
+  construct(transport, uri) {
+    super(transport, "zx.server.puppeteer.api.EmailApi", ["next"], uri);
   }
 });

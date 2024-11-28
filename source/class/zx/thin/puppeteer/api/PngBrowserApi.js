@@ -1,41 +1,36 @@
 /**
- * API for the browser to create PNGs
- *
- * This class needs to be instantiated in the browser, and then you add code so that when the `start` event
- * is fired, you create the HTML page and call `printPage`
- *
- * When the `next` event is fired, you should either print the next email (via a call to `printPage`) or call
- * `complete` to finish.
+ * Remote API class for capturing a sequence of PNGs off a webpage
  */
 qx.Class.define("zx.thin.puppeteer.api.PngBrowserApi", {
-  extend: zx.thin.puppeteer.api.AbstractBrowserApi,
-
+  extend: zx.io.api.server.AbstractServerApi,
   construct() {
-    super("zx.server.puppeteer.api.PngServerApi");
+    super("zx.server.puppeteer.api.PngApi");
   },
 
   events: {
-    /** Fired when the everything is read and the web page should composing the first PNG */
-    start: "qx.event.type.Event",
-
-    /** Fired every time a PNG has been successfully taken, and the web page should compose the next PNG or complete */
+    /**
+     * Fired when we tell the page to load the next image that will be taken
+     */
     next: "qx.event.type.Event"
   },
 
   members: {
-    start() {
-      this.fireEvent("start");
+    /**
+     * @override
+     */
+    _publications: {
+      /**
+       * @type {Object}
+       * Tells the puppeteer client to take a screenshot of the page
+       * because we finished rendering the page
+       */
+      takeScreenshot: {}
     },
-
+    /**
+     * @method
+     */
     next() {
       this.fireEvent("next");
-    },
-
-    /**
-     * Tells the puppeteer server to print the PNG
-     */
-    async takeScreenshot(data) {
-      return this.apiSendEvent("takeScreenshot", data);
     }
   }
 });

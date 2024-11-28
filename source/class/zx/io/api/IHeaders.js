@@ -1,3 +1,6 @@
+/**
+ * Tagging interface for the headers POJO that is sent with every request and response
+ */
 qx.Interface.define("zx.io.api.IHeaders", {
   members: {
     /**
@@ -8,7 +11,7 @@ qx.Interface.define("zx.io.api.IHeaders", {
     "Call-Index": 0,
     /**
      * Name of the API
-     * Note used for poll requests/responses
+     * Not used for poll requests/responses
      */
     "Api-Name": "",
     "Client-Api-Uuid": "",

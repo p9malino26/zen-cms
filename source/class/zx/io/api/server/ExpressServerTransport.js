@@ -33,9 +33,6 @@ qx.Class.define("zx.io.api.server.ExpressServerTransport", {
 
     async __onMessageReceived(expressReq, expressRes) {
       let data = zx.utils.Json.parseJson(expressReq.body);
-      let path = zx.io.api.util.Uri.breakoutUri(expressReq.baseUrl).path;
-      path = path.replace(this.__prefix, "");
-      data.path = path;
       let request = new zx.io.api.server.Request(this, data);
       let response = new zx.io.api.server.Response();
       let connectionManager = zx.io.api.server.ConnectionManager.getInstance();

@@ -15,31 +15,32 @@ qx.Class.define("zx.server.email.EmailRenderer", {
       }
       let config = grasshopper.services.ServicesConfig.getInstance().getConfigData();
 
-      let controller = new zx.server.puppeteer.PuppeteerController(zx.server.puppeteer.api.EmailServerApi).set({
+      let controller = new zx.server.puppeteer.PuppeteerController().set({
         username: config.authUser,
         password: config.authTokens["grasshopper.automatedLogin"] || null
       });
 
       controller.addListener("consoleLog", evt => {
         let data = evt.getData();
-        log("Message from puppeteer: " + JSON.stringify(data));
+        log("Message from puppeteer: " + JSON.stringify(data)); //!!test
       });
 
       log("Initializing controller...");
       await controller.initialise(url);
       log("Initialised browser controller");
 
-      let puppeteer = controller.getPuppeteer();
-      await puppeteer.waitForReadySignal();
+      let transport = controller.getTransport();
+      let emailApi = new zx.server.puppeteer.api.EmailServerApi(transport);
+      let headlessApi = new zx.server.puppeteer.api.HeadlessPageClientApi(transport);
+
       log("Received ready signal");
-      let api = controller.getApi();
-      api.addListener("sendEmail", async evt => {
+      await emailApi.subscribe("sendEmail", async data => {
         const {
           htmlBody,
           textBody,
           /**@type {EmailParameters}*/
           parameters
-        } = evt.getData();
+        } = data;
         parameters.to = parameters.to?.split(",") ?? [];
         parameters.cc = parameters.cc?.split(",") ?? [];
         parameters.bcc = parameters.bcc?.split(",") ?? [];
@@ -72,13 +73,12 @@ qx.Class.define("zx.server.email.EmailRenderer", {
         let message = await zx.server.email.Message.compose({ parameters, htmlBody, textBody });
         log("Email composed");
         messages.push(message);
-        api.next();
+        emailApi.next();
       });
 
-      await api.start();
-      log("Started API");
-      await controller.promiseFinished();
-      log("Finished browser controller");
+      log("Started run");
+      await headlessApi.run();
+      log("Run Finished");
       return messages;
     }
   }

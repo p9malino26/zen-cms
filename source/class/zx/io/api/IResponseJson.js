@@ -1,5 +1,5 @@
 /**
- * Tagging interface for response data from the server back to the client
+ * Tagging interface for response data POJO from the server back to the client
  */
 qx.Interface.define("zx.io.api.IResponseJson", {
   members: {
@@ -29,6 +29,9 @@ qx.Interface.define("zx.io.api.IResponseJson", {
      * @property {"unsubscribed"} type
      * @property {{eventName: string}} body
      *
+     * @interface IShutdown @extends IResponseData
+     * @property {"shutdown"} type
+
      * @type {IResponseData[]}
      */
     data: []

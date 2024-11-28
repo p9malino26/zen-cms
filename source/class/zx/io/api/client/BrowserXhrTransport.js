@@ -3,7 +3,6 @@
  */
 qx.Class.define("zx.io.api.client.BrowserXhrTransport", {
   extend: zx.io.api.client.AbstractClientTransport,
-  include: [zx.io.api.client.MSessionUuid],
 
   construct() {
     super();

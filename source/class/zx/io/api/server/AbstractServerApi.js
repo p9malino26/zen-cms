@@ -17,6 +17,12 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
 
   members: {
     /**
+     * Override this field in your implementation to define the publications that this API can publish
+     * @type {{[publicationName: string]: {}}}
+     */
+    _publications: null,
+
+    /**
      * @type {string}
      */
     __apiName: null,
@@ -133,6 +139,10 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
      * @param {any} data
      */
     publish(eventName, data) {
+      if (!this._publications[eventName]) {
+        this.warn(`Server API ${this.toString()} attempts to publish "${eventName}" but it is not defined in the _publications field.`);
+        debugger;
+      }
       zx.io.api.server.SessionManager.getInstance()
         .getAllSessions()
         .forEach(session => {
