@@ -33,6 +33,7 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
       let keys = Object.keys(this.__subscriptions);
       for (let key of keys) {
         if (key == "none") {
+          //TODO change to null
           out.push(null);
         } else {
           out.push(key);

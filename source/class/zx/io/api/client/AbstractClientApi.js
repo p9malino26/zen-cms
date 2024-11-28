@@ -216,10 +216,13 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
       this.__pendingMethodCalls[pending.callIndex] = pending;
       let headers = {
         "Call-Index": pending.callIndex, //linebreak
-        "Api-Name": this.__apiName,
         "Client-Api-Uuid": this.toUuid(),
         Cookies: JSON.stringify(this.__cookies)
       };
+
+      if (!this.__getPath()) {
+        headers["Api-Name"] = this.__apiName;
+      }
 
       const sessionUuid = this.__transport.getSessionUuid(this.__getHostname());
       if (sessionUuid) {
@@ -350,15 +353,16 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
     /**
      * Returns the path of the API, optionally with a method name appended
      * @param {string?} methodName
-     * @returns {string}
+     * @returns {string?}
      */
     __getPath(methodName) {
-      let apiPath = "/";
+      let apiPath = null;
       if (this.__uri) {
         apiPath = zx.io.api.util.Uri.breakoutUri(this.__uri).path;
       }
 
       if (methodName) {
+        apiPath ??= "/";
         apiPath = path.join(apiPath, methodName);
       }
 

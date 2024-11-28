@@ -43,6 +43,7 @@ qx.Class.define("zx.io.api.server.ConnectionManager", {
           throw new Error(`API with name ${apiName} already registered`);
         }
         this.__apisByPath[path] = api;
+        api.setPath(path);
       } else {
         if (this.__apisByName[api.getApiName()]) {
           throw new Error(`API with name ${apiName} already registered`);
@@ -64,34 +65,35 @@ qx.Class.define("zx.io.api.server.ConnectionManager", {
      */
     async receiveMessage(request, response) {
       let apiName = request.getHeader("Api-Name");
-      if (apiName) {
-        //Get the API instance
-        let path = request.getPath();
-        let apiPath = path ? path.substring(0, path.lastIndexOf("/")) : null;
 
-        let api;
-        if (apiPath) {
-          api = this.__apisByPath[apiPath];
-        } else {
-          api = this.__apisByName[apiName];
-        }
+      //Get the API instance
+      let api = null;
+      if (apiName) {
+        api = this.__apisByName[apiName];
 
         if (!api) {
-          if (path) {
-            throw new Error(`API ${apiName} not found at path ${path}. Did you forget to register it?`);
-          } else {
-            throw new Error(`API ${apiName} not found. Did you forget to register it?`);
+          throw new Error(`API ${apiName} not found. Did you forget to register it?`);
+        }
+      } else if (request.getPath()) {
+        for (let [apiPath, api_] of Object.entries(this.__apisByPath)) {
+          if (request.getPath().startsWith(apiPath)) {
+            api = api_;
+            break;
           }
         }
 
-        //Call the API
-        let responseData = await api.receiveMessage(request);
-        responseData.headers ??= {};
-        responseData.headers["Api-Name"] = apiName;
-        responseData.headers["Server-Api-Uuid"] = api.toUuid();
-        responseData.headers["Client-Api-Uuid"] = request.getHeader("Client-Api-Uuid");
-        response.addData(responseData);
+        if (!api) {
+          throw new Error(`API with path ${request.getPath()} not found. Did you forget to register it?`);
+        }
       }
+
+      //Call the API
+      let responseData = await api.receiveMessage(request);
+      responseData.headers ??= {};
+      responseData.headers["Api-Name"] = apiName;
+      responseData.headers["Server-Api-Uuid"] = api.toUuid();
+      responseData.headers["Client-Api-Uuid"] = request.getHeader("Client-Api-Uuid");
+      response.addData(responseData);
 
       //Session
       let session = request.getSession();
