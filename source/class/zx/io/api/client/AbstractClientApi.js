@@ -199,7 +199,7 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
         methodConfig.methodName = methodName;
       }
       this.__methodConfigs[methodName] = methodConfig || {};
-      this[methodName] = (...args) => this.__callMethod(methodName, args);
+      this[methodName] = (...args) => this._callMethod(methodName, args);
     },
 
     /**
@@ -208,7 +208,7 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
      * @param {any[]} methodArgs Arguments that will be passed to the server method
      * @returns {qx.Promise} A promise that will be resolved when the server responds to the method call
      */
-    __callMethod(methodName, methodArgs) {
+    _callMethod(methodName, methodArgs) {
       let promise = new qx.Promise();
       let pending = {
         promise,
