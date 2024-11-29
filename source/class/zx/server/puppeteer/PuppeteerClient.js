@@ -668,13 +668,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
     async screenshot(outputTo) {
       let opts = {
         path: outputTo,
-        imageType: "png",
-        clip: {
-          x: 0,
-          y: 0,
-          width: this.getViewportWidth(),
-          height: this.getViewportHeight()
-        }
+        imageType: "png"
       };
 
       return this._page.screenshot(opts);
