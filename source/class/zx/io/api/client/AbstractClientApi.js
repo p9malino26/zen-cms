@@ -115,13 +115,16 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
      * 
      * @param {string} eventName
      * @param {(data: any) => void} callback
+     * @param {object} context - if provided, the callback will be replaced; `callback.bind(context)`
      * @returns {qx.Promise<boolean>} A promise that will be resolved with true when the subscription succeeded or false when failed.
      * A subscription can fail if we lose connection to the server.
      */
-    subscribe(eventName, callback) {
+    subscribe(eventName, callback, context) {
+      if (context) {
+        callback = callback.bind(context);
+      }
       if (this.__subscriptions[eventName]) {
-        let { callbacks, promise } = this.__subscriptions[eventName];
-        callbacks.push(callback);
+        this.__subscriptions[eventName].callbacks.push(callback);
         return;
       }
 
