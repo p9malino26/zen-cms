@@ -10,6 +10,11 @@ qx.Class.define("zx.demo.remoteapi.WifiServerApi", {
   properties: {},
   objects: {},
   members: {
+    /**@override */
+    _publications: {
+      changeOnlineStatus: {}
+    },
+
     __onlineStatus: 0,
     isOnline() {
       return new Promise((resolve, reject) => {

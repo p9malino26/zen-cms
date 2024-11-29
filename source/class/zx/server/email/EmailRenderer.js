@@ -22,7 +22,7 @@ qx.Class.define("zx.server.email.EmailRenderer", {
 
       controller.addListener("consoleLog", evt => {
         let data = evt.getData();
-        log("Message from puppeteer: " + JSON.stringify(data)); //!!test
+        log("Message from puppeteer: " + JSON.stringify(data));
       });
 
       log("Initializing controller...");

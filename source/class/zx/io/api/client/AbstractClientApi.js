@@ -129,9 +129,12 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
       }
 
       let headers = {
-        "Api-Name": this.__apiName,
         "Client-Api-Uuid": this.toUuid()
       };
+
+      if (!this.__getPath()) {
+        headers["Api-Name"] = this.__apiName;
+      }
 
       if (this.__transport.getSessionUuid(this.__getHostname())) {
         headers["Session-Uuid"] = this.__transport.getSessionUuid(this.__getHostname());
@@ -171,7 +174,7 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
         let request = {
           type: "unsubscribe",
           headers: {
-            "Api-Name": this.__apiName,
+            "Api-Name": this.__getPath() && this.__apiName,
             "Client-Api-Uuid": this.toUuid(),
             "Session-Uuid": this.__transport.getSessionUuid(this.__getHostname())
           },

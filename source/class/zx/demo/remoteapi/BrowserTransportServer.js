@@ -35,10 +35,6 @@ qx.Class.define("zx.demo.remoteapi.BrowserTransportServer", {
 
     async receiveMessage({ uri, data }) {
       let request = new zx.io.api.server.Request(this, data);
-      if (uri) {
-        let { path: pth } = zx.io.api.util.Uri.breakoutUri(uri);
-        request.setPath(pth);
-      }
       let response = new zx.io.api.server.Response();
       await zx.io.api.server.ConnectionManager.getInstance().receiveMessage(request, response);
       this.postMessage(response.toNativeObject());

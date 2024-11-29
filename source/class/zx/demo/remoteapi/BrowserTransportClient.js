@@ -1,6 +1,5 @@
 qx.Class.define("zx.demo.remoteapi.BrowserTransportClient", {
   extend: zx.io.api.client.AbstractClientTransport,
-  include: [zx.io.api.client.MSessionUuid],
 
   construct(server) {
     super();

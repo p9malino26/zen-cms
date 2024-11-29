@@ -57,9 +57,6 @@ qx.Class.define("zx.thin.puppeteer.PuppeteerServerTransport", {
       }
 
       let request = new zx.io.api.server.Request(this, json);
-      if (json.path) {
-        request.setPath(json.path); //!this is a kluge
-      }
       let response = new zx.io.api.server.Response();
       let connectionManager = zx.io.api.server.ConnectionManager.getInstance();
       await connectionManager.receiveMessage(request, response);

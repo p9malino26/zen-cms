@@ -15,15 +15,23 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
   construct(apiName) {
     super();
     this.__apiName = apiName;
+    this.__restsByPath = {};
   },
 
   members: {
-    __path: null,
     /**
      * Override this field in your implementation to define the publications that this API can publish
      * @type {{[publicationName: string]: {}}}
      */
-    _publications: null,
+    _publications: {},
+
+    /**
+     * @type {{[methodName: string]: string[]}} A map of method names to an array of their parameter names.
+     * The arguments passed into the method in the client API will be given those names (positionwise) in the method request object.
+     */
+    _methodParams: {},
+
+    __path: null,
 
     /**
      * @type {string}
@@ -85,10 +93,12 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
         return path;
       }
 
+      //Bring query params into the method request
       let methodRequest = new zx.io.api.server.MethodRequest();
       let requestMethodPath = path.relative(this.__path ?? "/", request.getPath());
       methodRequest.setParams(request.getQuery());
 
+      //Try to lookup the method by path
       let methodName;
       for (let [methodPath, methodByRest] of Object.entries(this.__restsByPath)) {
         let rgx = new RegExp(pathToRegex(methodPath));
@@ -101,13 +111,21 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
         }
       }
 
+      //If no method found by path, try to use the path as the method name
       if (!methodName && requestMethodPath.indexOf("/") == -1) {
         methodName = requestMethodPath;
       }
 
       if (!this[methodName]) {
         throw new Error(`Method ${methodName} not found in API ${this.getApiName()}`);
-      } //!!forward errors properly
+      }
+
+      //Include the arguments used in API method call if there are any
+      if (request.getBody()?.methodArgs?.length) {
+        this._methodParams[methodName]?.forEach((arg, i) => {
+          methodRequest.getParams()[arg] = request.getBody().methodArgs[i];
+        });
+      }
 
       try {
         result = await this[methodName](methodRequest);
@@ -145,7 +163,6 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
         }
       }
 
-      this.__restsByPath ??= {};
       this.__restsByPath[path] ??= {};
       this.__restsByPath[path][restMethod] = methodName;
     },

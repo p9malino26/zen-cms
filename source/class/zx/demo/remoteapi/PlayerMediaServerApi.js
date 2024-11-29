@@ -6,10 +6,26 @@ qx.Class.define("zx.demo.remoteapi.PlayerMediaServerApi", {
     this.__interval = setInterval(() => {
       this.publish("playingMedia", this.__currentMedia++);
     }, 1000);
+
+    this._registerMethod("playMedia", "playMedia/{id}");
+    //localhost:8090/zx-remote-api/player/media/playMedia/22
   },
   properties: {},
   objects: {},
   members: {
+    /**@override */
+    _publications: {
+      /**
+       * @type {number}
+       */
+      playingMedia: {}
+    },
+
+    _methodParams: {
+      getCurrentMedia: [],
+      playMedia: ["id"]
+    },
+
     __currentMedia: 7,
     getCurrentMedia() {
       return new Promise((resolve, reject) => {
@@ -19,10 +35,17 @@ qx.Class.define("zx.demo.remoteapi.PlayerMediaServerApi", {
       });
     },
 
-    playMedia(id) {
-      console.log(`Playing media with id ${id}`);
+    /**
+     * @param {zx.io.api.server.MethodRequest} req
+     */
+    playMedia(req) {
+      const { id } = req.getParams();
+      console.log(`called playMedia with id ${id}`);
       this.__currentMedia = id;
-      return this.__currentMedia;
+    },
+
+    testMethod() {
+      return "pigs";
     }
   }
 });

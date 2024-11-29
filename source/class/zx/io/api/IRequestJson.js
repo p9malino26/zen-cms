@@ -4,9 +4,10 @@
 qx.Interface.define("zx.io.api.IRequestJson", {
   members: {
     /**
-     * @type {"callMethod" | "subscribe"}
+     * @type {"callMethod" | "subscribe" | "poll" | "unsubscribe"}
      */
     type: "",
+
     /**
      * @type {string} The path of the API method to call
      */

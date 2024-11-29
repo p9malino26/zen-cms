@@ -1,18 +1,24 @@
 /**
  * @ignore(fetch)
+ * A transport which enables browsers to use the Remote API system over HTTP
+ * NOTE: Currently only supports requests to the same origin!
  */
 qx.Class.define("zx.io.api.client.BrowserXhrTransport", {
   extend: zx.io.api.client.AbstractClientTransport,
 
-  construct() {
+  /**
+   * @param {string} prefix The prefix which the paths for the requests should be prefixed with
+   * For example, if we call postMessage("/foo", bar), and the prefix is '/andrew', the request will be sent to '/andrew/foo'
+   */
+  construct(prefix = "/zx-remote-api") {
     super();
+    this.__prefix = prefix;
     this.beginPoll();
-  },
-  events: {
-    message: "qx.event.type.Data"
   },
 
   members: {
+    __prefix: "",
+
     async beginPoll() {
       for (let hostname of this._getSubscribedHostnames()) {
         let sessionUuid = this.getSessionUuid(hostname);
@@ -20,6 +26,7 @@ qx.Class.define("zx.io.api.client.BrowserXhrTransport", {
           headers: {
             "Session-Uuid": sessionUuid
           },
+          type: "poll",
           body: {}
         };
 
@@ -39,11 +46,11 @@ qx.Class.define("zx.io.api.client.BrowserXhrTransport", {
         uri = "/";
       }
 
-      let res = await fetch("/zx-remote-api" + uri, {
+      let res = await fetch(this.__prefix + uri, {
         method: "POST",
-        body: zx.utils.Json.stringifyJson(data),
+        body: zx.utils.Json.stringifyJson(data), //cannot be JSON.stringify because we may have dates!
         headers: {
-          "Content-Type": "text/plain" //cannot be json because we may have dates
+          "Content-Type": "text/plain"
         }
       });
 

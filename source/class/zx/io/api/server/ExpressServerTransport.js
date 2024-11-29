@@ -4,9 +4,13 @@ const bodyParser = require("body-parser");
 qx.Class.define("zx.io.api.server.ExpressServerTransport", {
   extend: qx.core.Object,
   implement: [zx.io.api.server.IServerTransport],
-  construct() {
+  /**
+   * @param {string} prefix The prefix which the paths for the requests should be prefixed with
+   * For example, if we call postMessage("/foo", bar), and the prefix is '/andrew', the request will be sent to '/andrew/foo'
+   */
+  construct(prefix = "/zx-remote-api") {
     super();
-    this.__prefix = "/zx-remote-api";
+    this.__prefix = prefix;
     const app = express();
     const port = 8090;
     app.use(bodyParser.text());
@@ -38,12 +42,16 @@ qx.Class.define("zx.io.api.server.ExpressServerTransport", {
       } else {
         data = zx.utils.Json.parseJson(expressReq.body);
       }
+
+      if (Object.keys(data).length === 0) {
+        data = null;
+      }
+
       let request = new zx.io.api.server.Request(this, data);
-      let path = expressReq.baseUrl.substring(this.__prefix.length);
+      request.setPath(expressReq.baseUrl.substring(this.__prefix.length));
       request.setRestMethod(expressReq.method);
-      request.setType(path == "/" ? "poll" : "callMethod");
       request.setQuery(expressReq.query);
-      request.setPath(path);
+
       let response = new zx.io.api.server.Response();
       let connectionManager = zx.io.api.server.ConnectionManager.getInstance();
       await connectionManager.receiveMessage(request, response);

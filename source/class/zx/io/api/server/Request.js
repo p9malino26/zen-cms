@@ -8,15 +8,26 @@ qx.Class.define("zx.io.api.server.Request", {
 
   /**
    * @param {zx.io.api.server.IServerTransport} transport The transport that received the message and created this request
-   * @param {zx.io.api.IRequestJson} data The raw JSON message that this request is based on
+   * @param {zx.io.api.IRequestJson?} data The raw JSON message that this request is based on
    */
   construct(transport, data) {
     super();
     this.set({ transport: transport });
-    this.setHeaders(data.headers ? qx.lang.Object.clone(data.headers) : {});
-    this.setBody(data.body ?? null);
-    this.setPath(data.path ?? null);
-    this.setType(data.type ?? "poll");
+    this.initQuery({});
+
+    let properties = {
+      headers: {},
+      type: "callMethod"
+    };
+
+    if (data) {
+      properties.headers = data.headers ? qx.lang.Object.clone(data.headers) : {};
+      properties.body = data.body;
+      properties.path = data.path ?? null;
+      properties.type = data.type;
+    }
+
+    this.set(properties);
 
     let sessionUuid = this.getHeader("Session-Uuid");
     if (sessionUuid) {
@@ -85,9 +96,9 @@ qx.Class.define("zx.io.api.server.Request", {
     },
 
     query: {
-      init: null,
       nullable: true,
-      check: "Object"
+      check: "Object",
+      deferredInit: true
     },
 
     restMethod: {

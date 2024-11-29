@@ -69,22 +69,12 @@ qx.Class.define("zx.io.api.server.ConnectionManager", {
       //Get the API instance
       let api = null;
       if (apiName) {
-        //Get the API instance
-        let path = request.getPath();
-        let isMethod = request.getType() === "callMethod";
-        let apiPath = path ? (isMethod ? path.substring(0, path.lastIndexOf("/")) : path) : null;
-
-        let api;
-        if (apiPath) {
-          api = this.__apisByPath[apiPath];
-        } else {
-          api = this.__apisByName[apiName];
-        }
+        api = this.__apisByName[apiName];
 
         if (!api) {
           throw new Error(`API ${apiName} not found. Did you forget to register it?`);
         }
-      } else if (request.getPath()) {
+      } else if (request.getType() !== "poll" && request.getPath()) {
         for (let [apiPath, api_] of Object.entries(this.__apisByPath)) {
           if (request.getPath().startsWith(apiPath)) {
             api = api_;
@@ -93,17 +83,23 @@ qx.Class.define("zx.io.api.server.ConnectionManager", {
         }
 
         if (!api) {
-          throw new Error(`API with path ${request.getPath()} not found. Did you forget to register it?`);
+          throw new Error(`API which is prefix of path ${request.getPath()} not found. Did you forget to register it?`);
         }
+      } else if (request.getType() !== "poll") {
+        throw new Error(`Non-poll requests must have an 'Api-Name' header or 'path' property set`);
       }
 
-      //Call the API
-      let responseData = await api.receiveMessage(request);
-      responseData.headers ??= {};
-      responseData.headers["Api-Name"] = apiName;
-      responseData.headers["Server-Api-Uuid"] = api.toUuid();
-      responseData.headers["Client-Api-Uuid"] = request.getHeader("Client-Api-Uuid");
-      response.addData(responseData);
+      if (api) {
+        //Call the API
+        let responseData = await api.receiveMessage(request);
+        responseData.headers ??= {};
+        responseData.headers["Api-Name"] = apiName;
+        responseData.headers["Server-Api-Uuid"] = api.toUuid();
+        responseData.headers["Client-Api-Uuid"] = request.getHeader("Client-Api-Uuid");
+        response.addData(responseData);
+      } else if (request.getType() !== "poll") {
+        throw new Error(`API not found for non-poll request`);
+      }
 
       //Session
       let session = request.getSession();

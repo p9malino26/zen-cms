@@ -63,12 +63,12 @@ qx.Class.define("zx.demo.remoteapi.TestApp", {
     },
 
     async __runTest() {
-      // let clientTransport = this.__getBrowserClientTransport();
-      let clientTransport = this.__getHttpClientTransport();
+      let clientTransport = this.__getBrowserClientTransport();
+      // let clientTransport = this.__getHttpClientTransport();
       //Server
 
       //Client
-      let clientApi = new zx.demo.remoteapi.PlayerMediaClientApi(clientTransport);
+      let clientApi = new zx.demo.remoteapi.PlayerMediaClientApi(clientTransport, "/player/media");
       await clientApi.subscribe("playingMedia", media => {
         console.log(`Playing media with id ${media}`);
       });
@@ -87,9 +87,6 @@ qx.Class.define("zx.demo.remoteapi.TestApp", {
 
       let online = await wifiApi.isOnline();
       console.log(`Online status is ${online}`);
-
-      let mediaApiWithPath = new zx.demo.remoteapi.PlayerMediaClientApi(clientTransport, "/player/media");
-      await mediaApiWithPath.playMedia(888);
     },
 
     __getHttpClientTransport() {
@@ -103,7 +100,7 @@ qx.Class.define("zx.demo.remoteapi.TestApp", {
       serverTransport.setClient(clientTransport);
 
       let connectionManager = zx.io.api.server.ConnectionManager.getInstance();
-      connectionManager.registerApi(new zx.demo.remoteapi.PlayerMediaServerApi());
+      connectionManager.registerApi(new zx.demo.remoteapi.PlayerMediaServerApi(), "/player/media");
       connectionManager.registerApi(new zx.demo.remoteapi.WifiServerApi());
 
       return clientTransport;
