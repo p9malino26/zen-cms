@@ -132,6 +132,21 @@
       "theme": "zx.cms.client.theme.tangible.Theme",
       "name": "peertwo",
       "group": ["tests"]
+    },
+    {
+      "title": "Remote API browser test app",
+      "class": "zx.demo.remoteapi.TestApp",
+      "theme": "zx.cms.client.theme.tangible.Theme",
+      "name": "remoteApiBrowserTest",
+      "type": "browser",
+      "bootPath": "source/boot"
+    },
+    {
+      "title": "Remote API HTTP server test app",
+      "name": "remoteApiServerTest",
+      "exclude": ["qx.bom.Selector"],
+      "type": "node",
+      "class": "zx.demo.remoteapi.srv.ServerApp"
     }
   ],
   "sass": {
