@@ -82,6 +82,18 @@ qx.Class.define("zx.io.api.server.Request", {
     body: {
       init: null,
       nullable: true
+    },
+
+    query: {
+      init: null,
+      nullable: true,
+      check: "Object"
+    },
+
+    restMethod: {
+      init: null,
+      nullable: true,
+      check: "String"
     }
   },
 

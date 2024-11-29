@@ -10,16 +10,6 @@ const puppeteer = require("puppeteer-core");
 qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
   extend: qx.core.Object,
 
-  /**
-   * Constructor
-   */
-  construct() {
-    super();
-    this.__localApis = {};
-    this.__remoteApis = {};
-    this.__returnCallbacks = {};
-  },
-
   events: {
     /** Fired when an event arrives from Chromium */
     event: "qx.event.type.Data",
@@ -103,10 +93,6 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
     /** @type {import("puppeteer-core").Browser | null} */
     _browser: null,
     _page: null,
-    __localApis: null,
-    __remoteApis: null,
-    __returnCallbacks: null,
-    __serialNo: 0,
     __closed: false,
 
     /**
@@ -176,6 +162,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
       let result = null;
 
       let page = (this._page = await this._browser.newPage());
+      page.on("console", this._onConsole.bind(this));
 
       console.log("new page viewport", { width: this.getViewportWidth(), height: this.getViewportHeight() });
       page.setViewport({ width: this.getViewportWidth(), height: this.getViewportHeight() });
@@ -194,9 +181,6 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
 
       page.setDefaultNavigationTimeout(0);
 
-      // Catch console log messages so that we can read the protocol
-      page.on("console", msg => this._onConsole(msg));
-
       // Catch all failed requests like 4xx..5xx status codes
       page.on("requestfailed", request => {
         this.error(`Request failed for url ${request.url()}: ${request.failure().errorText}`);
@@ -208,11 +192,8 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
       });
 
       page.on("close", () => {
-        this.__abortAll();
         this.fireEvent("close");
       });
-
-      this.__readyPromise = new qx.Promise();
 
       if (this.isDebugOnStartup()) {
         url = `http://127.0.0.1:9000/dev/puppeteer-debug-corral?redirect=${encodeURIComponent(url)}`;
@@ -235,39 +216,25 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         };
 
         throw new Error(`Page navigation error: ${JSON.stringify(result, null, 2)}`);
-      } else {
-        this.__sentParentReady = true;
-        await this._postMessage("parent-ready");
       }
 
+      //wait until page is ready
+      let pageReady = false;
+      const MAX_PASSES = 10;
+      for (let pass = 0; pass < MAX_PASSES; pass++) {
+        let ready = await page.evaluate(() => zx.thin.puppeteer.PuppeteerServerTransport.getInstance().isReady());
+        if (ready) {
+          pageReady = true;
+          break;
+        }
+        console.log("Page remote API not ready yet, waiting...");
+        await new Promise(res => setTimeout(res, 1000));
+      }
+
+      if (!pageReady) {
+        throw new Error("Page did not become ready to use remote APIs within timeout");
+      }
       return result;
-    },
-
-    /**
-     * Aborts everything and shuts down
-     *
-     * @returns
-     */
-    __abortAll() {
-      if (this.__closed) {
-        return;
-      }
-      if (this.__readyPromise != null) {
-        this.__readyPromise.reject(new Error("Aborted"));
-      }
-      this.__closed = true;
-      let callbacks = this.__returnCallbacks;
-      this.__returnCallbacks = null;
-      Object.keys(callbacks).forEach(serialNo => {
-        let pending = callbacks[serialNo];
-        if (pending.timeoutId) {
-          clearTimeout(pending.timeoutId);
-          pending.timeoutId = null;
-        }
-        if (pending.exceptionCallback) {
-          pending.exceptionCallback(new Error("Closing the puppeteer connection"));
-        }
-      });
     },
 
     /**
@@ -309,68 +276,17 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
     },
 
     /**
-     * Waits until the other side is ready
-     */
-    async waitForReadySignal() {
-      await this.__readyPromise;
-    },
-
-    /**
-     * Adds a local API, ie an API that can be called from the HeadlessPage
-     *
-     * @param {String} name
-     * @param {zx.server.puppeteer.LocalApi} api
-     */
-    addLocalApi(name, api) {
-      if (this.__localApis[name]) {
-        this.warn(`Replacing Local API ${name} ${this.__localApis[name]} with ${api}`);
-      }
-
-      this.__localApis[name] = api;
-    },
-
-    /**
-     * Creates and caches an instance of a remote API
-     *
-     * @param {qx.Class} clazz
-     * @returns {zx.server.puppeteer.AbstractServerApi}
-     */
-    createRemoteApi(clazz) {
-      let api = this.__remoteApis[clazz.classname];
-      if (!api) {
-        api = new clazz(this);
-        this.__remoteApis[api.getNamespace() || clazz.classname] = api;
-      }
-      return api;
-    },
-
-    /**
      * Called when a console message is received; this can contain encoded messages that
      * describe method calls and events
      *
      * @param {*} msg
      */
     _onConsole(msg) {
-      const PREFIX = "[[__ZX_PUPPETEER_START__]]";
-      const SUFFIX = "[[__ZX_PUPPETEER_END__]]";
-
+      const PREFIX = zx.thin.puppeteer.PuppeteerUtil.MSG_PREFIX;
       let str = msg.text();
-      str = str.replace(/\[\[__GRASSHOPPER/g, "[[__ZX_PUPPETEER");
-      if (str.startsWith(PREFIX)) {
-        if (!str.endsWith(SUFFIX)) {
-          this.error("Cannot interpret console message: " + str);
-          return;
-        }
-        str = str.substring(PREFIX.length, str.length - SUFFIX.length);
-        var json;
-        try {
-          json = JSON.parse(str);
-        } catch (ex) {
-          this.error("Cannot parse console message payload: " + ex + ", string=" + str);
 
-          return;
-        }
-        return this._onReceiveMessage(json);
+      if (str.startsWith(PREFIX)) {
+        return; //ignore messages with prefix because they are for puppeteer api connumications
       }
       if (this.isDebug()) {
         console.log("PAGE LOG: ", new Date(), ": ", msg.text());
@@ -390,271 +306,6 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
     },
 
     /**
-     * Called to receive a message decoded from the console message
-     *
-     * @param {*} data
-     */
-    _onReceiveMessage(data) {
-      if (data.signature != "zx.thin.puppeteer.HeadlessPage") {
-        return;
-      }
-      var result = null;
-      if (this.__closed) {
-        return;
-      }
-
-      this.fireEvent("ping");
-
-      if (data.type == "return") {
-        var pending = this.__returnCallbacks[data.serialNo];
-        if (pending === undefined) {
-          this.error("Cannot find return callback with serialNo " + data.serialNo);
-        } else {
-          if (pending.timeoutId) {
-            clearTimeout(pending.timeoutId);
-            pending.timeoutId = null;
-          }
-          delete this.__returnCallbacks[data.serialNo];
-          if (data.error !== undefined) {
-            this.error("Exception raised in puppet: " + data.error);
-            if (pending.exceptionCallback) {
-              result = pending.exceptionCallback(new Error(data.error));
-            } else {
-              this.error("Uncaught exception returned from " + pending.data.methodName);
-            }
-          } else {
-            if (pending.returnCallback) {
-              result = pending.returnCallback(data.value);
-            }
-          }
-        }
-      } else if (data.type == "event") {
-        this._onReceiveEvent(data.event);
-      } else if (data.type == "api-error") {
-        this._onApiError(data.error);
-      } else {
-        this.error("Unexpected return message: " + JSON.stringify(data));
-      }
-    },
-
-    /**
-     * Called when there is a timeout when posting to the HeadlessPage
-     *
-     * @param {*} msg
-     */
-    _onTimeoutCallback(msg) {
-      let callbackData = this.__returnCallbacks[msg.serialNo];
-      delete this.__returnCallbacks[msg.serialNo];
-      if (callbackData.exceptionCallback) {
-        let err = new Error(`Timeout in callback for _postMessage(type=${msg.type}, methodName=${callbackData.data.methodName}) for message #${msg.serialNo}`);
-
-        err.code = "ETIMEOUT";
-        callbackData.exceptionCallback(err);
-      } else {
-        this.error(`Uncaught timeout in callback for _postMessage(type=${msg.type}, methodName=${callbackData.data.methodName}) for message #${msg.serialNo}`);
-      }
-    },
-
-    /**
-     * Calls a remote API
-     *
-     * @param options {Map} containing:
-     *  namespace
-     *  methodName
-     *  args
-     *  timeout
-     */
-    async callRemoteApi(options) {
-      var callback = null;
-      let args = options.args.filter(arg => {
-        if (typeof arg !== "function") {
-          return true;
-        }
-        callback = arg;
-      });
-
-      let result = undefined;
-      try {
-        result = await this._postMessageAndCapture("call", {
-          namespace: options.namespace,
-          methodName: options.methodName,
-          args: args,
-          timeout: options.timeout || null
-        });
-      } catch (ex) {
-        if (callback) {
-          callback(null, ex);
-        }
-        throw ex;
-      }
-      if (callback) {
-        callback(result);
-      }
-      return result;
-    },
-
-    /**
-     * Posts a message; this is the most common usage because it will properly queue and
-     * handle the response
-     *
-     * @param {*} type
-     * @param {*} data
-     */
-    async _postMessageAndCapture(type, data) {
-      var msg = { serialNo: this.__serialNo++, type: type, data: data };
-      let promise = new qx.Promise();
-      let callbackData = (this.__returnCallbacks[msg.serialNo] = {
-        returnCallback: result => promise.resolve(result),
-        exceptionCallback: err => promise.reject(err),
-        data
-      });
-
-      if (data.timeout > 0) {
-        callbackData.timeoutId = setTimeout(() => this._onTimeoutCallback(msg), data.timeout);
-      }
-
-      msg.signature = "zx.thin.puppeteer.HeadlessPage";
-
-      let strMsg = JSON.stringify(msg);
-      try {
-        /**
-         * @preserve
-         * javascript-obfuscator:disable
-         */
-        await this._page.evaluate(msg => {
-          window.postMessage(msg, "*");
-        }, strMsg);
-        /**
-         * @preserve
-         * javascript-obfuscator:enable
-         */
-      } catch (ex) {
-        this.error(`Error in _postMessageAndCapture(type=${type}) for message #${msg.serialNo}: ${ex}`);
-
-        if (callbackData.timeoutId) {
-          clearTimeout(callbackData.timeoutId);
-        }
-        delete this.__returnCallbacks[msg.serialNo];
-        throw ex;
-      }
-
-      await promise;
-    },
-
-    /**
-     * Posts a message and ignores the response
-     *
-     * @param {*} type
-     * @param {*} data
-     */
-    async _postMessage(type, data) {
-      var msg = { serialNo: this.__serialNo++, type: type, data: data, signature: "zx.thin.puppeteer.HeadlessPage" };
-      let strMsg = JSON.stringify(msg);
-      try {
-        /**
-         * @preserve
-         * javascript-obfuscator:disable
-         */
-        await this._page.evaluate(msg => {
-          window.postMessage(msg, "*");
-        }, strMsg);
-
-        /**
-         * @preserve
-         * javascript-obfuscator:enable
-         */
-      } catch (ex) {
-        this.error(`Error in _postMessage(type=${type}) for message #${msg.serialNo}: ${ex}`);
-        throw ex;
-      }
-    },
-
-    /**
-     * Called to receive an event from the HeadlessPage
-     *
-     * @param {*} event
-     * @returns
-     */
-    _onReceiveEvent(event) {
-      this.fireDataEvent("event", event);
-
-      switch (event.type) {
-        case "ready":
-          if (this.__readyPromise) {
-            this.__readyPromise.resolve();
-            this.__readyPromise = null;
-          }
-          break;
-
-        case "loaded":
-          // If we receive the "loaded" event but we have already sent "parent-ready", then the puppet page
-          //  was not ready to receive the message and will not have processed it; we need to send it again
-          if (this.__sentParentReady) {
-            return this._postMessage("parent-ready");
-          }
-          break;
-
-        case "api-call":
-          return this._onReceiveLocalApiCall(event.data);
-
-        case "api-event":
-          return this._onReceiveRemoteApiEvent(event.data);
-
-        case "shutdown":
-          return this._onReceiveShutdown();
-      }
-    },
-
-    /**
-     * Called when the API raised an exception
-     */
-    _onApiError(error) {
-      this.error("Client failed to process message: " + error);
-    },
-
-    /**
-     * Called when the HeadlessPage wants to call a LocalApi
-     *
-     * @param {*} data
-     */
-    async _onReceiveLocalApiCall(data) {
-      let api = this.__localApis[data.namespace];
-      let result = {
-        id: data.id
-      };
-
-      if (!api) {
-        this.error(`Cannot find API called ${data.namespace}`);
-        result.exception = new Error(`Cannot find API called ${data.namespace}`);
-      } else {
-        try {
-          result.result = await api.callMethod(data.methodName, data.args);
-        } catch (ex) {
-          this.error(`Error during call to API ${data.namespace}.${data.methodName}()`);
-
-          result.exception = ex;
-        }
-      }
-
-      await this._postMessage("api-return", result);
-    },
-
-    /**
-     * Called when the remote API sends an event
-     * @param {*} event
-     * @returns
-     */
-    _onReceiveRemoteApiEvent(event) {
-      let api = this.__remoteApis[event.namespace];
-      if (!api) {
-        this.warn(`Received event for ${event.namespace}.${event.name} but could not find a remote API`);
-
-        return;
-      }
-      api.receiveEvent(event.name, event.data);
-    },
-
-    /**
      * Called when the HeadlessPage is shutting down
      */
     _onReceiveShutdown() {},
@@ -668,13 +319,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
     async screenshot(outputTo) {
       let opts = {
         path: outputTo,
-        imageType: "png",
-        clip: {
-          x: 0,
-          y: 0,
-          width: this.getViewportWidth(),
-          height: this.getViewportHeight()
-        }
+        imageType: "png"
       };
 
       return this._page.screenshot(opts);

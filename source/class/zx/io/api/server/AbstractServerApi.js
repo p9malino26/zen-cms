@@ -1,6 +1,8 @@
+const path = require("path");
 /**
  * Abstract class for server-side API
  * Implement methods here that can be called from the client
+ * @typedef {"GET" | "POST" | "PUT" | "DELETE"} RestMethod
  */
 qx.Class.define("zx.io.api.server.AbstractServerApi", {
   extend: qx.core.Object,
@@ -16,10 +18,21 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
   },
 
   members: {
+    __path: null,
+    /**
+     * Override this field in your implementation to define the publications that this API can publish
+     * @type {{[publicationName: string]: {}}}
+     */
+    _publications: null,
+
     /**
      * @type {string}
      */
     __apiName: null,
+
+    setPath(path) {
+      this.__path = path;
+    },
     /**
      *
      * @returns {string}
@@ -28,6 +41,11 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
       return this.__apiName;
     },
 
+    /**
+     * @typedef {{[restName: RestMethod]: string}} MethodsByRest Maps the HTTP rest method to the server method
+     * @type {{[path: string]: MethodsByRest}}
+     */
+    __restsByPath: null,
     /**
      * Called EXCLUSIVELY by the connection manager (zx.io.api.server.ConnectionManager) when a message is received from the client.
      * Does the appropriate action, e.g. calling a method or subscribing to a publication.
@@ -60,11 +78,39 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
     async __callMethod(request) {
       let result = undefined;
       let error = undefined;
-      let methodArgs = request.getBody().methodArgs;
+
+      function pathToRegex(path) {
+        path = path.replace(/\{/g, "(?<");
+        path = path.replace(/\}/g, ">[^/]+)");
+        return path;
+      }
+
+      let methodRequest = new zx.io.api.server.MethodRequest();
+      let requestMethodPath = path.relative(this.__path ?? "/", request.getPath());
+      methodRequest.setParams(request.getQuery());
+
+      let methodName;
+      for (let [methodPath, methodByRest] of Object.entries(this.__restsByPath)) {
+        let rgx = new RegExp(pathToRegex(methodPath));
+        let match = requestMethodPath.match(rgx);
+        if (match) {
+          methodName = methodByRest[request.getRestMethod()];
+          let pathArgs = match.groups;
+          methodRequest.setParams(qx.lang.Object.mergeWith(request.getQuery(), pathArgs));
+          break;
+        }
+      }
+
+      if (!methodName && requestMethodPath.indexOf("/") == -1) {
+        methodName = requestMethodPath;
+      }
+
+      if (!this[methodName]) {
+        throw new Error(`Method ${methodName} not found in API ${this.getApiName()}`);
+      } //!!forward errors properly
 
       try {
-        let methodName = request.getPath().split("/").at(-1);
-        result = await this[methodName].apply(this, methodArgs);
+        result = await this[methodName](methodRequest);
       } catch (ex) {
         error = ex;
       }
@@ -76,10 +122,32 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
         },
         body: {
           methodResult: result,
-          error
+          error: error?.message
         }
       };
       return responseData;
+    },
+
+    /**
+     *
+     * @param {string} methodName
+     * @param {string} path
+     * @param {RestMethod?} restMethod
+     */
+    _registerMethod(methodName, path, restMethod = "GET") {
+      if (qx.core.Environment.get("qx.debug")) {
+        if (path.startsWith("/")) {
+          throw new Error(`Error resistering method at path ${path}. Path must be relative and must not start with a forward slash`);
+        }
+
+        if (!this[methodName]) {
+          throw new Error(`Error resistering method: method ${methodName} not found in API ${this.getApiName()}`);
+        }
+      }
+
+      this.__restsByPath ??= {};
+      this.__restsByPath[path] ??= {};
+      this.__restsByPath[path][restMethod] = methodName;
     },
 
     /**
@@ -133,6 +201,10 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
      * @param {any} data
      */
     publish(eventName, data) {
+      if (!this._publications[eventName]) {
+        this.warn(`Server API ${this.toString()} attempts to publish "${eventName}" but it is not defined in the _publications field.`);
+        debugger;
+      }
       zx.io.api.server.SessionManager.getInstance()
         .getAllSessions()
         .forEach(session => {

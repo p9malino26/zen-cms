@@ -32,11 +32,18 @@ qx.Class.define("zx.io.api.server.ExpressServerTransport", {
     },
 
     async __onMessageReceived(expressReq, expressRes) {
-      let data = zx.utils.Json.parseJson(expressReq.body);
-      let path = zx.io.api.util.Uri.breakoutUri(expressReq.baseUrl).path;
-      path = path.replace(this.__prefix, "");
-      data.path = path;
+      let data;
+      if (typeof expressReq.body == "object") {
+        data = expressReq.body;
+      } else {
+        data = zx.utils.Json.parseJson(expressReq.body);
+      }
       let request = new zx.io.api.server.Request(this, data);
+      let path = expressReq.baseUrl.substring(this.__prefix.length);
+      request.setRestMethod(expressReq.method);
+      request.setType(path == "/" ? "poll" : "callMethod");
+      request.setQuery(expressReq.query);
+      request.setPath(path);
       let response = new zx.io.api.server.Response();
       let connectionManager = zx.io.api.server.ConnectionManager.getInstance();
       await connectionManager.receiveMessage(request, response);

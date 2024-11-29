@@ -52,7 +52,7 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
     __uri: null,
 
     /**
-     * @typedef {{callback: ((eventData: any) => void), promise: qx.Promise?}} SubscriptionData The promise is created when the client requests subscribe,
+     * @typedef {{callbacks: ((eventData: any) => void)[], promise: qx.Promise?}} SubscriptionData The promise is created when the client requests subscribe,
      * and resolved when the client receives a message from the server that it has subscribed to the event.
      * The callback is called when the server publishes the event.
      * @type {{[eventName: string]: SubscriptionData}}
@@ -109,6 +109,10 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
 
     /**
      * Creates a subscription to a publication fired by the server API
+
+     * NOTE: You must await this method the first time you call it in a client API instance,
+     * otherwise it will cause problems with session tracking.
+     * 
      * @param {string} eventName
      * @param {(data: any) => void} callback
      * @returns {qx.Promise<boolean>} A promise that will be resolved with true when the subscription succeeded or false when failed.
@@ -133,6 +137,7 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
       this.__transport.postMessage(this.__uri, {
         type: "subscribe",
         headers,
+        path: this.__getPath(),
         body: {
           eventName
         }
@@ -211,10 +216,13 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
       this.__pendingMethodCalls[pending.callIndex] = pending;
       let headers = {
         "Call-Index": pending.callIndex, //linebreak
-        "Api-Name": this.__apiName,
         "Client-Api-Uuid": this.toUuid(),
         Cookies: JSON.stringify(this.__cookies)
       };
+
+      if (!this.__getPath()) {
+        headers["Api-Name"] = this.__apiName;
+      }
 
       const sessionUuid = this.__transport.getSessionUuid(this.__getHostname());
       if (sessionUuid) {
@@ -224,6 +232,7 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
       this.__transport.postMessage(this.__getUrl(methodName), {
         type: "callMethod",
         headers,
+        path: this.__getPath(methodName),
         body: {
           methodArgs
         }
@@ -293,6 +302,8 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
           return;
         }
         this.__subscriptions[data.body.eventName].callbacks.forEach(cb => cb(data.body.eventData));
+      } else if (data.type == "shutdown") {
+        this.warn("TODO shutdown not implemented");
       } else {
         throw new Error("Unexpected message type: " + data.type);
       }
@@ -337,6 +348,25 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
     __clearSubscriptions() {
       this.__subscriptions = {};
       //todo resolve all pending promises with error
+    },
+
+    /**
+     * Returns the path of the API, optionally with a method name appended
+     * @param {string?} methodName
+     * @returns {string?}
+     */
+    __getPath(methodName) {
+      let apiPath = null;
+      if (this.__uri) {
+        apiPath = zx.io.api.util.Uri.breakoutUri(this.__uri).path;
+      }
+
+      if (methodName) {
+        apiPath ??= "/";
+        apiPath = path.join(apiPath, methodName);
+      }
+
+      return apiPath;
     }
   }
 });
