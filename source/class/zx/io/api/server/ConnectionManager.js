@@ -69,7 +69,17 @@ qx.Class.define("zx.io.api.server.ConnectionManager", {
       //Get the API instance
       let api = null;
       if (apiName) {
-        api = this.__apisByName[apiName];
+        //Get the API instance
+        let path = request.getPath();
+        let isMethod = request.getType() === "callMethod";
+        let apiPath = path ? (isMethod ? path.substring(0, path.lastIndexOf("/")) : path) : null;
+
+        let api;
+        if (apiPath) {
+          api = this.__apisByPath[apiPath];
+        } else {
+          api = this.__apisByName[apiName];
+        }
 
         if (!api) {
           throw new Error(`API ${apiName} not found. Did you forget to register it?`);
