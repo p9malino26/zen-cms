@@ -11,7 +11,7 @@ qx.Class.define("zx.io.api.server.ExpressServerTransport", {
     const port = 8090;
     app.use(bodyParser.text());
     app
-      .use("/", express.static("compiled/source/Client"))
+      .use("/", express.static("compiled/source/remoteApiBrowserTest"))
       .use("/transpiled", express.static("compiled/source/transpiled"))
       .use("/resource", express.static("compiled/source/resource"))
       .use(this.__prefix + "/**", (req, res) => {

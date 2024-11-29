@@ -47,6 +47,15 @@
         "<node_internals>/**",
         "**/polyfill.js"
       ]
-    }
+    },
+    {
+      "address": "localhost",
+      "name": "Attach to Remote API test server",
+      "port": 9104,
+      "restart": true,
+      "request": "attach",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node"
+    },
   ]
 }
