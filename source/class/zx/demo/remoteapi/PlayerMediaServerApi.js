@@ -7,8 +7,10 @@ qx.Class.define("zx.demo.remoteapi.PlayerMediaServerApi", {
       this.publish("playingMedia", this.__currentMedia++);
     }, 1000);
 
+    //example addresses: localhost:8090/zx-remote-api/player/media/playMedia/22
+    //localhost:8090/zx-remote-api/player/media/testmethod
+    //localhost:8090/zx-remote-api/player/media/getCurrentMedia
     this._registerMethod("playMedia", "playMedia/{id}");
-    //localhost:8090/zx-remote-api/player/media/playMedia/22
   },
   properties: {},
   objects: {},
@@ -18,16 +20,19 @@ qx.Class.define("zx.demo.remoteapi.PlayerMediaServerApi", {
       /**
        * @type {number}
        */
-      playingMedia: {}
+      playingMedia: 0
     },
 
     _methodParams: {
-      getCurrentMedia: [],
       playMedia: ["id"]
     },
 
     __currentMedia: 7,
-    getCurrentMedia() {
+
+    /**
+     * @param {zx.io.api.server.MethodRequest} req
+     */
+    getCurrentMedia(req) {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve(this.__currentMedia);

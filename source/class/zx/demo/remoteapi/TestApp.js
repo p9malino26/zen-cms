@@ -63,8 +63,8 @@ qx.Class.define("zx.demo.remoteapi.TestApp", {
     },
 
     async __runTest() {
-      let clientTransport = this.__getBrowserClientTransport();
-      // let clientTransport = this.__getHttpClientTransport();
+      // let clientTransport = this.__getBrowserClientTransport();
+      let clientTransport = this.__getHttpClientTransport();
       //Server
 
       //Client

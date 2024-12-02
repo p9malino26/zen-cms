@@ -218,7 +218,7 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
      * @param {any} data
      */
     publish(eventName, data) {
-      if (!this._publications[eventName]) {
+      if (this._publications[eventName] === undefined) {
         this.warn(`Server API ${this.toString()} attempts to publish "${eventName}" but it is not defined in the _publications field.`);
         debugger;
       }
