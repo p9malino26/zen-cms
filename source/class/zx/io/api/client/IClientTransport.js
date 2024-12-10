@@ -41,6 +41,7 @@ qx.Interface.define("zx.io.api.client.IClientTransport", {
      * @param {string} hostname
      */
     subscribed(hostname) {},
+
     /**
      * Must be called from the client transport when it's unsubscribed from an event
      * @param {string} hostname

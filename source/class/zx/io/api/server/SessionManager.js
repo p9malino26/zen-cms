@@ -38,25 +38,40 @@ qx.Class.define("zx.io.api.server.SessionManager", {
       }
     },
 
+    /**
+     *
+     * @param {string} uuid
+     * @returns {zx.io.api.server.Session}
+     */
     getSessionByUuid(uuid) {
       return this.__sessionByUuid[uuid];
     },
 
+    /**
+     *
+     * @returns {zx.io.api.server.Session[]}
+     */
     getAllSessions() {
       return Object.values(this.__sessionByUuid);
     },
 
+    /**
+     * @param {zx.io.api.server.Session[]} session
+     */
     addSession(session) {
       this.__sessionByUuid[session.toUuid()] = session;
     },
 
+    /**
+     * @param {zx.io.api.server.Session} session
+     */
     removeSession(session) {
       delete this.__sessionByUuid[session.toUuid()];
     }
   },
   statics: {
     /**
-     * How often to look and kill old sessions
+     * How often to look for  and kill old sessions
      */
     KILL_OLD_SESSIONS_INTERVAL: 30000,
 

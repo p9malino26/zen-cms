@@ -154,6 +154,7 @@ qx.Class.define("zx.io.api.server.Session", {
           eventData: data
         }
       };
+
       this.__publicationsQueue.push(message);
       if (this.__transport.supportsServerPush()) {
         zx.io.api.server.ConnectionManager.getInstance().flushPublicationsQueue(this);

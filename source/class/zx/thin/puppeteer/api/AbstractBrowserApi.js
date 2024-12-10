@@ -27,11 +27,11 @@ qx.Class.define("zx.thin.puppeteer.api.AbstractBrowserApi", {
       /**
        * Fired when we are done with the browser and can shut it down
        */
-      complete: {}
+      complete: null
     },
 
     /**
-     * Called when there are no more emails to send
+     * Call this when we are done with the browser and can shut it down
      */
     complete() {
       this.publish("complete");

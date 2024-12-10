@@ -38,11 +38,16 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
      */
     __apiName: null,
 
+    /**
+     * Called EXCLUSIVELY by zx.io.api.server.ConnectionManager.registerApi
+     * Sets the path at which this API is registered
+     * @param {string} path
+     */
     setPath(path) {
       this.__path = path;
     },
+
     /**
-     *
      * @returns {string}
      */
     getApiName() {
@@ -54,6 +59,7 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
      * @type {{[path: string]: MethodsByRest}}
      */
     __restsByPath: null,
+
     /**
      * Called EXCLUSIVELY by the connection manager (zx.io.api.server.ConnectionManager) when a message is received from the client.
      * Does the appropriate action, e.g. calling a method or subscribing to a publication.
@@ -147,7 +153,6 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
     },
 
     /**
-     *
      * @param {string} methodName
      * @param {string} path
      * @param {RestMethod?} restMethod
@@ -189,6 +194,7 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
 
       return responseData;
     },
+
     /**
      * Creates a subscription for a particular event
      * @param {zx.io.api.server.Request} request

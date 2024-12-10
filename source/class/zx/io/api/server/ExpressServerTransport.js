@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 qx.Class.define("zx.io.api.server.ExpressServerTransport", {
   extend: qx.core.Object,
   implement: [zx.io.api.server.IServerTransport],
+
   /**
    * @param {string} prefix The prefix which the paths for the requests should be prefixed with
    * For example, if we call postMessage("/foo", bar), and the prefix is '/andrew', the request will be sent to '/andrew/foo'

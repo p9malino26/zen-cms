@@ -5,13 +5,20 @@ qx.Class.define("zx.io.api.util.Uri", {
      *
      * @param {string} uri
      * @returns Breaks out this URI into its components
+     *
+     * For example, the URI "http://www.example.com:8080/path/to/resource" would be broken out into:
+     * fqdn: www.example.com
+     * protocol: http
+     * hostname: www.example.com:8080
+     * port: 8080
+     * path: /path/to/resource
      */
     breakoutUri(uri) {
-      const letter = "[a-zA-Z]";
-      const fqdn = `${letter}+(\.${letter}+)*`;
-      const hostname = `(?<fqdn>${fqdn})(:(?<port>\\d+))?`;
-      let regexStr = `((?<protocol>${letter}+):\\/\\/)?(?<hostname>${hostname})?(?<path>\\/.*)`;
-      let regex = new RegExp(regexStr);
+      const LETTER = "[a-zA-Z]";
+      const FQDN = `${LETTER}+(\.${LETTER}+)*`;
+      const HOSTNAME = `(?<fqdn>${FQDN})(:(?<port>\\d+))?`;
+      const REGEX_STR = `((?<protocol>${LETTER}+):\\/\\/)?(?<hostname>${HOSTNAME})?(?<path>\\/.*)`;
+      let regex = new RegExp(REGEX_STR);
       let match = regex.exec(uri);
       return {
         fqdn: match.groups.fqdn ?? null,

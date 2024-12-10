@@ -1,16 +1,22 @@
+/**
+ * Transport used to communicate with a Puppeteer browser
+ * This class should be instantiated in the code which manages the browser via Puppeteer,
+ * which is usually a NodeJS server.
+ * The webpage inside the browser needs to use zx.thin.puppeteer.PuppeteerServerTransport
+ */
 qx.Class.define("zx.server.puppeteer.PuppeteerClientTransport", {
   extend: zx.io.api.client.AbstractClientTransport,
 
   /**
-   *
-   * @param {*} page
+   * @param {import("puppeteer-core").Page | null} page The puppeteer page to use for communication
    */
   construct(page) {
     super();
-    // Catch console log messages so that we can read the protocol
     this.__page = page;
+    // Catch console log messages so that we can read the protocol
     page.on("console", msg => this.__onConsole(msg));
   },
+
   members: {
     __page: null,
     /**
@@ -24,7 +30,6 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClientTransport", {
       const SUFFIX = zx.thin.puppeteer.PuppeteerUtil.MSG_SUFFIX;
 
       let str = msg.text();
-      str = str.replace(/\[\[__GRASSHOPPER/g, "[[__ZX_PUPPETEER");
       if (str.startsWith(PREFIX)) {
         if (!str.endsWith(SUFFIX)) {
           this.error("Cannot interpret console message: " + str);

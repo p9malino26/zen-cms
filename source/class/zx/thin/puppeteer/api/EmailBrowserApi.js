@@ -25,6 +25,7 @@ qx.Class.define("zx.thin.puppeteer.api.EmailBrowserApi", {
   members: {
     /**@override */
     _publications: {
+      /**@override */
       complete: null,
       /**
        * Tell the client to pull the email from the page and send the email

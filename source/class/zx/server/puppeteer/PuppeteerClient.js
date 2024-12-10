@@ -92,7 +92,10 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
   members: {
     /** @type {import("puppeteer-core").Browser | null} */
     _browser: null,
+
+    /** @type {import("puppeteer-core").Page | null} */
     _page: null,
+
     __closed: false,
 
     /**
@@ -289,15 +292,15 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
      * Called when a console message is received; this can contain encoded messages that
      * describe method calls and events
      *
-     * @param {*} msg
+     * @param {Object} msg Object with Puppeteer message
      */
     _onConsole(msg) {
       const PREFIX = zx.thin.puppeteer.PuppeteerUtil.MSG_PREFIX;
       let str = msg.text();
 
       if (str.startsWith(PREFIX)) {
-        this.fireEvent("ping");
-        return; //ignore messages with prefix because they are for puppeteer api connumications
+        this.fireEvent("ping"); //ignore messages with prefix because they are for puppeteer api communications
+        return;
       }
       if (this.isDebug()) {
         console.log("PAGE LOG: ", new Date(), ": ", msg.text());

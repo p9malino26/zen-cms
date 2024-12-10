@@ -15,29 +15,47 @@ qx.Class.define("zx.thin.puppeteer.api.PdfBrowserApi", {
   },
 
   events: {
-    /** Fired when the everything is read and the web page should composing the first PDF */
+    /** Fired when the puppeteer client is ready and the web page should composing the first PDF */
     start: "qx.event.type.Event",
 
-    /** Fired every time a PDF has been successfully taken, and the web page should compose the next PDF or complete */
+    /** Fired every time a PDF has been successfully printed, and the web page should compose the next PDF or complete */
     next: "qx.event.type.Event"
   },
 
   members: {
+    /**
+     * @override
+     */
     _publications: {
+      /**@override */
       complete: null,
+
+      /**
+       * @type {*}
+       * Fired when the webpage in the browser has been rendered so that the Puppeteer client can print the PDF
+       */
       printPdf: {}
     },
 
+    /**
+     * REMOTE METHOD
+     * Tells page to start rendering the first PDF
+     */
     start() {
       this.fireEvent("start");
     },
 
+    /**
+     * REMOTE METHOD
+     * Tells page to start rendering the next PDF
+     */
     next() {
       this.fireEvent("next");
     },
 
     /**
-     * Tells the puppeteer server to print the PDF
+     * Tells the puppeteer client to print the PDF
+     * @param {*} data Custom data regarding what's on the page which will be received by the puppeteer client
      */
     printPdf(data) {
       this.publish("printPdf", data);

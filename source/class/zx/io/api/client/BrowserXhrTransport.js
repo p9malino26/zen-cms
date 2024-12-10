@@ -19,6 +19,9 @@ qx.Class.define("zx.io.api.client.BrowserXhrTransport", {
   members: {
     __prefix: "",
 
+    /**
+     * Starts the polling loop
+     */
     async beginPoll() {
       for (let hostname of this._getSubscribedHostnames()) {
         let sessionUuid = this.getSessionUuid(hostname);
@@ -32,8 +35,9 @@ qx.Class.define("zx.io.api.client.BrowserXhrTransport", {
 
         await this.postMessage(hostname, message);
       }
-      setTimeout(() => this.beginPoll(), this.constructor.POLL_INTERVAL);
+      setTimeout(() => this.beginPoll(), this.constructor.__POLL_INTERVAL);
     },
+
     /**
      * @override
      */
@@ -48,7 +52,7 @@ qx.Class.define("zx.io.api.client.BrowserXhrTransport", {
 
       let res = await fetch(this.__prefix + uri, {
         method: "POST",
-        body: zx.utils.Json.stringifyJson(data), //cannot be JSON.stringify because we may have dates!
+        body: zx.utils.Json.stringifyJson(data), //cannot be JSON.stringify because we may have dates/bignumbers!
         headers: {
           "Content-Type": "text/plain"
         }
@@ -60,6 +64,9 @@ qx.Class.define("zx.io.api.client.BrowserXhrTransport", {
   },
 
   statics: {
-    POLL_INTERVAL: 1000
+    /**
+     * The interval in milliseconds between polls
+     */
+    __POLL_INTERVAL: 1000
   }
 });
