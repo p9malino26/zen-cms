@@ -11,7 +11,7 @@ qx.Class.define("zx.thin.puppeteer.api.PdfBrowserApi", {
   extend: zx.thin.puppeteer.api.AbstractBrowserApi,
 
   construct() {
-    super("zx.server.puppeteer.api.PdfServerApi");
+    super("zx.server.puppeteer.api.PdfApi");
   },
 
   events: {
@@ -23,6 +23,11 @@ qx.Class.define("zx.thin.puppeteer.api.PdfBrowserApi", {
   },
 
   members: {
+    _publications: {
+      complete: null,
+      printPdf: {}
+    },
+
     start() {
       this.fireEvent("start");
     },
@@ -35,7 +40,7 @@ qx.Class.define("zx.thin.puppeteer.api.PdfBrowserApi", {
      * Tells the puppeteer server to print the PDF
      */
     printPdf(data) {
-      this.apiSendEvent("printPdf", data);
+      this.publish("printPdf", data);
     }
   }
 });

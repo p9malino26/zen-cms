@@ -110,7 +110,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
     /**
      * Starts the connection to the Chromium instance in docker, completes only when the
      * page is loaded and ready to respond.  The page is required to instantiate an
-     * instance of `zx.thin.puppeteer.HeadlessPage` which will be used to communicate
+     * instance of `zx.thin.puppeteer.AbstractBrowserApi` which will be used to communicate
      * with this instance of zx.server.puppeteer.PuppeteerClient, including calling API
      * methods and sending events
      */
@@ -218,22 +218,24 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         throw new Error(`Page navigation error: ${JSON.stringify(result, null, 2)}`);
       }
 
-      //wait until page is ready
-      let pageReady = false;
-      const MAX_PASSES = 10;
-      for (let pass = 0; pass < MAX_PASSES; pass++) {
-        let ready = await page.evaluate(() => zx.thin.puppeteer.PuppeteerServerTransport.getInstance().isReady());
-        if (ready) {
-          pageReady = true;
-          break;
-        }
-        console.log("Page remote API not ready yet, waiting...");
-        await new Promise(res => setTimeout(res, 1000));
-      }
+      //wait until page is ready to use Remote APIs
+      //by repeatedly polling the page for the ready flag
+      this.__readyPromise = new Promise(async (resolve, reject) => {
+        const TIMEOUT = 30; //massive 30 second timeout
+        const INTERVAL = 100;
+        const MAX_PASSES = (TIMEOUT * 1000) / INTERVAL;
 
-      if (!pageReady) {
-        throw new Error("Page did not become ready to use remote APIs within timeout");
-      }
+        for (let pass = 0; pass < MAX_PASSES; pass++) {
+          let ready = await page.evaluate(() => window["zx"].thin.puppeteer.PuppeteerServerTransport.getInstance().isReady());
+          if (ready) {
+            return resolve();
+          }
+          console.log("Page remote API not ready yet, waiting...");
+          await new Promise(res => setTimeout(res, INTERVAL));
+        }
+
+        reject(new Error("Page did not become ready to use remote APIs within timeout"));
+      });
       return result;
     },
 
@@ -267,6 +269,14 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
     },
 
     /**
+     * Waits until the page in the headless browser is ready to communicate via the API
+     * i.e. called zx.thin.puppeteer.PuppeteerServerTransport.getInstance().ready()
+     */
+    async waitForReadySignal() {
+      await this.__readyPromise;
+    },
+
+    /**
      * Returns the page
      *
      * @returns
@@ -286,6 +296,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
       let str = msg.text();
 
       if (str.startsWith(PREFIX)) {
+        this.fireEvent("ping");
         return; //ignore messages with prefix because they are for puppeteer api connumications
       }
       if (this.isDebug()) {

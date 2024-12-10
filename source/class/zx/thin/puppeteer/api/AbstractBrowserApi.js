@@ -1,57 +1,50 @@
+/**
+ * Abstract class for all the puppeteer server APIs which run in the browser
+ */
 qx.Class.define("zx.thin.puppeteer.api.AbstractBrowserApi", {
-  extend: qx.core.Object,
+  extend: zx.io.api.server.AbstractServerApi,
   type: "abstract",
 
   /**
    * Constructor, attaches to the given HeadlessPage
-   *
-   * @param {String} serverApiName the server API namespace (typically the name of the class derived from `zx.server.puppeteer.AbstractServerApi` on the server)
-   * @param {zx.thin.puppeteer.HeadlessPage?} headless defaults to the singleton instance
+   * @param {string} apiName Name (ID) of the API
    */
-  construct(serverApiName, headless) {
-    super();
-    this.__serverApiName = serverApiName;
-    this.__headless = headless || zx.thin.puppeteer.HeadlessPage.getInstance();
-    this.__headless.addBrowserApi(this);
+  construct(apiName) {
+    super(apiName);
+    zx.io.api.server.ConnectionManager.getInstance().registerApi(this);
+
+    // For backwards compatibility
+    this.__headless = {
+      postReady() {
+        zx.thin.puppeteer.PuppeteerServerTransport.getInstance().makeReady();
+      }
+    };
   },
 
   members: {
-    /** @type{String} the server API namespace (typically the name of the class derived from `zx.server.puppeteer.AbstractServerApi` on the server) */
-    __serverApiName: null,
-
-    /** @type{zx.thin.puppeteer.HeadlessPage} */
-    __headless: null,
+    /**@override */
+    _publications: {
+      /**
+       * Fired when we are done with the browser and can shut it down
+       */
+      complete: {}
+    },
 
     /**
      * Called when there are no more emails to send
      */
     complete() {
-      this.apiSendEvent("complete");
+      this.publish("complete");
+    },
+
+    postReady() {
+      zx.thin.puppeteer.PuppeteerServerTransport.getInstance().makeReady();
     },
 
     /**
-     * Sends an API event to the server
-     *
-     * @param {String} eventName
-     * @param {*} data
-     */
-    apiSendEvent(eventName, data) {
-      this.__headless.apiSendEvent(this.__serverApiName, eventName, data);
-    },
-
-    /**
-     * The server API namespace (typically the name of the class derived from `zx.server.puppeteer.AbstractServerApi`  on the server)
-     *
-     * @returns {String} the server API namespace
-     */
-    getServerApiName() {
-      return this.__serverApiName;
-    },
-
-    /**
-     * The instance of `zx.thin.puppeteer.HeadlessPage` that this API is attached to
-     *
-     * @returns {zx.thin.puppeteer.HeadlessPage} the HeadlessPage controller
+     * @deprecated
+     * For backwards compatibility
+     * Returns dummy headlesss with postready method
      */
     getHeadless() {
       return this.__headless;

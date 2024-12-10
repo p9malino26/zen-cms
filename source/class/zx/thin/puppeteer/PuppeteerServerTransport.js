@@ -40,9 +40,8 @@ qx.Class.define("zx.thin.puppeteer.PuppeteerServerTransport", {
       // Get data
       var msg = evt.data;
 
-      console.log("Received message: " + msg);
-      if (typeof msg == "object") {
-        console.log("Received object: " + JSON.stringify(msg));
+      if (typeof msg !== "string") {
+        return;
       }
       if (!msg.startsWith(PREFIX)) return;
 

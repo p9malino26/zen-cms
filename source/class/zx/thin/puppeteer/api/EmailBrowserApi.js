@@ -8,25 +8,37 @@
  * `complete` to finish.
  */
 qx.Class.define("zx.thin.puppeteer.api.EmailBrowserApi", {
-  extend: zx.io.api.server.AbstractServerApi,
+  extend: zx.thin.puppeteer.api.AbstractBrowserApi,
 
   construct() {
     super("zx.server.puppeteer.api.EmailApi");
   },
 
   events: {
-    /** Fired when we want the webpage to render the next email, or return null when there are no more emails to render */
+    /** Fired when the everything is ready and the web page should sending the first email via call to `sendEmail` */
+    start: "qx.event.type.Event",
+
+    /** Fired every time an email has been successfully sent, and the web page should send the next email or complete */
     next: "qx.event.type.Event"
   },
 
   members: {
     /**@override */
     _publications: {
+      complete: null,
       /**
        * Tell the client to pull the email from the page and send the email
        */
       sendEmail: {}
     },
+
+    /**
+     * REMOTE METHOD
+     */
+    start() {
+      this.fireEvent("start");
+    },
+
     /**
      * REMOTE METHOD
      */
