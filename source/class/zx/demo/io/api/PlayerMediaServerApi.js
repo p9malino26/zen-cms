@@ -1,7 +1,7 @@
-qx.Class.define("zx.demo.remoteapi.PlayerMediaServerApi", {
+qx.Class.define("zx.demo.io.api.PlayerMediaServerApi", {
   extend: zx.io.api.server.AbstractServerApi,
   construct() {
-    super("zx.demo.remoteapi.PlayerMediaApi");
+    super("zx.demo.io.api.PlayerMediaApi");
 
     this.__interval = setInterval(() => {
       this.publish("playingMedia", this.__currentMedia++);

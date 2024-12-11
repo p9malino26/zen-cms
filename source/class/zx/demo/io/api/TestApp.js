@@ -9,12 +9,12 @@
 ************************************************************************ */
 
 /**
- * This is the main application class of "zx.demo.remoteapi"
+ * This is the main application class of "zx.demo.io.api"
  *
- * @asset(zx.demo.remoteapi/*)
+ * @asset(zx.demo.io.api/*)
  */
 // const Buffer = require("node:buffer");
-qx.Class.define("zx.demo.remoteapi.TestApp", {
+qx.Class.define("zx.demo.io.api.TestApp", {
   extend: qx.application.Standalone,
 
   /*
@@ -68,7 +68,7 @@ qx.Class.define("zx.demo.remoteapi.TestApp", {
       //Server
 
       //Client
-      let clientApi = new zx.demo.remoteapi.PlayerMediaClientApi(clientTransport, "/player/media");
+      let clientApi = new zx.demo.io.api.PlayerMediaClientApi(clientTransport, "/player/media");
       await clientApi.subscribe("playingMedia", media => {
         console.log(`Playing media with id ${media}`);
       });
@@ -80,7 +80,7 @@ qx.Class.define("zx.demo.remoteapi.TestApp", {
       media = await clientApi.getCurrentMedia();
       console.log(`Current media then is ${media}`);
 
-      let wifiApi = new zx.demo.remoteapi.WifiClientApi(clientTransport);
+      let wifiApi = new zx.demo.io.api.WifiClientApi(clientTransport);
       await wifiApi.subscribe("changeOnlineStatus", online => {
         console.log(`Online status changed to ${online}`);
       });
@@ -95,13 +95,13 @@ qx.Class.define("zx.demo.remoteapi.TestApp", {
     },
 
     __getBrowserClientTransport() {
-      let serverTransport = new zx.demo.remoteapi.BrowserTransportServer();
-      let clientTransport = new zx.demo.remoteapi.BrowserTransportClient(serverTransport);
+      let serverTransport = new zx.demo.io.api.BrowserTransportServer();
+      let clientTransport = new zx.demo.io.api.BrowserTransportClient(serverTransport);
       serverTransport.setClient(clientTransport);
 
       let connectionManager = zx.io.api.server.ConnectionManager.getInstance();
-      connectionManager.registerApi(new zx.demo.remoteapi.PlayerMediaServerApi(), "/player/media");
-      connectionManager.registerApi(new zx.demo.remoteapi.WifiServerApi());
+      connectionManager.registerApi(new zx.demo.io.api.PlayerMediaServerApi(), "/player/media");
+      connectionManager.registerApi(new zx.demo.io.api.WifiServerApi());
 
       return clientTransport;
     },

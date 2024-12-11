@@ -135,7 +135,7 @@
     },
     {
       "title": "Remote API browser test app",
-      "class": "zx.demo.remoteapi.TestApp",
+      "class": "zx.demo.io.api.TestApp",
       "theme": "zx.cms.client.theme.tangible.Theme",
       "name": "remoteApiBrowserTest",
       "type": "browser",
@@ -146,7 +146,7 @@
       "name": "remoteApiServerTest",
       "exclude": ["qx.bom.Selector"],
       "type": "node",
-      "class": "zx.demo.remoteapi.srv.ServerApp"
+      "class": "zx.demo.io.api.srv.ServerApp"
     },
 
     {

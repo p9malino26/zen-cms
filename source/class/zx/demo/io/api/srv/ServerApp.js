@@ -1,5 +1,5 @@
 const express = require("express");
-qx.Class.define("zx.demo.remoteapi.srv.ServerApp", {
+qx.Class.define("zx.demo.io.api.srv.ServerApp", {
   extend: qx.application.Basic,
   members: {
     async main() {
@@ -19,10 +19,10 @@ qx.Class.define("zx.demo.remoteapi.srv.ServerApp", {
         });
       let transport = new zx.io.api.transport.http.ExpressServerTransport(app);
       let connectionManager = zx.io.api.server.ConnectionManager.getInstance();
-      connectionManager.registerApi(new zx.demo.remoteapi.PlayerMediaServerApi(), "/player/media");
-      connectionManager.registerApi(new zx.demo.remoteapi.PlayerMediaServerApi());
-      connectionManager.registerApi(new zx.demo.remoteapi.WifiServerApi(), "/player/wifi");
-      connectionManager.registerApi(new zx.demo.remoteapi.WifiServerApi());
+      connectionManager.registerApi(new zx.demo.io.api.PlayerMediaServerApi(), "/player/media");
+      connectionManager.registerApi(new zx.demo.io.api.PlayerMediaServerApi());
+      connectionManager.registerApi(new zx.demo.io.api.WifiServerApi(), "/player/wifi");
+      connectionManager.registerApi(new zx.demo.io.api.WifiServerApi());
     }
   }
 });

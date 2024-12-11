@@ -1,4 +1,4 @@
-qx.Class.define("zx.demo.remoteapi.utils.Url", {
+qx.Class.define("zx.demo.io.api.utils.Url", {
   extend: qx.core.Object,
 
   construct(url) {

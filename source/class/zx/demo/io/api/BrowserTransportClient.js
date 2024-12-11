@@ -1,4 +1,4 @@
-qx.Class.define("zx.demo.remoteapi.BrowserTransportClient", {
+qx.Class.define("zx.demo.io.api.BrowserTransportClient", {
   extend: zx.io.api.client.AbstractClientTransport,
 
   construct(server) {

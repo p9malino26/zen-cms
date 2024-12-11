@@ -2,7 +2,7 @@
  * Demo server transport to be used in a basic JavaScript environment,
  * such as a browser or Node.js.
  */
-qx.Class.define("zx.demo.remoteapi.BrowserTransportServer", {
+qx.Class.define("zx.demo.io.api.BrowserTransportServer", {
   extend: zx.io.api.server.AbstractServerTransport,
 
   construct(client) {
@@ -43,7 +43,7 @@ qx.Class.define("zx.demo.remoteapi.BrowserTransportServer", {
 
     /**
      *
-     * @param {zx.demo.remoteapi.BrowserTransportClient} client
+     * @param {zx.demo.io.api.BrowserTransportClient} client
      */
     setClient(client) {
       this.__client = client;

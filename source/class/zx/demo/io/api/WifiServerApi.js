@@ -1,7 +1,7 @@
-qx.Class.define("zx.demo.remoteapi.WifiServerApi", {
+qx.Class.define("zx.demo.io.api.WifiServerApi", {
   extend: zx.io.api.server.AbstractServerApi,
   construct() {
-    super("zx.demo.remoteapi.WifiApi");
+    super("zx.demo.io.api.WifiApi");
 
     this.__interval = setInterval(() => {
       this.publish("changeOnlineStatus", this.__onlineStatus++);
