@@ -272,14 +272,6 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
     },
 
     /**
-     * Waits until the page in the headless browser is ready to communicate via the API
-     * i.e. called zx.thin.puppeteer.PuppeteerServerTransport.getInstance().ready()
-     */
-    async waitForReadySignal() {
-      await this.__readyPromise;
-    },
-
-    /**
      * Returns the page
      *
      * @returns

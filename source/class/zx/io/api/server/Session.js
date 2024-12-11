@@ -22,6 +22,7 @@ qx.Class.define("zx.io.api.server.Session", {
     this.__transport = transport;
     this.__subscriptions = {};
     this.__publicationsQueue = new qx.data.Array();
+    this.info("New session created", this.toUuid(), new Error().stack);
   },
 
   properties: {
@@ -37,7 +38,7 @@ qx.Class.define("zx.io.api.server.Session", {
 
   members: {
     /**
-     * @type {zx.io.api.server.IServerTransport}
+     * @type {zx.io.api.server.AbstractServerTransport}
      */
     __transport: null,
 
@@ -55,7 +56,7 @@ qx.Class.define("zx.io.api.server.Session", {
     __publicationsQueue: null,
 
     /**
-     * @returns {zx.io.api.server.IServerTransport}
+     * @returns {zx.io.api.server.AbstractServerTransport}
      */
     getTransport() {
       return this.__transport;
@@ -120,7 +121,7 @@ qx.Class.define("zx.io.api.server.Session", {
     },
 
     /**
-     * Called EXCLUSIVELY by the server API (zx.io.api.server.AbstractServerApi)
+     * Called EXCLUSIVELY by zx.io.api.server.AbstractServerApi
      * when we want to publish a subscribed client of a particular event
      * @param {zx.io.api.server.AbstractServerApi} api
      * @param {string} eventName
@@ -130,12 +131,14 @@ qx.Class.define("zx.io.api.server.Session", {
     publish(api, eventName, data) {
       let apiInfo = this.__subscriptions[api.toUuid()];
       if (!apiInfo) {
+        this.warn(this.toUuid(), "no apiInfo");
         return;
       }
       let { clientApiUuid, countPerEvent } = apiInfo;
 
       let subscriptionCount = countPerEvent[eventName];
       if (!subscriptionCount) {
+        this.warn(this.toUuid(), "no subscriptionCount");
         return;
       }
 
@@ -156,8 +159,11 @@ qx.Class.define("zx.io.api.server.Session", {
       };
 
       this.__publicationsQueue.push(message);
+      this.debug(this.toUuid(), "added publication, all publications:", this.__publicationsQueue.toArray());
       if (this.__transport.supportsServerPush()) {
         zx.io.api.server.ConnectionManager.getInstance().flushPublicationsQueue(this);
+      } else if (qx.core.Environment.get("qx.debug")) {
+        this.debug(`Transport ${this.__transport.classname} does not support server push. Publications will be queued until they can piggyback on a client-initiated message.`);
       }
     },
 

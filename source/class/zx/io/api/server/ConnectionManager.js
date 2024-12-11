@@ -1,11 +1,12 @@
 /**
  * Connection manager for the server
- * Takes in request from the server transport (zx.io.api.server.IServerTransport),
+ * Takes in request from the server transport (zx.io.api.server.AbstractServerTransport),
  * processes them and populates the response
  */
 qx.Class.define("zx.io.api.server.ConnectionManager", {
   extend: qx.core.Object,
   type: "singleton",
+
   construct() {
     super();
     this.__apisByName = {};
@@ -29,7 +30,7 @@ qx.Class.define("zx.io.api.server.ConnectionManager", {
      * If a path is provided, incoming requests for that API instance must have their path property (@see zx.io.api.server.Request#path) set to that path.
      * They cannot be access solely by their API name in the request's header.
      *
-     * @param {function | zx.io.api.server.AbstractApi} api API class or instance
+     * @param {(new () => zx.io.api.server.AbstractServerApi) | zx.io.api.server.AbstractServerApi} api API class or instance
      * @param {String?} path Optional path to register the API under
      */
     registerApi(api, path) {
@@ -91,12 +92,7 @@ qx.Class.define("zx.io.api.server.ConnectionManager", {
 
       if (api) {
         //Call the API
-        let responseData = await api.receiveMessage(request);
-        responseData.headers ??= {};
-        responseData.headers["Api-Name"] = apiName;
-        responseData.headers["Server-Api-Uuid"] = api.toUuid();
-        responseData.headers["Client-Api-Uuid"] = request.getHeader("Client-Api-Uuid");
-        response.addData(responseData);
+        await api.receiveMessage(request, response);
       } else if (request.getType() !== "poll") {
         throw new Error(`API not found for non-poll request`);
       }
@@ -109,6 +105,7 @@ qx.Class.define("zx.io.api.server.ConnectionManager", {
       if (session) {
         session.setLastActivity(new Date());
         for (let publication of session.consumePublicationsQueue()) {
+          this.debug("Sending publication to transport", { publication, session });
           response.addData(publication);
         }
       }

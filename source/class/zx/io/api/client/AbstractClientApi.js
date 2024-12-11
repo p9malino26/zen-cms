@@ -3,20 +3,15 @@
  *
  * @typedef {Object} MethodConfig Configuration for a method in the API
  */
-const path = require("path");
 qx.Class.define("zx.io.api.client.AbstractClientApi", {
+  type: "abstract",
   extend: qx.core.Object,
 
   /**
    *
-   * @param {zx.io.api.client.IClientTransport} transport The transport object that this API class sends and receives data
-   * @param {string} apiName An identifier for the API. Both this client API and its corresponding server API must have the same apiName.
-   * A good naming convention is,
-   * given that a client api is called com.thingy.DoobryClientApi,
-   * the server API should be called com.thingy.DoobryServerApi,
-   * and both should have the same apiName, "com.thingy.DoobryApi".
+   * @param {zx.io.api.client.AbstractClientTransport} transport The transport object that this API class sends and receives data
    *
-   * @param {string[] | {[methodName: string]: MethodConfig}} methodNames
+   * @param {string[] | { [methodName: string]: MethodConfig }} methodNames
    * Either: Names of the methods that are defined in the corresponding server API class.
    * Or: An object mapping method names to their configurations.
    *
@@ -62,7 +57,7 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
     __subscriptions: null,
 
     /**
-     * @type {zx.io.api.client.IClientTransport}
+     * @type {zx.io.api.client.AbstractClientTransport}
      */
     __transport: null,
 
@@ -235,14 +230,20 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
         headers["Session-Uuid"] = sessionUuid;
       }
 
-      this.__transport.postMessage(this.__getUrl(methodName), {
-        type: "callMethod",
-        headers,
-        path: this.__getPath(methodName),
-        body: {
-          methodArgs
-        }
-      });
+      try {
+        this.__transport.postMessage(this.__getUrl(methodName), {
+          type: "callMethod",
+          headers,
+          path: this.__getPath(methodName),
+          body: {
+            methodArgs
+          }
+        });
+      } catch (e) {
+        this.error("Error posting message", e);
+        delete this.__pendingMethodCalls[pending.callIndex];
+        promise.reject(e);
+      }
       return promise;
     },
 
@@ -319,20 +320,15 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
      * Returns a URL for a method call,
      * consisting of the API URI and the method name
      *
-     * @example
-     * if this.__uri == "http://example.com/api"
-     * and methodName == "doSomething"
-     * then this method will return "http://example.com/api/doSomething"
+     * For example;
+     * if this.__uri is "http://example.com/api" and methodName is "doSomething" then this method will return
+     * "http://example.com/api/doSomething"
      *
      * @param {string} methodName
      * @returns
      */
     __getUrl(methodName) {
-      if (!this.__uri) {
-        return "/" + methodName;
-      }
-      let out = path.join(this.__uri, methodName);
-      return out;
+      return zx.utils.Uri.join(this.__uri ?? "/", qx.lang.String.hyphenate(methodName));
     },
 
     /**
@@ -347,7 +343,7 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
         return null;
       }
 
-      let out = zx.io.api.util.Uri.breakoutUri(this.__uri).hostname;
+      let out = zx.utils.Uri.breakoutUri(this.__uri).hostname;
       return out;
     },
 
@@ -364,12 +360,11 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
     __getPath(methodName) {
       let apiPath = null;
       if (this.__uri) {
-        apiPath = zx.io.api.util.Uri.breakoutUri(this.__uri).path;
+        apiPath = zx.utils.Uri.breakoutUri(this.__uri).path;
       }
 
       if (methodName) {
-        apiPath ??= "/";
-        apiPath = path.join(apiPath, methodName);
+        apiPath = zx.utils.Uri.join(apiPath ?? "/", methodName);
       }
 
       return apiPath;

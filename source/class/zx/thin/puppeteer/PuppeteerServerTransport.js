@@ -3,8 +3,8 @@
  */
 qx.Class.define("zx.thin.puppeteer.PuppeteerServerTransport", {
   type: "singleton",
-  extend: qx.core.Object,
-  implement: zx.io.api.server.IServerTransport,
+  extend: zx.io.api.server.AbstractServerTransport,
+
   construct() {
     super();
     window.addEventListener("message", this._onMessage.bind(this), false);

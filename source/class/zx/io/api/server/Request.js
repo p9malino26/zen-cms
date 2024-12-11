@@ -7,27 +7,18 @@ qx.Class.define("zx.io.api.server.Request", {
   extend: qx.core.Object,
 
   /**
-   * @param {zx.io.api.server.IServerTransport} transport The transport that received the message and created this request
-   * @param {zx.io.api.IRequestJson?} data The raw JSON message that this request is based on
+   * @param {zx.io.api.server.AbstractServerTransport} transport The transport that received the message and created this request
+   * @param {zx.io.api.IRequestJson} data The raw JSON message that this request is based on
    */
   construct(transport, data) {
     super();
-    this.set({ transport: transport });
-    this.initQuery({});
 
-    let properties = {
-      headers: {},
-      type: "callMethod"
-    };
-
-    if (data) {
-      properties.headers = data.headers ? qx.lang.Object.clone(data.headers) : {};
-      properties.body = data.body;
-      properties.path = data.path ?? null;
-      properties.type = data.type;
-    }
-
-    this.set(properties);
+    this.setTransport(transport);
+    this.setHeaders(data.headers ?? {});
+    this.setBody(data.body ?? {});
+    this.setPath(data.path ?? null);
+    this.setType(data.type ?? "callMethod");
+    this.initPathArgs({});
 
     let sessionUuid = this.getHeader("Session-Uuid");
     if (sessionUuid) {
@@ -53,7 +44,7 @@ qx.Class.define("zx.io.api.server.Request", {
      */
     transport: {
       init: null,
-      check: "zx.io.api.server.IServerTransport"
+      check: "zx.io.api.server.AbstractServerTransport"
     },
 
     /**
@@ -95,10 +86,22 @@ qx.Class.define("zx.io.api.server.Request", {
       nullable: true
     },
 
+    /**
+     * A key-value map representing the query string of the request
+     * For HTTP requests, this is the query string in the URL
+     */
     query: {
-      nullable: true,
-      check: "Object",
-      deferredInit: true
+      deferredInit: true,
+      check: "Object"
+    },
+
+    /**
+     * A key-value map representing the URL path parameters
+     * Only applicable to REST requests
+     */
+    pathArgs: {
+      deferredInit: true,
+      check: "Object"
     },
 
     restMethod: {
@@ -109,6 +112,14 @@ qx.Class.define("zx.io.api.server.Request", {
   },
 
   members: {
+    /**
+     *
+     * Whether the request was initiated by an instance of zx.io.api.client.AbstractClientApi,
+     * and not a basic REST request
+     */
+    isFromClientApi() {
+      return this.getHeader("Client-Api-Uuid") !== undefined;
+    },
     /**
      * Makes sure that a session exists; if it already exists, nothing happens
      *

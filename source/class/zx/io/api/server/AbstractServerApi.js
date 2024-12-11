@@ -20,17 +20,17 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
 
   members: {
     /**
+     * A map of publication names.
+     * The values may take any shape (other than `undefined`), though it is recommended for purposes of documentation to
+     * use the literal `true`, and use a JSDoc comment to describe the shape of the data for that publication.
      * Override this field in your implementation to define the publications that this API can publish
-     * @type {{[publicationName: string]: {}}}
+     * @type {{ [publicationName: string]: any }}
      */
-    _publications: {},
+    _publications: null,
 
     /**
-     * @type {{[methodName: string]: string[]}} A map of method names to an array of their parameter names.
-     * The arguments passed into the method in the client API will be given those names (positionwise) in the method request object.
+     * @type {string}
      */
-    _methodParams: {},
-
     __path: null,
 
     /**
@@ -64,33 +64,42 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
      * Called EXCLUSIVELY by the connection manager (zx.io.api.server.ConnectionManager) when a message is received from the client.
      * Does the appropriate action, e.g. calling a method or subscribing to a publication.
      * @param {zx.io.api.server.Request} request
+     * @param {zx.io.api.server.Request} response
      * @returns {Promise<zx.io.api.IResponseJson.IResponseData>}
      */
-    async receiveMessage(request) {
+    async receiveMessage(request, response) {
       let type = request.getType();
+
+      this.assertTrue(response.getData().length === 0, "Response data must be empty before calling receiveMessage");
 
       let responseData;
       if (type == "callMethod") {
-        responseData = await this.__callMethod(request);
+        await this.__callMethod(request, response);
+        responseData = response.getData()[0];
       } else if (type == "subscribe") {
         responseData = this.__subscribe(request);
+        response.addData(responseData);
       } else if (type == "unsubscribe") {
         responseData = this.__unsubscribe(request);
+        response.addData(responseData);
       } else {
         throw new Error(`Unknown message type: ${type}`);
       }
 
-      return responseData;
+      responseData.headers ??= {};
+      responseData.headers["Api-Name"] = this.getApiName();
+      responseData.headers["Server-Api-Uuid"] = this.toUuid();
+      responseData.headers["Client-Api-Uuid"] = request.getHeader("Client-Api-Uuid");
     },
 
     /**
      * Calls a method on the server API
      *
      * @param {zx.io.api.server.Request} request
+     * @param {zx.io.api.server.Response} response
      * @returns {Promise<zx.io.api.IResponseJson.IResponseData>}
      */
-    async __callMethod(request) {
-      let result = undefined;
+    async __callMethod(request, response) {
       let error = undefined;
 
       function pathToRegex(path) {
@@ -99,77 +108,117 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
         return path;
       }
 
-      //Bring query params into the method request
-      let methodRequest = new zx.io.api.server.MethodRequest();
       let requestMethodPath = path.relative(this.__path ?? "/", request.getPath());
-      methodRequest.setParams(request.getQuery());
 
-      //Try to lookup the method by path
-      let methodName;
-      for (let [methodPath, methodByRest] of Object.entries(this.__restsByPath)) {
-        let rgx = new RegExp(pathToRegex(methodPath));
-        let match = requestMethodPath.match(rgx);
-        if (match) {
-          methodName = methodByRest[request.getRestMethod()];
-          let pathArgs = match.groups;
-          methodRequest.setParams(qx.lang.Object.mergeWith(request.getQuery(), pathArgs));
-          break;
+      let handler;
+      if (!request.isFromClientApi()) {
+        //Try to lookup the method by path
+        for (let [methodPath, methodByRest] of Object.entries(this.__restsByPath)) {
+          let rgx = new RegExp(pathToRegex(methodPath));
+          let match = requestMethodPath.match(rgx);
+          if (match) {
+            let pathArgs = match.groups ?? {};
+            request.setPathArgs(pathArgs);
+            handler = methodByRest[request.getRestMethod()];
+            break;
+          }
         }
-      }
 
-      //If no method found by path, try to use the path as the method name
-      if (!methodName && requestMethodPath.indexOf("/") == -1) {
-        methodName = requestMethodPath;
-      }
+        if (!handler) {
+          //If no method found by path, try to use the path as the method name
+          if (!this[requestMethodPath]) {
+            throw new Error(`Method ${requestMethodPath} not found in API ${this.getApiName()}`);
+          }
 
-      if (!this[methodName]) {
-        throw new Error(`Method ${methodName} not found in API ${this.getApiName()}`);
-      }
-
-      //Include the arguments used in API method call if there are any
-      if (request.getBody()?.methodArgs?.length) {
-        this._methodParams[methodName]?.forEach((arg, i) => {
-          methodRequest.getParams()[arg] = request.getBody().methodArgs[i];
-        });
-      }
-
-      try {
-        result = await this[methodName](methodRequest);
-      } catch (ex) {
-        error = ex;
-      }
-
-      let responseData = {
-        type: "methodReturn",
-        headers: {
-          "Call-Index": request.getHeaders()["Call-Index"]
-        },
-        body: {
-          methodResult: result,
-          error: error?.message
+          handler = this[requestMethodPath].bind(this);
         }
-      };
-      return responseData;
+      } else {
+        //Client API handler
+        handler = async () => {
+          let result;
+          let error;
+          try {
+            result = await this[requestMethodPath](...request.getBody().methodArgs);
+          } catch (e) {
+            error = e;
+            this.error(`Error calling method ${requestMethodPath} in API ${this.getApiName()}: ${e}`);
+          }
+          response.addData({
+            type: "methodReturn",
+            headers: {
+              "Call-Index": request.getHeaders()["Call-Index"]
+            },
+            body: {
+              methodResult: result,
+              error: error?.toString() ?? null
+            }
+          });
+        };
+      }
+
+      await handler(request, response);
     },
 
     /**
-     * @param {string} methodName
-     * @param {string} path
-     * @param {RestMethod?} restMethod
+     * @param {RestMethod} restMethod
+     * @param {string} path The path at which the method will be mounted
+     * @param {[methodName: string] | [func: Function, context: any]} Either a method name or a function with a context
+     * If a method name is provided, the method must exist in the instance of this API
+     *
+     * Makes a method able to be called via REST.
+     * During the REST call, the method will be called with the request and response objects as arguments
      */
-    _registerMethod(methodName, path, restMethod = "GET") {
+    __registerMethodRest(restMethod, path, ...args) {
       if (qx.core.Environment.get("qx.debug")) {
         if (path.startsWith("/")) {
           throw new Error(`Error resistering method at path ${path}. Path must be relative and must not start with a forward slash`);
         }
+      }
 
+      //This will be the handler for the REST call that will be called with the request and response objects
+      let handler;
+
+      if (typeof args[0] == "string") {
+        //this means it's a method name
+        let methodName = args[0];
         if (!this[methodName]) {
-          throw new Error(`Error resistering method: method ${methodName} not found in API ${this.getApiName()}`);
+          throw new Error(`Method ${methodName} not found in API ${this.getApiName()}`);
+        }
+        handler = (req, res) => this[methodName](req, res);
+      } else {
+        //this means it's a function with a context
+        let func = args[0];
+        let context;
+        handler = func;
+        if (args.length > 1) {
+          context = args[1];
+          handler = handler.bind(context);
         }
       }
 
       this.__restsByPath[path] ??= {};
-      this.__restsByPath[path][restMethod] = methodName;
+      this.__restsByPath[path][restMethod] = handler;
+    },
+
+    /**
+     * Call the four methods below to register a method to be called via REST
+     * @param {string} path
+     * @param  {...any} args
+     */
+    _registerGet(path, ...args) {
+      this.__registerMethodRest("GET", path, ...args);
+    },
+
+    _registerPost(path, ...args) {
+      this.__registerMethodRest("POST", path, ...args);
+    },
+
+    _registerPut(path, ...args) {
+      this.__registerMethodRest("PUT", path, ...args);
+    },
+
+    _registerDelete(path, ...args) {
+      this.__registerMethodRest("DELETE", path, ...args);
     },
 
     /**
@@ -231,6 +280,7 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
       zx.io.api.server.SessionManager.getInstance()
         .getAllSessions()
         .forEach(session => {
+          this.debug(`Publishing ${eventName} to ${session}`);
           session.publish(this, eventName, data);
         });
     }

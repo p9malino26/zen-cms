@@ -71,7 +71,7 @@ qx.Class.define("zx.io.api.server.SessionManager", {
   },
   statics: {
     /**
-     * How often to look for  and kill old sessions
+     * How often to look for and kill old sessions
      */
     KILL_OLD_SESSIONS_INTERVAL: 30000,
 

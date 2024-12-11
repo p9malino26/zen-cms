@@ -15,6 +15,15 @@ qx.Class.define("zx.io.api.server.Response", {
      */
     headers: {
       check: "Object"
+    },
+
+    /**
+     * Any error message that occurred while processing the request
+     */
+    error: {
+      check: "String",
+      init: null,
+      nullable: true
     }
   },
   members: {

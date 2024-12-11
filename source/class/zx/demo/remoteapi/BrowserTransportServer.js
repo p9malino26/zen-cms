@@ -3,8 +3,7 @@
  * such as a browser or Node.js.
  */
 qx.Class.define("zx.demo.remoteapi.BrowserTransportServer", {
-  extend: qx.core.Object,
-  implement: zx.io.api.server.IServerTransport,
+  extend: zx.io.api.server.AbstractServerTransport,
 
   construct(client) {
     super();
@@ -51,8 +50,7 @@ qx.Class.define("zx.demo.remoteapi.BrowserTransportServer", {
     },
 
     /**
-     *
-     * @param {*} param0
+     * Called by the client directly to receive a message.
      */
     async receiveMessage({ uri, data }) {
       let request = new zx.io.api.server.Request(this, data);

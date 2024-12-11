@@ -7,10 +7,18 @@ qx.Class.define("zx.demo.remoteapi.PlayerMediaServerApi", {
       this.publish("playingMedia", this.__currentMedia++);
     }, 1000);
 
-    //example addresses: localhost:8090/zx-remote-api/player/media/playMedia/22
-    //localhost:8090/zx-remote-api/player/media/testmethod
-    //localhost:8090/zx-remote-api/player/media/getCurrentMedia
-    this._registerMethod("playMedia", "playMedia/{id}");
+    //example addresses: localhost:8090/zx-api/player/media/playMedia/22
+    //localhost:8090/zx-api/player/media/testmethod
+    //localhost:8090/zx-api/player/media/getCurrentMedia
+
+    this._registerGet("playMedia/{id}", (req, res) => {
+      this.playMedia(req.getPathArgs().id);
+      res.addData({ message: "success" });
+    });
+    this._registerGet("getCurrentMedia", async (req, res) => {
+      let media = await this.getCurrentMedia();
+      res.addData({ currentMedia: media });
+    });
   },
   properties: {},
   objects: {},
@@ -23,16 +31,9 @@ qx.Class.define("zx.demo.remoteapi.PlayerMediaServerApi", {
       playingMedia: 0
     },
 
-    _methodParams: {
-      playMedia: ["id"]
-    },
-
     __currentMedia: 7,
 
-    /**
-     * @param {zx.io.api.server.MethodRequest} req
-     */
-    getCurrentMedia(req) {
+    getCurrentMedia() {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve(this.__currentMedia);
@@ -43,8 +44,7 @@ qx.Class.define("zx.demo.remoteapi.PlayerMediaServerApi", {
     /**
      * @param {zx.io.api.server.MethodRequest} req
      */
-    playMedia(req) {
-      const { id } = req.getParams();
+    playMedia(id) {
       console.log(`called playMedia with id ${id}`);
       this.__currentMedia = id;
     },

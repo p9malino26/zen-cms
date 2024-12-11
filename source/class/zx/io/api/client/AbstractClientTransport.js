@@ -4,19 +4,14 @@
 qx.Class.define("zx.io.api.client.AbstractClientTransport", {
   type: "abstract",
   extend: qx.core.Object,
-  implement: [zx.io.api.client.IClientTransport],
+
   construct() {
     super();
-    /**
-     * @type {[hostname: string]: number} Maps hostnames to the number of subscriptions to that hostname
-     */
-    this.__subscriptions = {};
 
-    /**
-     * @type {{[hostname: string]: string}}
-     */
+    this.__subscriptions = {};
     this.__sessionUuidForHostname = {};
   },
+
   events: {
     /**
      * @type {zx.io.api.IRequestJson}
@@ -24,7 +19,13 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
      */
     message: "qx.event.type.Data"
   },
+
   members: {
+    /**@type {{ [hostname: string]: number }} Maps hostnames to the number of subscriptions to that hostname */
+    __subscriptions: null,
+    /**@type {{ [hostname: string]: string }}*/
+    __sessionUuidForHostname: null,
+
     /**
      * @returns {string[]} The hostnames to which this client is subscribed
      */
@@ -33,7 +34,6 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
       let keys = Object.keys(this.__subscriptions);
       for (let key of keys) {
         if (key == "none") {
-          //TODO change to null
           out.push(null);
         } else {
           out.push(key);
@@ -42,14 +42,20 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
       return out;
     },
 
-    /**@override */
+    /**
+     * Called EXCLUSIVELY in zx.io.api.client.AbstractClientApi when the API has subscribed to an event
+     * @param {string} apiPath
+     */
     subscribed(hostname) {
       hostname ??= "none";
       this.__subscriptions[hostname] ??= 0;
       this.__subscriptions[hostname]++;
     },
 
-    /**@override */
+    /**
+     * Called EXCLUSIVELY in zx.io.api.client.AbstractClientApi when the API has unsubscribed from an event
+     * @param {string} apiPath
+     */
     unsubscribed(hostname) {
       hostname ??= "none";
       this.__subscriptions[hostname]--;
@@ -80,6 +86,16 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
         this.warn(`Session UUID for hostname ${hostname} is being overwritten`);
       }
       this.__sessionUuidForHostname[hostname] = sessionUuid;
+    },
+
+    /**
+     * Posts a message to the server.
+     * @abstract
+     * @param {string} uri The URI to post the message to
+     * @param {zx.io.api.IRequestJson} requestJson
+     */
+    postMessage(uri, requestJson) {
+      throw new Error(`Abstract method 'postMessage' of class ${this.classname} not implemented`);
     }
   }
 });
