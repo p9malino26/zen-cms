@@ -56,7 +56,7 @@ qx.Class.define("zx.io.api.server.SessionManager", {
     },
 
     /**
-     * @param {zx.io.api.server.Session[]} session
+     * @param {zx.io.api.server.Session} session
      */
     addSession(session) {
       this.__sessionByUuid[session.toUuid()] = session;

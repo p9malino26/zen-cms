@@ -6,6 +6,13 @@ qx.Class.define("zx.utils.Uri", {
      *
      * @param {string} uri
      * @returns Breaks out this URI into its components
+     *
+     * For example, the URI "http://www.example.com:8080/path/to/resource" would be broken out into:
+     * fqdn: www.example.com
+     * protocol: http
+     * hostname: www.example.com:8080
+     * port: 8080
+     * path: /path/to/resource
      */
     breakoutUri(uri) {
       const letter = "[a-zA-Z]";
@@ -23,6 +30,12 @@ qx.Class.define("zx.utils.Uri", {
       };
     },
 
+    /**
+     * Joins an arbitrary number of URL paths together
+     * @param {string} base
+     * @param  {...string} paths
+     * @returns {string}
+     */
     join(base, ...paths) {
       let uri = base;
       for (let path of paths) {

@@ -14,7 +14,7 @@ qx.Interface.define("zx.io.api.IResponseJson", {
      *
      * @interface IMethodReturn @extends IResponseData
      * @property {"methodReturn"} type
-     * @property {{methodResult: any, error: any}} body
+     * @property {{methodResult: any, error: string}} body
      * @property {{"Call-Index": number}} headers
      *
      * @interface IPublish @extends IResponseData

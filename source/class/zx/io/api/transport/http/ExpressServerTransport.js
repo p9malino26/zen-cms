@@ -18,7 +18,7 @@
 const bodyParser = require("body-parser");
 
 /**
- *
+ * Implementation of server transport for Express.js
  */
 qx.Class.define("zx.io.api.transport.http.ExpressServerTransport", {
   extend: zx.io.api.server.AbstractServerTransport,

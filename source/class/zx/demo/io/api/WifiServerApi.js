@@ -7,8 +7,7 @@ qx.Class.define("zx.demo.io.api.WifiServerApi", {
       this.publish("changeOnlineStatus", this.__onlineStatus++);
     }, 1000);
   },
-  properties: {},
-  objects: {},
+
   members: {
     /**@override */
     _publications: {

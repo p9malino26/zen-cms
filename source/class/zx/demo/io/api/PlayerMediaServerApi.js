@@ -1,3 +1,6 @@
+/**
+ * Example of a server API used to control a video player connected to a TV.
+ */
 qx.Class.define("zx.demo.io.api.PlayerMediaServerApi", {
   extend: zx.io.api.server.AbstractServerApi,
   construct() {
@@ -12,16 +15,18 @@ qx.Class.define("zx.demo.io.api.PlayerMediaServerApi", {
     //localhost:8090/zx-api/player/media/getCurrentMedia
 
     this._registerGet("playMedia/{id}", (req, res) => {
-      this.playMedia(req.getPathArgs().id);
+      this.playMedia(req.getPathArgs().id); //!!are these gonna be kebab case?
       res.addData({ message: "success" });
     });
     this._registerGet("getCurrentMedia", async (req, res) => {
       let media = await this.getCurrentMedia();
       res.addData({ currentMedia: media });
     });
+    this._registerGet("testMethod", (req, res) => {
+      res.addData({ message: this.testMethod() });
+    });
   },
-  properties: {},
-  objects: {},
+
   members: {
     /**@override */
     _publications: {
@@ -42,7 +47,7 @@ qx.Class.define("zx.demo.io.api.PlayerMediaServerApi", {
     },
 
     /**
-     * @param {zx.io.api.server.MethodRequest} req
+     * @param {number} req
      */
     playMedia(id) {
       console.log(`called playMedia with id ${id}`);

@@ -6,7 +6,6 @@ qx.Class.define("zx.thin.puppeteer.api.AbstractBrowserApi", {
   type: "abstract",
 
   /**
-   * Constructor, attaches to the given HeadlessPage
    * @param {string} apiName Name (ID) of the API
    */
   construct(apiName) {
@@ -42,7 +41,7 @@ qx.Class.define("zx.thin.puppeteer.api.AbstractBrowserApi", {
     },
 
     /**
-     * @deprecated
+     * @deprecated use this.postReady() instead
      * For backwards compatibility
      * Returns dummy headlesss with postready method
      */

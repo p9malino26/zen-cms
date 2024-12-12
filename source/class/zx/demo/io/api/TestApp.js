@@ -49,13 +49,13 @@ qx.Class.define("zx.demo.io.api.TestApp", {
       */
 
       // Create a button
-      const labal = new qx.ui.basic.Label("Remote API Test");
+      let label = new qx.ui.basic.Label("Remote API Test");
 
       // Document is the application root
-      const doc = this.getRoot();
+      let doc = this.getRoot();
 
       // Add button to document at fixed coordinates
-      doc.add(labal, { left: 100, top: 50 });
+      doc.add(label, { left: 100, top: 50 });
 
       // Add an event listener
       // button1.addListener("execute", this.__runTest, this);

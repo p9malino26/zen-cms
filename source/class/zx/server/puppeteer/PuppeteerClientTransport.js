@@ -8,7 +8,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClientTransport", {
   extend: zx.io.api.client.AbstractClientTransport,
 
   /**
-   * @param {import("puppeteer-core").Page | null} page The puppeteer page to use for communication
+   * @param {import("puppeteer-core").Page} page The puppeteer page to use for communication
    */
   construct(page) {
     super();

@@ -15,7 +15,7 @@ qx.Class.define("zx.io.api.server.Session", {
   extend: qx.core.Object,
 
   /**
-   * @param {zx.io.api.server.Transport} transport
+   * @param {zx.io.api.server.AbstractServerTransport} transport
    */
   construct(transport) {
     super();
@@ -168,8 +168,7 @@ qx.Class.define("zx.io.api.server.Session", {
     },
 
     /**
-     * Removes and returns all publications from the queue that are destined for a particular API
-     * @param {zx.io.api.server.AbstractServerApi} api
+     * Removes and returns all publications from the queue, for all APIs
      * @returns {zx.io.api.IResponseJson[]}
      */
     consumePublicationsQueue() {

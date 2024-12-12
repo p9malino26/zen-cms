@@ -12,6 +12,7 @@ qx.Class.define("zx.io.api.server.Response", {
   properties: {
     /**
      * public readonly
+     * @type {zx.io.api.IHeaders}
      */
     headers: {
       check: "Object"

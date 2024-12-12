@@ -62,10 +62,10 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
 
     /**
      * Called EXCLUSIVELY by the connection manager (zx.io.api.server.ConnectionManager) when a message is received from the client.
-     * Does the appropriate action, e.g. calling a method or subscribing to a publication.
+     * Does the appropriate action, e.g. calling a method or subscribing to a publication,
+     * and populates the response object
      * @param {zx.io.api.server.Request} request
-     * @param {zx.io.api.server.Request} response
-     * @returns {Promise<zx.io.api.IResponseJson.IResponseData>}
+     * @param {zx.io.api.server.Response} response
      */
     async receiveMessage(request, response) {
       let type = request.getType();
@@ -97,11 +97,8 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
      *
      * @param {zx.io.api.server.Request} request
      * @param {zx.io.api.server.Response} response
-     * @returns {Promise<zx.io.api.IResponseJson.IResponseData>}
      */
     async __callMethod(request, response) {
-      let error = undefined;
-
       function pathToRegex(path) {
         path = path.replace(/\{/g, "(?<");
         path = path.replace(/\}/g, ">[^/]+)");
@@ -201,7 +198,7 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
     },
 
     /**
-     * Call the four methods below to register a method to be called via REST
+     * Call either of the four methods below to register a method to be called via REST
      * @param {string} path
      * @param  {...any} args
      */

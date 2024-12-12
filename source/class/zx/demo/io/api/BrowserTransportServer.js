@@ -5,12 +5,17 @@
 qx.Class.define("zx.demo.io.api.BrowserTransportServer", {
   extend: zx.io.api.server.AbstractServerTransport,
 
+  /**
+   *
+   * @param {zx.demo.io.api.BrowserTransportClient} client
+   */
   construct(client) {
     super();
     this.__client = client;
   },
 
   members: {
+    __client: null,
     /**
      * @override
      */
@@ -19,7 +24,8 @@ qx.Class.define("zx.demo.io.api.BrowserTransportServer", {
     },
 
     /**
-     * @override
+     *
+     * @param {zx.io.api.IResponseJson} data
      */
     postMessage(data) {
       if (this.__client) {
@@ -52,7 +58,11 @@ qx.Class.define("zx.demo.io.api.BrowserTransportServer", {
     /**
      * Called by the client directly to receive a message.
      */
-    async receiveMessage({ uri, data }) {
+    /**
+     *
+     * @param {{data: zx.io.api.IRequestJson}} param0
+     */
+    async receiveMessage({ data }) {
       let request = new zx.io.api.server.Request(this, data);
       let response = new zx.io.api.server.Response();
       await zx.io.api.server.ConnectionManager.getInstance().receiveMessage(request, response);

@@ -1,4 +1,7 @@
 const express = require("express");
+/**
+ * Application used for running a server for the remote API HTTP demo
+ */
 qx.Class.define("zx.demo.io.api.srv.ServerApp", {
   extend: qx.application.Basic,
   members: {

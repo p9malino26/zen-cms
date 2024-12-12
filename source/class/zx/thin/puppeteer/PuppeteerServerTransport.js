@@ -1,5 +1,6 @@
 /**
  * Remote API server transport for puppeteer
+ * Refer to this class in the page that runs in the remote Puppeteer browser
  */
 qx.Class.define("zx.thin.puppeteer.PuppeteerServerTransport", {
   type: "singleton",
@@ -67,7 +68,10 @@ qx.Class.define("zx.thin.puppeteer.PuppeteerServerTransport", {
       return true;
     },
 
-    /**@override */
+    /**
+     *
+     * @param {zx.io.api.IRequestJson} data
+     */
     postMessage(data) {
       console.log(zx.thin.puppeteer.PuppeteerUtil.MSG_PREFIX + zx.utils.Json.stringifyJson(data) + zx.thin.puppeteer.PuppeteerUtil.MSG_SUFFIX);
     },
@@ -91,7 +95,7 @@ qx.Class.define("zx.thin.puppeteer.PuppeteerServerTransport", {
 
     /**
      * You should setup your remote APIs and call this method shortly after the remote page loads (i.e. not after some complex intialization)
-     * in order to notify the puppeteer client that this page is ready to receive remote API calls.
+     * in order to notify the Puppeteer client that this page is ready to receive remote API calls.
      */
     makeReady() {
       this.__ready = true;

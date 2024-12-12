@@ -104,10 +104,15 @@ qx.Class.define("zx.io.api.server.Request", {
       check: "Object"
     },
 
+    /**
+     * The REST method which initiated this request.
+     * Only present if the request is a REST request,
+     * and not initiated by a client API
+     */
     restMethod: {
       init: null,
       nullable: true,
-      check: "String"
+      check: ["GET", "POST", "PUT", "DELETE"]
     }
   },
 
