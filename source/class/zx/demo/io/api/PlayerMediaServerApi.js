@@ -15,7 +15,7 @@ qx.Class.define("zx.demo.io.api.PlayerMediaServerApi", {
     //localhost:8090/zx-api/player/media/getCurrentMedia
 
     this._registerGet("playMedia/{id}", (req, res) => {
-      this.playMedia(req.getPathArgs().id); //!!are these gonna be kebab case?
+      this.playMedia(req.getPathArgs().id);
       res.addData({ message: "success" });
     });
     this._registerGet("getCurrentMedia", async (req, res) => {
