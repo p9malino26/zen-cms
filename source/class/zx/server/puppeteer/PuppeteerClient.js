@@ -96,6 +96,13 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
     /** @type {import("puppeteer-core").Page | null} */
     _page: null,
 
+    /**
+     * @type {Promise<void> | null}
+     * A promise which resolves when the Puppeteer page is ready
+     * for Remote API communications
+     */
+    __readyPromise: null,
+
     __closed: false,
 
     /**
@@ -269,6 +276,14 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         }
         this._browser = null;
       }
+    },
+
+    /**
+     * Waits until the page in the headless browser is ready to communicate via the API
+     * i.e. called zx.thin.puppeteer.PuppeteerServerTransport.getInstance().ready()
+     */
+    async waitForReadySignal() {
+      return this.__readyPromise;
     },
 
     /**
