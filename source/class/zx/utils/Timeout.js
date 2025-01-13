@@ -155,5 +155,17 @@ qx.Class.define("zx.utils.Timeout", {
         }
       }
     }
+  },
+
+  statics: {
+    /**
+     * Sleeps for a duration, returning a promise that resolves when the sleep is done
+     *
+     * @param {Integer} duration time in ms to sleep for
+     * @returns
+     */
+    async sleep(duration) {
+      return new Promise(resolve => setTimeout(resolve, duration));
+    }
   }
 });
