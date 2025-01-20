@@ -193,7 +193,7 @@ qx.Class.define("zx.server.email.Message", {
       let attachmentsData = [{ data: htmlBody, alternative: true }];
       log("Before getting attachments");
       if (this.getAttachments()) {
-        let mime = (await import("mime")).default;
+        const mime = (await import("mime")).default;
         this.getAttachments().forEach(attachment => {
           let filename = attachment.getPath();
           let stream = fs.createReadStream(filename);
@@ -250,7 +250,7 @@ qx.Class.define("zx.server.email.Message", {
           let server = zx.server.Standalone.getInstance();
           emailJsMessage = await server.findOneObjectByType(zx.server.email.Message, { _uuid: this.toUuid() });
         }
-        log(`Error sending email with UUID: ${this.toUuid()}. Stack: ${err?.stack ?? "(no stack trace)"}`);
+        this.error(`Error sending email with UUID: ${this.toUuid()}. Stack: ${err?.stack ?? "(no stack trace)"}`);
         this.setLastErrorMessage(err ? err.message : "Unknown error when sending email");
         await this.save();
       }
