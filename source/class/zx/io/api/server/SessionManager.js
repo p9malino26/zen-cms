@@ -9,7 +9,7 @@ qx.Class.define("zx.io.api.server.SessionManager", {
   construct() {
     super();
     /**
-     * @type {{[uuid: string]: zx.io.api.server.Session}}
+     * @type {Object<String, zx.io.api.server.Session>}
      */
     this.__sessionByUuid = {};
 

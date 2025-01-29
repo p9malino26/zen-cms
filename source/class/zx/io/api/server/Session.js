@@ -63,7 +63,7 @@ qx.Class.define("zx.io.api.server.Session", {
     },
 
     /**
-     * Called EXCLUSIVELY by the session manager (zx.server.SessionManager) when the session is killed
+     * Called EXCLUSIVELY by the session manager (zx.io.api.server.SessionManager) when the session is killed
      * due to inactivity timeout
      */
     kill() {
