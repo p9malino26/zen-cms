@@ -23,6 +23,14 @@ qx.Class.define("zx.io.api.server.AbstractServerTransport", {
   type: "abstract",
   extend: qx.core.Object,
 
+  properties: {
+    encryptionMgr: {
+      init: null,
+      nullable: true,
+      check: "zx.io.api.crypto.IEncryptionMgr"
+    }
+  },
+
   members: {
     /**
      * Derived classes implementing server push should override this method
@@ -39,7 +47,9 @@ qx.Class.define("zx.io.api.server.AbstractServerTransport", {
      *   Can be used to determine the client to send the response to.
      * @returns {zx.io.api.server.Response}
      */
-    createPushResponse(session) {},
+    createPushResponse(session) {
+      return new zx.io.api.server.Response();
+    },
 
     /**
      * Sends the server push response created with method `createPushResponse`
