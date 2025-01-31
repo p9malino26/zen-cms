@@ -155,7 +155,7 @@ qx.Class.define("zx.work.pool.DockerPeerPool", {
      */
     _createClient(port, apiPath) {
       let host = `http://localhost:${port}`;
-      let transport = new zx.io.api.transport.http.ClientTransport();
+      let transport = new zx.io.api.transport.http.HttpClientTransport();
       let client = new zx.work.api.WorkerClientApi(transport, host + this.__route + apiPath);
       return client;
     },

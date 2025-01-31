@@ -19,7 +19,7 @@
  * @ignore(fetch)
  */
 const path = require("path");
-qx.Class.define("zx.io.api.transport.http.ClientTransport", {
+qx.Class.define("zx.io.api.transport.http.HttpClientTransport", {
   extend: zx.io.api.client.AbstractClientTransport,
 
   /**
@@ -56,7 +56,7 @@ qx.Class.define("zx.io.api.transport.http.ClientTransport", {
 
       let pollTimer = new zx.utils.Timeout(null, onPoll);
       pollTimer.setRecurring(true);
-      pollTimer.setDuration(zx.io.api.transport.http.ClientTransport.POLL_INTERVAL);
+      pollTimer.setDuration(zx.io.api.transport.http.HttpClientTransport.POLL_INTERVAL);
       return pollTimer;
     }
   },

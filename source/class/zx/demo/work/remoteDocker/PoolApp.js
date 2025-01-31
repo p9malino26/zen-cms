@@ -12,7 +12,7 @@ qx.Class.define("zx.demo.work.remoteDocker.PoolApp", {
         nodeDebugRange: new zx.utils.Range(9000, 10_000)
       });
 
-      let transport = new zx.io.api.transport.http.ClientTransport();
+      let transport = new zx.io.api.transport.http.HttpClientTransport();
       let scheduler = new zx.work.api.SchedulerClientApi(transport, "http://localhost:4001/zx.work/scheduler");
       pool.setSchedulerApi(scheduler);
       await pool.startup();
