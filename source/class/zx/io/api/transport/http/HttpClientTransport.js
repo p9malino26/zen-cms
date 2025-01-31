@@ -30,34 +30,12 @@ qx.Class.define("zx.io.api.transport.http.HttpClientTransport", {
   construct(route = "/zx-api/") {
     super();
     this.__route = route;
-    this.getQxObject("pollTimer").startTimer();
   },
 
-  events: {
-    message: "qx.event.type.Data"
-  },
-
-  objects: {
-    /**
-     * currently the http server does not implement server push.
-     * Therefore, we must periodically poll the server te receive publications.
-     */
-    pollTimer() {
-      const onPoll = async () => {
-        for (let hostname of this._getSubscribedHostnames()) {
-          let sessionUuid = this.getSessionUuid(hostname);
-          if (!sessionUuid) {
-            return;
-          }
-          let requestJson = { headers: { "Session-Uuid": sessionUuid }, type: "poll", body: {} };
-          await this.postMessage(hostname, requestJson);
-        }
-      };
-
-      let pollTimer = new zx.utils.Timeout(null, onPoll);
-      pollTimer.setRecurring(true);
-      pollTimer.setDuration(zx.io.api.transport.http.HttpClientTransport.POLL_INTERVAL);
-      return pollTimer;
+  properties: {
+    polling: {
+      refine: true,
+      init: true
     }
   },
 
@@ -90,19 +68,13 @@ qx.Class.define("zx.io.api.transport.http.HttpClientTransport", {
           headers: { "Content-Type": "text/plain" }
         });
 
-        let data = await response.json();
-        this.getQxObject("pollTimer").setEnabled(true);
+        let data = await response.text().then(t => zx.utils.Json.parseJson(t));
         this.fireDataEvent("message", data);
       } catch (err) {
         if (qx.core.Environment.get("qx.debug")) {
           console.error(`Failed to post message to ${uri}`, err);
         }
-        this.getQxObject("pollTimer").setEnabled(false);
       }
     }
-  },
-
-  statics: {
-    POLL_INTERVAL: 1_000
   }
 });

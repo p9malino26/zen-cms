@@ -10,6 +10,12 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
 
     this.__subscriptions = {};
     this.__sessionUuidForHostname = {};
+
+    let pollTimer = new zx.utils.Timeout(null, this._pollAll, this);
+    this.__pollTimer = pollTimer;
+    pollTimer.setRecurring(true);
+    this.bind("pollInterval", pollTimer, "duration");
+    this.bind("polling", pollTimer, "enabled");
   },
 
   events: {
@@ -20,9 +26,50 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
     message: "qx.event.type.Data"
   },
 
+  properties: {
+    /**
+     * If enabled, this transport will poll to all subscribed hostnames
+     * every set interval (property: pollInterval)
+     */
+    polling: {
+      init: false,
+      check: "Boolean",
+      event: "changePolling"
+    },
+
+    pollInterval: {
+      init: 1000,
+      event: "changePollInterval",
+      check: "Integer"
+    },
+
+    /**
+     * If specified, this encryption manager will be used to encrypt messages
+     * before they are sent to the server,
+     * and to decrypt messages received from the server.
+     *
+     * Ideally, you should use this object in your implementation of postMessage
+     * and in your received message event handler.
+     */
+    encryptionMgr: {
+      init: null,
+      nullable: true,
+      check: "zx.io.api.crypto.IEncryptionMgr"
+    }
+  },
+
   members: {
+    /**
+     * Timer used to poll all subscribed hostnames
+     * every given interval
+     *
+     * @type {zx.utils.Timeout}
+     */
+    __pollTimer: null,
+
     /**@type {{ [hostname: string]: number }} Maps hostnames to the number of subscriptions to that hostname */
     __subscriptions: null,
+
     /**@type {{ [hostname: string]: string }}*/
     __sessionUuidForHostname: null,
 
@@ -93,9 +140,25 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
      * @abstract
      * @param {string} uri The URI to post the message to
      * @param {zx.io.api.IRequestJson} requestJson
+     * @returns {*}
      */
     postMessage(uri, requestJson) {
       throw new Error(`Abstract method 'postMessage' of class ${this.classname} not implemented`);
+    },
+
+    /**
+     * Polls all hostnames to which the client is subscribed
+     * @returns {Promise<void>}
+     */
+    async _pollAll() {
+      for (let hostname of this._getSubscribedHostnames()) {
+        let sessionUuid = this.getSessionUuid(hostname);
+        if (!sessionUuid) {
+          return;
+        }
+        let requestJson = { headers: { "Session-Uuid": sessionUuid }, type: "poll", body: {} };
+        await this.postMessage(hostname, requestJson);
+      }
     }
   }
 });
