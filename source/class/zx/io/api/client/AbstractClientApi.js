@@ -294,7 +294,7 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
         if (pending) {
           delete this.__pendingMethodCalls[callIndex];
           if (data.body.error) {
-            pending.promise.reject(data.body.error);
+            pending.promise.reject(new Error(data.body.error));
           } else {
             pending.promise.resolve(data.body.methodResult);
           }
