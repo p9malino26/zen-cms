@@ -34,15 +34,12 @@ qx.Class.define("zx.io.api.transport.http.ExpressServerTransport", {
   construct(app, route = "/zx-api/") {
     super();
 
-    if (route.endsWith("/")) {
-      route = route.substring(0, route.length - 1);
-    }
-
-    route = qx.lang.String.escapeRegexpChars(route);
+    //remove trailing forward slash if there is one
+    route = route.replace(/\/$/, "");
 
     const RE_ROUTE = new RegExp(`^${route}`);
 
-    app.all(`${route}/*`, async (req, res) => {
+    app.all(`${route}/**`, async (req, res) => {
       let data = qx.lang.Object.clone(req.body, true);
       let path = zx.utils.Uri.breakoutUri(req.originalUrl).path.replace(RE_ROUTE, "");
       path = qx.lang.String.camelCase(path);
@@ -59,12 +56,6 @@ qx.Class.define("zx.io.api.transport.http.ExpressServerTransport", {
       }
 
       res.send(response.toNativeObject());
-
-      // TODO: http server push
-      // res.status(200).end();
-      // for (let data of response.getData()) {
-      //   this.postMessage(data);
-      // }
     });
   },
 
