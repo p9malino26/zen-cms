@@ -8,15 +8,22 @@ qx.Class.define("zx.demo.io.api.srv.ServerApp", {
     async main() {
       debugger; //now is a good time to break on caught exceptions
       let app = express();
-      let port = 8090;
+
+      let port = 8080;
+      let userPort = process.argv[2];
+
+      if (userPort) {
+        if (!userPort.startsWith("--port=")) {
+          throw new Error("Argument must be in the form --port=<number>, got: " + userPort);
+        }
+        port = userPort.split("=")[1];
+      }
+
       app.use(zx.io.api.transport.http.ExpressServerTransport.jsonMiddleware());
       app
         .use("/", express.static("compiled/source/remoteApiBrowserTest"))
         .use("/transpiled", express.static("compiled/source/transpiled"))
         .use("/resource", express.static("compiled/source/resource"))
-        .use(this.__prefix + "/**", (req, res) => {
-          this.__onMessageReceived(req, res);
-        })
         .listen(port, () => {
           console.log(`Server is running on port ${port}`);
         });
