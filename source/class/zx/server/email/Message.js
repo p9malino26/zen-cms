@@ -193,7 +193,7 @@ qx.Class.define("zx.server.email.Message", {
       let attachmentsData = [{ data: htmlBody, alternative: true }];
       log("Before getting attachments");
       if (this.getAttachments()) {
-        const mime = (await import("mime")).default;
+        let mime = (await import("mime")).default;
         this.getAttachments().forEach(attachment => {
           let filename = attachment.getPath();
           let stream = fs.createReadStream(filename);
