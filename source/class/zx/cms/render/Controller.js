@@ -111,7 +111,7 @@ qx.Class.define("zx.cms.render.Controller", {
       } else if (qx.Class.hasInterface(object.constructor, zx.cms.render.IViewable)) {
         viewableClass = object.constructor;
       } else {
-        throw new Error(`Cannot locate a contructor for ${object} because I can't understand what it is`);
+        throw new Error(`Cannot locate a controller for ${object} because I can't understand what it is`);
       }
 
       let current = zx.cms.render.Controller.__controllers[viewableClass.classname];
