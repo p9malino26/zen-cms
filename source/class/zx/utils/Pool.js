@@ -79,7 +79,7 @@ qx.Class.define("zx.utils.Pool", {
         await this.__createNewResource();
       };
 
-      const topup = new zx.utils.Timeout(null, onTopup);
+      let topup = new zx.utils.Timeout(null, onTopup);
       topup.setRecurring(true);
       this.bind("pollInterval", topup, "duration");
       return topup;
@@ -88,7 +88,7 @@ qx.Class.define("zx.utils.Pool", {
     trim() {
       const onTrim = async () => {
         let needsTrim = this.__pool.size > this.getMinSize();
-        for (const [resource, availability] of this.__pool) {
+        for (let [resource, availability] of this.__pool) {
           if (!needsTrim) {
             break;
           }
@@ -100,7 +100,7 @@ qx.Class.define("zx.utils.Pool", {
         }
       };
 
-      const trim = new zx.utils.Timeout(null, onTrim);
+      let trim = new zx.utils.Timeout(null, onTrim);
       trim.setRecurring(true);
       this.bind("pollInterval", trim, "duration");
       return trim;
@@ -138,7 +138,7 @@ qx.Class.define("zx.utils.Pool", {
       this.getQxObject("topup").killTimer();
       this.getQxObject("trim").killTimer();
       this.__live = false;
-      for (const resource of this.__pool.keys()) {
+      for (let resource of this.__pool.keys()) {
         await this.__destroyResource(resource);
       }
       this.__updateAvailability();
@@ -151,7 +151,7 @@ qx.Class.define("zx.utils.Pool", {
       if (!this.__live) {
         return false;
       }
-      for (const availability of this.__pool.values()) {
+      for (let availability of this.__pool.values()) {
         if (availability === zx.utils.Pool.AVAILABLE) {
           return true;
         }
@@ -168,7 +168,7 @@ qx.Class.define("zx.utils.Pool", {
       if (!this.__live) {
         throw new Error("Cannot acquire because the pool is not live - call 'startup' to start the pool");
       }
-      const resource = await this.__getOrCreateResource();
+      let resource = await this.__getOrCreateResource();
       this.__pool.set(resource, zx.utils.Pool.UNAVAILABLE);
       this.__updateAvailability();
       return resource;
@@ -203,7 +203,7 @@ qx.Class.define("zx.utils.Pool", {
      * @returns {TResource} a resource
      */
     async __createNewResource() {
-      const resource = await this.getFactory().create();
+      let resource = await this.getFactory().create();
       this.__pool.set(resource, zx.utils.Pool.AVAILABLE);
       return resource;
     },
@@ -226,9 +226,9 @@ qx.Class.define("zx.utils.Pool", {
      * @returns {TResource} a resource
      */
     async __getOrCreateResource() {
-      const startTime = Date.now();
+      let startTime = Date.now();
       while (true) {
-        for (const [resource, availability] of this.__pool) {
+        for (let [resource, availability] of this.__pool) {
           if (availability === zx.utils.Pool.UNAVAILABLE) {
             continue;
           }

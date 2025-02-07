@@ -71,7 +71,7 @@ qx.Class.define("zx.work.AbstractWorkerPool", {
 
   objects: {
     pool() {
-      const pool = new zx.utils.Pool();
+      let pool = new zx.utils.Pool();
       this.bind(
         "poolConfig",
         new zx.utils.Target(value => {
@@ -127,7 +127,7 @@ qx.Class.define("zx.work.AbstractWorkerPool", {
         }
       };
 
-      const pollTimer = new zx.utils.Timeout(null, onPoll);
+      let pollTimer = new zx.utils.Timeout(null, onPoll);
       pollTimer.setRecurring(true);
       this.bind("pollInterval", pollTimer, "duration");
       return pollTimer;
@@ -150,7 +150,7 @@ qx.Class.define("zx.work.AbstractWorkerPool", {
         }
       };
 
-      const pushTimer = new zx.utils.Timeout(null, onPush);
+      let pushTimer = new zx.utils.Timeout(null, onPush);
       pushTimer.setRecurring(true);
       this.bind("pushInterval", pushTimer, "duration");
       return pushTimer;

@@ -4,17 +4,17 @@ qx.Class.define("zx.demo.work.nodeWorkers.App", {
 
   members: {
     async main() {
-      const pool = new zx.work.pool.NodeWorkerPool({
+      let pool = new zx.work.pool.NodeWorkerPool({
         minSize: 0,
         maxSize: 1
       });
 
-      const schedulerClientTransport = new zx.io.api.transport.loopback.Client();
-      const schedulerServerTransport = new zx.io.api.transport.loopback.Server();
+      let schedulerClientTransport = new zx.io.api.transport.loopback.Client();
+      let schedulerServerTransport = new zx.io.api.transport.loopback.Server();
       schedulerClientTransport.connect(schedulerServerTransport);
       schedulerServerTransport.connect(schedulerClientTransport);
-      const schedulerClient = new zx.work.api.SchedulerClientApi(schedulerClientTransport, "/scheduler");
-      const schedulerServer = new zx.work.api.SchedulerServerApi("/scheduler");
+      let schedulerClient = new zx.work.api.SchedulerClientApi(schedulerClientTransport, "/scheduler");
+      let schedulerServer = new zx.work.api.SchedulerServerApi("/scheduler");
       pool.setSchedulerApi(schedulerClient);
       schedulerServer.schedule({
         uuid: "uuid",
