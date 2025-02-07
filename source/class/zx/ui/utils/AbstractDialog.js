@@ -34,11 +34,19 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
       trapKeyboard: true
     });
 
+    qx.core.Init.getApplication()
+      .getRoot()
+      .addListener("resize", () => this._onContainersResize());
+
     this.center();
-    this.addListenerOnce("appear", () => {
+    this.addListener("appear", () => {
       this.center();
-      this.getLayoutParent().addListener("resize", () => this.center());
+      setTimeout(() => this.center(), 100);
     });
+    this.addListener("appearonce", () => {
+      this.getLayoutParent().addListener("resize", () => this._onContainersResize());
+    });
+    this._onContainersResize();
     this.addListener("close", this._onClose, this);
   },
 
@@ -94,6 +102,24 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
 
     /** @type{qx.Promsie?} the promise that will resolve when the dialog is closed */
     __onClosePromise: null,
+
+    _onContainersResize() {
+      let maxHeight = Math.floor(qx.bom.Viewport.getHeight() * 0.9);
+      let maxWidth = Math.floor(qx.bom.Viewport.getWidth() * 0.9);
+      let minWidth = this.getMinWidth();
+      let minHeight = this.getMinHeight();
+      if (minWidth && maxWidth < minWidth) {
+        maxWidth = minWidth;
+      }
+      if (minHeight && maxHeight < minHeight) {
+        maxHeight = minHeight;
+      }
+      this.set({
+        maxHeight: maxHeight,
+        maxWidth: maxWidth
+      });
+      this.center();
+    },
 
     /**
      * Apply for `trapKeyboard`

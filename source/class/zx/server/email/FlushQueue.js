@@ -28,8 +28,6 @@ qx.Class.define("zx.server.email.FlushQueue", {
         if (success) {
           this.log(`Email ${email.toUuid()} sent successfully: ${success}`);
           sentUuids.push(email.toUuid());
-        } else {
-          this.log(`ERROR: Failed to send email ${email.toUuid()}. Message: ${email.getLastErrorMessage()}`);
         }
       }
 
