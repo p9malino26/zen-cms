@@ -90,7 +90,7 @@ qx.Class.define("zx.demo.io.api.TestApp", {
     },
 
     __getHttpClientTransport() {
-      let transport = new zx.io.api.transport.http.HttpClientTransport();
+      let transport = new zx.io.api.transport.http.HttpClientTransport("/zx-api/");
       return transport;
     },
 

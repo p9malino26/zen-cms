@@ -5,13 +5,18 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
   type: "abstract",
   extend: qx.core.Object,
 
-  construct() {
+  /**
+   *
+   * @param {string?} serverUri URI identifiying the server. Should include the hostname and the route to ZX remote API calls.
+   * For example, if the server is running at http://localhost:3000 and its route for its HTTP server transport is /zx-api,
+   * then the serverUri should be http://localhost:3000/zx-api
+   */
+  construct(serverUri) {
     super();
 
-    this.__subscriptions = {};
-    this.__sessionUuidForHostname = {};
+    this.__serverUri = serverUri;
 
-    let pollTimer = new zx.utils.Timeout(null, this._pollAll, this);
+    let pollTimer = new zx.utils.Timeout(null, this.__poll, this);
     this.__pollTimer = pollTimer;
     pollTimer.setRecurring(true);
     this.bind("pollInterval", pollTimer, "duration");
@@ -59,6 +64,9 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
   },
 
   members: {
+    getServerUri() {
+      return this.__serverUri;
+    },
     /**
      * Timer used to poll all subscribed hostnames
      * every given interval
@@ -67,47 +75,34 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
      */
     __pollTimer: null,
 
-    /**@type {{ [hostname: string]: number }} Maps hostnames to the number of subscriptions to that hostname */
-    __subscriptions: null,
-
-    /**@type {{ [hostname: string]: string }}*/
-    __sessionUuidForHostname: null,
-
     /**
-     * @returns {string[]} The hostnames to which this client is subscribed
+     * Number of subscriptions to the server
      */
-    _getSubscribedHostnames() {
-      let out = [];
-      let keys = Object.keys(this.__subscriptions);
-      for (let key of keys) {
-        if (key == "none") {
-          out.push(null);
-        } else {
-          out.push(key);
-        }
-      }
-      return out;
-    },
+    __subscriptions: 0,
+
+    /**@type {string | null}*/
+    __sessionUuid: null,
 
     /**
      * Called EXCLUSIVELY in zx.io.api.client.AbstractClientApi when the API has subscribed to an event
-     * @param {string} apiPath
+     * @param {string} sessionUuid
      */
-    subscribed(hostname) {
-      hostname ??= "none";
-      this.__subscriptions[hostname] ??= 0;
-      this.__subscriptions[hostname]++;
+    subscribe(sessionUuid) {
+      this.__sessionUuid = sessionUuid;
+      this.__subscriptions++;
     },
 
     /**
      * Called EXCLUSIVELY in zx.io.api.client.AbstractClientApi when the API has unsubscribed from an event
      * @param {string} apiPath
      */
-    unsubscribed(hostname) {
-      hostname ??= "none";
-      this.__subscriptions[hostname]--;
-      if (this.__subscriptions[hostname] === 0) {
-        delete this.__subscriptions[hostname];
+    unsubscribe() {
+      this.__subscriptions--;
+      if (qx.core.Environment.get("qx.Debug")) {
+        if (this.__subscriptions == -1) {
+          console.warn("You have unsubscribed more times than you have subscribed. There is a bug in your code.");
+          debugger;
+        }
       }
     },
 
@@ -115,50 +110,30 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
      * Gets a session UUID for a particular hostname of a client API URI
      * @param {string?} hostname
      */
-    getSessionUuid(hostname) {
-      hostname ??= "none";
-      return this.__sessionUuidForHostname[hostname];
-    },
-
-    /**
-     * Returns a session UUID for a particular hostname of a client API URI
-     * The implementation must be able to store a session UUID for a null hostname as well
-     * @param {string?} hostname
-     * @param {string} sessionUuid
-     */
-    setSessionUuid(hostname, sessionUuid) {
-      hostname ??= "none";
-      let existingUuid = this.__sessionUuidForHostname[hostname];
-      if (existingUuid && existingUuid != sessionUuid) {
-        this.warn(`Session UUID for hostname ${hostname} is being overwritten`);
-      }
-      this.__sessionUuidForHostname[hostname] = sessionUuid;
+    getSessionUuid() {
+      return this.__sessionUuid;
     },
 
     /**
      * Posts a message to the server.
      * @abstract
-     * @param {string} uri The URI to post the message to
+     * @param {string} path The path the the request. Consists of the API's path (if it has one), and the method name (if it's for a method call)
      * @param {zx.io.api.IRequestJson} requestJson
      * @returns {*}
      */
-    postMessage(uri, requestJson) {
+    postMessage(path, requestJson) {
       throw new Error(`Abstract method 'postMessage' of class ${this.classname} not implemented`);
     },
 
     /**
-     * Polls all hostnames to which the client is subscribed
+     * Polls the hostname for this transport,
+     * if we have subscriptions.
      * @returns {Promise<void>}
      */
-    async _pollAll() {
-      for (let hostname of this._getSubscribedHostnames()) {
-        let sessionUuid = this.getSessionUuid(hostname);
-        if (!sessionUuid) {
-          return;
-        }
-        let requestJson = { headers: { "Session-Uuid": sessionUuid }, type: "poll", body: {} };
-        await this.postMessage(hostname, requestJson);
-      }
+    async __poll() {
+      if (!this.__serverUri || this.__subscriptions === 0) return;
+      let requestJson = { headers: { "Session-Uuid": this.__sessionUuid }, type: "poll", body: {} };
+      await this.postMessage(this.__serverUri, requestJson);
     }
   }
 });

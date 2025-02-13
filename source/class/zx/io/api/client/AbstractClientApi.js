@@ -15,12 +15,12 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
    * Either: Names of the methods that are defined in the corresponding server API class.
    * Or: An object mapping method names to their configurations.
    *
-   * @param {string?} uri The URI of the server API. If provided, calls to the server will be forwarded to the API registerd at the path of the URI
+   * @param {string?} path The path to mount this API. If provided, calls from this API will target the API registed on the server at this path.
    */
-  construct(transport, apiName, methodNames, uri = null) {
+  construct(transport, apiName, methodNames, path = null) {
     super();
-
-    this.__uri = uri;
+    //uses of this class
+    this.__path = path;
     this.__transport = transport;
     this.__apiName = apiName;
     this.__cookies = {};
@@ -44,7 +44,7 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
     /**
      * @type {string}
      */
-    __uri: null,
+    __path: null,
 
     /**
      * @typedef {{callbacks: ((eventData: any) => void)[], promise: qx.Promise?}} SubscriptionData The promise is created when the client requests subscribe,
@@ -127,25 +127,24 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
         "Client-Api-Uuid": this.toUuid()
       };
 
-      if (!this.__getPath()) {
+      if (!this.__path) {
         headers["Api-Name"] = this.__apiName;
       }
 
-      if (this.__transport.getSessionUuid(this.__getHostname())) {
-        headers["Session-Uuid"] = this.__transport.getSessionUuid(this.__getHostname());
+      if (this.__transport.getSessionUuid()) {
+        headers["Session-Uuid"] = this.__transport.getSessionUuid();
       }
 
-      this.__transport.postMessage(this.__uri, {
+      this.__transport.postMessage(this.__path, {
         type: "subscribe",
         headers,
-        path: this.__getPath(),
+        path: this.__path,
         body: {
           eventName
         }
       });
 
       let promise = new qx.Promise();
-      this.__transport.subscribed(this.__getHostname());
       let callbacks = new qx.data.Array([callback]);
       this.__subscriptions[eventName] = { callbacks, promise };
       return promise;
@@ -169,16 +168,16 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
         let request = {
           type: "unsubscribe",
           headers: {
-            "Api-Name": this.__getPath() && this.__apiName,
+            "Api-Name": !this.__path ? this.__apiName : undefined,
             "Client-Api-Uuid": this.toUuid(),
-            "Session-Uuid": this.__transport.getSessionUuid(this.__getHostname())
+            "Session-Uuid": this.__transport.getSessionUuid()
           },
           body: {
             eventName
           }
         };
-        this.__transport.postMessage(this.__uri, request);
-        this.__transport.unsubscribed(this.__getHostname());
+        this.__transport.postMessage(this.__path, request);
+        this.__transport.unsubscribed();
       }
     },
 
@@ -221,11 +220,11 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
         Cookies: JSON.stringify(this.__cookies)
       };
 
-      if (!this.__getPath()) {
+      if (!this.__path) {
         headers["Api-Name"] = this.__apiName;
       }
 
-      const sessionUuid = this.__transport.getSessionUuid(this.__getHostname());
+      let sessionUuid = this.__transport.getSessionUuid();
       if (sessionUuid) {
         headers["Session-Uuid"] = sessionUuid;
       }
@@ -279,9 +278,9 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
         }
       }
 
-      //Session UUID
-      if (data.headers["Session-Uuid"]) {
-        this.__transport.setSessionUuid(this.__getHostname(), data.headers["Session-Uuid"]);
+      if (this.__transport.getSessionUuid() && data.headers["Session-Uuid"] && data.headers["Session-Uuid"] != this.__transport.getSessionUuid()) {
+        console.warn("Session UUID has changed. This means that current subscriptions will not work. Please check that your connection to the server is stable.");
+        debugger;
       }
 
       if (data.type == "methodReturn") {
@@ -300,6 +299,7 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
           }
         }
       } else if (data.type == "subscribed") {
+        this.__transport.subscribe(data.headers["Session-Uuid"]);
         this.__subscriptions[data.body.eventName].promise.resolve();
         delete this.__subscriptions[data.body.eventName].promise;
       } else if (data.type == "unsubscribed") {
@@ -321,30 +321,14 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
      * consisting of the API URI and the method name
      *
      * For example;
-     * if this.__uri is "http://example.com/api" and methodName is "doSomething" then this method will return
+     * if this.__path is "http://example.com/api" and methodName is "doSomething" then this method will return
      * "http://example.com/api/doSomething"
      *
      * @param {string} methodName
      * @returns
      */
     __getUrl(methodName) {
-      return zx.utils.Uri.join(this.__uri ?? "/", qx.lang.String.hyphenate(methodName));
-    },
-
-    /**
-     *
-     * @returns {string} The hostname part of this URI
-     *
-     * For example, if this.__uri is "http://example.com/api",
-     * this method will return "example.com"
-     */
-    __getHostname() {
-      if (!this.__uri) {
-        return null;
-      }
-
-      let out = zx.utils.Uri.breakoutUri(this.__uri).hostname;
-      return out;
+      return zx.utils.Uri.join(this.__path ?? "/", qx.lang.String.hyphenate(methodName));
     },
 
     __clearSubscriptions() {
@@ -358,13 +342,14 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
      * @returns {string?}
      */
     __getPath(methodName) {
-      let apiPath = null;
-      if (this.__uri) {
-        apiPath = zx.utils.Uri.breakoutUri(this.__uri).path;
-      }
+      let apiPath = this.__path ?? "/";
 
       if (methodName) {
-        apiPath = zx.utils.Uri.join(apiPath ?? "/", methodName);
+        apiPath = zx.utils.Uri.join(apiPath, methodName);
+      }
+
+      if (apiPath === "/") {
+        apiPath = "";
       }
 
       return apiPath;
