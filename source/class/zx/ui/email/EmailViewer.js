@@ -4,55 +4,29 @@ qx.Class.define("zx.ui.email.EmailViewer", {
   extend: qx.ui.container.Composite,
 
   construct() {
-    super(new qx.ui.layout.VBox(10));
-    this._add(this.getQxObject("root"), { flex: 1 });
+    super(new qx.ui.layout.VBox(2));
+    this._add(this.getQxObject("grpHeaders"));
+    this._add(this.getQxObject("tabview"), { flex: 1 });
 
     this.__attachmentUrls = new Map();
-
-    this.bind("rawEmail", this, "parsedEmail", { converter: this._toServerEmailMessage.bind(this) });
-    this.bind("parsedEmail", this, "bodyDisplayMode", {
-      converter: () => {
-        let hasMarkup = this.hasMarkup();
-        let hasPlain = this.hasPlain();
-        let current = this.getBodyDisplayMode();
-        if (current && hasMarkup && hasPlain) {
-          return current;
-        }
-        if (hasMarkup) {
-          return "markup";
-        }
-        if (hasPlain) {
-          return "plain";
-        }
-        return null;
-      }
-    });
   },
 
   properties: {
-    /**
-     * Raw email - either some {@link zx.server.email.Message}, or a `string` containing a raw
-     * mime-encoded email.
-     */
-    rawEmail: {
-      check: value => typeof value === "string",
-      nullable: true,
-      init: null,
-      event: "changeRawEmail"
-    },
-
-    parsedEmail: {
+    value: {
       check: "zx.server.email.Message",
-      nullable: true,
       init: null,
-      event: "changeParsedEmail"
+      nullable: true,
+      event: "changeValue",
+      transform: "_transformValue",
+      apply: "_applyValue"
     },
 
     bodyDisplayMode: {
       check: ["plain", "markup"],
       nullable: true,
       init: null,
-      event: "changeBodyDisplayMode"
+      event: "changeBodyDisplayMode",
+      apply: "_applyBodyDisplayMode"
     },
 
     currentAttachment: {
@@ -63,261 +37,218 @@ qx.Class.define("zx.ui.email.EmailViewer", {
   },
 
   objects: {
-    root() {
-      const root = new qx.ui.container.Composite(new qx.ui.layout.VBox(10));
-      root.add(this.getQxObject("compMeta"));
-      root.add(this.getQxObject("compBody"), { flex: 1 });
-      return root;
+    tabview() {
+      let tv = new qx.ui.tabview.TabView();
+      tv.add(this.getQxObject("pageBody"));
+      tv.add(this.getQxObject("pageAttachments"));
+      return tv;
     },
 
-    // START(meta)
-    compMeta() {
-      const compMeta = new qx.ui.container.Composite(new qx.ui.layout.VBox(10)).set({ padding: 4 });
-      compMeta.add(this.getQxObject("grpFields"));
-      compMeta.add(this.getQxObject("grpAttachments"));
-      return compMeta;
+    pageBody() {
+      let page = new qx.ui.tabview.Page("Body");
+      page.setLayout(new qx.ui.layout.Grow());
+      let scroll = new qx.ui.container.Scroll();
+      let scrollContents = new qx.ui.container.Composite(new qx.ui.layout.Grow());
+      scroll.add(scrollContents);
+      scrollContents.add(this.getQxObject("lblBodyPlainText"));
+      scrollContents.add(this.getQxObject("htmlBody"));
+      page.add(scroll);
+      return page;
     },
 
-    // START(fields)
-    compFields() {
-      const compFields = new qx.ui.container.Composite(new qx.ui.layout.VBox(10)).set({ width: 300 });
-      compFields.add(this.getQxObject("fieldDate"));
-      compFields.add(this.getQxObject("fieldFrom"));
-      compFields.add(this.getQxObject("fieldSubject"));
-      return compFields;
+    lblBodyPlainText() {
+      return new qx.ui.basic.Label().set({ rich: true, wrap: true, padding: 10 });
     },
 
-    grpFields() {
-      const grpFields = new qx.ui.groupbox.GroupBox("Headers").set({ minWidth: 500 });
-      grpFields.setLayout(new qx.ui.layout.VBox(10));
-
-      let comp; // nice to have: a grid layout with directional flex
-      comp = new qx.ui.container.Composite(new qx.ui.layout.HBox(10));
-      comp.add(new qx.ui.basic.Label("Date:").set({ minWidth: 50 }));
-      comp.add(this.getQxObject("fieldDate"), { flex: 1 });
-      grpFields.add(comp);
-
-      comp = new qx.ui.container.Composite(new qx.ui.layout.HBox(10));
-      comp.add(new qx.ui.basic.Label("From:").set({ minWidth: 50 }));
-      comp.add(this.getQxObject("fieldFrom"), { flex: 1 });
-      grpFields.add(comp);
-
-      comp = new qx.ui.container.Composite(new qx.ui.layout.HBox(10));
-      comp.add(new qx.ui.basic.Label("Subject:").set({ minWidth: 50 }));
-      comp.add(this.getQxObject("fieldSubject"), { flex: 1 });
-      grpFields.add(comp);
-
-      comp = new qx.ui.container.Composite(new qx.ui.layout.HBox(10));
-      comp.add(new qx.ui.basic.Label("Display:").set({ minWidth: 50 }));
-      let group = new qx.ui.form.RadioGroup();
-      group.addListener("changeSelection", evt => this.setBodyDisplayMode(evt.getData()[0]?.getModel() ?? null));
-      group.add(this.getQxObject("radioShowMarkup"));
-      comp.add(this.getQxObject("radioShowMarkup"), { flex: 1 });
-      group.add(this.getQxObject("radioShowPlain"));
-      comp.add(this.getQxObject("radioShowPlain"), { flex: 1 });
-      grpFields.add(comp);
-
-      return grpFields;
+    htmlBody() {
+      return new qx.ui.embed.Html().set({ overflowY: "scroll" });
     },
 
-    fieldDate() {
-      const fieldDate = new qx.ui.form.DateField().set({ enabled: false });
-      this.bind("parsedEmail.dateQueued", fieldDate, "value");
-      fieldDate.getChildControl("button").setVisibility("excluded");
-      return fieldDate;
+    grpHeaders() {
+      let grp = new qx.ui.groupbox.GroupBox("Headers").set({ minWidth: 500 });
+      let layout = new qx.ui.layout.Grid();
+      layout.setColumnFlex(1, 1);
+      grp.setLayout(layout);
+
+      grp.add(new qx.ui.basic.Label("Date Queued:"), { row: 0, column: 0 });
+
+      let comp2 = new qx.ui.container.Composite(new qx.ui.layout.HBox(2));
+      comp2.add(this.getQxObject("edtDateQueued"));
+      comp2.add(new qx.ui.basic.Label("Date Delivered: "));
+      comp2.add(this.getQxObject("edtDateDelivered"));
+      grp.add(comp2, { row: 0, column: 1 });
+
+      grp.add(new qx.ui.basic.Label("To:"), { row: 1, column: 0 });
+      grp.add(this.getQxObject("edtTo"), { row: 1, column: 1 });
+
+      grp.add(new qx.ui.basic.Label("CC:"), { row: 2, column: 0 });
+      grp.add(this.getQxObject("edtCc"), { row: 2, column: 1 });
+
+      grp.add(new qx.ui.basic.Label("Subject:"), { row: 3, column: 0 });
+      grp.add(this.getQxObject("edtSubject"), { row: 3, column: 1 });
+
+      grp.add(new qx.ui.basic.Label("Display:"), { row: 4, column: 0 });
+
+      let rg = new qx.ui.form.RadioGroup();
+      rg.addListener("changeSelection", evt => this.setBodyDisplayMode(evt.getData()[0]?.getModel() ?? null));
+      rg.add(this.getQxObject("btnShowMarkup"));
+      rg.add(this.getQxObject("btnShowPlain"));
+
+      let comp = new qx.ui.container.Composite(new qx.ui.layout.HBox(2));
+      comp.add(this.getQxObject("btnShowMarkup"));
+      comp.add(this.getQxObject("btnShowPlain"));
+      grp.add(comp, { row: 4, column: 1 });
+
+      return grp;
     },
 
-    fieldFrom() {
-      const fieldFrom = new qx.ui.form.TextField().set({ enabled: false });
-      this.bind("parsedEmail.from", fieldFrom, "value");
-      return fieldFrom;
+    edtDateQueued() {
+      return new qx.ui.form.TextField().set({ readOnly: true });
+    },
+    edtDateDelivered() {
+      return new qx.ui.form.TextField().set({ readOnly: true });
     },
 
-    fieldSubject() {
-      const fieldSubject = new qx.ui.form.TextField().set({ enabled: false });
-      this.bind("parsedEmail.subject", fieldSubject, "value");
-      return fieldSubject;
+    edtTo() {
+      return new qx.ui.form.TextField().set({ readOnly: true });
+    },
+    edtCc() {
+      return new qx.ui.form.TextField().set({ readOnly: true });
+    },
+    edtSubject() {
+      return new qx.ui.form.TextField().set({ readOnly: true });
     },
 
-    radioShowMarkup() {
-      const radioShowMarkup = new qx.ui.form.RadioButton("Markup").set({ minWidth: 100 });
-      this.bind("parsedEmail", radioShowMarkup, "enabled", { converter: () => this.hasMarkup() });
-      radioShowMarkup.setModel("markup");
-      return radioShowMarkup;
+    btnShowMarkup() {
+      return new qx.ui.form.RadioButton("Markup").set({ minWidth: 100, model: "markup" });
     },
 
-    radioShowPlain() {
-      const radioShowPlain = new qx.ui.form.RadioButton("Plaintext").set({ minWidth: 100 });
-      this.bind("parsedEmail", radioShowPlain, "enabled", { converter: () => this.hasPlain() });
-      radioShowPlain.setModel("plain");
-      return radioShowPlain;
+    btnShowPlain() {
+      return new qx.ui.form.RadioButton("Plaintext").set({ minWidth: 100, model: "plain" });
     },
-    // END(fields)
 
-    // START(attachments)
-    grpAttachments() {
-      const grpAttachments = new qx.ui.groupbox.GroupBox("Attachments").set({ minWidth: 300 });
-      grpAttachments.setLayout(new qx.ui.layout.HBox(10));
-      grpAttachments.add(this.getQxObject("lstAttachments"));
-      grpAttachments.add(this.getQxObject("compAttachmentInfo"));
-      return grpAttachments;
+    pageAttachments() {
+      let pg = new qx.ui.tabview.Page("Attachments");
+      pg.setLayout(new qx.ui.layout.HBox(2));
+      pg.add(this.getQxObject("lstAttachments"));
+      pg.add(this.getQxObject("compAttachmentInfo"), { flex: 1 });
+      return pg;
     },
 
     lstAttachments() {
-      const lstAttachments = new qx.ui.form.List().set({ minWidth: 300 });
-      this.bind(
-        "parsedEmail.attachments",
-        new zx.utils.Target(attachments => {
-          lstAttachments.removeAll();
-          this.setCurrentAttachment(null);
-          if (!attachments) {
-            return;
-          }
-          for (let attachment of attachments) {
-            let title = attachment.getName();
-            let item = new qx.ui.form.ListItem(title, null, attachment);
-            item.setToolTipText(title);
-            lstAttachments.add(item);
-            item.addListener("tap", () => this.setCurrentAttachment(attachment));
-          }
-        })
-      );
-      return lstAttachments;
+      return new qx.ui.form.List().set({ minWidth: 300 });
+    },
+
+    ctlrAttachments() {
+      let ctlr = new qx.data.controller.List(null, this.getQxObject("lstAttachments"), "name");
+      ctlr.getSelection().addListener("change", () => {
+        let attachment = ctlr.getSelection().getItem(0);
+        this.setCurrentAttachment(attachment);
+      });
+      return ctlr;
     },
 
     compAttachmentInfo() {
-      const compAttachmentInfo = new qx.ui.container.Composite(new qx.ui.layout.VBox(10)).set({ minWidth: 300 });
-      let comp; // nice to have: a grid layout with directional flex
+      let layout = new qx.ui.layout.Grid(2, 2);
+      layout.setColumnFlex(1, 1);
+      let comp = new qx.ui.container.Composite(layout).set({ minWidth: 300 });
 
-      comp = new qx.ui.container.Composite(new qx.ui.layout.HBox(10));
-      comp.add(new qx.ui.basic.Label("Name:").set({ minWidth: 50 }));
-      comp.add(this.getQxObject("fieldName"), { flex: 1 });
-      compAttachmentInfo.add(comp);
+      comp.add(new qx.ui.basic.Label("Name:"), { row: 0, column: 0 });
+      comp.add(this.getQxObject("edtName"), { row: 0, column: 1 });
 
-      comp = new qx.ui.container.Composite(new qx.ui.layout.HBox(10));
-      comp.add(new qx.ui.basic.Label("Type:").set({ minWidth: 50 }));
-      comp.add(this.getQxObject("fieldType"), { flex: 1 });
-      compAttachmentInfo.add(comp);
+      comp.add(new qx.ui.basic.Label("Type:"), { row: 1, column: 0 });
+      comp.add(this.getQxObject("edtContentType"), { row: 1, column: 1 });
 
-      comp = new qx.ui.container.Composite(new qx.ui.layout.HBox(10));
-      comp.add(new qx.ui.basic.Label("Size:").set({ minWidth: 50 }));
-      comp.add(this.getQxObject("fieldSize"), { flex: 1 });
-      compAttachmentInfo.add(comp);
+      comp.add(new qx.ui.basic.Label("Size:"), { row: 2, column: 0 });
+      comp.add(this.getQxObject("edtSize"), { row: 2, column: 1 });
 
-      comp = new qx.ui.container.Composite(new qx.ui.layout.HBox(10));
-      comp.add(this.getQxObject("btnView"), { flex: 1 });
-      compAttachmentInfo.add(comp);
-      return compAttachmentInfo;
+      comp.add(this.getQxObject("btnViewAttachment"), { row: 3, column: 0 });
+
+      return comp;
     },
 
-    fieldName() {
-      const fieldName = new qx.ui.form.TextField().set({ enabled: false });
-      this.bind("currentAttachment.name", fieldName, "value");
-      return fieldName;
+    edtName() {
+      const edtName = new qx.ui.form.TextField().set({ enabled: false });
+      this.bind("currentAttachment.name", edtName, "value");
+      return edtName;
     },
 
-    fieldType() {
-      const fieldType = new qx.ui.form.TextField().set({ enabled: false });
-      this.bind("currentAttachment.contentType", fieldType, "value");
-      return fieldType;
+    edtContentType() {
+      const edtContentType = new qx.ui.form.TextField().set({ enabled: false });
+      this.bind("currentAttachment.contentType", edtContentType, "value");
+      return edtContentType;
     },
 
-    fieldSize() {
-      const fieldSize = new qx.ui.form.TextField().set({ enabled: false });
-      this.bind("currentAttachment.size", fieldSize, "value", { converter: this._size1024.bind(this) });
-      return fieldSize;
+    edtSize() {
+      const edtSize = new qx.ui.form.TextField().set({ enabled: false });
+      this.bind("currentAttachment.size", edtSize, "value", { converter: this._size1024.bind(this) });
+      return edtSize;
     },
 
-    btnView() {
-      const btnView = new qx.ui.form.Button("View").set({ maxWidth: 300 });
-      btnView.addListener("execute", () => window.open(this._createUrlForAttachment(this.getCurrentAttachment())));
-      this.bind("currentAttachment", btnView, "enabled", { converter: Boolean });
-      return btnView;
-    },
-    // END(attachments)
-
-    // END(meta)
-
-    // START(body)
-    compBody() {
-      const compBody = new qx.ui.container.Composite(new qx.ui.layout.VBox());
-      compBody.add(this.getQxObject("plaintextBody"), { flex: 1 });
-      compBody.add(this.getQxObject("markupBody"), { flex: 1 });
-      return compBody;
-    },
-
-    plaintextBody() {
-      const plaintextBody = new qx.ui.container.Scroll();
-      let plaintextLabel = new qx.ui.basic.Label().set({ rich: true, wrap: true, padding: 10 });
-      plaintextBody.add(plaintextLabel);
-      this.bind("parsedEmail", plaintextLabel, "value", { converter: parsed => parsed?.getTextBody() ?? "" });
-      this.bind("bodyDisplayMode", plaintextBody, "visibility", { converter: mode => (mode === "plain" ? "visible" : "excluded") });
-      return plaintextBody;
-    },
-
-    markupBody() {
-      const markupBody = new qx.ui.embed.Html().set({ overflowY: "scroll" });
-      this.bind("parsedEmail", markupBody, "html", { converter: parsed => `<div style="color:initial">${parsed?.getHtmlBody() ?? ""}</div>` });
-      this.bind("bodyDisplayMode", markupBody, "visibility", { converter: mode => (mode === "markup" ? "visible" : "excluded") });
-      return markupBody;
+    btnViewAttachment() {
+      let btn = new qx.ui.form.Button("View").set({ maxWidth: 300 });
+      btn.addListener("execute", () => window.open(this._createUrlForAttachment(this.getCurrentAttachment())));
+      this.bind("currentAttachment", btn, "enabled", { converter: Boolean });
+      return btn;
     }
-    // END(body)
   },
 
   members: {
-    setValue(value) {
+    _transformValue(value) {
       if (value instanceof zx.server.email.Message) {
-        this.setParsedEmail(value);
-        this.setRawEmail(null);
-        return;
+        return value;
       }
       if (typeof value === "string") {
-        this.setRawEmail(value);
-        this.setParsedEmail(null);
-        return;
-      }
-      if (value === null) {
-        this.setRawEmail(null);
-        this.setParsedEmail(null);
-        return;
+        return zx.ui.email.EmailViewer.parseEmailMessage(value);
       }
       throw new Error(`Invalid value for virtual property 'value' of class ${this.classname}: ${JSON.stringify(value)} - expected nullable string or zx.server.email.Message`);
     },
 
-    getValue() {
-      return this.getRawEmail() ?? this.getParsedEmail();
+    _applyValue(value, oldValue) {
+      if (value) {
+        this.getQxObject("lblBodyPlainText").setValue(value.getTextBody() || "");
+        this.getQxObject("htmlBody").setHtml(`<div style="color:initial">${value.getHtmlBody() || ""}</div>`);
+        this.setBodyDisplayMode(!!value.getHtmlBody() ? "markup" : "plain");
+        let hasMarkup = !!value.getHtmlBody();
+        let hasPlain = !!value.getTextBody();
+        this.getQxObject("btnShowMarkup").set({
+          enabled: hasMarkup,
+          value: hasMarkup
+        });
+        this.getQxObject("btnShowPlain").set({
+          enabled: hasPlain,
+          value: hasPlain && !hasMarkup
+        });
+        this.getQxObject("ctlrAttachments").setModel(value.getAttachments());
+        this.getQxObject("edtTo").setValue(value.getTo()?.join(", ") || "");
+        this.getQxObject("edtCc").setValue(value.getCc()?.join(", ") || "");
+        this.getQxObject("edtSubject").setValue(value.getSubject() || "");
+        const DF = new qx.util.format.DateFormat("yyyy-MM-dd HH:mm");
+        this.getQxObject("edtDateQueued").setValue(value.getDateQueued() ? DF.format(value.getDateQueued()) : "");
+        this.getQxObject("edtDateDelivered").setValue(value.getDateDelivered() ? DF.format(value.getDateDelivered()) : "");
+      } else {
+        this.getQxObject("lblBodyPlainText").setValue("");
+        this.getQxObject("htmlBody").setHtml("");
+        this.getQxObject("ctlrAttachments").setModel(null);
+        this.getQxObject("edtTo").setValue("");
+        this.getQxObject("edtCc").setValue("");
+        this.getQxObject("edtSubject").setValue("");
+        this.getQxObject("edtDateQueued").setValue("");
+        this.getQxObject("edtDateDelivered").setValue("");
+      }
     },
 
-    resetValue() {
-      this.resetRawEmail();
-      this.resetParsedEmail();
+    _applyBodyDisplayMode(value, oldValue) {
+      this.__updateUi();
+    },
+
+    __updateUi() {
+      let mode = this.getBodyDisplayMode();
+      this.getQxObject("lblBodyPlainText").setVisibility(mode == "plain" ? "visible" : "excluded");
+      this.getQxObject("htmlBody").setVisibility(mode != "plain" ? "visible" : "excluded");
     },
 
     __attachmentUrls: null,
-
-    hasMarkup() {
-      return !!this.getParsedEmail()?.getHtmlBody();
-    },
-
-    hasPlain() {
-      return !!this.getParsedEmail()?.getTextBody();
-    },
-
-    _inlineAssets(html, attachments) {
-      if ((html ?? null) === null) {
-        return null;
-      }
-      for (let attachment of attachments) {
-        if (attachment.contentDisposition !== "inline") {
-          continue;
-        }
-        if (attachment.contentId) {
-          let url = URL.createObjectURL(new Blob([attachment.content], { type: attachment.contentType }));
-          html = html.replace(new RegExp(`cid:${attachment.contentId.slice(1, -1)}`, "g"), url);
-        }
-      }
-      return html;
-    },
 
     _createUrlForAttachment(attachment) {
       if (this.__attachmentUrls.has(attachment)) {
@@ -333,10 +264,6 @@ qx.Class.define("zx.ui.email.EmailViewer", {
       return url;
     },
 
-    _addressesFor(addrOrGrp) {
-      return "email" in addrOrGrp ? [addrOrGrp.email] : addrOrGrp.group.map(addr => addr.email);
-    },
-
     _size1024(size) {
       if (size === null) {
         return "[unknown]";
@@ -349,23 +276,49 @@ qx.Class.define("zx.ui.email.EmailViewer", {
         size = parseFloat((size / 1024).toFixed(1));
       }
       return null;
-    },
+    }
+  },
 
-    _toServerEmailMessage(value) {
+  statics: {
+    /**
+     * Parse a raw email message into a {@link zx.server.email.Message} object.
+     *
+     * @param {string} value - The raw email message to parse.
+     * @returns {zx.server.email.Message} - The parsed email message.
+     */
+    parseEmailMessage(value) {
       if (value === null) {
         return null;
       }
       let parsed = protonMime.parseMail(value);
+
+      const addressesFor = addrOrGrp => ("email" in addrOrGrp ? [addrOrGrp.email] : addrOrGrp.group.map(addr => addr.email));
+      const inlineAssets = (html, attachments) => {
+        if ((html ?? null) === null) {
+          return null;
+        }
+        for (let attachment of attachments) {
+          if (attachment.contentDisposition !== "inline") {
+            continue;
+          }
+          if (attachment.contentId) {
+            let url = URL.createObjectURL(new Blob([attachment.content], { type: attachment.contentType }));
+            html = html.replace(new RegExp(`cid:${attachment.contentId.slice(1, -1)}`, "g"), url);
+          }
+        }
+        return html;
+      };
+
       return new zx.server.email.Message().set({
         dateQueued: new Date(-Infinity),
         lastErrorMessage: null,
         subject: parsed.subject ?? null,
         from: parsed.from?.email ?? null,
         dateDelivered: parsed.date ?? null,
-        to: parsed.to?.flatMap(this._addressesFor.bind(this)) ?? null,
-        cc: parsed.cc?.flatMap(this._addressesFor.bind(this)) ?? null,
-        bcc: parsed.bcc?.flatMap(this._addressesFor.bind(this)) ?? null,
-        htmlBody: this._inlineAssets(parsed.body.html, parsed.attachments),
+        to: parsed.to?.flatMap(addressesFor) ?? null,
+        cc: parsed.cc?.flatMap(addressesFor) ?? null,
+        bcc: parsed.bcc?.flatMap(addressesFor) ?? null,
+        htmlBody: inlineAssets(parsed.body.html, parsed.attachments),
         textBody: parsed.body.text ? qx.bom.String.escape(parsed.body.text).replace(/\n/g, "<br />") : null,
         attachments: new qx.data.Array(
           parsed.attachments.map(attachment =>
