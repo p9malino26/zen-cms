@@ -195,7 +195,7 @@ qx.Class.define("zx.ui.email.EmailViewer", {
 
   members: {
     _transformValue(value) {
-      if (value instanceof zx.server.email.Message) {
+      if (value === null || value instanceof zx.server.email.Message) {
         return value;
       }
       if (typeof value === "string") {
