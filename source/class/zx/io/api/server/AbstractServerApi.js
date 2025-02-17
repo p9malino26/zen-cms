@@ -102,10 +102,19 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
       function pathToRegex(path) {
         path = path.replace(/\{/g, "(?<");
         path = path.replace(/\}/g, ">[^/]+)");
+        path = `^${path}$`;
         return path;
       }
 
-      let requestMethodPath = path.relative(this.__path ?? "/", request.getPath());
+      let requestMethodPath;
+      if (this.__path) {
+        requestMethodPath = path.relative(this.__path, request.getPath());
+      } else if (request.isFromClientApi()) {
+        requestMethodPath = request.getPath().replace(/^\//, "");
+      } else {
+        const PREFIX = "/__globalApis/" + this.getApiName();
+        requestMethodPath = path.relative(PREFIX, request.getPath());
+      }
 
       let handler;
       if (!request.isFromClientApi()) {
@@ -157,9 +166,11 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
     },
 
     /**
+     * @typedef {(req: zx.io.api.server.Request, res: zx.io.api.server.Response) => (void | Promise<void>)} RestHandler
+
      * @param {RestMethod} restMethod
      * @param {string} path The path at which the method will be mounted
-     * @param {[methodName: string] | [func: Function, context: any]} Either a method name or a function with a context
+     * @param {[methodName: string] | [func: RestHandler, context: any]} args Either a method name or a function with a context
      * If a method name is provided, the method must exist in the instance of this API
      *
      * Makes a method able to be called via REST.
