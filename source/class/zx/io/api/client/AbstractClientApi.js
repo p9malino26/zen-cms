@@ -353,7 +353,7 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
      * @returns
      */
     __getUrl(methodName) {
-      return zx.utils.Uri.join(this.__path ?? "/", qx.lang.String.hyphenate(methodName));
+      return zx.utils.Uri.join(this.__path ?? "/", methodName);
     },
 
     __clearSubscriptions() {
