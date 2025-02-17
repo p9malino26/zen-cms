@@ -25,12 +25,12 @@ qx.Class.define("zx.server.work.pool.WebWorkerPool", {
   implement: [zx.server.work.IWorkerFactory],
 
   environment: {
-    "zx.server.work.pool.WebWorkerPool.remoteAppPath": "/web-worker-service/index.js"
+    "zx.server.work.pool.WebWorkerPool.remoteAppPath": "/demo-work-web-worker-service/index.js"
   },
 
   /**
    * @param {object} config - config for {@link zx.utils.Pool}
-   * @param {string} [remoteAppPath] - the server request path to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.server.work.runtime.NodeWorkerApp}. If not provided, defaults to the environment variable `zx.server.work.pool.WebWorkerPool.remoteAppPath` (this environment variable defaults to the application named 'web-worker-service' built in source mode)
+   * @param {string} [remoteAppPath] - the server request path to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.server.work.runtime.NodeWorkerApp}. If not provided, defaults to the environment variable `zx.server.work.pool.WebWorkerPool.remoteAppPath` (this environment variable defaults to the application named 'demo-work-web-worker-service' built in source mode)
    */
   construct(config, remoteAppPath) {
     console.warn("As of 13/02/2025, Web Workers are not supported yet because we don't know how to compile Qooxdoo for web workers.");

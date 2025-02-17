@@ -29,7 +29,7 @@ qx.Class.define("zx.server.work.pool.DockerPeerPool", {
     /**
      * Resolved relative to the user home directory `/home/zxWorker` in the container (your `compiled` directory will be automatically linked into the home directory)
      */
-    "zx.server.work.pool.DockerPeerPool.remoteAppPath": "./app/work-docker-peer-service/index.js",
+    "zx.server.work.pool.DockerPeerPool.remoteAppPath": "./app/demo-work-docker-peer-service/index.js",
     /**
      * How the docker peer's node process should be started for debugging, if at all.
      * Options:
@@ -48,7 +48,7 @@ qx.Class.define("zx.server.work.pool.DockerPeerPool", {
    * @param {string} route - the base path on the node remote app for zx apis. Be certain that this exactly matches the route configured on the server, eg {@link zx.server.work.runtime.ExpressService}
    * @param {object} config - config for {@link zx.utils.Pool}
    * @param {string} image - the docker image to use. Note: it is expected that the user in the container will be named `zxWorker`
-   * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.server.work.runtime.ExpressService}. If not provided, defaults to the environment variable `zx.server.work.pool.DockerPeerPool.remoteAppPath` (this environment variable defaults to the application named 'work-docker-peer-service' built in source mode)
+   * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.server.work.runtime.ExpressService}. If not provided, defaults to the environment variable `zx.server.work.pool.DockerPeerPool.remoteAppPath` (this environment variable defaults to the application named 'demo-work-docker-peer-service' built in source mode)
    */
   construct(route, config, image, remoteAppPath) {
     super(config);

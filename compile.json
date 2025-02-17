@@ -168,7 +168,7 @@
     {
       "title": "Worker service for web workers (TODO: needs app loader)",
       "class": "zx.demo.server.work.webworkers.WebWorkerService",
-      "name": "web-worker-service",
+      "name": "demo-work-web-worker-service",
       "description": "todo: we need a loader for web workers to make this functional",
       "type": "browser"
     },
@@ -182,7 +182,7 @@
     {
       "title": "Worker service for node worker threads",
       "class": "zx.demo.server.work.nodeworkers.NodeWorkerService",
-      "name": "node-worker-service",
+      "name": "demo-work-node-worker-service",
       "type": "node"
     },
     {
@@ -195,7 +195,7 @@
     {
       "title": "Worker service for separate node process",
       "class": "zx.demo.server.work.localpeer.LocalPeerService",
-      "name": "local-peer-service",
+      "name": "demo-work-local-peer-service",
       "type": "node"
     },
     {
@@ -208,7 +208,7 @@
     {
       "title": "Worker service for a docker container",
       "class": "zx.demo.server.work.dockerpeer.DockerPeerService",
-      "name": "work-docker-peer-service",
+      "name": "demo-work-docker-peer-service",
       "type": "node",
       "include": ["qx.core.Init"]
     },

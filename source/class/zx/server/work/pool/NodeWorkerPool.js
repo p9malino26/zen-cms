@@ -24,12 +24,12 @@ qx.Class.define("zx.server.work.pool.NodeWorkerPool", {
   implement: [zx.server.work.IWorkerFactory],
 
   environment: {
-    "zx.server.work.pool.NodeWorkerPool.remoteAppPath": "./compiled/source-node/node-worker-service/index.js"
+    "zx.server.work.pool.NodeWorkerPool.remoteAppPath": "./compiled/source-node/demo-work-node-worker-service/index.js"
   },
 
   /**
    * @param {object} config - config for {@link zx.utils.Pool}
-   * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.server.work.runtime.NodeWorkerApp}. If not provided, defaults to the environment variable `zx.server.work.pool.NodeWorkerPool.remoteAppPath` (this environment variable defaults to the application named 'node-worker-service' built in source mode)
+   * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.server.work.runtime.NodeWorkerApp}. If not provided, defaults to the environment variable `zx.server.work.pool.NodeWorkerPool.remoteAppPath` (this environment variable defaults to the application named 'demo-work-node-worker-service' built in source mode)
    */
   construct(config, remoteAppPath) {
     super(config);

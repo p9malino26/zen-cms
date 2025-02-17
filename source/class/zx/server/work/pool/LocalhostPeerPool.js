@@ -25,7 +25,7 @@ qx.Class.define("zx.server.work.pool.LocalhostPeerPool", {
   extend: zx.server.work.pool.AbstractPeerPool,
 
   environment: {
-    "zx.server.work.pool.LocalhostPeerPool.remoteAppPath": "./compiled/source-node/local-peer-service/index.js",
+    "zx.server.work.pool.LocalhostPeerPool.remoteAppPath": "./compiled/source-node/demo-work-local-peer-service/index.js",
     /**
      * How the node peer process should be started for debugging, if at all.
      * Options:
@@ -39,7 +39,7 @@ qx.Class.define("zx.server.work.pool.LocalhostPeerPool", {
   /**
    * @param {string} route - the base path on the node remote app for zx apis. Be certain that this exactly matches the route configured on the server, eg {@link zx.server.work.runtime.ExpressService}
    * @param {object} config - config for {@link zx.utils.Pool}
-   * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.server.work.runtime.ExpressService}. If not provided, defaults to the environment variable `zx.server.work.pool.LocalhostPeerPool.remoteAppPath` (this environment variable defaults to the application named 'local-peer-service' built in source mode)
+   * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.server.work.runtime.ExpressService}. If not provided, defaults to the environment variable `zx.server.work.pool.LocalhostPeerPool.remoteAppPath` (this environment variable defaults to the application named 'demo-work-local-peer-service' built in source mode)
    */
   construct(route, config, remoteAppPath) {
     super(config);
