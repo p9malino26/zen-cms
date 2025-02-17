@@ -25,6 +25,9 @@ qx.Class.define("zx.server.work.pool.LocalhostPeerPool", {
   extend: zx.server.work.pool.AbstractPeerPool,
 
   environment: {
+    /**
+     * Path of the application to run as the remote peer
+     */
     "zx.server.work.pool.LocalhostPeerPool.remoteAppPath": "./compiled/source-node/demo-work-local-peer-service/index.js",
     /**
      * How the node peer process should be started for debugging, if at all.
@@ -37,9 +40,9 @@ qx.Class.define("zx.server.work.pool.LocalhostPeerPool", {
   },
 
   /**
-   * @param {string} route - the base path on the node remote app for zx apis. Be certain that this exactly matches the route configured on the server, eg {@link zx.server.work.runtime.ExpressService}
+   * @param {string} route - the base path on the node remote app for zx apis. Be certain that this exactly matches the route configured on the server, eg {@link zx.server.work.runtime.NodePeerService}
    * @param {object} config - config for {@link zx.utils.Pool}
-   * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.server.work.runtime.ExpressService}. If not provided, defaults to the environment variable `zx.server.work.pool.LocalhostPeerPool.remoteAppPath` (this environment variable defaults to the application named 'demo-work-local-peer-service' built in source mode)
+   * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.server.work.runtime.NodePeerService}. If not provided, defaults to the environment variable `zx.server.work.pool.LocalhostPeerPool.remoteAppPath` (this environment variable defaults to the application named 'demo-work-local-peer-service' built in source mode)
    */
   construct(route, config, remoteAppPath) {
     super(config);
@@ -55,10 +58,8 @@ qx.Class.define("zx.server.work.pool.LocalhostPeerPool", {
 
   members: {
     /**
-     * @abstract
-     * @param {number} port
-     * @param {string} apiPath
-     * @returns {Promise<zx.server.work.api.WorkerClientApi>}
+     * @override
+     * @returns {child_process.ChildProcess}
      */
     async _createWorker(port, apiPath) {
       let params = [this.__remoteAppPath, port, apiPath];
@@ -91,9 +92,6 @@ qx.Class.define("zx.server.work.pool.LocalhostPeerPool", {
 
     /**
      * @override
-     * @param {number} port
-     * @param {string} apiPath
-     * @returns {zx.io.api.client.AbstractClientTransport}
      */
     _createClient(port, apiPath) {
       let host = `http://localhost:${port}`;
@@ -104,8 +102,7 @@ qx.Class.define("zx.server.work.pool.LocalhostPeerPool", {
 
     /**
      * @override
-     * @param {import('node:child_process').ChildProcess} peerProcess
-     * @param {() => void} cleanup - must be called once the worker has been destroyed
+     * @param {child_process.ChildProcess} peerProcess
      */
     _destroyWorker(peerProcess, cleanup) {
       peerProcess.once("close", cleanup);

@@ -26,6 +26,9 @@ qx.Class.define("zx.server.work.runtime.AbstractPeerService", {
   extend: qx.application.Basic,
   type: "abstract",
 
+  /**
+   * @param {string} route The initial prefix of HTTP paths
+   */
   construct(route) {
     super();
     this._route = route;
@@ -42,11 +45,15 @@ qx.Class.define("zx.server.work.runtime.AbstractPeerService", {
   members: {
     /**
      * @abstract
+     * This method is called when the server is ready to communicate using `zx.server.work.api.WorkerServerApi`
      */
     _onReady() {
       throw new Error(`Abstract method _onReady of class ${this.classname} not implemented`);
     },
 
+    /**
+     * @override
+     */
     async main() {
       this.__parseArgv();
       let app = this.getQxObject("app");
@@ -58,6 +65,9 @@ qx.Class.define("zx.server.work.runtime.AbstractPeerService", {
       });
     },
 
+    /**
+     * Parses command line arguments and sets this._port and this._apiPath
+     */
     __parseArgv() {
       let [port, apiPath] = process.argv.slice(2);
 

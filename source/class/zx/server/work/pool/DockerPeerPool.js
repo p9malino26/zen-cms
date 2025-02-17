@@ -45,10 +45,10 @@ qx.Class.define("zx.server.work.pool.DockerPeerPool", {
   },
 
   /**
-   * @param {string} route - the base path on the node remote app for zx apis. Be certain that this exactly matches the route configured on the server, eg {@link zx.server.work.runtime.ExpressService}
+   * @param {string} route - the base path on the node remote app for zx apis. Be certain that this exactly matches the route configured on the server, eg {@link zx.server.work.runtime.DockerPeerService}
    * @param {object} config - config for {@link zx.utils.Pool}
    * @param {string} image - the docker image to use. Note: it is expected that the user in the container will be named `zxWorker`
-   * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.server.work.runtime.ExpressService}. If not provided, defaults to the environment variable `zx.server.work.pool.DockerPeerPool.remoteAppPath` (this environment variable defaults to the application named 'demo-work-docker-peer-service' built in source mode)
+   * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.server.work.runtime.DockerPeerService}. If not provided, defaults to the environment variable `zx.server.work.pool.DockerPeerPool.remoteAppPath` (this environment variable defaults to the application named 'demo-work-docker-peer-service' built in source mode)
    */
   construct(route, config, image, remoteAppPath) {
     super(config);
@@ -66,10 +66,8 @@ qx.Class.define("zx.server.work.pool.DockerPeerPool", {
 
   members: {
     /**
-     * @abstract
-     * @param {number} port
-     * @param {string} apiPath
-     * @returns {Promise<zx.server.work.api.WorkerClientApi>}
+     * @override
+     * @returns {import('dockerode').Container}
      */
     async _createWorker(port, apiPath) {
       const SERVER_PORT = 3000;
@@ -150,9 +148,6 @@ qx.Class.define("zx.server.work.pool.DockerPeerPool", {
 
     /**
      * @override
-     * @param {number} port
-     * @param {string} apiPath
-     * @returns {zx.io.api.client.AbstractClientTransport}
      */
     _createClient(port, apiPath) {
       let host = `http://localhost:${port}`;
@@ -164,7 +159,6 @@ qx.Class.define("zx.server.work.pool.DockerPeerPool", {
     /**
      * @override
      * @param {import('dockerode').Container} peerProcess
-     * @param {() => void} cleanup - must be called once the worker has been destroyed
      */
     _destroyWorker(peerProcess, cleanup) {
       peerProcess.kill(() => {

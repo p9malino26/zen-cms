@@ -16,8 +16,10 @@
  * ************************************************************************ */
 
 /**
- * API designed to run on a worker of a worker pool,
- * which executes the piece of work (zx.server.work.IWork) that is passed to it.
+ * API designed to run on a worker of a worker pool process,
+ * which the pool communicates with.
+ * The pool can tell the worker what task to run,
+ * and the worker posts back messages regarding the status of the work back to the pool.
  */
 qx.Class.define("zx.server.work.api.WorkerServerApi", {
   implement: [zx.server.work.IWorker],

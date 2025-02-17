@@ -16,7 +16,9 @@
  * ************************************************************************ */
 
 /**
- * Client api for work scheduling
+ * This API is used by the pool (zx.server.work.AbstractWorkerPool) to communicate with the scheduler (zx.server.work.api.SchedulerServerApi),
+ * and used for receiving work and uploading infornamtion regarding the status of the work.
+ *
  */
 qx.Class.define("zx.server.work.api.SchedulerClientApi", {
   extend: zx.io.api.client.AbstractClientApi,

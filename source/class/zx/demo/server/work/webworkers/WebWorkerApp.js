@@ -1,5 +1,5 @@
 /**
- * NOTE: As of 13/02/2025, web wor
+ * NOTE: As of 13/02/2025, web workers do not work yet because we don't know how to compile Qooxdoo for web workers.
  */
 qx.Class.define("zx.demo.server.work.webworkers.WebWorkerApp", {
   extend: qx.application.Native,

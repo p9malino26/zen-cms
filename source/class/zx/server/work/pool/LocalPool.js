@@ -33,8 +33,7 @@ qx.Class.define("zx.server.work.pool.LocalPool", {
     __workerMap: null,
 
     /**
-     * creates a new instance
-     * @returns {Promise<zx.server.work.api.WorkerClientApi>}
+     * @override
      */
     async create() {
       let apiPath = this._createPath("workerApi");
@@ -57,8 +56,7 @@ qx.Class.define("zx.server.work.pool.LocalPool", {
     },
 
     /**
-     * Destroys an instance entirely
-     * @param {zx.server.work.api.WorkerClientApi} client
+     * @override
      */
     async destroy(client) {
       let server = this.__workerMap.get(client);

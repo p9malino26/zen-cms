@@ -20,6 +20,7 @@ const { Worker } = require("node:worker_threads");
  * The node worker pool runs work in a node worker thread
  */
 qx.Class.define("zx.server.work.pool.NodeWorkerPool", {
+  /** @template {import('node:worker_threads').Worker} TWorker */
   extend: zx.server.work.pool.AbstractThreadWorkerPool,
   implement: [zx.server.work.IWorkerFactory],
 
@@ -38,9 +39,8 @@ qx.Class.define("zx.server.work.pool.NodeWorkerPool", {
 
   members: {
     /**
-     * creates a new instance
-     * @param {string} apiPath
-     * @returns {Promise<zx.server.work.api.WorkerClientApi>}
+     * @override
+     * @returns {Promise<import("node:worker_threads").Worker>}
      */
     async _createWorker(apiPath) {
       let nodeWorker = new Worker(this.__remoteAppPath, { name: apiPath, workerData: { apiPath } });
@@ -50,6 +50,7 @@ qx.Class.define("zx.server.work.pool.NodeWorkerPool", {
     },
 
     /**
+     * @override
      * @returns {zx.io.api.transport.nodeWorker.Client}
      */
     _createClientTransport() {
