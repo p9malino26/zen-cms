@@ -22,7 +22,7 @@ const express = require("express");
  *
  * Uses express as the server platform
  */
-qx.Class.define("zx.work.runtime.AbstractPeerService", {
+qx.Class.define("zx.server.work.runtime.AbstractPeerService", {
   extend: qx.application.Basic,
   type: "abstract",
 
@@ -50,7 +50,7 @@ qx.Class.define("zx.work.runtime.AbstractPeerService", {
     async main() {
       this.__parseArgv();
       let app = this.getQxObject("app");
-      new zx.work.api.WorkerServerApi(this._apiPath);
+      new zx.server.work.api.WorkerServerApi(this._apiPath);
       new zx.io.api.transport.http.ExpressServerTransport(app, this._route);
       app.listen(this._port, () => {
         console.log(`Worker server is running on port ${this._port}`);

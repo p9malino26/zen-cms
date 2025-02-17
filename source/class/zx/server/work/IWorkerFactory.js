@@ -18,14 +18,14 @@
 /**
  * An IWorkerFactory creates workers for a worker pool
  */
-qx.Interface.define("zx.work.IWorkerFactory", {
+qx.Interface.define("zx.server.work.IWorkerFactory", {
   members: {
     /**
      * creates a new instance
      *
      * Typically, this method will create a worker client api, spin up the worker runtime, and connect the client to the
      * server within the runtime.
-     * @returns {Promise<zx.work.api.WorkerClientApi>}
+     * @returns {Promise<zx.server.work.api.WorkerClientApi>}
      */
     async create() {},
 
@@ -33,7 +33,7 @@ qx.Interface.define("zx.work.IWorkerFactory", {
      * Destroys an instance entirely
      *
      * Typically, this method will shutdown the worker runtime, and dispose of the worker client api and transports.
-     * @param {zx.work.api.WorkerClientApi} client
+     * @param {zx.server.work.api.WorkerClientApi} client
      */
     async destroy(client) {}
   }

@@ -19,28 +19,28 @@ const { Worker } = require("node:worker_threads");
 /**
  * The node worker pool runs work in a node worker thread
  */
-qx.Class.define("zx.work.pool.NodeWorkerPool", {
-  extend: zx.work.pool.AbstractThreadWorkerPool,
-  implement: [zx.work.IWorkerFactory],
+qx.Class.define("zx.server.work.pool.NodeWorkerPool", {
+  extend: zx.server.work.pool.AbstractThreadWorkerPool,
+  implement: [zx.server.work.IWorkerFactory],
 
   environment: {
-    "zx.work.pool.NodeWorkerPool.remoteAppPath": "./compiled/source-node/node-worker-service/index.js"
+    "zx.server.work.pool.NodeWorkerPool.remoteAppPath": "./compiled/source-node/node-worker-service/index.js"
   },
 
   /**
    * @param {object} config - config for {@link zx.utils.Pool}
-   * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.work.runtime.NodeWorkerApp}. If not provided, defaults to the environment variable `zx.work.pool.NodeWorkerPool.remoteAppPath` (this environment variable defaults to the application named 'node-worker-service' built in source mode)
+   * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.server.work.runtime.NodeWorkerApp}. If not provided, defaults to the environment variable `zx.server.work.pool.NodeWorkerPool.remoteAppPath` (this environment variable defaults to the application named 'node-worker-service' built in source mode)
    */
   construct(config, remoteAppPath) {
     super(config);
-    this.__remoteAppPath = remoteAppPath ?? qx.core.Environment.get("zx.work.pool.NodeWorkerPool.remoteAppPath");
+    this.__remoteAppPath = remoteAppPath ?? qx.core.Environment.get("zx.server.work.pool.NodeWorkerPool.remoteAppPath");
   },
 
   members: {
     /**
      * creates a new instance
      * @param {string} apiPath
-     * @returns {Promise<zx.work.api.WorkerClientApi>}
+     * @returns {Promise<zx.server.work.api.WorkerClientApi>}
      */
     async _createWorker(apiPath) {
       let nodeWorker = new Worker(this.__remoteAppPath, { name: apiPath, workerData: { apiPath } });

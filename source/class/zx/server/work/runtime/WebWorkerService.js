@@ -20,7 +20,7 @@
  *
  * @ignore(self)
  */
-qx.Class.define("zx.work.runtime.WebWorkerService", {
+qx.Class.define("zx.server.work.runtime.WebWorkerService", {
   extend: qx.application.Basic,
 
   members: {
@@ -34,7 +34,7 @@ qx.Class.define("zx.work.runtime.WebWorkerService", {
 
       let promise = new Promise(res => self.addEventListener("message", evt => res(evt.data.apiPath), { once: true }));
       self.postMessage("ready");
-      new zx.work.api.WorkerServerApi(await promise);
+      new zx.server.work.api.WorkerServerApi(await promise);
       new zx.io.api.transport.webWorker.Server();
     }
   }

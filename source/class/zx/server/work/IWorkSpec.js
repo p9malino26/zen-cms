@@ -16,10 +16,10 @@
  * ************************************************************************ */
 
 /**
- * This interface represents the shape of the POJO used to specify a work item (zx.work.IWork)
- * that is sent from the scheduler to the worker (zx.work.IWorker)
+ * This interface represents the shape of the POJO used to specify a work item (zx.server.work.IWork)
+ * that is sent from the scheduler to the worker (zx.server.work.IWorker)
  */
-qx.Interface.define("zx.work.IWorkSpec", {
+qx.Interface.define("zx.server.work.IWorkSpec", {
   members: {
     /**
      * A uuid for the work item
@@ -28,13 +28,13 @@ qx.Interface.define("zx.work.IWorkSpec", {
     uuid: null,
 
     /**
-     * The classname of the work item, must implement {@link zx.work.IWork}
+     * The classname of the work item, must implement {@link zx.server.work.IWork}
      * @type {string}
      */
     classname: null,
 
     /**
-     * The compatibility is an array of classnames referencing {@link zx.work.AbstractWorkerPool}s that provide an environment
+     * The compatibility is an array of classnames referencing {@link zx.server.work.AbstractWorkerPool}s that provide an environment
      * this work can run in. To accept any and all environments, pass an empty array.
      * @type {string[]}
      */

@@ -16,12 +16,12 @@
  * ************************************************************************ */
 
 /**
- * Base implentation of zx.work.IWork
+ * Base implentation of zx.server.work.IWork
  */
-qx.Class.define("zx.work.AbstractWork", {
+qx.Class.define("zx.server.work.AbstractWork", {
   type: "abstract",
   extend: qx.core.Object,
-  implement: [zx.work.IWork],
+  implement: [zx.server.work.IWork],
 
   /**
    * @param {string} uuid - a uuid to uniquely identify this work
@@ -35,7 +35,7 @@ qx.Class.define("zx.work.AbstractWork", {
     /**
      * Executes the work
      * @abstract
-     * @param {zx.work.OutputClientApi} output - the output api
+     * @param {zx.server.work.OutputClientApi} output - the output api
      * @returns {Promise<string | void> | string | void}
      */
     execute() {

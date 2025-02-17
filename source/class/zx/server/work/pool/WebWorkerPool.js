@@ -20,31 +20,31 @@
  *
  * @ignore(Worker)
  */
-qx.Class.define("zx.work.pool.WebWorkerPool", {
-  extend: zx.work.pool.AbstractThreadWorkerPool,
-  implement: [zx.work.IWorkerFactory],
+qx.Class.define("zx.server.work.pool.WebWorkerPool", {
+  extend: zx.server.work.pool.AbstractThreadWorkerPool,
+  implement: [zx.server.work.IWorkerFactory],
 
   environment: {
-    "zx.work.pool.WebWorkerPool.remoteAppPath": "/web-worker-service/index.js"
+    "zx.server.work.pool.WebWorkerPool.remoteAppPath": "/web-worker-service/index.js"
   },
 
   /**
    * @param {object} config - config for {@link zx.utils.Pool}
-   * @param {string} [remoteAppPath] - the server request path to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.work.runtime.NodeWorkerApp}. If not provided, defaults to the environment variable `zx.work.pool.WebWorkerPool.remoteAppPath` (this environment variable defaults to the application named 'web-worker-service' built in source mode)
+   * @param {string} [remoteAppPath] - the server request path to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.server.work.runtime.NodeWorkerApp}. If not provided, defaults to the environment variable `zx.server.work.pool.WebWorkerPool.remoteAppPath` (this environment variable defaults to the application named 'web-worker-service' built in source mode)
    */
   construct(config, remoteAppPath) {
     console.warn("As of 13/02/2025, Web Workers are not supported yet because we don't know how to compile Qooxdoo for web workers.");
     debugger;
     super(this, config);
     this.getQxObject("pool").set;
-    this.__remoteAppPath = remoteAppPath ?? qx.core.Environment.get("zx.work.pool.WebWorkerPool.remoteAppPath");
+    this.__remoteAppPath = remoteAppPath ?? qx.core.Environment.get("zx.server.work.pool.WebWorkerPool.remoteAppPath");
   },
 
   members: {
     /**
      * creates a new instance
      * @param {string} apiPath
-     * @returns {Promise<zx.work.api.WorkerClientApi>}
+     * @returns {Promise<zx.server.work.api.WorkerClientApi>}
      */
     async _createWorker(apiPath) {
       let webWorker = new Worker(this.__remoteAppPath, { name: apiPath });

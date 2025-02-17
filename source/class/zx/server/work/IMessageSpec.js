@@ -20,7 +20,7 @@
  *
  * (not to be confused with a similarly named mobile messaging app)
  */
-qx.Interface.define("zx.work.IMessageSpec", {
+qx.Interface.define("zx.server.work.IMessageSpec", {
   members: {
     /** @type {string} the uuid of the caller */
     caller: null,

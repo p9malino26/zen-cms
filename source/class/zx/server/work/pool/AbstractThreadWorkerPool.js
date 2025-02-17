@@ -18,8 +18,8 @@
 /**
  * The worker thread pool runs work in a worker thread
  */
-qx.Class.define("zx.work.pool.AbstractThreadWorkerPool", {
-  extend: zx.work.AbstractWorkerPool,
+qx.Class.define("zx.server.work.pool.AbstractThreadWorkerPool", {
+  extend: zx.server.work.AbstractWorkerPool,
 
   /**
    * @param {object} config - config for {@link zx.utils.Pool}
@@ -32,13 +32,13 @@ qx.Class.define("zx.work.pool.AbstractThreadWorkerPool", {
   },
 
   members: {
-    /**@type {Map<zx.work.api.WorkerClientApi, import('node:worker_threads').Worker | Worker>} */
+    /**@type {Map<zx.server.work.api.WorkerClientApi, import('node:worker_threads').Worker | Worker>} */
     __workerMap: null,
 
     /**
      * @abstract
      * @param {string} apiPath
-     * @returns {Promise<zx.work.api.WorkerClientApi>}
+     * @returns {Promise<zx.server.work.api.WorkerClientApi>}
      */
     async _createWorker(apiPath) {
       throw new Error(`Abstract method _createWorker of class ${this.classname} not implemented`);
@@ -54,7 +54,7 @@ qx.Class.define("zx.work.pool.AbstractThreadWorkerPool", {
 
     /**
      * creates a new instance
-     * @returns {Promise<zx.work.api.WorkerClientApi>}
+     * @returns {Promise<zx.server.work.api.WorkerClientApi>}
      */
     async create() {
       let apiPath = this._createPath("workerApi");
@@ -64,7 +64,7 @@ qx.Class.define("zx.work.pool.AbstractThreadWorkerPool", {
       let transport = this._createClientTransport();
       transport.connect(workerThread);
 
-      let client = new zx.work.api.WorkerClientApi(transport, apiPath);
+      let client = new zx.server.work.api.WorkerClientApi(transport, apiPath);
 
       this.__workerMap.set(client, workerThread);
 
@@ -75,7 +75,7 @@ qx.Class.define("zx.work.pool.AbstractThreadWorkerPool", {
 
     /**
      * Destroys an instance entirely
-     * @param {zx.work.api.WorkerClientApi} client
+     * @param {zx.server.work.api.WorkerClientApi} client
      */
     async destroy(client) {
       let workerThread = this.__workerMap.get(client);

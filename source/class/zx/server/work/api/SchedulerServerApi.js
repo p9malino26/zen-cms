@@ -20,11 +20,11 @@
  *
  * This class also functions as the scheduler itself, keeping track of work and distributing it to pools
  */
-qx.Class.define("zx.work.api.SchedulerServerApi", {
+qx.Class.define("zx.server.work.api.SchedulerServerApi", {
   extend: zx.io.api.server.AbstractServerApi,
 
   construct(apiPath) {
-    super("zx.work.api.SchedulerApi");
+    super("zx.server.work.api.SchedulerApi");
     zx.io.api.server.ConnectionManager.getInstance().registerApi(this, apiPath);
 
     this.__pendingWork = new zx.utils.PrioritizedList();
@@ -32,15 +32,15 @@ qx.Class.define("zx.work.api.SchedulerServerApi", {
   },
 
   members: {
-    /**@type {zx.utils.PrioritizedList<zx.work.IWorkSpec>}*/
+    /**@type {zx.utils.PrioritizedList<zx.server.work.IWorkSpec>}*/
     __pendingWork: null,
 
-    /**@type {Map<string, zx.work.IMessageSpec[]>} */
+    /**@type {Map<string, zx.server.work.IMessageSpec[]>} */
     __messages: null,
 
     /**
      * Adds a work description to the queue, which will then be fetched by a worker poll and the executed in one of its workers
-     * @param {zx.work.IWorkSpec} workConfig
+     * @param {zx.server.work.IWorkSpec} workConfig
      */
     schedule(workConfig) {
       this.__pendingWork.add(workConfig, workConfig.priority ?? 5);
@@ -49,7 +49,7 @@ qx.Class.define("zx.work.api.SchedulerServerApi", {
     /**
      * REMOTE METHOD
      * @param {string} classname - classname of the caller, used to determine compatibility with work
-     * @returns {Promise<zx.work.IWorkSpec | null>} work data, or an empty object if no work is available
+     * @returns {Promise<zx.server.work.IWorkSpec | null>} work data, or an empty object if no work is available
      */
     async poll(classname) {
       return this.__pendingWork.takeFirst(workConfig => !workConfig.compatibility.length || workConfig.compatibility.includes(classname));
@@ -57,7 +57,7 @@ qx.Class.define("zx.work.api.SchedulerServerApi", {
 
     /**
      * REMOTE METHOD
-     * @param {zx.work.IMessageSpec[]} messages - messages to push
+     * @param {zx.server.work.IMessageSpec[]} messages - messages to push
      */
     async push(messages) {
       console.log(`received ${messages.length} messages`);

@@ -4,7 +4,7 @@ qx.Class.define("zx.demo.work.remoteDocker.PoolApp", {
 
   members: {
     async main() {
-      let pool = new zx.work.pool.DockerPeerPool("/zx.work", {
+      let pool = new zx.server.work.pool.DockerPeerPool("/zx.work", {
         minSize: 0,
         maxSize: 2
       }).set({
@@ -13,7 +13,7 @@ qx.Class.define("zx.demo.work.remoteDocker.PoolApp", {
       });
 
       let transport = new zx.io.api.transport.http.HttpClientTransport("http://localhost:4001/zx.work");
-      let scheduler = new zx.work.api.SchedulerClientApi(transport, "/scheduler");
+      let scheduler = new zx.server.work.api.SchedulerClientApi(transport, "/scheduler");
       pool.setSchedulerApi(scheduler);
       await pool.startup();
     },

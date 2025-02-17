@@ -16,17 +16,27 @@
  * ************************************************************************ */
 
 /**
- * Client api for work scheduling
+ *
  */
-qx.Class.define("zx.work.api.SchedulerClientApi", {
+qx.Class.define("zx.server.work.api.WorkerClientApi", {
   extend: zx.io.api.client.AbstractClientApi,
+  implement: [zx.server.work.IWorker],
 
   /**
    *
-   * @param {zx.io.api.server.AbstractServerTransport} transport
+   * @param {zx.io.api.client.AbstractClientTransport} transport
    * @param {string} path
    */
   construct(transport, path) {
-    super(transport, "zx.work.api.SchedulerApi", ["schedule", "poll", "push"], path);
+    super(transport, "zx.server.work.api.WorkerApi", ["run"], path);
+  },
+
+  members: {
+    /**
+     * @override zx.server.work.IWorker#run
+     */
+    run(work) {
+      //Nothing. This method is defined on the WorkerServerApi.
+    }
   }
 });

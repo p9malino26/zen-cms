@@ -3,7 +3,7 @@ qx.Class.define("zx.demo.work.Local", {
 
   members: {
     async main() {
-      let pool = new zx.work.pool.LocalPool({
+      let pool = new zx.server.work.pool.LocalPool({
         minSize: 5
       });
 
@@ -11,8 +11,8 @@ qx.Class.define("zx.demo.work.Local", {
       let schedulerServerTransport = new zx.io.api.transport.loopback.Server();
       schedulerClientTransport.connect(schedulerServerTransport);
       schedulerServerTransport.connect(schedulerClientTransport);
-      let schedulerClient = new zx.work.api.SchedulerClientApi(schedulerClientTransport, "/scheduler");
-      let schedulerServer = new zx.work.api.SchedulerServerApi("/scheduler");
+      let schedulerClient = new zx.server.work.api.SchedulerClientApi(schedulerClientTransport, "/scheduler");
+      let schedulerServer = new zx.server.work.api.SchedulerServerApi("/scheduler");
       pool.setSchedulerApi(schedulerClient);
 
       schedulerServer.addListener("complete", e => {

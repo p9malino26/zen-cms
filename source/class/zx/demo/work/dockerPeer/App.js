@@ -4,7 +4,7 @@ qx.Class.define("zx.demo.work.dockerPeer.App", {
 
   members: {
     async main() {
-      let pool = new zx.work.pool.DockerPeerPool("/zx.work", {
+      let pool = new zx.server.work.pool.DockerPeerPool("/zx.work", {
         minSize: 0,
         maxSize: 2
       }).set({
@@ -16,8 +16,8 @@ qx.Class.define("zx.demo.work.dockerPeer.App", {
       let schedulerServerTransport = new zx.io.api.transport.loopback.Server();
       schedulerClientTransport.connect(schedulerServerTransport);
       schedulerServerTransport.connect(schedulerClientTransport);
-      let schedulerClient = new zx.work.api.SchedulerClientApi(schedulerClientTransport);
-      let schedulerServer = new zx.work.api.SchedulerServerApi();
+      let schedulerClient = new zx.server.work.api.SchedulerClientApi(schedulerClientTransport);
+      let schedulerServer = new zx.server.work.api.SchedulerServerApi();
       pool.setSchedulerApi(schedulerClient);
       schedulerServer.schedule({
         uuid: "uuid",

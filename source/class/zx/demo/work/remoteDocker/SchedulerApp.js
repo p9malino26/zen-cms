@@ -16,7 +16,7 @@ qx.Class.define("zx.demo.work.remoteDocker.SchedulerApp", {
     async main() {
       let app = this.getQxObject("app");
       new zx.io.api.transport.http.ExpressServerTransport(app, "/zx.work");
-      let schedulerServer = new zx.work.api.SchedulerServerApi("/scheduler");
+      let schedulerServer = new zx.server.work.api.SchedulerServerApi("/scheduler");
       schedulerServer.schedule({
         uuid: qx.util.Uuid.createUuidV4(),
         classname: zx.demo.work.TestWork.classname,

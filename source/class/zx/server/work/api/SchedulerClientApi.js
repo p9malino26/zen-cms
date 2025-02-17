@@ -16,20 +16,17 @@
  * ************************************************************************ */
 
 /**
- * An app to host workers in a separated node process
- *
- * Uses express as the server platform
+ * Client api for work scheduling
  */
-qx.Class.define("zx.work.runtime.NodePeerService", {
-  extend: zx.work.runtime.AbstractPeerService,
+qx.Class.define("zx.server.work.api.SchedulerClientApi", {
+  extend: zx.io.api.client.AbstractClientApi,
 
-  construct(route = "/zx.work") {
-    super(route);
-  },
-
-  members: {
-    _onReady() {
-      console.log("zx.work.pool.LocalhostPeerPool.READY_SIGNAL");
-    }
+  /**
+   *
+   * @param {zx.io.api.server.AbstractServerTransport} transport
+   * @param {string} path
+   */
+  construct(transport, path) {
+    super(transport, "zx.server.work.api.SchedulerApi", ["schedule", "poll", "push"], path);
   }
 });

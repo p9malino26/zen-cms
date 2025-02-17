@@ -25,7 +25,7 @@
  * @property {string} message - The message posted by the worker, e.g. a log message or error message. For posts regarding completion, this is the return message
  * @property {boolean?} [success] - Only for completion information. `true` if the work completed successfully, false if not
  */
-qx.Class.define("zx.work.AbstractWorkerPool", {
+qx.Class.define("zx.server.work.AbstractWorkerPool", {
   extend: qx.core.Object,
 
   construct() {
@@ -49,7 +49,7 @@ qx.Class.define("zx.work.AbstractWorkerPool", {
     },
 
     schedulerApi: {
-      check: "zx.work.api.SchedulerClientApi"
+      check: "zx.server.work.api.SchedulerClientApi"
     },
 
     pollInterval: {
@@ -127,7 +127,7 @@ qx.Class.define("zx.work.AbstractWorkerPool", {
         }
         if (work) {
           console.log(`[${this.classname}]: received work!`);
-          /**@type {zx.work.api.WorkerClientApi} */
+          /**@type {zx.server.work.api.WorkerClientApi} */
 
           //Do not await this because it will cause us not to poll until this IWork is finished
           this.getQxObject("pool")
@@ -171,7 +171,7 @@ qx.Class.define("zx.work.AbstractWorkerPool", {
   },
 
   members: {
-    /**@type {zx.work.IMessageSpec[]}*/
+    /**@type {zx.server.work.IMessageSpec[]}*/
     __pendingMessages: null,
 
     /**

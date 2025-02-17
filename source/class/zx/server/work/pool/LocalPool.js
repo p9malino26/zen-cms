@@ -18,9 +18,9 @@
 /**
  * The local pool runs work in the same main thread as the pool
  */
-qx.Class.define("zx.work.pool.LocalPool", {
-  extend: zx.work.AbstractWorkerPool,
-  implement: [zx.work.IWorkerFactory],
+qx.Class.define("zx.server.work.pool.LocalPool", {
+  extend: zx.server.work.AbstractWorkerPool,
+  implement: [zx.server.work.IWorkerFactory],
 
   construct() {
     super();
@@ -29,12 +29,12 @@ qx.Class.define("zx.work.pool.LocalPool", {
   },
 
   members: {
-    /**@type {Map<zx.work.api.WorkerClientApi, zx.work.api.WorkerServerApi>} */
+    /**@type {Map<zx.server.work.api.WorkerClientApi, zx.server.work.api.WorkerServerApi>} */
     __workerMap: null,
 
     /**
      * creates a new instance
-     * @returns {Promise<zx.work.api.WorkerClientApi>}
+     * @returns {Promise<zx.server.work.api.WorkerClientApi>}
      */
     async create() {
       let apiPath = this._createPath("workerApi");
@@ -45,8 +45,8 @@ qx.Class.define("zx.work.pool.LocalPool", {
       serverTransport.connect(clientTransport);
       clientTransport.connect(serverTransport);
 
-      let server = new zx.work.api.WorkerServerApi(apiPath);
-      let client = new zx.work.api.WorkerClientApi(clientTransport, apiPath);
+      let server = new zx.server.work.api.WorkerServerApi(apiPath);
+      let client = new zx.server.work.api.WorkerClientApi(clientTransport, apiPath);
 
       this.__workerMap.set(client, server);
 
@@ -58,7 +58,7 @@ qx.Class.define("zx.work.pool.LocalPool", {
 
     /**
      * Destroys an instance entirely
-     * @param {zx.work.api.WorkerClientApi} client
+     * @param {zx.server.work.api.WorkerClientApi} client
      */
     async destroy(client) {
       let server = this.__workerMap.get(client);

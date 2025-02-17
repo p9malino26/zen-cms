@@ -17,17 +17,17 @@
 
 /**
  * API designed to run on a worker of a worker pool,
- * which executes the piece of work (zx.work.IWork) that is passed to it.
+ * which executes the piece of work (zx.server.work.IWork) that is passed to it.
  */
-qx.Class.define("zx.work.api.WorkerServerApi", {
-  implement: [zx.work.IWorker],
+qx.Class.define("zx.server.work.api.WorkerServerApi", {
+  implement: [zx.server.work.IWorker],
   extend: zx.io.api.server.AbstractServerApi,
 
   /**
    * @param {string} apiPath
    */
   construct(apiPath) {
-    super("zx.work.api.WorkerApi");
+    super("zx.server.work.api.WorkerApi");
     zx.io.api.server.ConnectionManager.getInstance().registerApi(this, apiPath);
   },
 
@@ -54,7 +54,7 @@ qx.Class.define("zx.work.api.WorkerServerApi", {
     },
 
     /**
-     * @override zx.work.IWorker#run
+     * @override zx.server.work.IWorker#run
      */
     async run(work) {
       let clazz = qx.Class.getByName(work.classname);
@@ -62,8 +62,8 @@ qx.Class.define("zx.work.api.WorkerServerApi", {
         throw new Error(`Cannot find class '${work.classname}'`);
       }
       let instance = new clazz(work.uuid, ...work.args);
-      if (!(instance instanceof zx.work.AbstractWork)) {
-        throw new Error(`Class '${work.classname}' is not an instance of zx.work.AbstractWork`);
+      if (!(instance instanceof zx.server.work.AbstractWork)) {
+        throw new Error(`Class '${work.classname}' is not an instance of zx.server.work.AbstractWork`);
       }
       let caller = instance.toUuid();
       const log = message => {

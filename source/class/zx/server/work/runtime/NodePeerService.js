@@ -15,15 +15,13 @@
  *
  * ************************************************************************ */
 
-const express = require("express");
-
 /**
- * An app to host workers in a docker container
+ * An app to host workers in a separated node process
  *
  * Uses express as the server platform
  */
-qx.Class.define("zx.work.runtime.DockerPeerService", {
-  extend: zx.work.runtime.AbstractPeerService,
+qx.Class.define("zx.server.work.runtime.NodePeerService", {
+  extend: zx.server.work.runtime.AbstractPeerService,
 
   construct(route = "/zx.work") {
     super(route);
@@ -31,7 +29,7 @@ qx.Class.define("zx.work.runtime.DockerPeerService", {
 
   members: {
     _onReady() {
-      console.log("zx.work.pool.DockerPeerPool.READY_SIGNAL");
+      console.log("zx.server.work.pool.LocalhostPeerPool.READY_SIGNAL");
     }
   }
 });

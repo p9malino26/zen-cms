@@ -19,8 +19,8 @@
  * The peer pool runs workers in a separate node process
  * @template TWorker
  */
-qx.Class.define("zx.work.pool.AbstractPeerPool", {
-  extend: zx.work.AbstractWorkerPool,
+qx.Class.define("zx.server.work.pool.AbstractPeerPool", {
+  extend: zx.server.work.AbstractWorkerPool,
 
   /**
    * @param {object} config - config for {@link zx.utils.Pool}
@@ -43,14 +43,14 @@ qx.Class.define("zx.work.pool.AbstractPeerPool", {
   },
 
   members: {
-    /**@type {Map<zx.work.api.WorkerClientApi, [process: TWorker, port: number]>} */
+    /**@type {Map<zx.server.work.api.WorkerClientApi, [process: TWorker, port: number]>} */
     __workerMap: null,
 
     /**
      * @abstract
      * @param {number} port
      * @param {string} apiPath
-     * @returns {Promise<zx.work.api.WorkerClientApi>}
+     * @returns {Promise<zx.server.work.api.WorkerClientApi>}
      */
     async _createWorker(port, apiPath) {
       throw new Error(`Abstract method _createWorker of class ${this.classname} not implemented`);
@@ -77,7 +77,7 @@ qx.Class.define("zx.work.pool.AbstractPeerPool", {
 
     /**
      * creates a new instance
-     * @returns {Promise<zx.work.api.WorkerClientApi>}
+     * @returns {Promise<zx.server.work.api.WorkerClientApi>}
      */
     async create() {
       let apiPath = this._createPath("workerApi");
@@ -95,7 +95,7 @@ qx.Class.define("zx.work.pool.AbstractPeerPool", {
 
     /**
      * Destroys an instance entirely
-     * @param {zx.work.api.WorkerClientApi} client
+     * @param {zx.server.work.api.WorkerClientApi} client
      */
     async destroy(client) {
       let result = this.__workerMap.get(client);
