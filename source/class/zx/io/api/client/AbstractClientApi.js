@@ -136,18 +136,25 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
         headers["Session-Uuid"] = this.__transport.getSessionUuid();
       }
 
-      this.__transport.postMessage(this.__path, {
-        type: "subscribe",
-        headers,
-        path: this.__path,
-        body: {
-          eventName
-        }
-      });
-
       let promise = new qx.Promise();
       let callbacks = new qx.data.Array([callback]);
       this.__subscriptions[eventName] = { callbacks, promise };
+
+      Promise.resolve()
+        .then(() =>
+          this.__transport.postMessage(this.__path, {
+            type: "subscribe",
+            headers,
+            path: this.__path,
+            body: {
+              eventName
+            }
+          })
+        )
+        .catch(e => {
+          promise.reject(e);
+        });
+
       return promise;
     },
 
@@ -180,7 +187,12 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
           }
         };
         this.__transport.unsubscribe();
-        this.__transport.postMessage(this.__path, request);
+
+        Promise.resolve()
+          .then(() => this.__transport.postMessage(this.__path, request))
+          .catch(e => {
+            promise.reject(e);
+          });
       } else {
         promise.resolve();
       }
@@ -236,20 +248,23 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
         headers["Session-Uuid"] = sessionUuid;
       }
 
-      try {
-        this.__transport.postMessage(this.__getUrl(methodName), {
-          type: "callMethod",
-          headers,
-          path: this.__getPath(methodName),
-          body: {
-            methodArgs
-          }
+      Promise.resolve()
+        .then(() =>
+          this.__transport.postMessage(this.__getUrl(methodName), {
+            type: "callMethod",
+            headers,
+            path: this.__getPath(methodName),
+            body: {
+              methodArgs
+            }
+          })
+        )
+        .catch(e => {
+          this.error("Error posting message", e);
+          delete this.__pendingMethodCalls[pending.callIndex];
+          promise.reject(e);
         });
-      } catch (e) {
-        this.error("Error posting message", e);
-        delete this.__pendingMethodCalls[pending.callIndex];
-        promise.reject(e);
-      }
+
       return promise;
     },
 
