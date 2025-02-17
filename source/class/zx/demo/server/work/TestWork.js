@@ -1,4 +1,4 @@
-qx.Class.define("zx.demo.work.TestWork", {
+qx.Class.define("zx.demo.server.work.TestWork", {
   extend: zx.server.work.AbstractWork,
 
   members: {

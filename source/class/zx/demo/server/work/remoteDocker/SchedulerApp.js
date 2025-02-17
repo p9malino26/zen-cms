@@ -1,6 +1,6 @@
 const express = require("express");
 
-qx.Class.define("zx.demo.work.remoteDocker.SchedulerApp", {
+qx.Class.define("zx.demo.server.work.remoteDocker.SchedulerApp", {
   extend: qx.application.Basic,
   implement: [qx.application.IApplication],
 
@@ -19,13 +19,13 @@ qx.Class.define("zx.demo.work.remoteDocker.SchedulerApp", {
       let schedulerServer = new zx.server.work.api.SchedulerServerApi("/scheduler");
       schedulerServer.schedule({
         uuid: qx.util.Uuid.createUuidV4(),
-        classname: zx.demo.work.TestWork.classname,
+        classname: zx.demo.server.work.TestWork.classname,
         compatibility: [],
         args: []
       });
       schedulerServer.schedule({
         uuid: qx.util.Uuid.createUuidV4(),
-        classname: zx.demo.work.TestWork.classname,
+        classname: zx.demo.server.work.TestWork.classname,
         compatibility: [],
         args: []
       });

@@ -1,15 +1,10 @@
-/**
- * NOTE: As of 13/02/2025, web wor
- */
-qx.Class.define("zx.demo.work.webworkers.WebWorkerDemoApp", {
-  extend: qx.application.Native,
-  implement: [qx.application.IApplication],
+qx.Class.define("zx.demo.server.work.Local", {
+  extend: qx.application.Basic,
 
   members: {
     async main() {
-      let pool = new zx.server.work.pool.WebWorkerPool({
-        minSize: 0,
-        maxSize: 2
+      let pool = new zx.server.work.pool.LocalPool({
+        minSize: 5
       });
 
       let schedulerClientTransport = new zx.io.api.transport.loopback.Client();
@@ -19,23 +14,28 @@ qx.Class.define("zx.demo.work.webworkers.WebWorkerDemoApp", {
       let schedulerClient = new zx.server.work.api.SchedulerClientApi(schedulerClientTransport, "/scheduler");
       let schedulerServer = new zx.server.work.api.SchedulerServerApi("/scheduler");
       pool.setSchedulerApi(schedulerClient);
-      schedulerServer.schedule({
-        uuid: "uuid",
-        classname: zx.demo.work.TestWork.classname,
-        compatibility: [],
-        args: []
-      });
+
       schedulerServer.addListener("complete", e => {
-        console.log('schedulerServer.addListener("complete")', e.getData());
+        console.log("schedulerServer: complete: ", e.getData());
       });
 
       await pool.startup();
-    },
 
-    finalize() {},
+      schedulerServer.schedule({
+        uuid: qx.util.Uuid.createUuidV4(),
+        classname: zx.demo.server.work.TestWork.classname,
+        compatibility: [],
+        args: []
+      });
 
-    close() {},
-
-    terminate() {}
+      setTimeout(() => {
+        schedulerServer.schedule({
+          uuid: qx.util.Uuid.createUuidV4(),
+          classname: zx.demo.server.work.ErrorWork.classname,
+          compatibility: [],
+          args: []
+        });
+      }, 2000);
+    }
   }
 });

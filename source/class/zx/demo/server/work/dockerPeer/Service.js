@@ -2,11 +2,11 @@
  *
  * Application that runs on a docker container, executing the tasks (zx.server.work.IWork)
  */
-qx.Class.define("zx.demo.work.dockerPeer.Service", {
+qx.Class.define("zx.demo.server.work.dockerPeer.Service", {
   extend: zx.server.work.runtime.DockerPeerService,
   construct() {
     super();
-    zx.demo.work.TestWork;
-    zx.demo.work.ErrorWork;
+    zx.demo.server.work.TestWork;
+    zx.demo.server.work.ErrorWork;
   }
 });
