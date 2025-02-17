@@ -45,23 +45,22 @@ qx.Class.define("zx.io.api.transport.loopback.Client", {
     },
 
     /**
-     * Posts a message to the server.
-     * @param {string} uri The URI to post the message to
-     * @param {zx.io.api.IRequestJson} requestJson
+     * @override
      */
     postMessage(uri, requestJson) {
       if (!this.__server) {
         throw new Error("Not connected to server");
       }
-      console.log(this.classname, "POSTING MESSAGE", uri, requestJson);
       this.fireDataEvent("post", { uri, requestJson });
     },
 
     /**
-     * @param {zx.io.api.IResponseJson} responseJson
+     * Called EXCLUSIVELY by zx.io.api.transport.loopback.Server
+     * when it posts a message to this transport
+     * @param {zx.io.api.IResponseJson} data
      */
-    async receiveMessage(transportableJson) {
-      this.fireDataEvent("message", { data: [transportableJson] });
+    async receiveMessage(data) {
+      this.fireDataEvent("message", data);
     }
   },
 

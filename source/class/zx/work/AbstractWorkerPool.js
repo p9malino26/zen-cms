@@ -1,4 +1,6 @@
 /* ************************************************************************
+
+
  *
  *  Zen [and the art of] CMS
  *
@@ -18,7 +20,10 @@
 /**
  * A worker pool maintains and manages a pool of workers
  *
- * @ignore(crypto.randomUUID)
+ * @interface IWorkerPostData
+ * @property {string} caller - the UUID of the IWork instance
+ * @property {string} message - The message posted by the worker, e.g. a log message or error message. For posts regarding completion, this is the return message
+ * @property {boolean?} [success] - Only for completion information. `true` if the work completed successfully, false if not
  */
 qx.Class.define("zx.work.AbstractWorkerPool", {
   extend: qx.core.Object,
@@ -112,6 +117,8 @@ qx.Class.define("zx.work.AbstractWorkerPool", {
       const onPoll = async () => {
         console.log(`[${this.classname}]: polling for work...`);
         let work;
+        if (!this.getQxObject("pool").available()) return;
+
         try {
           work = await this.getSchedulerApi().poll(this.classname);
         } catch {
@@ -120,10 +127,15 @@ qx.Class.define("zx.work.AbstractWorkerPool", {
         }
         if (work) {
           console.log(`[${this.classname}]: received work!`);
-          let worker = await this.getQxObject("pool").acquire();
-          await worker.run(work);
-          await worker.poll(); // TODO: something's going wrong - the docker server isn't sending all of it's publications
-          // this.getQxObject("pool").release(worker);
+          /**@type {zx.work.api.WorkerClientApi} */
+
+          //Do not await this because it will cause us not to poll until this IWork is finished
+          this.getQxObject("pool")
+            .acquire()
+            .then(async worker => {
+              await worker.run(work);
+              this.getQxObject("pool").release(worker);
+            });
         }
       };
 
@@ -143,8 +155,9 @@ qx.Class.define("zx.work.AbstractWorkerPool", {
         try {
           console.log(`[${this.classname}]: pushing ${currentPending.length} messages...`);
           await this.getSchedulerApi().push(currentPending);
-        } catch {
+        } catch (e) {
           console.log(`[${this.classname}]: failed to push messages`);
+          debugger;
           // the server running the scheduler is down - re-add the pending messages and try again later
           this.__pendingMessages.unshift(...currentPending);
         }
@@ -167,7 +180,7 @@ qx.Class.define("zx.work.AbstractWorkerPool", {
      * @returns {string} the path in the form `/{{classname}}/{{uuid}}/{{apiName}}/{{randomUuid}}`
      */
     _createPath(apiName) {
-      return `/${this.classname}/${this.toUuid()}/${apiName}/${crypto.randomUUID()}`;
+      return `/${this.classname}/${this.toUuid()}/${apiName}/${qx.util.Uuid.createUuidV4()}`;
     },
 
     /**
@@ -187,29 +200,35 @@ qx.Class.define("zx.work.AbstractWorkerPool", {
      */
     async shutdown(forceAfterMs = -1) {
       this.getQxObject("pollTimer").killTimer();
-      await new Promise(async resolve => {
-        let startTime = Date.now();
-        while (this.__pendingMessages.length) {
-          await new Promise(r => setTimeout(r, this.getPushInterval()));
-          if (forceAfterMs >= 0 && Date.now() - startTime > forceAfterMs) {
-            break;
-          }
+
+      let startTime = Date.now();
+      while (this.__pendingMessages.length) {
+        await new Promise(r => setTimeout(r, this.getPushInterval()));
+        if (forceAfterMs >= 0 && Date.now() - startTime > forceAfterMs) {
+          break;
         }
-        this.getQxObject("pushTimer").killTimer();
-        resolve();
-      });
+      }
+      this.getQxObject("pushTimer").killTimer();
       await this.getQxObject("pool").shutdown();
     },
 
-    _onLog(evt) {
-      let { caller, message } = evt.getData();
+    /**
+     * Called when the worker posts back a log message from its instance of IWork
+     * @param {IWorkerPostData} data
+     */
+    _onLog(data) {
+      let { caller, message } = data;
       console.log(`[${this.classname}]: ${caller}: ${message}`);
       this.__pendingMessages.push({ caller, message, time: Date.now(), kind: "log" });
       this.__sortPending();
     },
 
-    _onComplete(evt) {
-      let { caller, message, success } = evt.getData();
+    /**
+     * Called when the worker has completed its task (either succeeded or error)
+     * @param {IWorkerPostData} data
+     */
+    _onComplete(data) {
+      let { caller, message, success } = data;
       console.log(`[${this.classname}]: ${caller} (${success ? "success" : "fail"}): ${message}`);
       this.__pendingMessages.push({ caller, message, time: Date.now(), kind: success ? "success" : "failure" });
       this.__sortPending();

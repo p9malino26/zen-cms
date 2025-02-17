@@ -42,9 +42,8 @@ qx.Class.define("zx.io.api.transport.http.ExpressServerTransport", {
     app.all(`${route}/**`, async (req, res) => {
       let data = qx.lang.Object.clone(req.body, true);
       let path = zx.utils.Uri.breakoutUri(req.originalUrl).path.replace(RE_ROUTE, "");
-      path = qx.lang.String.camelCase(path);
       data.path = path;
-      data.restMethod = req.method; // TODO: we should only set this if we get a RESTful request; RPC should have no method
+      data.restMethod = req.method;
 
       let request = new zx.io.api.server.Request(this, data).set({ restMethod: req.method });
       let response = new zx.io.api.server.Response();

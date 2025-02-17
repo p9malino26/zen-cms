@@ -54,11 +54,15 @@ qx.Class.define("zx.io.api.transport.loopback.Server", {
      * Sends a message back to the client
      * @param {zx.io.api.IRequestJson} requestJson
      */
-    postMessage(requestJson) {
-      this.__clientsByApiUuid.get(requestJson.headers["Client-Api-Uuid"])?.receiveMessage(requestJson);
+    __postMessage(requestJson) {
+      this.__clientsByApiUuid.get(requestJson.data[0].headers["Client-Api-Uuid"]).receiveMessage(requestJson);
     },
 
     /**
+     *
+     * Called EXCLUSIVELY by zx.io.api.transport.loopback.Server
+     * when it posts a message to this transport
+     *
      * @param {string} uri
      * @param {zx.io.api.IRequestJson} requestJson
      */
@@ -70,9 +74,7 @@ qx.Class.define("zx.io.api.transport.loopback.Server", {
       }
       let response = new zx.io.api.server.Response();
       await zx.io.api.server.ConnectionManager.getInstance().receiveMessage(request, response);
-      for (let data of response.getData()) {
-        this.postMessage(data);
-      }
+      this.__postMessage(response.toNativeObject());
     },
 
     /**
@@ -80,6 +82,14 @@ qx.Class.define("zx.io.api.transport.loopback.Server", {
      */
     supportsServerPush() {
       return true;
+    },
+
+    /**
+     * @override
+     */
+    sendPushResponse(response) {
+      let data = response.toNativeObject();
+      this.__postMessage(data);
     }
   },
 

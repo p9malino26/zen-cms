@@ -16,18 +16,26 @@
  * ************************************************************************ */
 
 /**
- *
+ * API designed to run on a worker of a worker pool,
+ * which executes the piece of work (zx.work.IWork) that is passed to it.
  */
 qx.Class.define("zx.work.api.WorkerServerApi", {
+  implement: [zx.work.IWorker],
   extend: zx.io.api.server.AbstractServerApi,
 
+  /**
+   * @param {string} apiPath
+   */
   construct(apiPath) {
     super("zx.work.api.WorkerApi");
-    console.log(`New worker server api at ${apiPath} ready to work!`);
+    zx.io.api.server.ConnectionManager.getInstance().registerApi(this, apiPath);
   },
 
   members: {
-    publications: {
+    /**
+     * @override
+     */
+    _publications: {
       /**
        * Sent when a work logs a message
        * @type {object}
@@ -46,15 +54,7 @@ qx.Class.define("zx.work.api.WorkerServerApi", {
     },
 
     /**
-     * Run to ensure the collection of log and complete publications. The transport should manage them independently,
-     * however if the process running this server is killed after a publication is sent but before the transport polls,
-     * data can be lost.
-     * @returns {void}
-     */
-    async poll() {},
-
-    /**
-     * @param {zx.work.IWorkSpec} work
+     * @override zx.work.IWorker#run
      */
     async run(work) {
       let clazz = qx.Class.getByName(work.classname);
@@ -84,9 +84,6 @@ qx.Class.define("zx.work.api.WorkerServerApi", {
         }
         this.publish("complete", { caller, success: false, message: cause.message });
       }
-      console.log("before wait");
-      await new Promise(res => setTimeout(res, 10_000));
-      console.log("after wait");
     }
   }
 });

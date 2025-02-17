@@ -68,9 +68,8 @@ qx.Class.define("zx.work.pool.AbstractThreadWorkerPool", {
 
       this.__workerMap.set(client, workerThread);
 
-      client.addListener("log", this._onLog, this);
-      client.addListener("complete", this._onComplete, this);
-
+      await client.subscribe("log", this._onLog.bind(this));
+      await client.subscribe("complete", this._onComplete.bind(this));
       return client;
     },
 
@@ -83,8 +82,8 @@ qx.Class.define("zx.work.pool.AbstractThreadWorkerPool", {
       await workerThread.terminate();
 
       this.__workerMap.delete(client);
-      client.removeListener("log", this._onLog, this);
-      client.removeListener("complete", this._onComplete, this);
+      await client.unsubscribe("log");
+      await client.unsubscribe("complete");
       client.dispose();
     }
   }

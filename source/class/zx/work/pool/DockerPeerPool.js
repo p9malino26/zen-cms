@@ -29,7 +29,7 @@ qx.Class.define("zx.work.pool.DockerPeerPool", {
     /**
      * Resolved relative to the user home directory `/home/zxWorker` in the container (your `compiled` directory will be automatically linked into the home directory)
      */
-    "zx.work.pool.DockerPeerPool.remoteAppPath": "./compiled/source-node/docker-peer-service/index.js",
+    "zx.work.pool.DockerPeerPool.remoteAppPath": "./app/work-docker-peer-service/index.js",
     /**
      * How the docker peer's node process should be started for debugging, if at all.
      * Options:
@@ -48,7 +48,7 @@ qx.Class.define("zx.work.pool.DockerPeerPool", {
    * @param {string} route - the base path on the node remote app for zx apis. Be certain that this exactly matches the route configured on the server, eg {@link zx.work.runtime.ExpressService}
    * @param {object} config - config for {@link zx.utils.Pool}
    * @param {string} image - the docker image to use. Note: it is expected that the user in the container will be named `zxWorker`
-   * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.work.runtime.ExpressService}. If not provided, defaults to the environment variable `zx.work.pool.DockerPeerPool.remoteAppPath` (this environment variable defaults to the application named 'docker-peer-service' built in source mode)
+   * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app. The app will likely extend {@link zx.work.runtime.ExpressService}. If not provided, defaults to the environment variable `zx.work.pool.DockerPeerPool.remoteAppPath` (this environment variable defaults to the application named 'work-docker-peer-service' built in source mode)
    */
   construct(route, config, image, remoteAppPath) {
     super(config);
@@ -105,31 +105,32 @@ qx.Class.define("zx.work.pool.DockerPeerPool", {
         Tty: true,
         HostConfig: {
           AutoRemove: true,
-          Binds: [`${process.cwd()}/compiled:/home/pptruser/compiled`, `${process.cwd()}/package.json:/home/pptruser/package.json`],
+          Binds: [`${process.cwd()}/compiled/source-node:/home/pptruser/app/`],
           PortBindings
         }
       };
-      let container = await /**@type {import('dockerode')}*/ (this.__docker).createContainer(config);
+      let container = await this.__docker.createContainer(config);
       container._config = config;
 
-      let resolve;
-      let promise = new Promise(res => (resolve = res));
-
       let prefix = `[${this.classname}: node ${params.slice(-3).join(" ")}]`;
-      container.attach({ stream: true, stdout: true, stderr: false }, (err, stream) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        stream.on("data", data => {
-          if (resolve) {
-            if (data.toString().includes(zx.work.pool.DockerPeerPool.READY_SIGNAL)) {
-              resolve();
-              resolve = null;
-            }
+
+      let resolved = false;
+      let promise = new Promise(resolve => {
+        container.attach({ stream: true, stdout: true, stderr: false }, (err, stream) => {
+          if (err) {
+            console.error(err);
             return;
           }
-          console.log(`${prefix} stdout: ${data}`);
+          stream.on("data", data => {
+            if (!resolved) {
+              if (data.toString().includes(zx.work.pool.DockerPeerPool.READY_SIGNAL)) {
+                resolve();
+                resolved = true;
+              }
+              return;
+            }
+            console.log(`${prefix} stdout: ${data}`);
+          });
         });
       });
       container.attach({ stream: true, stdout: false, stderr: true }, (err, stream) => {
@@ -155,8 +156,8 @@ qx.Class.define("zx.work.pool.DockerPeerPool", {
      */
     _createClient(port, apiPath) {
       let host = `http://localhost:${port}`;
-      let transport = new zx.io.api.transport.http.HttpClientTransport();
-      let client = new zx.work.api.WorkerClientApi(transport, host + this.__route + apiPath);
+      let transport = new zx.io.api.transport.http.HttpClientTransport(host + this.__route);
+      let client = new zx.work.api.WorkerClientApi(transport, apiPath);
       return client;
     },
 

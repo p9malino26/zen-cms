@@ -16,11 +16,12 @@
  * ************************************************************************ */
 
 /**
- * A Work is a single executable task
+ * Base implentation of zx.work.IWork
  */
 qx.Class.define("zx.work.AbstractWork", {
   type: "abstract",
   extend: qx.core.Object,
+  implement: [zx.work.IWork],
 
   /**
    * @param {string} uuid - a uuid to uniquely identify this work

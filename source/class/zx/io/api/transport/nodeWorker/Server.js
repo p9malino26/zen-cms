@@ -48,24 +48,24 @@ qx.Class.define("zx.io.api.transport.nodeWorker.Server", {
       }
       client.on("message", ({ uri, requestJson }) => {
         this.__clientsByApiUuid.set(requestJson.headers["Client-Api-Uuid"], client);
-        this.receiveMessage(uri, requestJson);
+        this.__receiveMessage(uri, requestJson);
       });
     },
 
     /**
      * Sends a message back to the client.
      * Only works if this transport support server-side push
-     * @param {zx.io.api.IRequestJson} requestJson
+     * @param {zx.io.api.IResponseJson} responseJson
      */
-    postMessage(requestJson) {
-      this.__clientsByApiUuid.get(requestJson.headers["Client-Api-Uuid"])?.postMessage(requestJson);
+    __postMessage(responseJson) {
+      this.__clientsByApiUuid.get(responseJson.data[0].headers["Client-Api-Uuid"])?.postMessage(responseJson);
     },
 
     /**
      * @param {string} uri
      * @param {zx.io.api.IRequestJson} requestJson
      */
-    async receiveMessage(uri, requestJson) {
+    async __receiveMessage(uri, requestJson) {
       let request = new zx.io.api.server.Request(this, requestJson);
       if (uri) {
         let breakout = zx.utils.Uri.breakoutUri(uri);
@@ -73,17 +73,23 @@ qx.Class.define("zx.io.api.transport.nodeWorker.Server", {
       }
       let response = new zx.io.api.server.Response();
       await zx.io.api.server.ConnectionManager.getInstance().receiveMessage(request, response);
-      for (let data of response.getData()) {
-        this.postMessage(data);
-      }
+      let json = response.toNativeObject();
+      this.__postMessage(json);
     },
 
     /**
-     * Override this method to return true if the transport supports server-side push.
-     * @returns {true}
+     * @override
      */
     supportsServerPush() {
       return true;
+    },
+
+    /**
+     * @override
+     */
+    sendPushResponse(response) {
+      let json = response.toNativeObject();
+      this.__postMessage(json);
     }
   },
 

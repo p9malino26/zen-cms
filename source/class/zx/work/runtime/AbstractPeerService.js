@@ -33,7 +33,7 @@ qx.Class.define("zx.work.runtime.AbstractPeerService", {
 
   objects: {
     app() {
-      const app = express();
+      let app = express();
       app.use(zx.io.api.transport.http.ExpressServerTransport.jsonMiddleware());
       return app;
     }

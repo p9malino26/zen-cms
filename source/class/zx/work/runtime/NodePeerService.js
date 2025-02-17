@@ -15,8 +15,6 @@
  *
  * ************************************************************************ */
 
-const express = require("express");
-
 /**
  * An app to host workers in a separated node process
  *
@@ -31,7 +29,7 @@ qx.Class.define("zx.work.runtime.NodePeerService", {
 
   members: {
     _onReady() {
-      console.log(zx.work.pool.LocalhostPeerPool.READY_SIGNAL);
+      console.log("zx.work.pool.LocalhostPeerPool.READY_SIGNAL");
     }
   }
 });

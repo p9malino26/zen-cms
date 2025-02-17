@@ -1,12 +1,15 @@
-qx.Class.define("zx.demo.work.nodeWorkers.App", {
-  extend: qx.application.Basic,
+/**
+ * NOTE: As of 13/02/2025, web wor
+ */
+qx.Class.define("zx.demo.work.webworkers.WebWorkerDemoApp", {
+  extend: qx.application.Native,
   implement: [qx.application.IApplication],
 
   members: {
     async main() {
-      let pool = new zx.work.pool.NodeWorkerPool({
+      let pool = new zx.work.pool.WebWorkerPool({
         minSize: 0,
-        maxSize: 1
+        maxSize: 2
       });
 
       let schedulerClientTransport = new zx.io.api.transport.loopback.Client();

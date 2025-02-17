@@ -16,7 +16,8 @@
  * ************************************************************************ */
 
 /**
- * This interface represents the shape of the POJO used to specify a work item
+ * This interface represents the shape of the POJO used to specify a work item (zx.work.IWork)
+ * that is sent from the scheduler to the worker (zx.work.IWorker)
  */
 qx.Interface.define("zx.work.IWorkSpec", {
   members: {
@@ -27,7 +28,7 @@ qx.Interface.define("zx.work.IWorkSpec", {
     uuid: null,
 
     /**
-     * The classname of the work item
+     * The classname of the work item, must implement {@link zx.work.IWork}
      * @type {string}
      */
     classname: null,

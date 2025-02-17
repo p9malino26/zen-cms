@@ -50,8 +50,8 @@ qx.Class.define("zx.work.pool.LocalPool", {
 
       this.__workerMap.set(client, server);
 
-      client.addListener("log", this._onLog, this);
-      client.addListener("complete", this._onComplete, this);
+      await client.subscribe("log", this._onLog.bind(this));
+      await client.subscribe("complete", this._onComplete.bind(this));
 
       return client;
     },
@@ -63,11 +63,9 @@ qx.Class.define("zx.work.pool.LocalPool", {
     async destroy(client) {
       let server = this.__workerMap.get(client);
       server.dispose();
-      zx.io.api.server.ConnectionManager.getInstance().unregisterApi(server);
-
       this.__workerMap.delete(client);
-      client.removeListener("log", this._onLog, this);
-      client.removeListener("complete", this._onComplete, this);
+      await client.unsubscribe("log");
+      await client.unsubscribe("complete");
       client.dispose();
     }
   }

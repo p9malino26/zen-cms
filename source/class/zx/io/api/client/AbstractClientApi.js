@@ -49,6 +49,7 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
     /**
      * @typedef {{callbacks: ((eventData: any) => void)[], promise: qx.Promise?}} SubscriptionData The promise is created when the client requests subscribe,
      * and resolved when the client receives a message from the server that it has subscribed to the event.
+     * A promise is created and used in the same way when the user unsubscribes.
      * The callback is called when the server publishes the event.
      * @type {{[eventName: string]: SubscriptionData}}
      *
@@ -163,8 +164,10 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
         callbacks.removeAll();
       }
 
+      let promise = new qx.Promise();
+
       if (callbacks.length == 0) {
-        delete this.__subscriptions[eventName];
+        this.__subscriptions[eventName].promise = promise;
         let request = {
           type: "unsubscribe",
           headers: {
@@ -176,9 +179,13 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
             eventName
           }
         };
+        this.__transport.unsubscribe();
         this.__transport.postMessage(this.__path, request);
-        this.__transport.unsubscribed();
+      } else {
+        promise.resolve();
       }
+
+      return promise;
     },
 
     /**
@@ -279,7 +286,9 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
       }
 
       if (this.__transport.getSessionUuid() && data.headers["Session-Uuid"] && data.headers["Session-Uuid"] != this.__transport.getSessionUuid()) {
-        console.warn("Session UUID has changed. This means that current subscriptions will not work. Please check that your connection to the server is stable.");
+        console.warn(
+          "Session UUID has changed. This means that current subscriptions will not work. Please check that you send no other request during you initial subscription, and that your connection to the server is stable."
+        );
         debugger;
       }
 
@@ -303,7 +312,8 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
         this.__subscriptions[data.body.eventName].promise.resolve();
         delete this.__subscriptions[data.body.eventName].promise;
       } else if (data.type == "unsubscribed") {
-        return;
+        this.__subscriptions[data.body.eventName].promise.resolve();
+        delete this.__subscriptions[data.body.eventName];
       } else if (data.type == "publish") {
         if (!this.__subscriptions[data.body.eventName]) {
           return;

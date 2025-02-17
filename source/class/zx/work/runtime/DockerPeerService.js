@@ -31,7 +31,7 @@ qx.Class.define("zx.work.runtime.DockerPeerService", {
 
   members: {
     _onReady() {
-      console.log(zx.work.pool.DockerPeerPool.READY_SIGNAL);
+      console.log("zx.work.pool.DockerPeerPool.READY_SIGNAL");
     }
   }
 });

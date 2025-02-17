@@ -47,9 +47,10 @@ qx.Class.define("zx.io.api.transport.http.HttpClientTransport", {
         let data = await response.text().then(t => zx.utils.Json.parseJson(t));
         this.fireDataEvent("message", data);
       } catch (err) {
-        if (qx.core.Environment.get("qx.debug")) {
-          console.error(`Failed to post message to ${url}`, err);
-        }
+        //bring those into closure for debugging ease
+        path;
+        url;
+        throw err;
       }
     }
   }

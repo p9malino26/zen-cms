@@ -20,7 +20,13 @@ qx.Class.define("zx.demo.work.localPeer.App", {
       let schedulerServer = new zx.work.api.SchedulerServerApi("/scheduler");
       pool.setSchedulerApi(schedulerClient);
       schedulerServer.schedule({
-        uuid: "uuid",
+        uuid: qx.util.Uuid.createUuidV4(),
+        classname: zx.demo.work.TestWork.classname,
+        compatibility: [],
+        args: []
+      });
+      schedulerServer.schedule({
+        uuid: qx.util.Uuid.createUuidV4(),
         classname: zx.demo.work.TestWork.classname,
         compatibility: [],
         args: []

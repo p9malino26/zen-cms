@@ -14,17 +14,28 @@ qx.Class.define("zx.demo.work.Local", {
       let schedulerClient = new zx.work.api.SchedulerClientApi(schedulerClientTransport, "/scheduler");
       let schedulerServer = new zx.work.api.SchedulerServerApi("/scheduler");
       pool.setSchedulerApi(schedulerClient);
+
+      schedulerServer.addListener("complete", e => {
+        console.log("schedulerServer: complete: ", e.getData());
+      });
+
+      await pool.startup();
+
       schedulerServer.schedule({
-        uuid: "uuid",
+        uuid: qx.util.Uuid.createUuidV4(),
         classname: zx.demo.work.TestWork.classname,
         compatibility: [],
         args: []
       });
-      schedulerServer.addListener("complete", e => {
-        console.log('schedulerServer.addListener("complete")', e.getData());
-      });
 
-      await pool.startup();
+      setTimeout(() => {
+        schedulerServer.schedule({
+          uuid: qx.util.Uuid.createUuidV4(),
+          classname: zx.demo.work.ErrorWork.classname,
+          compatibility: [],
+          args: []
+        });
+      }, 2000);
     }
   }
 });

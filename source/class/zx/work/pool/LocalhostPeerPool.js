@@ -33,7 +33,7 @@ qx.Class.define("zx.work.pool.LocalhostPeerPool", {
      * - "inspect" - start the node process with the --inspect flag and a random free port within this.nodeDebugRange (default if qx.debug=true)
      * - "break" - start the node process with the --inspect-brk flag and a random free port within this.nodeDebugRange
      */
-    "zx.work.pool.LocalhostPeerPool.inspector": "inspect"
+    "zx.work.pool.LocalhostPeerPool.inspector": ""
   },
 
   /**
@@ -62,8 +62,9 @@ qx.Class.define("zx.work.pool.LocalhostPeerPool", {
      */
     async _createWorker(port, apiPath) {
       let params = [this.__remoteAppPath, port, apiPath];
-      if (qx.core.Environment.get("qx.debug")) {
-        params.unshift(qx.core.Environment.get("zx.work.pool.LocalhostPeerPool.inspector"));
+      let inspect = qx.core.Environment.get("zx.work.pool.LocalhostPeerPool.inspector");
+      if (qx.core.Environment.get("qx.debug") && inspect) {
+        params.unshift(inspect);
       }
 
       let res = child_process.spawn("node", params, {});
@@ -73,8 +74,7 @@ qx.Class.define("zx.work.pool.LocalhostPeerPool", {
       let resolve;
       let promise = new Promise(res => (resolve = res));
       res.stdout.on("data", data => {
-        // we account for an extra \n character as we are reading command line output
-        if (data.toString() === zx.work.pool.LocalhostPeerPool.READY_SIGNAL + "\n") {
+        if (data.toString().indexOf(zx.work.pool.LocalhostPeerPool.READY_SIGNAL) > -1) {
           resolve?.();
           resolve = null;
           return;
@@ -97,8 +97,8 @@ qx.Class.define("zx.work.pool.LocalhostPeerPool", {
      */
     _createClient(port, apiPath) {
       let host = `http://localhost:${port}`;
-      let transport = new zx.io.api.transport.http.HttpClientTransport();
-      let client = new zx.work.api.WorkerClientApi(transport, host + this.__route + apiPath);
+      let transport = new zx.io.api.transport.http.HttpClientTransport(host + this.__route);
+      let client = new zx.work.api.WorkerClientApi(transport, apiPath);
       return client;
     },
 

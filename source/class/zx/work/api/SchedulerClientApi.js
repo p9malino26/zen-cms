@@ -21,24 +21,12 @@
 qx.Class.define("zx.work.api.SchedulerClientApi", {
   extend: zx.io.api.client.AbstractClientApi,
 
-  construct(transport, uri) {
-    super(transport, [], uri);
-  },
-
-  members: {
-    /**
-     * @param {string} classname - classname of the caller, used to determine compatibility with work
-     * @returns {Promise<zx.work.IWorkSpec | null>} work data, or an empty object if no work is available
-     */
-    async poll(classname) {
-      return await this._callMethod("poll", [classname]);
-    },
-
-    /**
-     * @param {zx.work.IMessageSpec} messages - messages to push, in chronological order
-     */
-    async push(messages) {
-      return await this._callMethod("push", [messages]);
-    }
+  /**
+   *
+   * @param {zx.io.api.server.AbstractServerTransport} transport
+   * @param {string} path
+   */
+  construct(transport, path) {
+    super(transport, "zx.work.api.SchedulerApi", ["schedule", "poll", "push"], path);
   }
 });

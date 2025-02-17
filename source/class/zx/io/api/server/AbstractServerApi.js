@@ -124,7 +124,7 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
         if (!handler) {
           //If no method found by path, try to use the path as the method name
           if (!this[requestMethodPath]) {
-            throw new Error(`Method ${requestMethodPath} not found in API ${this.getApiName()}`);
+            throw new Error(`Method ${requestMethodPath} not found in API ${this.getApiName()}, request body: ${request.getBody()}`);
           }
 
           handler = this[requestMethodPath].bind(this);

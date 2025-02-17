@@ -42,7 +42,7 @@ qx.Class.define("zx.io.api.transport.nodeWorker.Client", {
         throw new Error("Already connected to server");
       }
       this.__server = server;
-      this.__server.on("message", transportableJson => this.fireDataEvent("message", { data: [transportableJson] }));
+      this.__server.on("message", transportableJson => this.fireDataEvent("message", transportableJson));
     },
 
     /**

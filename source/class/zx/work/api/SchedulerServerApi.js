@@ -38,11 +38,16 @@ qx.Class.define("zx.work.api.SchedulerServerApi", {
     /**@type {Map<string, zx.work.IMessageSpec[]>} */
     __messages: null,
 
+    /**
+     * Adds a work description to the queue, which will then be fetched by a worker poll and the executed in one of its workers
+     * @param {zx.work.IWorkSpec} workConfig
+     */
     schedule(workConfig) {
       this.__pendingWork.add(workConfig, workConfig.priority ?? 5);
     },
 
     /**
+     * REMOTE METHOD
      * @param {string} classname - classname of the caller, used to determine compatibility with work
      * @returns {Promise<zx.work.IWorkSpec | null>} work data, or an empty object if no work is available
      */
@@ -51,6 +56,7 @@ qx.Class.define("zx.work.api.SchedulerServerApi", {
     },
 
     /**
+     * REMOTE METHOD
      * @param {zx.work.IMessageSpec[]} messages - messages to push
      */
     async push(messages) {

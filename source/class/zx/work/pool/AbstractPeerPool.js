@@ -88,9 +88,8 @@ qx.Class.define("zx.work.pool.AbstractPeerPool", {
 
       this.__workerMap.set(client, [peerProcess, port]);
 
-      client.addListener("log", this._onLog, this);
-      client.addListener("complete", this._onComplete, this);
-
+      await client.subscribe("log", this._onLog.bind(this));
+      await client.subscribe("complete", this._onComplete.bind(this));
       return client;
     },
 
@@ -104,11 +103,11 @@ qx.Class.define("zx.work.pool.AbstractPeerPool", {
         return;
       }
       let [peerProcess, port] = result;
-      this._destroyWorker(peerProcess, () => this.getRemoteServerRange().release(port));
+      await client.unsubscribe("log");
+      await client.unsubscribe("complete");
 
+      this._destroyWorker(peerProcess, () => this.getRemoteServerRange().release(port));
       this.__workerMap.delete(client);
-      client.removeListener("log", this._onLog, this);
-      client.removeListener("complete", this._onComplete, this);
       client.dispose();
     }
   }

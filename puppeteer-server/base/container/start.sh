@@ -23,7 +23,6 @@ function __run_puppeteer() {
 }
 
 function __run_worker() {
-  PUPPETEER_SKIP_DOWNLOAD=true npm install --frozen-lockfile
   node $ZX_NODE_ARGS 2>&1 | tee -a ./console.log
 }
 

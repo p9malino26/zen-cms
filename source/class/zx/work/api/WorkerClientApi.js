@@ -20,24 +20,23 @@
  */
 qx.Class.define("zx.work.api.WorkerClientApi", {
   extend: zx.io.api.client.AbstractClientApi,
+  implement: [zx.work.IWorker],
 
-  construct(transport, uri) {
-    super(transport, [], uri);
-    this.subscribe("log", ({ caller, message }) => this.fireDataEvent("log", { caller, message }));
-    this.subscribe("complete", ({ caller, success, message }) => this.fireDataEvent("complete", { caller, success, message }));
+  /**
+   *
+   * @param {zx.io.api.client.AbstractClientTransport} transport
+   * @param {string} path
+   */
+  construct(transport, path) {
+    super(transport, "zx.work.api.WorkerApi", ["run"], path);
   },
 
   members: {
     /**
-     * @returns {void}
+     * @override zx.work.IWorker#run
      */
-    async poll() {},
-
-    /**
-     * @param {zx.work.IWorkSpec} work
-     */
-    async run(work) {
-      return await this._callMethod("run", [work]);
+    run(work) {
+      //Nothing. This method is defined on the WorkerServerApi.
     }
   }
 });
