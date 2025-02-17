@@ -21,7 +21,7 @@ qx.Class.define("zx.demo.io.api.srv.ServerApp", {
 
       app.use(zx.io.api.transport.http.ExpressServerTransport.jsonMiddleware());
       app
-        .use("/", express.static("compiled/source/remoteApiBrowserTest"))
+        .use("/", express.static("compiled/source/remote-api-browser-test"))
         .use("/transpiled", express.static("compiled/source/transpiled"))
         .use("/resource", express.static("compiled/source/resource"))
         .listen(port, () => {
