@@ -1,7 +1,7 @@
 /**
  * NOTE: As of 13/02/2025, web wor
  */
-qx.Class.define("zx.demo.server.work.webworkers.WebWorkerDemoApp", {
+qx.Class.define("zx.demo.server.work.webworkers.WebWorkerApp", {
   extend: qx.application.Native,
   implement: [qx.application.IApplication],
 

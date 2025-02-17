@@ -1,15 +1,10 @@
-qx.Class.define("zx.demo.server.work.localpeer.App", {
+qx.Class.define("zx.demo.server.work.LocalWorkApp", {
   extend: qx.application.Basic,
-  implement: [qx.application.IApplication],
 
   members: {
     async main() {
-      let pool = new zx.server.work.pool.LocalhostPeerPool("/zx.work", {
-        minSize: 0,
-        maxSize: 1
-      }).set({
-        remoteServerRange: new zx.utils.Range(3000, 4000),
-        nodeDebugRange: new zx.utils.Range(9000, 10_000)
+      let pool = new zx.server.work.pool.LocalPool({
+        minSize: 5
       });
 
       let schedulerClientTransport = new zx.io.api.transport.loopback.Client();
@@ -19,29 +14,28 @@ qx.Class.define("zx.demo.server.work.localpeer.App", {
       let schedulerClient = new zx.server.work.api.SchedulerClientApi(schedulerClientTransport, "/scheduler");
       let schedulerServer = new zx.server.work.api.SchedulerServerApi("/scheduler");
       pool.setSchedulerApi(schedulerClient);
-      schedulerServer.schedule({
-        uuid: qx.util.Uuid.createUuidV4(),
-        classname: zx.demo.server.work.TestWork.classname,
-        compatibility: [],
-        args: []
-      });
-      schedulerServer.schedule({
-        uuid: qx.util.Uuid.createUuidV4(),
-        classname: zx.demo.server.work.TestWork.classname,
-        compatibility: [],
-        args: []
-      });
+
       schedulerServer.addListener("complete", e => {
-        console.log('schedulerServer.addListener("complete")', e.getData());
+        console.log("schedulerServer: complete: ", e.getData());
       });
 
       await pool.startup();
-    },
 
-    finalize() {},
+      schedulerServer.schedule({
+        uuid: qx.util.Uuid.createUuidV4(),
+        classname: zx.demo.server.work.TestWork.classname,
+        compatibility: [],
+        args: []
+      });
 
-    close() {},
-
-    terminate() {}
+      setTimeout(() => {
+        schedulerServer.schedule({
+          uuid: qx.util.Uuid.createUuidV4(),
+          classname: zx.demo.server.work.ErrorWork.classname,
+          compatibility: [],
+          args: []
+        });
+      }, 2000);
+    }
   }
 });

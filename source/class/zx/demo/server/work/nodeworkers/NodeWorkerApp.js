@@ -1,4 +1,4 @@
-qx.Class.define("zx.demo.server.work.nodeworkers.NodeWorkerDemoApp", {
+qx.Class.define("zx.demo.server.work.nodeworkers.NodeWorkerApp", {
   extend: qx.application.Basic,
 
   members: {
