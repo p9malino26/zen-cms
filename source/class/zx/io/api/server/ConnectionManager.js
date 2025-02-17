@@ -67,6 +67,14 @@ qx.Class.define("zx.io.api.server.ConnectionManager", {
     async receiveMessage(request, response) {
       let apiName = request.getHeader("Api-Name");
 
+      if (!apiName) {
+        let rgx = /^\/__globalApis\/(.+?)\//;
+        let match = rgx.exec(request.getPath());
+        if (match) {
+          apiName = match[1];
+        }
+      }
+
       //Get the API instance
       let api = null;
       if (apiName) {
