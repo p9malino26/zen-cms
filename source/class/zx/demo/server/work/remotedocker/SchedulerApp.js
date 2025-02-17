@@ -1,6 +1,6 @@
 const express = require("express");
 
-qx.Class.define("zx.demo.server.work.remoteDocker.SchedulerApp", {
+qx.Class.define("zx.demo.server.work.remotedocker.SchedulerApp", {
   extend: qx.application.Basic,
   implement: [qx.application.IApplication],
 

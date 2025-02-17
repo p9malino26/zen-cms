@@ -1,4 +1,4 @@
-qx.Class.define("zx.demo.server.work.localPeer.App", {
+qx.Class.define("zx.demo.server.work.localpeer.App", {
   extend: qx.application.Basic,
   implement: [qx.application.IApplication],
 

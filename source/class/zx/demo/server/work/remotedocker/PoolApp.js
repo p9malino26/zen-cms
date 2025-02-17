@@ -1,4 +1,4 @@
-qx.Class.define("zx.demo.server.work.remoteDocker.PoolApp", {
+qx.Class.define("zx.demo.server.work.remotedocker.PoolApp", {
   extend: qx.application.Basic,
   implement: [qx.application.IApplication],
 
