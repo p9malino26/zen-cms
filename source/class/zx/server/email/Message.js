@@ -164,9 +164,11 @@ qx.Class.define("zx.server.email.Message", {
     __isStringArray(value) {
       return value instanceof qx.data.Array && value.every(v => typeof v === "string");
     },
+
     __isAttachmentArray(value) {
       return value instanceof qx.data.Array && value.every(v => v instanceof zx.server.email.Attachment);
     },
+
     __ensureQxArray(value) {
       if (!Array.isArray(value) && !(value instanceof qx.data.Array) && value !== null) {
         value = [value];
@@ -188,6 +190,9 @@ qx.Class.define("zx.server.email.Message", {
       let htmlBody = this.getHtmlBody();
 
       let config = await zx.server.Config.getConfig();
+      if (!config.smtpServer) {
+        throw new Error("SMTP server configuration not found in cms.json");
+      }
 
       /** @type {Array<Record<keyof any, any>>} */
       let attachmentsData = [{ data: htmlBody, alternative: true }];
@@ -224,8 +229,7 @@ qx.Class.define("zx.server.email.Message", {
 
       log("Before getting creating emailJsMessage");
 
-      let emailJsMessage = zx.server.email.EmailJS.createNewMessage({
-        from: config.smtpServer.fromAddr,
+      let emailConfig = {
         to: this.getTo(),
         cc: this.getCc(),
         bcc: this.getBcc(),
@@ -233,7 +237,11 @@ qx.Class.define("zx.server.email.Message", {
         attachment: attachmentsData,
         text: this.getTextBody(),
         ...(this.getFrom() ? { "reply-to": this.getFrom() } : {})
-      });
+      };
+      if (config.smtpServer.fromAddr) {
+        emailConfig.from = config.smtpServer.fromAddr;
+      }
+      let emailJsMessage = zx.server.email.EmailJS.createNewMessage(emailConfig);
 
       let client = zx.server.email.SMTPClient.getSmtpClientImpl();
       let error = false;
