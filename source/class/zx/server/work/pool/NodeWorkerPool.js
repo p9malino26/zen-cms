@@ -51,10 +51,10 @@ qx.Class.define("zx.server.work.pool.NodeWorkerPool", {
 
     /**
      * @override
-     * @returns {zx.io.api.transport.nodeWorker.Client}
+     * @returns {zx.io.api.transport.nodeworker.NodeWorkerClientTransport}
      */
     _createClientTransport() {
-      return new zx.io.api.transport.nodeWorker.Client();
+      return new zx.io.api.transport.nodeworker.NodeWorkerClientTransport();
     }
   }
 });

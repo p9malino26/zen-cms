@@ -22,7 +22,7 @@
  * A loopback transport does not communicate across a process boundary, instead it communicates within the same process
  * on the same thread. This is primarily useful for testing and debugging.
  */
-qx.Class.define("zx.io.api.transport.loopback.Server", {
+qx.Class.define("zx.io.api.transport.loopback.LoopbackServerTransport", {
   extend: zx.io.api.server.AbstractServerTransport,
 
   construct() {
@@ -31,13 +31,13 @@ qx.Class.define("zx.io.api.transport.loopback.Server", {
   },
 
   members: {
-    /**@type {Map<string, zx.io.api.transport.loopback.Client>}*/
+    /**@type {Map<string, zx.io.api.transport.loopback.LoopbackClientTransport>}*/
     __clientsByApiUuid: null,
 
     /**
      * Connects to a client
      * @param {any} id
-     * @param {zx.io.api.transport.loopback.Client} client
+     * @param {zx.io.api.transport.loopback.LoopbackClientTransport} client
      */
     connect(client) {
       if (this.__clientsByApiUuid.has(client.toUuid()) && this.__clientsByApiUuid.get(client.toUuid()) !== client) {
@@ -60,7 +60,7 @@ qx.Class.define("zx.io.api.transport.loopback.Server", {
 
     /**
      *
-     * Called EXCLUSIVELY by zx.io.api.transport.loopback.Server
+     * Called EXCLUSIVELY by zx.io.api.transport.loopback.LoopbackServerTransport
      * when it posts a message to this transport
      *
      * @param {string} uri

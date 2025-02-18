@@ -38,8 +38,8 @@ qx.Class.define("zx.server.work.pool.LocalPool", {
     async create() {
       let apiPath = this._createPath("workerApi");
 
-      let serverTransport = new zx.io.api.transport.loopback.Server();
-      let clientTransport = new zx.io.api.transport.loopback.Client();
+      let serverTransport = new zx.io.api.transport.loopback.LoopbackServerTransport();
+      let clientTransport = new zx.io.api.transport.loopback.LoopbackClientTransport();
 
       serverTransport.connect(clientTransport);
       clientTransport.connect(serverTransport);

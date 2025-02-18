@@ -15,58 +15,57 @@
  *
  * ************************************************************************ */
 
+const { isMainThread, parentPort, Worker, MessagePort } = require("node:worker_threads");
+
 /**
- * Server transport for a web worker connection
+ * Server transport for a node worker thread connection
  *
- * A web worker transport communicates between a web worker and the owner process which spawned it.
- *
- * @ignore(self)
- * @ignore(Worker)
+ * A node worker transport communicates between a node worker thread and the owner process which spawned it.
  */
-qx.Class.define("zx.io.api.transport.webWorker.Server", {
+qx.Class.define("zx.io.api.transport.nodeworker.NodeWorkerServerTransport", {
   extend: zx.io.api.server.AbstractServerTransport,
 
   construct() {
     super();
     this.__clientsByApiUuid = new Map();
 
-    if (typeof self.postMessage !== "undefined") {
-      this.connect(self);
+    if (!isMainThread) {
+      this.connect(parentPort);
     }
   },
 
   members: {
-    /**@type {Map<string, Worker | typeof self>}*/
+    /**@type {Map<string, Worker | MessagePort>}*/
     __clientsByApiUuid: null,
 
     /**
      * Connects a client to the server
-     * @param {Worker | typeof self} client
+     * @param {Worker | MessagePort} client
      */
     connect(client) {
-      if (!(client instanceof Worker) && !(client !== self)) {
-        throw new Error("Client must be a web Worker or web worker process 'self' context");
+      if (!(client instanceof Worker) && !(client instanceof MessagePort)) {
+        throw new Error(["Client must be a node Worker or MessagePort", '\tconst { Worker, MessagePort } = require("node:worker_threads")'].join("\n"));
       }
-      client.addListener("message", ({ uri, requestJson }) => {
+      client.on("message", ({ uri, requestJson }) => {
         this.__clientsByApiUuid.set(requestJson.headers["Client-Api-Uuid"], client);
-        this.receiveMessage(uri, requestJson);
+        this.__receiveMessage(uri, requestJson);
       });
     },
 
     /**
      * Sends a message back to the client.
      * Only works if this transport support server-side push
-     * @param {zx.io.api.IRequestJson} requestJson
+     * @param {zx.io.api.IResponseJson} responseJson
      */
-    postMessage(requestJson) {
-      this.__clientsByApiUuid.get(requestJson.headers["Client-Api-Uuid"])?.postMessage(requestJson);
+    __postMessage(responseJson) {
+      this.__clientsByApiUuid.get(responseJson.data[0].headers["Client-Api-Uuid"])?.postMessage(responseJson);
     },
 
     /**
      * @param {string} uri
      * @param {zx.io.api.IRequestJson} requestJson
      */
-    async receiveMessage(uri, requestJson) {
+    async __receiveMessage(uri, requestJson) {
       let request = new zx.io.api.server.Request(this, requestJson);
       if (uri) {
         let breakout = zx.utils.Uri.breakoutUri(uri);
@@ -74,17 +73,23 @@ qx.Class.define("zx.io.api.transport.webWorker.Server", {
       }
       let response = new zx.io.api.server.Response();
       await zx.io.api.server.ConnectionManager.getInstance().receiveMessage(request, response);
-      for (let data of response.getData()) {
-        this.postMessage(data);
-      }
+      let json = response.toNativeObject();
+      this.__postMessage(json);
     },
 
     /**
-     * Override this method to return true if the transport supports server-side push.
-     * @returns {true}
+     * @override
      */
     supportsServerPush() {
       return true;
+    },
+
+    /**
+     * @override
+     */
+    sendPushResponse(response) {
+      let json = response.toNativeObject();
+      this.__postMessage(json);
     }
   },
 

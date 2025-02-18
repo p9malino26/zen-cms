@@ -1,5 +1,5 @@
 /**
- * This interface represents an objects which sends and receives data over a Bluetooth L2CAP socket
+ * This interface represents an object which sends and receives data over a Bluetooth L2CAP connection
  */
 qx.Interface.define("zx.io.api.transport.bluetooth.IL2CapSocket", {
   events: {

@@ -11,18 +11,18 @@
  *    MIT (see LICENSE in project root)
  *
  *  Authors:
+ *    Patryk Milinowski (@p9malino26)
  *    Will Johnson (@willsterjohnson)
  *
  * ************************************************************************ */
 
-const { Worker, MessagePort } = require("node:worker_threads");
-
 /**
- * Client transport for a node worker thread connection
+ * The client part of a loopback transport
  *
- * A node worker transport communicates between a node worker thread and the owner process which spawned it.
+ * A loopback transport does not communicate across a process boundary, instead it communicates within the same process
+ * on the same thread. This is primarily useful for testing and debugging.
  */
-qx.Class.define("zx.io.api.transport.nodeWorker.Client", {
+qx.Class.define("zx.io.api.transport.loopback.LoopbackClientTransport", {
   extend: zx.io.api.client.AbstractClientTransport,
 
   events: {
@@ -30,31 +30,37 @@ qx.Class.define("zx.io.api.transport.nodeWorker.Client", {
   },
 
   members: {
-    /**@type {Worker | MessagePort}*/
+    /**@type {zx.io.api.transport.loopback.LoopbackServerTransport}*/
     __server: null,
 
     /**
      * Connects to a server
-     * @param {Worker | MessagePort} server
+     * @param {zx.io.api.transport.loopback.LoopbackServerTransport} server
      */
     connect(server) {
       if (this.__server) {
         throw new Error("Already connected to server");
       }
       this.__server = server;
-      this.__server.on("message", transportableJson => this.fireDataEvent("message", transportableJson));
     },
 
     /**
-     * Posts a message to the server.
-     * @param {string} uri The URI to post the message to
-     * @param {zx.io.api.IRequestJson} message
+     * @override
      */
     postMessage(uri, requestJson) {
       if (!this.__server) {
         throw new Error("Not connected to server");
       }
-      this.__server.postMessage({ uri, requestJson });
+      this.fireDataEvent("post", { uri, requestJson });
+    },
+
+    /**
+     * Called EXCLUSIVELY by zx.io.api.transport.loopback.LoopbackServerTransport
+     * when it posts a message to this transport
+     * @param {zx.io.api.IResponseJson} data
+     */
+    async receiveMessage(data) {
+      this.fireDataEvent("message", data);
     }
   },
 

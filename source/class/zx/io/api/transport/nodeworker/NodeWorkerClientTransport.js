@@ -15,12 +15,14 @@
  *
  * ************************************************************************ */
 
+const { Worker, MessagePort } = require("node:worker_threads");
+
 /**
- * Client transport for a web worker connection
+ * Client transport for a node worker thread connection
  *
- * A web worker transport communicates between a web worker and the owner process which spawned it.
+ * A node worker transport communicates between a node worker thread and the owner process which spawned it.
  */
-qx.Class.define("zx.io.api.transport.webWorker.Client", {
+qx.Class.define("zx.io.api.transport.nodeworker.NodeWorkerClientTransport", {
   extend: zx.io.api.client.AbstractClientTransport,
 
   events: {
@@ -28,19 +30,19 @@ qx.Class.define("zx.io.api.transport.webWorker.Client", {
   },
 
   members: {
-    /**@type {Worker | typeof self}*/
+    /**@type {Worker | MessagePort}*/
     __server: null,
 
     /**
      * Connects to a server
-     * @param {Worker | typeof self} server
+     * @param {Worker | MessagePort} server
      */
     connect(server) {
       if (this.__server) {
         throw new Error("Already connected to server");
       }
       this.__server = server;
-      server.addEventListener("message", transportableJson => this.fireDataEvent("message", { data: [transportableJson] }));
+      this.__server.on("message", transportableJson => this.fireDataEvent("message", transportableJson));
     },
 
     /**

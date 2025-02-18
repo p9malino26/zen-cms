@@ -7,8 +7,8 @@ qx.Class.define("zx.demo.server.work.LocalWorkApp", {
         minSize: 5
       });
 
-      let schedulerClientTransport = new zx.io.api.transport.loopback.Client();
-      let schedulerServerTransport = new zx.io.api.transport.loopback.Server();
+      let schedulerClientTransport = new zx.io.api.transport.loopback.LoopbackClientTransport();
+      let schedulerServerTransport = new zx.io.api.transport.loopback.LoopbackServerTransport();
       schedulerClientTransport.connect(schedulerServerTransport);
       schedulerServerTransport.connect(schedulerClientTransport);
       let schedulerClient = new zx.server.work.api.SchedulerClientApi(schedulerClientTransport, "/scheduler");

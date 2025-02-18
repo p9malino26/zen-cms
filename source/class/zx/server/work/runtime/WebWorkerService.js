@@ -35,7 +35,7 @@ qx.Class.define("zx.server.work.runtime.WebWorkerService", {
       let promise = new Promise(res => self.addEventListener("message", evt => res(evt.data.apiPath), { once: true }));
       self.postMessage("ready");
       new zx.server.work.api.WorkerServerApi(await promise);
-      new zx.io.api.transport.webWorker.Server();
+      new zx.io.api.transport.webworker.WebWorkerServerTransport();
     }
   }
 });

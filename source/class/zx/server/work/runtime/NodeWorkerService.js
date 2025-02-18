@@ -32,7 +32,7 @@ qx.Class.define("zx.server.work.runtime.NodeWorkerService", {
         );
       }
       new zx.server.work.api.WorkerServerApi(workerData.apiPath);
-      new zx.io.api.transport.nodeWorker.Server();
+      new zx.io.api.transport.nodeworker.NodeWorkerServerTransport();
     }
   }
 });

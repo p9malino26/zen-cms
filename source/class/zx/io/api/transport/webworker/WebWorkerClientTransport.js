@@ -11,18 +11,16 @@
  *    MIT (see LICENSE in project root)
  *
  *  Authors:
- *    Patryk Milinowski (@p9malino26)
  *    Will Johnson (@willsterjohnson)
  *
  * ************************************************************************ */
 
 /**
- * The client part of a loopback transport
+ * Client transport for a web worker connection
  *
- * A loopback transport does not communicate across a process boundary, instead it communicates within the same process
- * on the same thread. This is primarily useful for testing and debugging.
+ * A web worker transport communicates between a web worker and the owner process which spawned it.
  */
-qx.Class.define("zx.io.api.transport.loopback.Client", {
+qx.Class.define("zx.io.api.transport.webworker.WebWorkerClientTransport", {
   extend: zx.io.api.client.AbstractClientTransport,
 
   events: {
@@ -30,37 +28,31 @@ qx.Class.define("zx.io.api.transport.loopback.Client", {
   },
 
   members: {
-    /**@type {zx.io.api.transport.loopback.Server}*/
+    /**@type {Worker | typeof self}*/
     __server: null,
 
     /**
      * Connects to a server
-     * @param {zx.io.api.transport.loopback.Server} server
+     * @param {Worker | typeof self} server
      */
     connect(server) {
       if (this.__server) {
         throw new Error("Already connected to server");
       }
       this.__server = server;
+      server.addEventListener("message", transportableJson => this.fireDataEvent("message", { data: [transportableJson] }));
     },
 
     /**
-     * @override
+     * Posts a message to the server.
+     * @param {string} uri The URI to post the message to
+     * @param {zx.io.api.IRequestJson} message
      */
     postMessage(uri, requestJson) {
       if (!this.__server) {
         throw new Error("Not connected to server");
       }
-      this.fireDataEvent("post", { uri, requestJson });
-    },
-
-    /**
-     * Called EXCLUSIVELY by zx.io.api.transport.loopback.Server
-     * when it posts a message to this transport
-     * @param {zx.io.api.IResponseJson} data
-     */
-    async receiveMessage(data) {
-      this.fireDataEvent("message", data);
+      this.__server.postMessage({ uri, requestJson });
     }
   },
 

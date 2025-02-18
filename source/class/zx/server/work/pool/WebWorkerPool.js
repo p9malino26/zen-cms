@@ -63,7 +63,7 @@ qx.Class.define("zx.server.work.pool.WebWorkerPool", {
      * @override
      */
     _createClientTransport() {
-      return new zx.io.api.transport.webWorker.Client();
+      return new zx.io.api.transport.webworker.WebWorkerClientTransport();
     }
   }
 });
