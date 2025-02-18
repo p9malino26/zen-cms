@@ -161,6 +161,7 @@ qx.Class.define("zx.server.work.AbstractWorkerPool", {
                 debugger;
               }
               delete this.__currentWork[work.uuid];
+              this.getQxObject("pushTimer").fire();
               this.getQxObject("pool").release(worker);
             });
         }
