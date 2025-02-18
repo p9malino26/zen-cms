@@ -63,28 +63,31 @@ qx.Class.define("zx.server.work.api.WorkerServerApi", {
       if (!clazz) {
         throw new Error(`Cannot find class '${work.classname}'`);
       }
-      let instance = new clazz(work.uuid, ...work.args);
-      if (!(instance instanceof zx.server.work.AbstractWork)) {
-        throw new Error(`Class '${work.classname}' is not an instance of zx.server.work.AbstractWork`);
+      let instance = new clazz(...work.args);
+      instance.setExplicitUuid(work.uuid);
+
+      if (!qx.Class.hasInterface(clazz, zx.server.work.IWork)) {
+        throw new Error(`Class '${work.classname}' does not implement interface zx.server.work.IWork !`);
       }
-      let caller = instance.toUuid();
+
+      let uuid = work.uuid;
       const log = message => {
         if (qx.core.Environment.get("qx.debug")) {
-          console.log(`[${instance.classname}:${caller}] LOG: ${message}`);
+          console.log(`[${instance.classname}:${uuid}] LOG: ${message}`);
         }
-        this.publish("log", { caller, message });
+        this.publish("log", { caller: uuid, message });
       };
       try {
         let message = await instance.execute(log);
         if (qx.core.Environment.get("qx.debug")) {
-          console.log(`[${instance.classname}:${caller}] SUCCESS: ${message}`);
+          console.log(`[${instance.classname}:${uuid}] SUCCESS: ${message}`);
         }
-        this.publish("complete", { caller, success: true, message });
+        this.publish("complete", { caller: uuid, success: true, message });
       } catch (cause) {
         if (qx.core.Environment.get("qx.debug")) {
-          console.log(`[${instance.classname}:${caller}] FAILURE: ${cause.message}`);
+          console.log(`[${instance.classname}:${uuid}] FAILURE: ${cause.message}`);
         }
-        this.publish("complete", { caller, success: false, message: cause.message });
+        this.publish("complete", { caller: uuid, success: false, message: cause.message });
       }
     }
   }

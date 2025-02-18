@@ -121,6 +121,7 @@ qx.Class.define("zx.io.api.server.Request", {
      *
      * Whether the request was initiated by an instance of zx.io.api.client.AbstractClientApi,
      * and not a basic REST request
+     * @returns {boolean}
      */
     isFromClientApi() {
       return this.getHeader("Client-Api-Uuid") !== undefined;

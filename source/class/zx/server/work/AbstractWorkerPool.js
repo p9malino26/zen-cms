@@ -17,6 +17,7 @@
  *
  * ************************************************************************ */
 
+const express = require("express");
 /**
  * A worker pool maintains and manages a pool of workers
  *
@@ -31,6 +32,21 @@ qx.Class.define("zx.server.work.AbstractWorkerPool", {
   construct() {
     super();
     this.__pendingMessages = [];
+    this.__currentWork = {};
+
+    let expressApp = express();
+    expressApp.use(zx.io.api.transport.http.ExpressServerTransport.jsonMiddleware());
+
+    let port = qx.core.Environment.get("zx.server.work.AbstractWorkerPool.serverPort");
+    expressApp.listen(port, () => this.info(`Listening on port ${port}`));
+
+    new zx.io.api.transport.http.ExpressServerTransport(expressApp, "/zx.work");
+    let api = new zx.server.work.api.WorkerPoolServerApi(this);
+    zx.io.api.server.ConnectionManager.getInstance().registerApi(api, "/pool");
+  },
+
+  environment: {
+    "zx.server.work.AbstractWorkerPool.serverPort": 4002
   },
 
   properties: {
@@ -121,8 +137,8 @@ qx.Class.define("zx.server.work.AbstractWorkerPool", {
 
         try {
           work = await this.getSchedulerApi().poll(this.classname);
-        } catch {
-          console.log(`[${this.classname}]: failed to poll for work`);
+        } catch (e) {
+          console.log(`[${this.classname}]: failed to poll for work: ${e}`);
           return;
         }
         if (work) {
@@ -133,7 +149,18 @@ qx.Class.define("zx.server.work.AbstractWorkerPool", {
           this.getQxObject("pool")
             .acquire()
             .then(async worker => {
-              await worker.run(work);
+              this.__currentWork[work.uuid] = {
+                worker,
+                work,
+                startTime: new Date()
+              };
+              try {
+                await worker.run(work);
+              } catch (e) {
+                console.error(`[${this.classname}]: error running work`, e);
+                debugger;
+              }
+              delete this.__currentWork[work.uuid];
               this.getQxObject("pool").release(worker);
             });
         }
@@ -171,8 +198,66 @@ qx.Class.define("zx.server.work.AbstractWorkerPool", {
   },
 
   members: {
+    /**
+     * Info about the pieces of work that are current running,
+     * index by the UUID of the work
+     *
+     * @interface CurrentWorkInfo
+     * @property {zx.server.work.api.WorkerClientApi} worker - the worker API
+     * @property {zx.server.work.IWorkSpec} work - the work spec
+     * @property {Date} startTime - the time the work started
+     * @type {Map<string, CurrentWorkInfo>}
+     */
+    __currentWork: null,
+
     /**@type {zx.server.work.IMessageSpec[]}*/
     __pendingMessages: null,
+
+    /**
+     *
+     * @param {string} uuid
+     */
+    killWork(uuid) {
+      if (!this.__currentWork[uuid]) {
+        throw new Error("No work with that UUID");
+      }
+      this.__currentWork[uuid].worker.terminate();
+      delete this.__currentWork[uuid];
+    },
+
+    /**
+     *
+     * @returns {Object} Information about all the current work that is running
+     */
+    getStatusJson() {
+      return Object.values(this.__currentWork).map(info => ({
+        uuid: info.work.uuid,
+        classname: info.work.classname,
+        startTime: info.startTime
+      }));
+    },
+
+    /**
+     * Get information about a current work that is running
+     *
+     * @param {string} uuid
+     * @returns {Object}
+     */
+    getWorkerStatusJson(uuid) {
+      let info = this.__currentWork[uuid];
+      if (!info) {
+        throw new Error("No work with that UUID");
+      }
+
+      let outstandingLogs = this.__pendingMessages.filter(msg => msg.caller === uuid);
+
+      let out = {
+        outstandingLogs,
+        startTime: info.startTime.toISOString()
+      };
+
+      return out;
+    },
 
     /**
      * Utility to generate uniform api paths
@@ -219,7 +304,7 @@ qx.Class.define("zx.server.work.AbstractWorkerPool", {
     _onLog(data) {
       let { caller, message } = data;
       console.log(`[${this.classname}]: ${caller}: ${message}`);
-      this.__pendingMessages.push({ caller, message, time: Date.now(), kind: "log" });
+      this.__pendingMessages.push({ caller, message, time: new Date(), kind: "log" });
       this.__sortPending();
     },
 
@@ -230,7 +315,7 @@ qx.Class.define("zx.server.work.AbstractWorkerPool", {
     _onComplete(data) {
       let { caller, message, success } = data;
       console.log(`[${this.classname}]: ${caller} (${success ? "success" : "fail"}): ${message}`);
-      this.__pendingMessages.push({ caller, message, time: Date.now(), kind: success ? "success" : "failure" });
+      this.__pendingMessages.push({ caller, message, time: new Date(), kind: success ? "success" : "failure" });
       this.__sortPending();
     },
 

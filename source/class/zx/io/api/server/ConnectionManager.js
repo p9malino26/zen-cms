@@ -68,7 +68,7 @@ qx.Class.define("zx.io.api.server.ConnectionManager", {
       let apiName = request.getHeader("Api-Name");
 
       if (!apiName) {
-        let rgx = /^\/__globalApis\/(.+?)\//;
+        let rgx = new RegExp(`^/${zx.io.api.server.AbstractServerApi.GLOBAL_API_PREFIX}/(.+?)/`);
         let match = rgx.exec(request.getPath());
         if (match) {
           apiName = match[1];

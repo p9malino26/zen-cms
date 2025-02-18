@@ -86,10 +86,11 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
         throw new Error(`Unknown message type: ${type}`);
       }
 
-      responseData.headers ??= {};
-      responseData.headers["Api-Name"] = this.getApiName();
-      responseData.headers["Server-Api-Uuid"] = this.toUuid();
-      responseData.headers["Client-Api-Uuid"] = request.getHeader("Client-Api-Uuid");
+      if (request.isFromClientApi()) {
+        responseData.headers["Api-Name"] = this.getApiName();
+        responseData.headers["Server-Api-Uuid"] = this.toUuid();
+        responseData.headers["Client-Api-Uuid"] = request.getHeader("Client-Api-Uuid");
+      }
     },
 
     /**
@@ -99,6 +100,19 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
      * @param {zx.io.api.server.Response} response
      */
     async __callMethod(request, response) {
+      if (request.isFromClientApi()) {
+        await this.__callMethodFromApi(request, response);
+      } else {
+        await this.__callMethodFromRest(request, response);
+      }
+    },
+
+    /**
+     *
+     * @param {zx.io.api.server.Request} request
+     * @param {zx.io.api.server.Response} response
+     */
+    async __callMethodFromRest(request, response) {
       function pathToRegex(path) {
         path = path.replace(/\{/g, "(?<");
         path = path.replace(/\}/g, ">[^/]+)");
@@ -109,60 +123,69 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
       let requestMethodPath;
       if (this.__path) {
         requestMethodPath = path.relative(this.__path, request.getPath());
-      } else if (request.isFromClientApi()) {
-        requestMethodPath = request.getPath().replace(/^\//, "");
       } else {
-        const PREFIX = "/__globalApis/" + this.getApiName();
+        const PREFIX = `/${zx.io.api.server.AbstractServerApi.GLOBAL_API_PREFIX}/${this.getApiName()}`;
         requestMethodPath = path.relative(PREFIX, request.getPath());
       }
 
       let handler;
-      if (!request.isFromClientApi()) {
-        //Try to lookup the method by path
-        for (let [methodPath, methodByRest] of Object.entries(this.__restsByPath)) {
-          let rgx = new RegExp(pathToRegex(methodPath));
-          let match = requestMethodPath.match(rgx);
-          if (match) {
-            let pathArgs = match.groups ?? {};
-            request.setPathArgs(pathArgs);
-            handler = methodByRest[request.getRestMethod()];
-            break;
-          }
+      //Try to find a method that has been registered for REST
+      for (let [methodPath, methodByRest] of Object.entries(this.__restsByPath)) {
+        let rgx = new RegExp(pathToRegex(methodPath));
+        let match = requestMethodPath.match(rgx);
+        if (match) {
+          let pathArgs = match.groups ?? {};
+          request.setPathArgs(pathArgs);
+          handler = methodByRest[request.getRestMethod()];
+          break;
         }
-
-        if (!handler) {
-          //If no method found by path, try to use the path as the method name
-          if (!this[requestMethodPath]) {
-            throw new Error(`Method ${requestMethodPath} not found in API ${this.getApiName()}, request body: ${request.getBody()}`);
-          }
-
-          handler = this[requestMethodPath].bind(this);
-        }
-      } else {
-        //Client API handler
-        handler = async () => {
-          let result;
-          let error;
-          try {
-            result = await this[requestMethodPath](...request.getBody().methodArgs);
-          } catch (e) {
-            error = e;
-            this.error(`Error calling method ${requestMethodPath} in API ${this.getApiName()}: ${e}`);
-          }
-          response.addData({
-            type: "methodReturn",
-            headers: {
-              "Call-Index": request.getHeaders()["Call-Index"]
-            },
-            body: {
-              methodResult: result,
-              error: error?.toString() ?? null
-            }
-          });
-        };
       }
 
-      await handler(request, response);
+      let returnData;
+      if (handler) {
+        returnData = await handler(request, response);
+      } else {
+        //If no REST handle found, try to call the method directly, with request and response as arguments
+        if (!this[requestMethodPath]) {
+          throw new Error(`Unable to find REST-suitable method in api ${this.getApiName()}, request path: ${request.getPath()}`);
+        }
+
+        returnData = await this[requestMethodPath](request, response);
+      }
+
+      //If the method returned something, add it to the response
+      if (returnData) {
+        response.addData(returnData);
+      }
+    },
+
+    /**
+     *
+     * @param {zx.io.api.server.Request} request
+     * @param {zx.io.api.server.Response} response
+     */
+    async __callMethodFromApi(request, response) {
+      let requestMethodPath = request.getPath().split("/").at(-1);
+
+      //Client API handler
+      let result;
+      let error;
+      try {
+        result = await this[requestMethodPath](...request.getBody().methodArgs);
+      } catch (e) {
+        error = e;
+        this.error(`Error calling method ${requestMethodPath} in API ${this.getApiName()}: ${e}`);
+      }
+      response.addData({
+        type: "methodReturn",
+        headers: {
+          "Call-Index": request.getHeaders()["Call-Index"]
+        },
+        body: {
+          methodResult: result,
+          error: error?.toString() ?? null
+        }
+      });
     },
 
     /**
@@ -292,5 +315,9 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
           session.publish(this, eventName, data);
         });
     }
+  },
+
+  statics: {
+    GLOBAL_API_PREFIX: "__globalApis"
   }
 });

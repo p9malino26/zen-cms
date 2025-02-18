@@ -1,5 +1,6 @@
 qx.Class.define("zx.demo.server.work.ErrorWork", {
-  extend: zx.server.work.AbstractWork,
+  extend: qx.core.Object,
+  implement: zx.server.work.IWork,
 
   members: {
     /**

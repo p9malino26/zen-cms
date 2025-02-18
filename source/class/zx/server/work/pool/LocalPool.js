@@ -62,8 +62,7 @@ qx.Class.define("zx.server.work.pool.LocalPool", {
       let server = this.__workerMap.get(client);
       server.dispose();
       this.__workerMap.delete(client);
-      await client.unsubscribe("log");
-      await client.unsubscribe("complete");
+      client.terminate();
       client.dispose();
     }
   }

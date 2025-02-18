@@ -6,9 +6,10 @@ qx.Interface.define("zx.server.work.IWork", {
     /**
      * Executes the work
      * @abstract
+     * @param {(string: message) => void} log - the log function
      * @param {zx.server.work.OutputClientApi} output - the output api
      * @returns {Promise<string | void> | string | void}
      */
-    execute() {}
+    execute(log) {}
   }
 });

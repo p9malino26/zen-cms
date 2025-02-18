@@ -86,8 +86,7 @@ qx.Class.define("zx.server.work.pool.AbstractThreadWorkerPool", {
       await workerThread.terminate();
 
       this.__workerMap.delete(client);
-      await client.unsubscribe("log");
-      await client.unsubscribe("complete");
+      client.terminate();
       client.dispose();
     }
   }

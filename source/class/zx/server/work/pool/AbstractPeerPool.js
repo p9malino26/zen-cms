@@ -26,6 +26,7 @@
  */
 qx.Class.define("zx.server.work.pool.AbstractPeerPool", {
   extend: zx.server.work.AbstractWorkerPool,
+  implement: [zx.server.work.IWorkerFactory],
 
   /**
    * @param {object} config - config for {@link zx.utils.Pool}
@@ -93,7 +94,7 @@ qx.Class.define("zx.server.work.pool.AbstractPeerPool", {
     },
 
     /**
-     * Creates a new worker and returns an API to communicate with it
+     * @override
      * @returns {Promise<zx.server.work.api.WorkerClientApi>}
      */
     async create() {
@@ -111,7 +112,7 @@ qx.Class.define("zx.server.work.pool.AbstractPeerPool", {
     },
 
     /**
-     * Destroys a worker entirely
+     * @override
      * @param {zx.server.work.api.WorkerClientApi} client
      */
     async destroy(client) {
@@ -120,9 +121,7 @@ qx.Class.define("zx.server.work.pool.AbstractPeerPool", {
         return;
       }
       let [peerProcess, port] = result;
-      await client.unsubscribe("log");
-      await client.unsubscribe("complete");
-
+      client.terminate();
       this._destroyWorker(peerProcess, () => this.getRemoteServerRange().release(port));
       this.__workerMap.delete(client);
       client.dispose();

@@ -25,7 +25,7 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
     this.__apiName = apiName;
     this.__cookies = {};
     this.__pendingMethodCalls = {};
-    this.__transport.addListener("message", evt => this.__onMessage(evt.getData()), this);
+    this.__transport.addListener("message", this.__onMessage, this);
     this.__methodConfigs = {};
     this.__subscriptions = {};
 
@@ -40,7 +40,13 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
     }
   },
 
+  destruct() {
+    this.terminate();
+  },
+
   members: {
+    __terminated: false,
+
     /**
      * @type {string}
      */
@@ -69,7 +75,7 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
      * @property {string} methodName Name of method in the server API class
      * @property {any[]} methodArgs Arguments passed to server method
      *
-     * @type {PendingMethodCall[]}
+     * @type {Map<number, PendingMethodCall>}
      */
     __pendingMethodCalls: null,
 
@@ -96,6 +102,30 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
     __apiName: null,
 
     /**
+     * Terminates the client API, rejecting all pending subscriptions and method calls
+     * Note: This does not clear the session data on the server ATMw
+     */
+    terminate() {
+      if (this.__terminated) return;
+      //reject pending subscriptions
+      for (let [eventName, subData] of Object.entries(this.__subscriptions)) {
+        if (subData.promise) {
+          subData.promise.reject(new Error("Client API terminated"));
+        }
+        this.__transport.unsubscribe();
+      }
+
+      //reject pending method calls
+      for (let pending of Object.values(this.__pendingMethodCalls)) {
+        pending.promise.reject(new Error("Client API terminated"));
+      }
+
+      //Disconnect from the transport
+      this.__transport.removeListener("message", this.__onMessage, this);
+      this.__terminated = true;
+    },
+
+    /**
      *
      * @returns {string} Name of the API, common to both client and server API classes
      */
@@ -116,6 +146,11 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
      * A subscription can fail if we lose connection to the server.
      */
     subscribe(eventName, callback, context) {
+      if (this.__terminated) {
+        this.error("Client API is terminated");
+        return;
+      }
+
       if (context) {
         callback = callback.bind(context);
       }
@@ -164,6 +199,10 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
      * @param {(data: any) => void} callback
      */
     unsubscribe(eventName, callback) {
+      if (this.__terminated) {
+        this.error("Client API is terminated");
+        return;
+      }
       let { callbacks } = this.__subscriptions[eventName];
       if (callback) {
         callbacks.remove(callback);
@@ -225,6 +264,11 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
      * @returns {qx.Promise} A promise that will be resolved when the server responds to the method call
      */
     _callMethod(methodName, methodArgs) {
+      if (this.__terminated) {
+        this.error("Client API is terminated");
+        return;
+      }
+
       let promise = new qx.Promise();
       let pending = {
         promise,
@@ -270,9 +314,10 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
 
     /**
      * Called when a message is received from the server by the transport
-     * @param {zx.io.api.IResponseJson} message
+     * @param {qx.event.type.Data<zx.io.api.IResponseJson>} message
      */
-    __onMessage(message) {
+    __onMessage(evt) {
+      let message = evt.getData();
       for (let data of message.data) {
         this.__processData(data);
       }

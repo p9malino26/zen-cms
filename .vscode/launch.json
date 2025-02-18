@@ -41,23 +41,9 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Node Work Demo",
+      "name": "Zen CMS: Custom Command",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/compiled/source-node/demo-work-node-workers/index.js"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Docker Local Work Demo",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/compiled/source-node/demo-work-docker-peers/index.js"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Remote Docker Scheduler App",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/compiled/source-node/demo-work-remote-docker-scheduler/index.js"
     },
     {
       "address": "localhost",
