@@ -37,6 +37,22 @@
         "<node_internals>/**",
         "**/polyfill.js"
       ]
-    }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Zen CMS: Custom Command",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/compiled/source-node/demo-work-node-workers/index.js"
+    },
+    {
+      "address": "localhost",
+      "name": "Attach to Remote API test server",
+      "port": 9105,
+      "restart": true,
+      "request": "attach",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node"
+    },
   ]
 }

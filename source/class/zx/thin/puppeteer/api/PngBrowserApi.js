@@ -11,7 +11,7 @@ qx.Class.define("zx.thin.puppeteer.api.PngBrowserApi", {
   extend: zx.thin.puppeteer.api.AbstractBrowserApi,
 
   construct() {
-    super("zx.server.puppeteer.api.PngServerApi");
+    super("zx.server.puppeteer.api.PngApi");
   },
 
   events: {
@@ -23,19 +23,38 @@ qx.Class.define("zx.thin.puppeteer.api.PngBrowserApi", {
   },
 
   members: {
+    _publications: {
+      /**@override */
+      complete: null,
+      /**
+       * @type {*}
+       * Called when the web page has rendered its content and tells the puppeteer client to take a screenshot
+       */
+      takeScreenshot: {}
+    },
+
+    /**
+     * REMOTE METHOD
+     * Tells page to start rendering the first PNG
+     */
     start() {
       this.fireEvent("start");
     },
 
+    /**
+     * REMOTE METHOD
+     * Tells page to start rendering the next PNG
+     */
     next() {
       this.fireEvent("next");
     },
 
     /**
-     * Tells the puppeteer server to print the PNG
+     * Tells the puppeteer server that content has been rendered and it should take a screenshot
+     * @param {*} data Custom data regarding what's on the page which will be received by the puppeteer client
      */
     async takeScreenshot(data) {
-      return this.apiSendEvent("takeScreenshot", data);
+      return this.publish("takeScreenshot", data);
     }
   }
 });

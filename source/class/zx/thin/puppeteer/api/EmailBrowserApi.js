@@ -11,11 +11,11 @@ qx.Class.define("zx.thin.puppeteer.api.EmailBrowserApi", {
   extend: zx.thin.puppeteer.api.AbstractBrowserApi,
 
   construct() {
-    super("zx.server.puppeteer.api.EmailServerApi");
+    super("zx.server.puppeteer.api.EmailApi");
   },
 
   events: {
-    /** Fired when the everything is read and the web page should sending the first email via call to `sendEmail` */
+    /** Fired when the everything is ready and the web page should sending the first email via call to `sendEmail` */
     start: "qx.event.type.Event",
 
     /** Fired every time an email has been successfully sent, and the web page should send the next email or complete */
@@ -23,10 +23,26 @@ qx.Class.define("zx.thin.puppeteer.api.EmailBrowserApi", {
   },
 
   members: {
+    /**@override */
+    _publications: {
+      /**@override */
+      complete: null,
+      /**
+       * Tell the client to pull the email from the page and send the email
+       */
+      sendEmail: {}
+    },
+
+    /**
+     * REMOTE METHOD
+     */
     start() {
       this.fireEvent("start");
     },
 
+    /**
+     * REMOTE METHOD
+     */
     next() {
       this.fireEvent("next");
     },
@@ -39,7 +55,7 @@ qx.Class.define("zx.thin.puppeteer.api.EmailBrowserApi", {
      * @param {EmailParameters} parameters see {@link zx.server.email.Message}
      */
     sendEmail(htmlBody, textBody, parameters) {
-      this.apiSendEvent("sendEmail", { htmlBody, textBody, parameters });
+      this.publish("sendEmail", { htmlBody, textBody, parameters });
     },
 
     /**

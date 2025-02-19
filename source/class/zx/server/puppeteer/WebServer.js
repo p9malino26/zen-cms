@@ -6,6 +6,7 @@ const path = require("node:path");
 
 /**
  * @asset(zx/server/puppeteer/dev/*)
+ * @ignore(fetch)
  */
 qx.Class.define("zx.server.puppeteer.WebServer", {
   extend: qx.core.Object,

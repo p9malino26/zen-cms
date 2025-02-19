@@ -296,7 +296,7 @@ qx.Class.define("zx.server.WebServer", {
 
       await this._initSessions(app);
       await this._initApplication(app);
-      await this._initApis();
+      await this._initApis(app);
       await this._initUrlRules();
       return app;
     },
@@ -914,7 +914,9 @@ qx.Class.define("zx.server.WebServer", {
     /**
      * Called to initialise APIs
      */
-    async _initApis() {},
+    async _initApis(app) {
+      this._apiTransport = new zx.io.api.transport.http.FastifyServerTransport(app, cb => this.wrapMiddleware(cb));
+    },
 
     /**
      * The handler for urls
@@ -1026,7 +1028,7 @@ qx.Class.define("zx.server.WebServer", {
      *
      * @returns {fastify.Response}
      */
-    getCurrentReponse() {
+    getCurrentResponse() {
       let instance = zx.server.Standalone.getInstance();
       if (!(instance instanceof zx.server.WebServer)) {
         return null;

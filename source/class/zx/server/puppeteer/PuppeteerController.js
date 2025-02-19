@@ -31,7 +31,8 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
     /**
      * Fired when the Puppeteer client prints a message in the console
      */
-    consoleLog: "qx.event.type.Data"
+    consoleLog: "qx.event.type.Data",
+    ping: "qx.event.type.Event"
   },
 
   environment: {
@@ -40,10 +41,15 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
   },
 
   members: {
-    /** @type{qx.Class<zx.server.puppeteer.AbstractServerApi>} the API class */
+    /**
+     * @type {zx.server.puppeteer.PuppeteerClientTransport}
+     */
+    __transport: null,
+
+    /** @type{qx.Class<zx.io.api.client.AbstractClientApi>} the API class */
     __apiClass: null,
 
-    /** @type{zx.server.puppeteer.AbstractServerApi} the API instance */
+    /** @type{zx.io.api.client.AbstractClientApi} the API instance */
     __api: null,
 
     /** @type{zx.server.puppeteer.ChromiumDocker} the Chromium instance */
@@ -107,8 +113,11 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
         password: this.getPassword(),
         ...clientProperties
       });
-
-      this.__puppeteer.addListener("log", evt => this.fireDataEvent("consoleLog", evt.getData()));
+      this.__puppeteer.addListener("log", evt => {
+        this.fireDataEvent("consoleLog", evt.getData());
+        evt.preventDefault();
+      });
+      this.__puppeteer.addListener("ping", evt => this.fireEvent("ping"));
 
       this.debug("Puppeteer client created");
 
@@ -125,16 +134,18 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
         throw ex;
       }
 
-      this.__api = this.__puppeteer.createRemoteApi(this.__apiClass);
+      let puppeteer = this.__puppeteer;
+      let transport = new zx.server.puppeteer.PuppeteerClientTransport(puppeteer.getPage());
+
+      puppeteer.addListenerOnce("close", () => transport.shutdown());
+
+      let Clazz = this.__apiClass;
+      this.__api = new Clazz(transport);
+
       let apiFinished = new qx.Promise();
       this.__promiseFinished = apiFinished.then(() => this.__closeDown());
-
-      this.__api.addListener("complete", evt => apiFinished.resolve());
-    },
-
-    async start() {
-      await this.__api.start();
-      console.log("Email API started");
+      await puppeteer.waitForReadySignal();
+      await this.__api.subscribe("complete", () => apiFinished.resolve());
     },
 
     /**
@@ -156,7 +167,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
     /**
      * The API instance
      *
-     * @returns {zx.server.puppeteer.AbstractServerApi} the API instance
+     * @returns {zx.io.api.client.AbstractClientApi} the API instance
      */
     getApi() {
       return this.__api;
