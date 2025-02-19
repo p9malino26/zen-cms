@@ -43,7 +43,7 @@ qx.Class.define("zx.ui.utils.AbstractDialog", {
       this.center();
       setTimeout(() => this.center(), 100);
     });
-    this.addListener("appearonce", () => {
+    this.addListenerOnce("appear", () => {
       this.getLayoutParent().addListener("resize", () => this._onContainersResize());
     });
     this._onContainersResize();
