@@ -5,13 +5,14 @@
  *  https://zenesis.com
  *
  *  Copyright:
- *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *    2019-2025 Zenesis Ltd, https://www.zenesis.com
  *
  *  License:
  *    MIT (see LICENSE in project root)
  *
  *  Authors:
- *    Will Johnson (@willsterjohnson)
+ *    John Spackman (@johnspackman)
+ *    Will Johnson (@willsterjohnsonatzenesis)
  *
  * ************************************************************************ */
 
@@ -34,7 +35,7 @@ qx.Interface.define("zx.server.work.IWorkSpec", {
     classname: null,
 
     /**
-     * The compatibility is an array of classnames referencing {@link zx.server.work.AbstractWorkerPool}s that provide an environment
+     * The compatibility is an array of classnames referencing {@link zx.server.work.pool.AbstractWorkerPool}s that provide an environment
      * this work can run in. To accept any and all environments, pass an empty array.
      * @type {string[]}
      */

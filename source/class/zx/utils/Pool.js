@@ -11,7 +11,7 @@
  *    MIT (see LICENSE in project root)
  *
  *  Authors:
- *    Will Johnson (@willsterjohnson)
+ *    Will Johnson (@willsterjohnsonatzenesis)
  *
  * ************************************************************************ */
 
@@ -61,7 +61,7 @@ qx.Class.define("zx.utils.Pool", {
      * @prop {(value: TResource) => Promise<void>} [destroy] - optional destructor function
      */
     factory: {
-      check: "Object"
+      check: "zx.utils.IPoolFactory"
     }
   },
 
@@ -203,7 +203,7 @@ qx.Class.define("zx.utils.Pool", {
      * @returns {TResource} a resource
      */
     async __createNewResource() {
-      let resource = await this.getFactory().create();
+      let resource = await this.getFactory().createPoolableEntity();
       this.__pool.set(resource, zx.utils.Pool.AVAILABLE);
       return resource;
     },
@@ -218,7 +218,7 @@ qx.Class.define("zx.utils.Pool", {
         return;
       }
       this.__pool.delete(resource);
-      await this.getFactory().destroy?.(resource);
+      await this.getFactory().destroyPoolableEntity(resource);
     },
 
     /**

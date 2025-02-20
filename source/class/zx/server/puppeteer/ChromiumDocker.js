@@ -6,6 +6,7 @@ const path = require("path");
  */
 qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
   extend: qx.core.Object,
+  implement: [zx.server.puppeteer.IChromium],
 
   destruct() {
     zx.server.puppeteer.chromiumdocker.PoolManager.getInstance().deleteInstance(this);

@@ -52,7 +52,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
     /** @type{zx.io.api.client.AbstractClientApi} the API instance */
     __api: null,
 
-    /** @type{zx.server.puppeteer.ChromiumDocker} the Chromium instance */
+    /** @type{zx.server.puppeteer.IChromium} the Chromium instance */
     __chromium: null,
 
     /** @type{zx.server.puppeteer.PuppeteerClient} the Puppeteer instance attached to the Chromium instance */
@@ -65,14 +65,15 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
      * Visits a URL, creating an API instance to talk to the page
      *
      * @param {String} url
+     * @oaram {zx.server.puppeteer.IChromium} chromium
      * @param {Object} [clientProperties] Properties to set to the Puppeteer client. Must be properties of zx.server.puppeteer.PuppeteerClient
      */
-    async initialise(url, clientProperties = {}) {
-      this.__chromium = await zx.server.puppeteer.chromiumdocker.PoolManager.getInstance().acquire();
+    async initialise(url, chromium, clientProperties = {}) {
+      this.__chromium = chromium;
       console.log("ChromiumDocker aquired");
 
       $checkPuppeteerVersion: {
-        const response = await fetch(`http://127.0.0.1:${this.__chromium.getPortNumber()}/version`);
+        const response = await fetch(`{this.__chromium.getBaseUrl()}/version`);
         const responseJson = await response.json();
         if (!responseJson) {
           throw new Error("Failed to get version from remote container. Please make sure you are using the latest docker image.");

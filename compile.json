@@ -213,13 +213,6 @@
       "include": ["qx.core.Init"]
     },
     {
-      "title": "Demo app for the worker pool part of a distributed work infrastructure",
-      "class": "zx.demo.server.work.remotedocker.RemoteDockerPoolApp",
-      "name": "demo-work-remote-docker-pool",
-      "type": "node",
-      "include": ["qx.core.Init"]
-    },
-    {
       "title": "Demo app for the work scheduler part of a distributed work infrastructure",
       "class": "zx.demo.server.work.remotedocker.RemoteDockerSchedulerApp",
       "name": "demo-work-remote-docker-scheduler",

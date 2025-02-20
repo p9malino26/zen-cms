@@ -12,7 +12,7 @@
  *
  *  Authors:
  *    Patryk Milinowski (@p9malino26)
- *    Will Johnson (@willsterjohnson)
+ *    Will Johnson (@willsterjohnsonatzenesis)
  *
  * ************************************************************************ */
 

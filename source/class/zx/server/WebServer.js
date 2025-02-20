@@ -135,6 +135,12 @@ qx.Class.define("zx.server.WebServer", {
           await ctlr.writeAllProxiedClasses();
         }
       }
+      if (this._config.docker?.workerPool) {
+        let dockerConfig = zx.server.puppeteer.ChromiumDocker.getConfiguration();
+        qx.lang.Object.mergeWith(dockerConfig, this._config.docker, true);
+
+        await zx.server.puppeteer.ChromiumDocker.cleanupOldContainers();
+      }
       await this._startServer();
       await this._registerUrls();
     },

@@ -26,7 +26,7 @@ qx.Class.define("zx.server.email.EmailRenderer", {
       });
 
       log("Initializing controller...");
-      await controller.initialise(url);
+      await controller.initialise(url, await zx.server.puppeteer.chromiumdocker.PoolManager.getInstance().acquire());
       log("Initialised browser controller");
 
       log("Received ready signal");

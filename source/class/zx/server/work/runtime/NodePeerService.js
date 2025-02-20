@@ -5,13 +5,14 @@
  *  https://zenesis.com
  *
  *  Copyright:
- *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *    2019-2025 Zenesis Ltd, https://www.zenesis.com
  *
  *  License:
  *    MIT (see LICENSE in project root)
  *
  *  Authors:
- *    Will Johnson (@willsterjohnson)
+ *    John Spackman (@johnspackman)
+ *    Will Johnson (@willsterjohnsonatzenesis)
  *
  * ************************************************************************ */
 
@@ -29,7 +30,7 @@ qx.Class.define("zx.server.work.runtime.NodePeerService", {
 
   members: {
     _onReady() {
-      console.log("zx.server.work.pool.LocalhostPeerPool.READY_SIGNAL");
+      console.log("zx.server.work.pool.NodeProcessWorkerPool.READY_SIGNAL");
     }
   }
 });

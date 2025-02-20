@@ -1,0 +1,57 @@
+/* ************************************************************************
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2025 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (@johnspackman)
+ *    Will Johnson (@willsterjohnsonatzenesis)
+ *
+ * ************************************************************************ */
+const { Worker } = require("node:worker_threads");
+
+/**
+ * The node worker pool runs work in a node worker thread
+ */
+qx.Class.define("zx.server.work.pool.NodeThreadWorkerPool", {
+  /** @template {import('node:worker_threads').Worker} TWorker */
+  extend: zx.server.work.pool.AbstractWorkerPool,
+  implement: [zx.server.work.IWorkerFactory],
+
+  /**
+   * @param {object} poolConfig - config for {@link zx.utils.Pool}
+   * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app.
+   */
+  construct(poolConfig, remoteAppPath) {
+    super("/", poolConfig);
+    this.__remoteAppPath = remoteAppPath;
+  },
+
+  members: {
+    /**
+     * @override
+     */
+    async createPoolableEntity() {
+      let apiPath = this.getRoute();
+      let nodeThread = new Worker(this.__remoteAppPath, { name: apiPath, workerData: { apiPath } });
+
+      let workerTracker = new zx.server.work.pool.NodeThreadWorkerTracker(this, nodeThread);
+      await workerTracker.initialise();
+      return workerTracker;
+    },
+
+    /**
+     * @override
+     */
+    async destroyPoolableEntity(entity) {
+      // Nothing
+    }
+  }
+});

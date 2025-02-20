@@ -5,18 +5,19 @@
  *  https://zenesis.com
  *
  *  Copyright:
- *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *    2019-2025 Zenesis Ltd, https://www.zenesis.com
  *
  *  License:
  *    MIT (see LICENSE in project root)
  *
  *  Authors:
- *    Will Johnson (@willsterjohnson)
+ *    John Spackman (@johnspackman)
+ *    Will Johnson (@willsterjohnsonatzenesis)
  *
  * ************************************************************************ */
 
 /**
- * This API is used by the pool (zx.server.work.AbstractWorkerPool) to communicate with the scheduler (zx.server.work.api.SchedulerServerApi),
+ * This API is used by the pool (zx.server.work.pool.AbstractWorkerPool) to communicate with the scheduler (zx.server.work.api.SchedulerServerApi),
  * and used for receiving work and uploading infornamtion regarding the status of the work.
  *
  */

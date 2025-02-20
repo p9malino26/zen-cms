@@ -5,13 +5,14 @@
  *  https://zenesis.com
  *
  *  Copyright:
- *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *    2019-2025 Zenesis Ltd, https://www.zenesis.com
  *
  *  License:
  *    MIT (see LICENSE in project root)
  *
  *  Authors:
- *    Will Johnson (@willsterjohnson)
+ *    John Spackman (@johnspackman)
+ *    Will Johnson (@willsterjohnsonatzenesis)
  *
  * ************************************************************************ */
 
@@ -19,7 +20,7 @@
  * The local pool runs work in the same main thread as the pool
  */
 qx.Class.define("zx.server.work.pool.LocalPool", {
-  extend: zx.server.work.AbstractWorkerPool,
+  extend: zx.server.work.pool.AbstractWorkerPool,
   implement: [zx.server.work.IWorkerFactory],
 
   construct() {
@@ -44,15 +45,15 @@ qx.Class.define("zx.server.work.pool.LocalPool", {
       serverTransport.connect(clientTransport);
       clientTransport.connect(serverTransport);
 
-      let server = new zx.server.work.api.WorkerServerApi(apiPath);
-      let client = new zx.server.work.api.WorkerClientApi(clientTransport, apiPath);
+      let serverApi = new zx.server.work.api.WorkerServerApi(apiPath);
+      let clientApi = new zx.server.work.api.WorkerClientApi(clientTransport, apiPath);
 
-      this.__workerMap.set(client, server);
+      this.__workerMap.set(clientApi, serverApi);
 
-      await client.subscribe("log", this._onLog.bind(this));
-      await client.subscribe("complete", this._onComplete.bind(this));
+      await clientApi.subscribe("log", this._onLog.bind(this));
+      await clientApi.subscribe("complete", this._onComplete.bind(this));
 
-      return client;
+      return clientApi;
     },
 
     /**

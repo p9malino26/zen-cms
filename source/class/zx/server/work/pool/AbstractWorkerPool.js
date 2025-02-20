@@ -7,46 +7,46 @@
  *  https://zenesis.com
  *
  *  Copyright:
- *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *    2019-2025 Zenesis Ltd, https://www.zenesis.com
  *
  *  License:
  *    MIT (see LICENSE in project root)
  *
  *  Authors:
- *    Will Johnson (@willsterjohnson)
+ *    John Spackman (@johnspackman)
+ *    Will Johnson (@willsterjohnsonatzenesis)
  *
  * ************************************************************************ */
 
-const express = require("express");
 /**
  * A worker pool maintains and manages a pool of workers
  *
- * @interface IWorkerPostData
- * @property {string} caller - the UUID of the IWork instance
- * @property {string} message - The message posted by the worker, e.g. a log message or error message. For posts regarding completion, this is the return message
- * @property {boolean?} [success] - Only for completion information. `true` if the work completed successfully, false if not
+ * Implementations of this class is responsible to creating and destroying those
+ * processes, allocating work to them, and communicating with the scheduler to
+ * receive work to do and report back the status of the work to the scheduler.
+ *
  */
-qx.Class.define("zx.server.work.AbstractWorkerPool", {
+qx.Class.define("zx.server.work.pool.AbstractWorkerPool", {
   extend: qx.core.Object,
+  implement: [zx.server.work.IWorkerFactory],
 
-  construct() {
+  construct(route, poolConfig) {
     super();
+
+    if (route.endsWith("/")) {
+      route = route.substring(0, route.length - 1);
+    }
+    if (!route.startsWith("/")) {
+      route = `/${route}`;
+    }
+    this.__route = route;
+    this.setPoolConfig(poolConfig);
+
     this.__pendingMessages = [];
     this.__currentWork = {};
 
-    let expressApp = express();
-    expressApp.use(zx.io.api.transport.http.ExpressServerTransport.jsonMiddleware());
-
-    let port = qx.core.Environment.get("zx.server.work.AbstractWorkerPool.serverPort");
-    expressApp.listen(port, () => this.info(`Listening on port ${port}`));
-
-    new zx.io.api.transport.http.ExpressServerTransport(expressApp, "/zx.work");
     let api = new zx.server.work.api.WorkerPoolServerApi(this);
     zx.io.api.server.ConnectionManager.getInstance().registerApi(api, "/pool");
-  },
-
-  environment: {
-    "zx.server.work.AbstractWorkerPool.serverPort": 4002
   },
 
   properties: {
@@ -59,9 +59,11 @@ qx.Class.define("zx.server.work.AbstractWorkerPool", {
      * @prop {number} [config.pollInterval] - the number of milliseconds between checks for available resources
      */
     poolConfig: {
+      init: null,
+      nullable: true,
       check: "Object",
       event: "changePoolConfig",
-      init: () => ({})
+      apply: "_applyPoolConfig"
     },
 
     schedulerApi: {
@@ -93,31 +95,7 @@ qx.Class.define("zx.server.work.AbstractWorkerPool", {
   objects: {
     pool() {
       let pool = new zx.utils.Pool();
-      this.bind(
-        "poolConfig",
-        new zx.utils.Target(value => {
-          if (typeof value.minSize === "number") {
-            pool.setMinSize(value.minSize);
-          } else {
-            pool.resetMinSize();
-          }
-          if (typeof value.maxSize === "number") {
-            pool.setMaxSize(value.maxSize);
-          } else {
-            pool.resetMaxSize();
-          }
-          if (typeof value.timeout === "number") {
-            pool.setTimeout(value.timeout);
-          } else {
-            pool.resetTimeout();
-          }
-          if (typeof value.pollInterval === "number") {
-            pool.setPollInterval(value.pollInterval);
-          } else {
-            pool.resetPollInterval();
-          }
-        })
-      );
+      pool.setFactory(this);
       pool.addListener("becomeAvailable", () => {
         console.log("pool sent becomeAvailable");
         this.getQxObject("pollTimer").startTimer();
@@ -203,7 +181,7 @@ qx.Class.define("zx.server.work.AbstractWorkerPool", {
      * Info about the pieces of work that are current running,
      * index by the UUID of the work
      *
-     * @interface CurrentWorkInfo
+     * @typedef CurrentWorkInfo
      * @property {zx.server.work.api.WorkerClientApi} worker - the worker API
      * @property {zx.server.work.IWorkSpec} work - the work spec
      * @property {Date} startTime - the time the work started
@@ -213,6 +191,39 @@ qx.Class.define("zx.server.work.AbstractWorkerPool", {
 
     /**@type {zx.server.work.IMessageSpec[]}*/
     __pendingMessages: null,
+
+    /**
+     * Apply for `poolConfig` property
+     */
+    _applyPoolConfig(value, oldValue) {
+      let pool = this.getQxObject("pool");
+      ["minSize", "maxSize", "timeout", "pollInterval"].forEach(prop => {
+        let upname = qx.lang.firstUp(prop);
+        if (value[prop] !== undefined) {
+          pool["set" + upname](value[prop]);
+        } else {
+          pool["reset" + qx.lang.firstUp(prop)](value[prop]);
+        }
+      });
+    },
+
+    getRoute() {
+      return this.__route;
+    },
+
+    /**
+     * @Override
+     */
+    createPoolableEntity() {
+      throw new Error(`Abstract method ${this.classname}.createPoolableEntity from IPoolFactory not implemented`);
+    },
+
+    /**
+     * @Override
+     */
+    destroyPoolableEntity(entity) {
+      throw new Error(`Abstract method ${this.classname}.destroyPoolableEntity from IPoolFactory not implemented`);
+    },
 
     /**
      *
@@ -296,28 +307,6 @@ qx.Class.define("zx.server.work.AbstractWorkerPool", {
       }
       this.getQxObject("pushTimer").killTimer();
       await this.getQxObject("pool").shutdown();
-    },
-
-    /**
-     * Called when the worker posts back a log message from its instance of IWork
-     * @param {IWorkerPostData} data
-     */
-    _onLog(data) {
-      let { caller, message } = data;
-      console.log(`[${this.classname}]: ${caller}: ${message}`);
-      this.__pendingMessages.push({ caller, message, time: new Date(), kind: "log" });
-      this.__sortPending();
-    },
-
-    /**
-     * Called when the worker has completed its task (either succeeded or error)
-     * @param {IWorkerPostData} data
-     */
-    _onComplete(data) {
-      let { caller, message, success } = data;
-      console.log(`[${this.classname}]: ${caller} (${success ? "success" : "fail"}): ${message}`);
-      this.__pendingMessages.push({ caller, message, time: new Date(), kind: success ? "success" : "failure" });
-      this.__sortPending();
     },
 
     __sortPending() {
