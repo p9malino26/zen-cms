@@ -1,4 +1,4 @@
-qx.Class.define("zx.server.work.pool.DockerWorkerTracker", {
+qx.Class.define("zx.server.work.pools.DockerWorkerTracker", {
   extend: zx.server.work.WorkerTracker,
 
   construct(workerPool, container, dockerConfig) {
@@ -21,7 +21,7 @@ qx.Class.define("zx.server.work.pool.DockerWorkerTracker", {
           }
           stream.on("data", data => {
             if (!resolved) {
-              if (data.toString().includes(zx.server.work.pool.DockerWorkerPool.READY_SIGNAL)) {
+              if (data.toString().includes(zx.server.work.pools.DockerWorkerPool.READY_SIGNAL)) {
                 resolve();
                 resolved = true;
               }

@@ -35,7 +35,7 @@ qx.Interface.define("zx.server.work.IWorkSpec", {
     classname: null,
 
     /**
-     * The compatibility is an array of classnames referencing {@link zx.server.work.pool.AbstractWorkerPool}s that provide an environment
+     * The compatibility is an array of classnames referencing {@link zx.server.work.WorkerPool}s that provide an environment
      * this work can run in. To accept any and all environments, pass an empty array.
      * @type {string[]}
      */

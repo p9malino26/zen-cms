@@ -30,7 +30,7 @@ qx.Class.define("zx.server.work.runtime.NodePeerService", {
 
   members: {
     _onReady() {
-      console.log("zx.server.work.pool.NodeProcessWorkerPool.READY_SIGNAL");
+      console.log("zx.server.work.pools.NodeProcessWorkerPool.READY_SIGNAL");
     }
   }
 });

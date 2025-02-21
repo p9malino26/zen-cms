@@ -21,9 +21,9 @@
  *
  * @ignore(Worker)
  */
-qx.Class.define("zx.server.work.pool.WebThreadWorkerPool", {
+qx.Class.define("zx.server.work.pools.WebThreadWorkerPool", {
   /** @template {Worker} TWorker */
-  extend: zx.server.work.pool.AbstractWorkerPool,
+  extend: zx.server.work.WorkerPool,
 
   /**
    * @param {object} poolConfig - config for {@link zx.utils.Pool}

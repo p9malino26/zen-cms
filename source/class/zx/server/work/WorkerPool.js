@@ -26,7 +26,7 @@
  * receive work to do and report back the status of the work to the scheduler.
  *
  */
-qx.Class.define("zx.server.work.pool.AbstractWorkerPool", {
+qx.Class.define("zx.server.work.WorkerPool", {
   extend: qx.core.Object,
   implement: [zx.server.work.IWorkerFactory],
 
@@ -42,8 +42,7 @@ qx.Class.define("zx.server.work.pool.AbstractWorkerPool", {
     this.__route = route;
     this.setPoolConfig(poolConfig);
 
-    this.__pendingMessages = [];
-    this.__currentWork = {};
+    this.__runningWorkTrackers = {};
 
     let api = new zx.server.work.api.WorkerPoolServerApi(this);
     zx.io.api.server.ConnectionManager.getInstance().registerApi(api, "/pool");
@@ -104,72 +103,20 @@ qx.Class.define("zx.server.work.pool.AbstractWorkerPool", {
         console.log("pool sent becomeUnavailable");
         this.getQxObject("pollTimer").killTimer();
       });
+      pool.addListener("createResource", this.__onPoolCreateResource, this);
+      pool.addListener("destroyResource", this.__onPoolDestroyResource, this);
       return pool;
     },
 
     pollTimer() {
-      const onPoll = async () => {
-        console.log(`[${this.classname}]: polling for work...`);
-        let work;
-        if (!this.getQxObject("pool").available()) return;
-
-        try {
-          work = await this.getSchedulerApi().poll(this.classname);
-        } catch (e) {
-          console.log(`[${this.classname}]: failed to poll for work: ${e}`);
-          return;
-        }
-        if (work) {
-          console.log(`[${this.classname}]: received work!`);
-          /**@type {zx.server.work.api.WorkerClientApi} */
-
-          //Do not await this because it will cause us not to poll until this IWork is finished
-          this.getQxObject("pool")
-            .acquire()
-            .then(async worker => {
-              this.__currentWork[work.uuid] = {
-                worker,
-                work,
-                startTime: new Date()
-              };
-              try {
-                await worker.run(work);
-              } catch (e) {
-                console.error(`[${this.classname}]: error running work`, e);
-                debugger;
-              }
-              delete this.__currentWork[work.uuid];
-              this.getQxObject("pushTimer").fire();
-              this.getQxObject("pool").release(worker);
-            });
-        }
-      };
-
-      let pollTimer = new zx.utils.Timeout(null, onPoll);
+      let pollTimer = new zx.utils.Timeout(null, this.__pollForNewWork, this);
       pollTimer.setRecurring(true);
       this.bind("pollInterval", pollTimer, "duration");
       return pollTimer;
     },
 
     pushTimer() {
-      const onPush = async () => {
-        this.__sortPending();
-        let currentPending = this.__pendingMessages.splice(0, Math.min(this.__pendingMessages.length, this.getMaxPushMessages()));
-        if (!currentPending.length) {
-          return;
-        }
-        try {
-          console.log(`[${this.classname}]: pushing ${currentPending.length} messages...`);
-          await this.getSchedulerApi().push(currentPending);
-        } catch (e) {
-          console.log(`[${this.classname}]: failed to push messages`);
-          debugger;
-          // the server running the scheduler is down - re-add the pending messages and try again later
-          this.__pendingMessages.unshift(...currentPending);
-        }
-      };
-
-      let pushTimer = new zx.utils.Timeout(null, onPush);
+      let pushTimer = new zx.utils.Timeout(null, () => this.__pushQueuedResultsToScheduler());
       pushTimer.setRecurring(true);
       this.bind("pushInterval", pushTimer, "duration");
       return pushTimer;
@@ -177,20 +124,11 @@ qx.Class.define("zx.server.work.pool.AbstractWorkerPool", {
   },
 
   members: {
-    /**
-     * Info about the pieces of work that are current running,
-     * index by the UUID of the work
-     *
-     * @typedef CurrentWorkInfo
-     * @property {zx.server.work.api.WorkerClientApi} worker - the worker API
-     * @property {zx.server.work.IWorkSpec} work - the work spec
-     * @property {Date} startTime - the time the work started
-     * @type {Map<string, CurrentWorkInfo>}
-     */
-    __currentWork: null,
+    /** @type{zx.server.work.WorkResult[]} queue of WorkResults to send back to the scheduler */
+    __workResultQueue: null,
 
-    /**@type {zx.server.work.IMessageSpec[]}*/
-    __pendingMessages: null,
+    /** @type{Object<String,zx.server.work.WorkTracker>} WorkTrackers that are currently running Work, indexed by work UUID */
+    __runningWorkTrackers: null,
 
     /**
      * Apply for `poolConfig` property
@@ -207,6 +145,89 @@ qx.Class.define("zx.server.work.pool.AbstractWorkerPool", {
       });
     },
 
+    /**
+     * Event handler for when the pool creates a new resource (a WorkTracker)
+     */
+    __onPoolCreateResource(evt) {
+      let workerTracker = evt.getData();
+      workerTracker.addListener("changeStatus", this.__onWorkTrackerStatusChange, this);
+    },
+
+    /**
+     * Event handler for when the pool permanently destroys a resource (a WorkTracker)
+     */
+    __onPoolDestroyResource(evt) {
+      let workerTracker = evt.getData();
+      let workResult = workerTracker.takeWorkResult();
+      if (workResult) {
+        this.__workResultQueue.push(workResult);
+        delete this.__runningWorkTrackers[workResult.getWorkJson().uuid];
+      }
+      workerTracker.removeListener("changeStatus", this.__onWorkTrackerStatusChange, this);
+    },
+
+    /**
+     * Events handler for changes to a WorkTracker's status
+     */
+    __onWorkTrackerStatusChange(evt) {
+      let status = evt.getData();
+      let pool = this.getQxObject("pool");
+      let workResult = workerTracker.takeWorkResult();
+      if (status === "dead") {
+        pool.destroyResource(workerTracker);
+      } else if (status === "stopped") {
+        workerTracker.reuse();
+        pool.release(workerTracker);
+      }
+      if (workResult) {
+        this.__workResultQueue.push(workResult);
+      }
+      this.getQxObject("pushTimer").fire();
+    },
+
+    /**
+     * Event handler for when we need to poll for new work
+     */
+    __pollForNewWork() {
+      this.log(`polling for work...`);
+      let work;
+      if (!this.getQxObject("pool").available()) {
+        return;
+      }
+
+      try {
+        work = await this.getSchedulerApi().poll(this.classname);
+      } catch (e) {
+        this.log(`[${this.classname}]: failed to poll for work: ${e}`);
+        return;
+      }
+      if (work) {
+        this.log(`[${this.classname}]: received work!`);
+
+        let workTracker = await this.getQxObject("pool").acquire();
+        this.__runningWorkTrackers[work.uuid] = workerTracker;
+        workerTracker.runWork(work);
+      }
+    },
+
+    /**
+     * Called on a timer to send results back to the scheduler
+     */
+    async __pushQueuedResultsToScheduler() {
+      while (this.__workResultQueue.length) {
+        let workResult = this.__workResultQueue[0];
+        await this.getSchedulerApi().pushResult({
+          status: workResult.getStatusJson(),
+          log: workResult.getWorkLog()
+        });
+        this.__workResultQueue.shift();
+        workResult.deleteWorkDir();
+      }
+    },
+
+    /**
+     * Returns the API route
+     */
     getRoute() {
       return this.__route;
     },
@@ -230,11 +251,11 @@ qx.Class.define("zx.server.work.pool.AbstractWorkerPool", {
      * @param {string} uuid
      */
     killWork(uuid) {
-      if (!this.__currentWork[uuid]) {
+      if (!this.__runningWorkTrackers[uuid]) {
         throw new Error("No work with that UUID");
       }
-      this.__currentWork[uuid].worker.terminate();
-      delete this.__currentWork[uuid];
+      this.__runningWorkTrackers[uuid].killWork();
+      delete this.__runningWorkTrackers[uuid];
     },
 
     /**
@@ -242,11 +263,7 @@ qx.Class.define("zx.server.work.pool.AbstractWorkerPool", {
      * @returns {Object} Information about all the current work that is running
      */
     getStatusJson() {
-      return Object.values(this.__currentWork).map(info => ({
-        uuid: info.work.uuid,
-        classname: info.work.classname,
-        startTime: info.startTime
-      }));
+      return Object.values(this.__runningWorkTrackers).map(workerTracker => workerTracker.getWorkResult().getStatusJson());
     },
 
     /**
@@ -256,28 +273,12 @@ qx.Class.define("zx.server.work.pool.AbstractWorkerPool", {
      * @returns {Object}
      */
     getWorkerStatusJson(uuid) {
-      let info = this.__currentWork[uuid];
-      if (!info) {
+      let workerTracker = this.__runningWorkTrackers[uuid];
+      if (!workerTracker) {
         throw new Error("No work with that UUID");
       }
 
-      let outstandingLogs = this.__pendingMessages.filter(msg => msg.caller === uuid);
-
-      let out = {
-        outstandingLogs,
-        startTime: info.startTime.toISOString()
-      };
-
-      return out;
-    },
-
-    /**
-     * Utility to generate uniform api paths
-     * @param {string} apiName - human-readable name of the api. Must be unique within the class
-     * @returns {string} the path in the form `/{{classname}}/{{uuid}}/{{apiName}}/{{randomUuid}}`
-     */
-    _createPath(apiName) {
-      return `/${this.classname}/${this.toUuid()}/${apiName}/${qx.util.Uuid.createUuidV4()}`;
+      return workerTracker.getWorkResult().getStatusJson();
     },
 
     /**
@@ -307,10 +308,6 @@ qx.Class.define("zx.server.work.pool.AbstractWorkerPool", {
       }
       this.getQxObject("pushTimer").killTimer();
       await this.getQxObject("pool").shutdown();
-    },
-
-    __sortPending() {
-      this.__pendingMessages.sort((a, b) => a.time - b.time);
     }
   }
 });

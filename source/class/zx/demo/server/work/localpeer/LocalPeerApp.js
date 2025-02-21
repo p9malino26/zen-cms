@@ -4,7 +4,7 @@ qx.Class.define("zx.demo.server.work.localpeer.LocalPeerApp", {
 
   members: {
     async main() {
-      let pool = new zx.server.work.pool.NodeProcessWorkerPool("/zx.work", {
+      let pool = new zx.server.work.pools.NodeProcessWorkerPool("/zx.work", {
         minSize: 0,
         maxSize: 2
       }).set({

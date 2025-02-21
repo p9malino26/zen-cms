@@ -9,7 +9,7 @@ qx.Class.define("zx.server.work.WorkerTracker", {
 
   /**
    *
-   * @param {zx.server.work.pool.AbstractWorkerPool} workerPool
+   * @param {zx.server.work.WorkerPool} workerPool
    * @param {zx.server.work.api.WorkerClientApi?} workerClientApi
    */
   construct(workerPool, workerClientApi) {
@@ -26,12 +26,8 @@ qx.Class.define("zx.server.work.WorkerTracker", {
     }
   },
 
-  statics: {
-    __DF_LOG: new qx.util.format.DateFormat("yyyy-MM-dd HH:mm:ss")
-  },
-
   members: {
-    /** @type{zx.server.work.pool.AbstractWorkerPool} the pool this belong to */
+    /** @type{zx.server.work.WorkerPool} the pool this belong to */
     __workerPool: null,
 
     /** @type{zx.server.work.api.WorkerClientApi} connection to the actual worker */
@@ -40,25 +36,25 @@ qx.Class.define("zx.server.work.WorkerTracker", {
     /** @type{*?} the currently running work */
     __jsonWork: null,
 
-    /** @type{String} the path for storing anythign to do with the Work being run by the Worker (eg log files) */
-    __workdir: null,
+    /** @type{zx.server.work.WorkResult} the output of the currently running (or just stopped) work */
+    __workResult: null,
 
-    /** @type{WriteStream} where to write logs for the Work */
-    __logStream: null,
-
-    /** @type{*} JSON status that is written into the workdir */
-    __workStatus: null,
-
+    /**
+     * Called when starting the WorkTracker
+     */
     async initialize() {
       await this.__workerClientApi.subscribe("log", data => {
         if (this.__jsonWork?.uuid === data.caller) {
           this.appendWorkLog(data.message);
         } else {
-          this.log(data.message);
+          this.error(data.message);
         }
       });
     },
 
+    /**
+     * Sets the WorkerClientApi for this WorkerTracker; this is only used if it could not be set in the constructor
+     */
     _setWorkerClientApi(workerClientApi) {
       if (this.__workerClientApi) {
         throw new Error("Cannot set workerClientApi more than once");
@@ -72,19 +68,14 @@ qx.Class.define("zx.server.work.WorkerTracker", {
      * @param {*} jsonWork
      */
     async runWork(jsonWork) {
-      if (this.__jsonWork) {
+      if (this.__workResult) {
         throw new Error("WorkerTracker already has work");
       }
-      this.__workdir = path.join(this.__workerPool.getWorkDir(), "work", jsonWork.uuid);
-      await fs.mkdir(this.__workdir, { recursive: true });
-      this.__logStream = fs.createWriteStream(path.join(this.__workdir, "log.txt"));
-      this.__workStatus = {
-        started: new Date(),
-        logFile: "log.txt"
-      };
-      this.appendWorkLog("Starting work: " + JSON.stringify(jsonWork, null, 2));
+      let workdir = path.join(this.__workerPool.getWorkDir(), "work", jsonWork.uuid);
+      this.__workResult = new zx.server.work.WorkResult();
+      await this.__workResult.initialize(workdir, jsonWork);
       this.setStatus("running");
-      this._writeWorkStatus();
+      this.__workResult.writeStatus();
       let promise = this.__workerClientApi.run(jsonWork);
       promise.then(response => this._onWorkComplete(response));
     },
@@ -95,14 +86,7 @@ qx.Class.define("zx.server.work.WorkerTracker", {
      * @param {String} message
      */
     appendWorkLog(message) {
-      this.__logStream.write(zx.server.work.WorkerTracker.__DF_LOG.format(new Date()) + " " + message + "\n");
-    },
-
-    /**
-     * Persists the __workStatus to disk
-     */
-    async _writeWorkStatus() {
-      await fs.writeFile(path.join(this.__workdir, "status.json"), JSON.stringify(this.__workStatus, null, 2));
+      this.__workResult.appendWorkLog(message);
     },
 
     /**
@@ -111,17 +95,14 @@ qx.Class.define("zx.server.work.WorkerTracker", {
      * @param {*} response the value returned by the WorkerClientApi.run method
      */
     _onWorkComplete(response) {
-      this.__workStatus.response = response;
-      this.__workStatus.completed = new Date();
       this.appendWorkLog("Work complete: " + JSON.stringify(response.result));
-      this._writeWorkStatus();
+      this.__workResult.writeStatus();
       if (this.getStatus() === "killing" || response.result == "killed") {
         this.setStatus("dead");
       } else {
         this.setStatus("stopped");
       }
-      fs.close(this.__logStream);
-      this.__logStream = null;
+      this.__workResult.close(response);
       this.__workStatus = null;
       this.__jsonWork = null;
     },
@@ -136,23 +117,17 @@ qx.Class.define("zx.server.work.WorkerTracker", {
       }
     },
 
-    /**
-     * The work directory
-     *
-     * @returns {String} the path to the work directory
-     */
-    getWorkDir() {
-      return this.__workdir;
+    getWorkResult() {
+      return this.__workResult;
     },
 
     /**
-     * Deletes the work directory
+     * Called by the WorkerPool when a Work is finished, so that the results can be shipped back to the Scheduler
      */
-    async deleteWorkDir() {
-      if (this.__workdir) {
-        await fs.rm(this.__workdir, { recursive: true, force: true });
-        this.__workdir = null;
-      }
+    takeWorkResult() {
+      let workResult = this.__workResult;
+      this.__workResult = null;
+      return workResult;
     },
 
     /**
@@ -165,9 +140,9 @@ qx.Class.define("zx.server.work.WorkerTracker", {
       if (this.getStatus() != "stopped") {
         throw new Error("Cannot reuse a WorkerTracker that is not stopped");
       }
-      if (this.__workdir) {
-        this.error(`Reusing a WorkerTracker that still has a workdir - ${this.__workdir}`);
-        this.__workdir = null;
+      if (this.__workResult) {
+        this.error(`Reusing a WorkerTracker that still has a workResult - ${this.__workResult}`);
+        this.__workResult = null;
       }
       this.setStatus("waiting");
     }

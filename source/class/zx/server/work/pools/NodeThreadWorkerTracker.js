@@ -1,4 +1,4 @@
-qx.Class.define("zx.server.work.pool.nodeThreadWorkerTracker", {
+qx.Class.define("zx.server.work.pools.nodeThreadWorkerTracker", {
   extend: zx.server.work.WorkerTracker,
 
   construct(workerPool, nodeThread) {

@@ -17,7 +17,7 @@
  * ************************************************************************ */
 
 /**
- * This API is used by the pool (zx.server.work.pool.AbstractWorkerPool) to communicate with the scheduler (zx.server.work.api.SchedulerServerApi),
+ * This API is used by the pool (zx.server.work.WorkerPool) to communicate with the scheduler (zx.server.work.api.SchedulerServerApi),
  * and used for receiving work and uploading infornamtion regarding the status of the work.
  *
  */

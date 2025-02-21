@@ -20,9 +20,9 @@ const { Worker } = require("node:worker_threads");
 /**
  * The node worker pool runs work in a node worker thread
  */
-qx.Class.define("zx.server.work.pool.NodeThreadWorkerPool", {
+qx.Class.define("zx.server.work.pools.NodeThreadWorkerPool", {
   /** @template {import('node:worker_threads').Worker} TWorker */
-  extend: zx.server.work.pool.AbstractWorkerPool,
+  extend: zx.server.work.WorkerPool,
   implement: [zx.server.work.IWorkerFactory],
 
   /**
@@ -42,7 +42,7 @@ qx.Class.define("zx.server.work.pool.NodeThreadWorkerPool", {
       let apiPath = this.getRoute();
       let nodeThread = new Worker(this.__remoteAppPath, { name: apiPath, workerData: { apiPath } });
 
-      let workerTracker = new zx.server.work.pool.NodeThreadWorkerTracker(this, nodeThread);
+      let workerTracker = new zx.server.work.pools.NodeThreadWorkerTracker(this, nodeThread);
       await workerTracker.initialise();
       return workerTracker;
     },

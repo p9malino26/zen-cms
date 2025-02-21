@@ -22,15 +22,15 @@ const path = require("node:path");
 /**
  * The docker peer pool runs workers in a docker container
  */
-qx.Class.define("zx.server.work.pool.DockerWorkerPool", {
+qx.Class.define("zx.server.work.pools.DockerWorkerPool", {
   /** @template {import('dockerode').Container} TWorker */
-  extend: zx.server.work.pool.AbstractWorkerPool,
+  extend: zx.server.work.WorkerPool,
 
   environment: {
     /**
      * The docker image to use for the worker by default
      */
-    "zx.server.work.pool.DockerWorkerPool.imageName": "zenesisuk/zx-puppeteer-server-base"
+    "zx.server.work.pools.DockerWorkerPool.imageName": "zenesisuk/zx-puppeteer-server-base"
   },
 
   /**
@@ -41,9 +41,9 @@ qx.Class.define("zx.server.work.pool.DockerWorkerPool", {
    */
   construct(route, poolConfig, image, remoteAppPath) {
     super(route, poolConfig);
-    this.__remoteAppPath = remoteAppPath ?? qx.core.Environment.get("zx.server.work.pool.DockerWorkerPool.remoteAppPath");
+    this.__remoteAppPath = remoteAppPath ?? qx.core.Environment.get("zx.server.work.pools.DockerWorkerPool.remoteAppPath");
     this.__docker = new Docker();
-    this.__image = image ?? qx.core.Environment.get("zx.server.work.pool.DockerWorkerPool.imageName");
+    this.__image = image ?? qx.core.Environment.get("zx.server.work.pools.DockerWorkerPool.imageName");
   },
 
   properties: {
@@ -92,7 +92,7 @@ qx.Class.define("zx.server.work.pool.DockerWorkerPool", {
         }
       };
       let container = await this.__docker.createContainer(dockerConfig);
-      let workerTracker = new zx.server.work.pool.DockerWorkerTracker(this, container, dockerConfig);
+      let workerTracker = new zx.server.work.pools.DockerWorkerTracker(this, container, dockerConfig);
       await workerTracker.initialise();
       container._config = dockerConfig;
     },
@@ -106,6 +106,6 @@ qx.Class.define("zx.server.work.pool.DockerWorkerPool", {
   },
 
   statics: {
-    READY_SIGNAL: "zx.server.work.pool.DockerWorkerPool.READY_SIGNAL"
+    READY_SIGNAL: "zx.server.work.pools.DockerWorkerPool.READY_SIGNAL"
   }
 });

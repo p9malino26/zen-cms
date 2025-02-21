@@ -1,4 +1,4 @@
-qx.Class.define("zx.server.work.pool.NodeProcessWorkerTracker", {
+qx.Class.define("zx.server.work.pools.NodeProcessWorkerTracker", {
   extend: zx.server.work.WorkerTracker,
 
   construct(workerPool, nodeProcess, httpPort) {
@@ -17,7 +17,7 @@ qx.Class.define("zx.server.work.pool.NodeProcessWorkerTracker", {
       let resolve;
       let promise = new Promise(res => (resolve = res));
       nodeProcess.stdout.on("data", data => {
-        if (data.toString().indexOf(zx.server.work.pool.NodeProcessWorkerPool.READY_SIGNAL) > -1) {
+        if (data.toString().indexOf(zx.server.work.pools.NodeProcessWorkerPool.READY_SIGNAL) > -1) {
           resolve?.();
           resolve = null;
           return;

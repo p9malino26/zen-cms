@@ -3,7 +3,7 @@ qx.Class.define("zx.demo.server.work.nodeworkers.NodeWorkerApp", {
 
   members: {
     async main() {
-      let pool = new zx.server.work.pool.NodeThreadWorkerPool({
+      let pool = new zx.server.work.pools.NodeThreadWorkerPool({
         minSize: 0,
         maxSize: 2
       });

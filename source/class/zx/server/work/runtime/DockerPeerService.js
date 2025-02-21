@@ -32,7 +32,7 @@ qx.Class.define("zx.server.work.runtime.DockerPeerService", {
 
   members: {
     _onReady() {
-      console.log("zx.server.work.pool.DockerWorkerPool.READY_SIGNAL");
+      console.log("zx.server.work.pools.DockerWorkerPool.READY_SIGNAL");
     }
   }
 });

@@ -67,7 +67,9 @@ qx.Class.define("zx.utils.Pool", {
 
   events: {
     becomeAvailable: "qx.event.type.Event",
-    becomeUnavailable: "qx.event.type.Event"
+    becomeUnavailable: "qx.event.type.Event",
+    createResource: "qx.event.type.Data",
+    destroyResource: "qx.event.type.Data"
   },
 
   objects: {
@@ -110,8 +112,10 @@ qx.Class.define("zx.utils.Pool", {
   members: {
     /**@type {Map<TResource, Symbol>} */
     __pool: null,
+
     /**@type {boolean}*/
     __live: false,
+
     /**@type {boolean}*/
     __available: false,
 
@@ -184,6 +188,16 @@ qx.Class.define("zx.utils.Pool", {
     },
 
     /**
+     * Destroy a resource
+     *
+     * @param {TResource} resource - a resource
+     */
+    async destroyResource(resource) {
+      this.__destroyResource(resource);
+      this.__updateAvailability();
+    },
+
+    /**
      * Update this pools availability, firing events as necessary
      */
     __updateAvailability() {
@@ -204,6 +218,7 @@ qx.Class.define("zx.utils.Pool", {
      */
     async __createNewResource() {
       let resource = await this.getFactory().createPoolableEntity();
+      this.fireDataEvent("createResource", resource);
       this.__pool.set(resource, zx.utils.Pool.AVAILABLE);
       return resource;
     },
@@ -217,6 +232,7 @@ qx.Class.define("zx.utils.Pool", {
       if (this.__pool.get(resource) === zx.utils.Pool.UNAVAILABLE) {
         return;
       }
+      this.fireDataEvent("destroyResource", resource);
       this.__pool.delete(resource);
       await this.getFactory().destroyPoolableEntity(resource);
     },

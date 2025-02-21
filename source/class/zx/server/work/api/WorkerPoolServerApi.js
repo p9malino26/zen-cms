@@ -6,7 +6,7 @@ qx.Class.define("zx.server.work.api.WorkerPoolServerApi", {
   extend: zx.io.api.server.AbstractServerApi,
 
   /**
-   * @param {zx.server.work.pool.AbstractWorkerPool} pool
+   * @param {zx.server.work.WorkerPool} pool
    */
   construct(pool) {
     super("zx.server.work.api.WorkerPoolApi");
@@ -20,7 +20,7 @@ qx.Class.define("zx.server.work.api.WorkerPoolServerApi", {
 
   members: {
     /**
-     * @type {zx.server.work.pool.AbstractWorkerPool}
+     * @type {zx.server.work.WorkerPool}
      */
     __pool: null
   }

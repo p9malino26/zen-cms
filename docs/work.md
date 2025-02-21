@@ -1,7 +1,7 @@
 # Work, Workers, Worker Pools, and Schedulers
 
 There are lots of occasions when we want to be able to be able to perform a task in the background, collect logs and other generated output,
-and then update some kind of status to show when it's complete. If something goes wrong, we need to be able to pull diagnostics from it.
+and then update some kind of status to know when it's complete. If something goes wrong, we need to be able to pull diagnostics from it.
 
 In a small system, maybe running that task asynchronously is enough; and if it is a CPU-intensive task, they you might choose to run that
 task in a separate Node Worker thread if its on the server, or a browser Web Worker thread if it's in a client web browser.
@@ -14,13 +14,19 @@ run by a process (lets call that process a "Worker") somewhere on the network. Y
 you might organise them into a "Worker Pool", and as more Work has to be done, you would like the Worker Pool to allocate a Worker, and then
 have that Worker run your Work.
 
-Exactly what Work needs to be done is organised by one or more Schedulers, each of which has some kind of a list of things that need to be
-done, and when they need to be run - a Worker Pool will connect to Schedulers and ask for a piece of Work to do; when the Worker has finished
-executing the Work, the results will be uploaded back to the Scheduler.
-
 Some tasks have to run at particular times, eg 5am on Monday-Friday, and so you could have a time-based Scheduler that manages a list of
-these tasks; other tasks are transient and just need to be executed ASAP, and so you might have a queue-based Scheduler where some code just adds
-some task, and the Scheduler hands that task out as Work in first-in-first-out order
+these tasks; other tasks just need to be executed ASAP, in a first-in-first-out order and so you might have a queue-based Scheduler where
+some code just adds some task to queue, and the Scheduler hands that task out as Worker Pools ask for it.
+
+When a Worker has finished a piece of Work, the result of the work includes status (eg success, failure, or an exception) as well as logs;
+these are returned to the Scheduler that issued the Work, so that it can record that the task was completed and persist those logs to
+somewhere sensible in case they are needed later.
+
+## Robustness
+
+With all of the different parts that communicate with each other, run independently of each other, and asynchronously (perhaps on different
+physical servers), this needs to be robust. For example, if the Scheduler goes offline and the Worker finishes the work, it cannot send the
+results of the Work (the status and logs) back to the Scheduler ... until the Scheduler comes back online.
 
 ## Chromium
 
@@ -66,3 +72,10 @@ inside Chromium is the other side of a process boundary.
 > NOTE:: While the Docker Pool creates and manages Docker Containers, each of which can run Chromium, this is not the same as the class in
 > `zx.server.puppeteer.ChromiumDocker` - that class also manages a pool of Chromium instances in Docker, but is deprecated because it has nothing to
 > do with the Work/Worker/Worker Pool mechanisms decribed here
+
+# TODO
+
+time and queue Schedulers
+persistence of WorkResult in WorkerPool
+nodeProcessLocation in DockerWorkerPool (thisprocess, localhost, container)
+interfaces for APIs

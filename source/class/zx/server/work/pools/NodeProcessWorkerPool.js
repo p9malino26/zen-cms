@@ -21,8 +21,8 @@ const child_process = require("node:child_process");
 /**
  * The localhost peer pool runs workers in a separate node process on the same machine
  */
-qx.Class.define("zx.server.work.pool.NodeProcessWorkerPool", {
-  extend: zx.server.work.pool.AbstractWorkerPool,
+qx.Class.define("zx.server.work.pools.NodeProcessWorkerPool", {
+  extend: zx.server.work.WorkerPool,
 
   /**
    * @param {string} route - the base path on the node remote app for zx apis. Be certain that this exactly
@@ -57,7 +57,7 @@ qx.Class.define("zx.server.work.pool.NodeProcessWorkerPool", {
 
       let nodeProcess = child_process.spawn("node", params, {});
 
-      let workerTracker = new zx.server.work.pool.NodeProcessWorkerTracker(this, nodeProcess, httpPort);
+      let workerTracker = new zx.server.work.pools.NodeProcessWorkerTracker(this, nodeProcess, httpPort);
       await workerTracker.initialise();
       return workerTracker;
     },
@@ -71,6 +71,6 @@ qx.Class.define("zx.server.work.pool.NodeProcessWorkerPool", {
   },
 
   statics: {
-    READY_SIGNAL: "zx.server.work.pool.NodeProcessWorkerPool.READY_SIGNAL"
+    READY_SIGNAL: "zx.server.work.pools.NodeProcessWorkerPool.READY_SIGNAL"
   }
 });

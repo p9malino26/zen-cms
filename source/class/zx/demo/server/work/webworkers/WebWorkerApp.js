@@ -7,7 +7,7 @@ qx.Class.define("zx.demo.server.work.webworkers.WebWorkerApp", {
 
   members: {
     async main() {
-      let pool = new zx.server.work.pool.WebThreadWorkerPool({
+      let pool = new zx.server.work.pools.WebThreadWorkerPool({
         minSize: 0,
         maxSize: 2
       });
