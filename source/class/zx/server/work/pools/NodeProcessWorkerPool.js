@@ -22,15 +22,14 @@ const child_process = require("node:child_process");
  * The localhost peer pool runs workers in a separate node process on the same machine
  */
 qx.Class.define("zx.server.work.pools.NodeProcessWorkerPool", {
-  extend: zx.server.work.WorkerPool,
+  extend: zx.server.work.pools.WorkerPool,
 
   /**
    * @param {string} route - the base path on the node remote app for zx apis. Be certain that this exactly
    *  matches the route configured on the server, eg {@link zx.server.work.runtime.NodePeerService}
    * @param {object} poolConfig - config for {@link zx.utils.Pool}
-   * @param {string} remoteAppPath - the path on disk to the compiled entrypoint for the remote worker app. .
    */
-  construct(route, poolConfig, remoteAppPath) {
+  construct(route, poolConfig) {
     super(route, poolConfig);
     this.__remoteAppPath = remoteAppPath;
   },
@@ -40,6 +39,13 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerPool", {
     nodeInspect: {
       init: "none",
       check: ["none", "inspect", "inspect-brk"]
+    },
+
+    /** The command line to pass to node, defaults to this app using the command line "work start-worker" */
+    nodeCommand: {
+      init: null,
+      nullable: true,
+      check: "Array"
     }
   },
 
@@ -49,15 +55,20 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerPool", {
      */
     async createPoolableEntity() {
       let httpPort = zx.server.PortRanges.getNodeHttpServerApiPortRange().allocate();
-      let params = [this.__remoteAppPath, httpPort, apiPath];
+      let nodeDebugPort = null;
+      let nodeCmd = this.getNodeCommand();
+      if (!nodeCmd) {
+        nodeCmd = [process.argv[1], "work", "start-worker", "--port", httpPort, "--api-path", apiPath];
+      }
       let inspect = this.getNodeInspect();
       if (inspect != "none") {
-        params.unshift(`--${inspect}=0.0.0.0:${zx.server.PortRanges.getNodeDebugPortRange().allocate()}`);
+        nodeDebugPort = zx.server.PortRanges.getNodeDebugPortRange().allocate();
+        params.unshift(`--${inspect}=0.0.0.0:${nodeDebugPort}`);
       }
 
       let nodeProcess = child_process.spawn("node", params, {});
 
-      let workerTracker = new zx.server.work.pools.NodeProcessWorkerTracker(this, nodeProcess, httpPort);
+      let workerTracker = new zx.server.work.pools.NodeProcessWorkerTracker(this, nodeProcess, httpPort, nodeDebugPort);
       await workerTracker.initialise();
       return workerTracker;
     },
@@ -68,9 +79,5 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerPool", {
     async destroyPoolableEntity(entity) {
       entity.killNodeProcess();
     }
-  },
-
-  statics: {
-    READY_SIGNAL: "zx.server.work.pools.NodeProcessWorkerPool.READY_SIGNAL"
   }
 });

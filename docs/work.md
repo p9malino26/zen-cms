@@ -76,6 +76,7 @@ inside Chromium is the other side of a process boundary.
 # TODO
 
 time and queue Schedulers
-persistence of WorkResult in WorkerPool
 nodeProcessLocation in DockerWorkerPool (thisprocess, localhost, container)
-interfaces for APIs
+connect docker worker to chromium
+
+api paths

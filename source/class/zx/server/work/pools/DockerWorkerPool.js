@@ -24,7 +24,7 @@ const path = require("node:path");
  */
 qx.Class.define("zx.server.work.pools.DockerWorkerPool", {
   /** @template {import('dockerode').Container} TWorker */
-  extend: zx.server.work.WorkerPool,
+  extend: zx.server.work.pools.WorkerPool,
 
   environment: {
     /**
@@ -62,7 +62,7 @@ qx.Class.define("zx.server.work.pools.DockerWorkerPool", {
       let chromiumPort = zx.server.PortRanges.getChromiumPortRange().allocate();
       const SERVER_PORT = 3000;
       const TCP_SPEC = `${SERVER_PORT}/tcp`;
-      let params = [path.join("/home/pptruser", this.__remoteAppPath), `${SERVER_PORT}`, apiPath];
+      let params = [path.join("/home/pptruser", this.__remoteAppPath), `${SERVER_PORT}`];
       let inspect = this.getNodeInspect();
       if (inspect != "none") {
         params.unshift(`--${inspect}=0.0.0.0`);
@@ -103,9 +103,5 @@ qx.Class.define("zx.server.work.pools.DockerWorkerPool", {
     async destroyPoolableEntity(entity) {
       entity.killDockerContainer();
     }
-  },
-
-  statics: {
-    READY_SIGNAL: "zx.server.work.pools.DockerWorkerPool.READY_SIGNAL"
   }
 });

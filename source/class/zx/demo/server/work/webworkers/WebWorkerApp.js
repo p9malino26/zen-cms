@@ -16,16 +16,20 @@ qx.Class.define("zx.demo.server.work.webworkers.WebWorkerApp", {
       let schedulerServerTransport = new zx.io.api.transport.loopback.LoopbackServerTransport();
       schedulerClientTransport.connect(schedulerServerTransport);
       schedulerServerTransport.connect(schedulerClientTransport);
-      let schedulerClient = new zx.server.work.api.SchedulerClientApi(schedulerClientTransport, "/scheduler");
-      let schedulerServer = new zx.server.work.api.SchedulerServerApi("/scheduler");
-      pool.setSchedulerApi(schedulerClient);
-      schedulerServer.schedule({
+
+      let scheduler = new zx.server.work.scheduler.QueueScheduler();
+      zx.io.api.server.ConnectionManager.getInstance().registerApi(scheduler.getServerApi(), "/scheduler");
+
+      let schedulerClientApi = new zx.io.api.client.GenericClientApiProxy(zx.server.work.scheduler.ISchedulerApi, schedulerClientTransport, "/scheduler");
+      pool.setSchedulerApi(schedulerClientApi);
+
+      scheduler.pushWork({
         uuid: "uuid",
         classname: zx.demo.server.work.TestWork.classname,
         compatibility: [],
         args: []
       });
-      schedulerServer.addListener("complete", e => {
+      scheduler.addListener("complete", e => {
         console.log('schedulerServer.addListener("complete")', e.getData());
       });
 

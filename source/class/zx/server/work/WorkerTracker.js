@@ -1,3 +1,5 @@
+const path = require("path");
+
 /**
  * Tracks a worker; the worker is often in a remote process, and will feed back logs and status
  * via the WorkerClientApi.  Instances of this class are used to track everything about that
@@ -9,8 +11,8 @@ qx.Class.define("zx.server.work.WorkerTracker", {
 
   /**
    *
-   * @param {zx.server.work.WorkerPool} workerPool
-   * @param {zx.server.work.api.WorkerClientApi?} workerClientApi
+   * @param {zx.server.work.pools.WorkerPool} workerPool
+   * @param {zx.server.work.IWorkerApi?} workerClientApi
    */
   construct(workerPool, workerClientApi) {
     super();
@@ -27,10 +29,10 @@ qx.Class.define("zx.server.work.WorkerTracker", {
   },
 
   members: {
-    /** @type{zx.server.work.WorkerPool} the pool this belong to */
+    /** @type{zx.server.work.pools.WorkerPool} the pool this belong to */
     __workerPool: null,
 
-    /** @type{zx.server.work.api.WorkerClientApi} connection to the actual worker */
+    /** @type{zx.server.work.IWorkerApi} connection to the actual worker */
     __workerClientApi: null,
 
     /** @type{*?} the currently running work */

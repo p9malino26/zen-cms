@@ -22,8 +22,7 @@ const { Worker } = require("node:worker_threads");
  */
 qx.Class.define("zx.server.work.pools.NodeThreadWorkerPool", {
   /** @template {import('node:worker_threads').Worker} TWorker */
-  extend: zx.server.work.WorkerPool,
-  implement: [zx.server.work.IWorkerFactory],
+  extend: zx.server.work.pools.WorkerPool,
 
   /**
    * @param {object} poolConfig - config for {@link zx.utils.Pool}

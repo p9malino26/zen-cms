@@ -14,14 +14,14 @@ qx.Class.define("zx.server.work.pools.DockerWorkerTracker", {
     async initialise() {
       let resolved = false;
       let promise = new Promise(resolve => {
-        container.attach({ stream: true, stdout: true, stderr: false }, (err, stream) => {
+        this.__container.attach({ stream: true, stdout: true, stderr: false }, (err, stream) => {
           if (err) {
             this.error(err);
             return;
           }
           stream.on("data", data => {
             if (!resolved) {
-              if (data.toString().includes(zx.server.work.pools.DockerWorkerPool.READY_SIGNAL)) {
+              if (data.toString().includes("zx.server.work.WORKER_READY_SIGNAL")) {
                 resolve();
                 resolved = true;
               }
@@ -31,7 +31,7 @@ qx.Class.define("zx.server.work.pools.DockerWorkerTracker", {
           });
         });
       });
-      container.attach({ stream: true, stdout: false, stderr: true }, (err, stream) => {
+      this.__container.attach({ stream: true, stdout: false, stderr: true }, (err, stream) => {
         if (err) {
           this.error(err);
           return;
@@ -39,14 +39,14 @@ qx.Class.define("zx.server.work.pools.DockerWorkerTracker", {
         stream.on("data", data => this.appendWorkLog(data));
       });
 
-      await container.start();
+      await this.__container.start();
       this.debug(`spawned worker, waiting for ready signal...`);
       await promise;
 
       let chromiumPort = parseInt(this.__dockerConfig.HostConfig.PortBindings["3000/tcp"][0].HostPort, 10);
       let url = `http://localhost:${chromiumPort}`;
-      let transport = new zx.io.api.transport.http.HttpClientTransport(url + this.__workerPool.getRoute());
-      let workerClientApi = new zx.server.work.api.WorkerClientApi(transport, apiPath);
+      let transport = new zx.io.api.transport.http.HttpClientTransport(url);
+      let workerClientApi = new zx.io.api.client.GenericClientApiProxy(zx.server.work.IWorkerApi, transport, "/work/worker");
       this._setWorkerClientApi(workerClientApi);
 
       this.debug(`worker ready`);

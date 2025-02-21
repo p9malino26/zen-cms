@@ -11,17 +11,20 @@ qx.Class.define("zx.demo.server.work.LocalWorkApp", {
       let schedulerServerTransport = new zx.io.api.transport.loopback.LoopbackServerTransport();
       schedulerClientTransport.connect(schedulerServerTransport);
       schedulerServerTransport.connect(schedulerClientTransport);
-      let schedulerClient = new zx.server.work.api.SchedulerClientApi(schedulerClientTransport, "/scheduler");
-      let schedulerServer = new zx.server.work.api.SchedulerServerApi("/scheduler");
-      pool.setSchedulerApi(schedulerClient);
 
-      schedulerServer.addListener("complete", e => {
-        console.log("schedulerServer: complete: ", e.getData());
+      let scheduler = new zx.server.work.scheduler.QueueScheduler();
+      zx.io.api.server.ConnectionManager.getInstance().registerApi(scheduler.getServerApi(), "/scheduler");
+
+      let schedulerClientApi = new zx.io.api.client.GenericClientApiProxy(zx.server.work.scheduler.ISchedulerApi, schedulerClientTransport, "/scheduler");
+      pool.setSchedulerApi(schedulerClientApi);
+
+      scheduler.addListener("complete", e => {
+        console.log("scheduler: complete: ", e.getData());
       });
 
       await pool.startup();
 
-      schedulerServer.schedule({
+      scheduler.pushWork({
         uuid: qx.util.Uuid.createUuidV4(),
         classname: zx.demo.server.work.TestWork.classname,
         compatibility: [],
@@ -29,7 +32,7 @@ qx.Class.define("zx.demo.server.work.LocalWorkApp", {
       });
 
       setTimeout(() => {
-        schedulerServer.schedule({
+        scheduler.pushWork({
           uuid: qx.util.Uuid.createUuidV4(),
           classname: zx.demo.server.work.ErrorWork.classname,
           compatibility: [],

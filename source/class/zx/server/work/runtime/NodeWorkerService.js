@@ -32,7 +32,8 @@ qx.Class.define("zx.server.work.runtime.NodeWorkerService", {
           `zx.server.work.runtime.NodeWorkerApp is designed for use in a worker thread and should not be executed in ${currentExecution}. Some features may not work correctly, others may cause the application to crash.`
         );
       }
-      new zx.server.work.api.WorkerServerApi(workerData.apiPath);
+      let worker = new zx.server.work.Worker();
+      zx.io.api.server.ConnectionManager.getInstance().registerApi(worker.getServerApi(), "/work/worker");
       new zx.io.api.transport.nodeworker.NodeWorkerServerTransport();
     }
   }

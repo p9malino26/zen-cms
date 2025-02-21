@@ -1,15 +1,17 @@
 qx.Class.define("zx.server.work.pools.NodeProcessWorkerTracker", {
   extend: zx.server.work.WorkerTracker,
 
-  construct(workerPool, nodeProcess, httpPort) {
+  construct(workerPool, nodeProcess, httpPort, nodeDebugPort) {
     super(workerPool, null);
     this.__nodeProcess = nodeProcess;
     this.__httpPort = httpPort;
+    this.__nodeDebugPort = nodeDebugPort;
   },
 
   members: {
     __nodeProcess: null,
     __httpPort: null,
+    __nodeDebugPort: null,
 
     async initialise() {
       let nodeProcess = child_process.spawn("node", params, {});
@@ -17,7 +19,7 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerTracker", {
       let resolve;
       let promise = new Promise(res => (resolve = res));
       nodeProcess.stdout.on("data", data => {
-        if (data.toString().indexOf(zx.server.work.pools.NodeProcessWorkerPool.READY_SIGNAL) > -1) {
+        if (data.toString().indexOf("zx.server.work.WORKER_READY_SIGNAL") > -1) {
           resolve?.();
           resolve = null;
           return;
@@ -36,8 +38,8 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerTracker", {
       await promise;
 
       let url = `http://localhost:${this.__httpPort}`;
-      let transport = new zx.io.api.transport.http.HttpClientTransport(url + this.__workerPool.getRoute());
-      let workerClientApi = new zx.server.work.api.WorkerClientApi(transport, apiPath);
+      let transport = new zx.io.api.transport.http.HttpClientTransport(url);
+      let workerClientApi = new zx.io.api.client.GenericClientApiProxy(zx.server.work.IWorkerApi, transport, "/work/worker");
       this._setWorkerClientApi(workerClientApi);
 
       this.debug(`worker ready`);
@@ -53,6 +55,10 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerTracker", {
           this.__nodeProcess.once("close", resolve);
           this.__nodeProcess.kill();
           this.__nodeProcess = null;
+          if (this.__nodeDebugPort) {
+            zx.server.PortRanges.getNodeDebugPortRange().release(this.__nodeDebugPort);
+          }
+          zx.server.PortRanges.getNodeHttpServerApiPortRange.release(this.__httpPort);
         });
       }
     }

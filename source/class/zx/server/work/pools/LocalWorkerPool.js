@@ -20,7 +20,7 @@
  * The local pool runs work in the same main thread as the pool
  */
 qx.Class.define("zx.server.work.pools.LocalWorkerPool", {
-  extend: zx.server.work.WorkerPool,
+  extend: zx.server.work.pools.WorkerPool,
 
   members: {
     /**
@@ -33,8 +33,9 @@ qx.Class.define("zx.server.work.pools.LocalWorkerPool", {
       serverTransport.connect(clientTransport);
       clientTransport.connect(serverTransport);
 
-      let serverApi = new zx.server.work.api.WorkerServerApi(this.getRoute());
-      let clientApi = new zx.server.work.api.WorkerClientApi(clientTransport, this.getRoute());
+      let worker = new zx.server.work.Worker();
+      zx.io.api.server.ConnectionManager.getInstance().registerApi(worker.getServerApi(), "/work/pools/local");
+      let clientApi = new zx.io.api.client.GenericClientApiProxy(zx.server.work.IWorkerApi, clientTransport, "/work/pools/local");
 
       let workerTracker = new zx.server.work.pools.LocalWorkerTracker(this, clientApi, serverApi);
       await workerTracker.initialise();

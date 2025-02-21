@@ -16,21 +16,24 @@ qx.Class.define("zx.demo.server.work.remotedocker.RemoteDockerSchedulerApp", {
     async main() {
       let app = this.getQxObject("app");
       new zx.io.api.transport.http.ExpressServerTransport(app, "/zx.work");
-      let schedulerServer = new zx.server.work.api.SchedulerServerApi("/scheduler");
-      schedulerServer.schedule({
+
+      let scheduler = new zx.server.work.scheduler.QueueScheduler();
+      zx.io.api.server.ConnectionManager.getInstance().registerApi(scheduler.getServerApi(), "/scheduler");
+
+      scheduler.pushWork({
         uuid: qx.util.Uuid.createUuidV4(),
         classname: zx.demo.server.work.TestWork.classname,
         compatibility: [],
         args: []
       });
-      schedulerServer.schedule({
+      scheduler.pushWork({
         uuid: qx.util.Uuid.createUuidV4(),
         classname: zx.demo.server.work.TestWork.classname,
         compatibility: [],
         args: []
       });
       // TODO: add loads more worker which do real stuff, including a worker which goes to 'google.com' and takes a screenshot
-      schedulerServer.addListener("complete", e => {
+      scheduler.addListener("complete", e => {
         console.log('schedulerServer.addListener("complete")', e.getData());
       });
       app.listen(4001, () => console.log(`Scheduler server is running on port ${4001}`));

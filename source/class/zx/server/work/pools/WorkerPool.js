@@ -18,6 +18,9 @@
  *
  * ************************************************************************ */
 
+const path = require("path");
+const fs = require("fs");
+
 /**
  * A worker pool maintains and manages a pool of workers
  *
@@ -26,11 +29,11 @@
  * receive work to do and report back the status of the work to the scheduler.
  *
  */
-qx.Class.define("zx.server.work.WorkerPool", {
+qx.Class.define("zx.server.work.pools.WorkerPool", {
   extend: qx.core.Object,
-  implement: [zx.server.work.IWorkerFactory],
+  implement: [zx.utils.IPoolFactory],
 
-  construct(route, poolConfig) {
+  construct(route, poolConfig, workDir) {
     super();
 
     if (route.endsWith("/")) {
@@ -40,12 +43,15 @@ qx.Class.define("zx.server.work.WorkerPool", {
       route = `/${route}`;
     }
     this.__route = route;
+    if (!workDir) {
+      workDir = zx.server.Config.resolveTemp("worker-pools/" + this.classname);
+    }
+    this.setWorkDir(workDir);
     this.setPoolConfig(poolConfig);
 
     this.__runningWorkTrackers = {};
 
-    let api = new zx.server.work.api.WorkerPoolServerApi(this);
-    zx.io.api.server.ConnectionManager.getInstance().registerApi(api, "/pool");
+    let api = new zx.server.work.pools.WorkerPoolServerApi(this);
   },
 
   properties: {
@@ -65,29 +71,29 @@ qx.Class.define("zx.server.work.WorkerPool", {
       apply: "_applyPoolConfig"
     },
 
-    schedulerApi: {
-      check: "zx.server.work.api.SchedulerClientApi"
+    /** Where to persist the WorkResult and other files */
+    workDir: {
+      check: "String",
+      apply: "_applyWorkDir"
     },
 
+    /** Scheduler to poll from */
+    schedulerApi: {
+      check: "zx.server.work.scheduler.ISchedulerApi"
+    },
+
+    /** Frequency, in milliseconds, to poll the scheduler when there are spare Workers in the pool */
     pollInterval: {
       check: "Integer",
       init: 5_000,
       event: "changePollInterval"
     },
 
+    /** Frequency, in milliseconds, to try to push completed work back to the scheduler when the scheduler is offline */
     pushInterval: {
       check: "Integer",
       init: 10_000,
       event: "changePushInterval"
-    },
-
-    /**
-     * The maximum number of push messages to send at once
-     * A higher or lower limit may be appropriate depending on where workers, this pool, and the scheduler are running
-     */
-    maxPushMessages: {
-      check: "Integer",
-      init: 100
     }
   },
 
@@ -117,7 +123,6 @@ qx.Class.define("zx.server.work.WorkerPool", {
 
     pushTimer() {
       let pushTimer = new zx.utils.Timeout(null, () => this.__pushQueuedResultsToScheduler());
-      pushTimer.setRecurring(true);
       this.bind("pushInterval", pushTimer, "duration");
       return pushTimer;
     }
@@ -131,18 +136,60 @@ qx.Class.define("zx.server.work.WorkerPool", {
     __runningWorkTrackers: null,
 
     /**
+     * Instruct the pool to start creating workers and polling for work
+     */
+    async startup() {
+      let workDir = this.getWorkDir();
+      await fs.promises.mkdir(workDir, { recursive: true });
+      let files = await fs.promises.readdir(workDir);
+      for (let file of files) {
+        let fullPath = path.join(workDir, file);
+        let stat = await fs.promises.stat(fullPath);
+        if (stat.isDirectory()) {
+          let workResult = await zx.server.work.WorkResult.loadFromDir(fullPath);
+          this.__workResultQueue.push(workResult);
+        }
+      }
+      await this.getQxObject("pool").startup();
+      this.getQxObject("pollTimer").startTimer();
+      this.getQxObject("pushTimer").startTimer();
+    },
+
+    /**
+     * Shut down the pool and all pooled workers
+     *
+     * Shutdown will wait for all pending messages to send before shutting down, unless a destructiveMs is provided
+     * @param {number} [forceAfterMs] - the number of milliseconds to wait before forcibly shutting down. Use any negative value to wait indefinitely. Defaults to -1.
+     */
+    async shutdown(forceAfterMs = -1) {
+      this.getQxObject("pollTimer").killTimer();
+      this.getQxObject("pushTimer").killTimer();
+      await this.getQxObject("pool").shutdown();
+    },
+
+    /**
      * Apply for `poolConfig` property
      */
     _applyPoolConfig(value, oldValue) {
       let pool = this.getQxObject("pool");
       ["minSize", "maxSize", "timeout", "pollInterval"].forEach(prop => {
-        let upname = qx.lang.firstUp(prop);
+        let upname = qx.lang.String.firstUp(prop);
         if (value[prop] !== undefined) {
           pool["set" + upname](value[prop]);
         } else {
-          pool["reset" + qx.lang.firstUp(prop)](value[prop]);
+          pool["reset" + upname](value[prop]);
         }
       });
+    },
+
+    /**
+     * Apply for `workDir` property
+     */
+    _applyWorkDir(value, oldValue) {
+      let pool = this.getQxObject("pool");
+      if (pool.getSize() > 0) {
+        throw new Error("Cannot change workDir while pool is running");
+      }
     },
 
     /**
@@ -172,6 +219,7 @@ qx.Class.define("zx.server.work.WorkerPool", {
     __onWorkTrackerStatusChange(evt) {
       let status = evt.getData();
       let pool = this.getQxObject("pool");
+      let workerTracker = evt.getTarget();
       let workResult = workerTracker.takeWorkResult();
       if (status === "dead") {
         pool.destroyResource(workerTracker);
@@ -181,32 +229,32 @@ qx.Class.define("zx.server.work.WorkerPool", {
       }
       if (workResult) {
         this.__workResultQueue.push(workResult);
+        this.getQxObject("pushTimer").startTimer();
       }
-      this.getQxObject("pushTimer").fire();
     },
 
     /**
      * Event handler for when we need to poll for new work
      */
-    __pollForNewWork() {
-      this.log(`polling for work...`);
-      let work;
+    async __pollForNewWork() {
       if (!this.getQxObject("pool").available()) {
         return;
       }
 
+      let jsonWork;
       try {
-        work = await this.getSchedulerApi().poll(this.classname);
+        this.log(`polling for work...`);
+        jsonWork = await this.getSchedulerApi().pollForWork();
       } catch (e) {
-        this.log(`[${this.classname}]: failed to poll for work: ${e}`);
+        this.log(`failed to poll for work: ${e}`);
         return;
       }
-      if (work) {
-        this.log(`[${this.classname}]: received work!`);
+      if (jsonWork) {
+        this.log(`received work!`);
 
-        let workTracker = await this.getQxObject("pool").acquire();
-        this.__runningWorkTrackers[work.uuid] = workerTracker;
-        workerTracker.runWork(work);
+        let workerTracker = await this.getQxObject("pool").acquire();
+        this.__runningWorkTrackers[jsonWork.uuid] = workerTracker;
+        workerTracker.runWork(jsonWork);
       }
     },
 
@@ -216,10 +264,14 @@ qx.Class.define("zx.server.work.WorkerPool", {
     async __pushQueuedResultsToScheduler() {
       while (this.__workResultQueue.length) {
         let workResult = this.__workResultQueue[0];
-        await this.getSchedulerApi().pushResult({
-          status: workResult.getStatusJson(),
-          log: workResult.getWorkLog()
-        });
+        let jsonResult = await workResult.serializeForScheduler();
+        try {
+          await this.getSchedulerApi().onWorkCompleted(jsonResult);
+        } catch (ex) {
+          this.error(`Failed to push work result to scheduler: ${ex}`);
+          this.getQxObject("pushTimer").startTimer();
+          return;
+        }
         this.__workResultQueue.shift();
         workResult.deleteWorkDir();
       }
@@ -279,35 +331,6 @@ qx.Class.define("zx.server.work.WorkerPool", {
       }
 
       return workerTracker.getWorkResult().getStatusJson();
-    },
-
-    /**
-     * Instruct the pool to start creating workers and polling for work
-     */
-    async startup() {
-      await this.getQxObject("pool").startup();
-      this.getQxObject("pollTimer").startTimer();
-      this.getQxObject("pushTimer").startTimer();
-    },
-
-    /**
-     * Shut down the pool and all pooled workers
-     *
-     * Shutdown will wait for all pending messages to send before shutting down, unless a destructiveMs is provided
-     * @param {number} [forceAfterMs] - the number of milliseconds to wait before forcibly shutting down. Use any negative value to wait indefinitely. Defaults to -1.
-     */
-    async shutdown(forceAfterMs = -1) {
-      this.getQxObject("pollTimer").killTimer();
-
-      let startTime = Date.now();
-      while (this.__pendingMessages.length) {
-        await new Promise(r => setTimeout(r, this.getPushInterval()));
-        if (forceAfterMs >= 0 && Date.now() - startTime > forceAfterMs) {
-          break;
-        }
-      }
-      this.getQxObject("pushTimer").killTimer();
-      await this.getQxObject("pool").shutdown();
     }
   }
 });

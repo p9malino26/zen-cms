@@ -5,11 +5,10 @@ qx.Interface.define("zx.server.work.IWork", {
   members: {
     /**
      * Executes the work
-     * @abstract
-     * @param {(string: message) => void} log - the log function
-     * @param {zx.server.work.OutputClientApi} output - the output api
-     * @returns {Promise<string | void> | string | void}
+     *
+     * @param {zx.server.work.IWorker} worker the Worker that is executing this Work
+     * @returns {Promise<>} A promise that resolves when the work is complete
      */
-    execute(log) {}
+    async execute(worker) {}
   }
 });

@@ -16,22 +16,23 @@ qx.Class.define("zx.demo.server.work.dockerpeer.DockerPeerApp", {
       let schedulerServerTransport = new zx.io.api.transport.loopback.LoopbackServerTransport();
       schedulerClientTransport.connect(schedulerServerTransport);
       schedulerServerTransport.connect(schedulerClientTransport);
-      let schedulerClient = new zx.server.work.api.SchedulerClientApi(schedulerClientTransport);
-      let schedulerServer = new zx.server.work.api.SchedulerServerApi();
-      pool.setSchedulerApi(schedulerClient);
-      schedulerServer.schedule({
+
+      let schedulerClientApi = new zx.io.api.client.GenericClientApiProxy(zx.server.work.scheduler.ISchedulerApi, schedulerClientTransport);
+      pool.setSchedulerApi(schedulerClientApi);
+
+      scheduler.pushWork({
         uuid: "uuid",
         classname: zx.demo.server.work.TestWork.classname,
         compatibility: [],
         args: []
       });
-      schedulerServer.schedule({
+      scheduler.pushWork({
         uuid: "uuid",
         classname: zx.demo.server.work.ErrorWork.classname,
         compatibility: [],
         args: []
       });
-      schedulerServer.addListener("complete", e => {
+      scheduler.addListener("complete", e => {
         console.log('schedulerServer.addListener("complete")', e.getData());
       });
 

@@ -30,6 +30,14 @@ qx.Class.define("zx.cli.commands.work.StartDockerPoolCommand", {
       })
     );
     this.addArgument(
+      new zx.cli.Argument("port").set({
+        description: "port to listen on",
+        type: "integer",
+        value: 4000,
+        required: true
+      })
+    );
+    this.addArgument(
       new zx.cli.Argument("minSize").set({
         description: "minimum number of instances",
         type: "integer",
@@ -67,13 +75,10 @@ qx.Class.define("zx.cli.commands.work.StartDockerPoolCommand", {
       let pool = new zx.server.work.pools.DockerWorkerPool("/zx.work", {
         minSize: args.minSize || 0,
         maxSize: args.maxSize || 2
-      }).set({
-        remoteServerRange: new zx.utils.Range(3000, 4000),
-        nodeDebugRange: new zx.utils.Range(9000, 10_000)
       });
 
       let transport = new zx.io.api.transport.http.HttpClientTransport(protocol + "://" + host + ":" + port);
-      let schedulerApi = new zx.server.work.api.SchedulerClientApi(transport, path);
+      let schedulerApi = new zx.io.api.client.GenericClientApiProxy(zx.server.work.scheduler.ISchedulerApi, transport, path);
       pool.setSchedulerApi(schedulerApi);
       await pool.startup();
     }

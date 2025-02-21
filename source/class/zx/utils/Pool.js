@@ -33,80 +33,53 @@ qx.Class.define("zx.utils.Pool", {
   },
 
   properties: {
+    /** Minimum number of resources to keep in the pool */
     minSize: {
       check: "Number",
-      init: 0
+      init: 0,
+      event: "changeMinSize",
+      apply: "_applyMinSize"
     },
 
+    /** Maximum number of resources to keep in the pool */
     maxSize: {
       check: "Number",
-      init: 10
+      init: 10,
+      event: "changeMaxSize",
+      apply: "_applyMaxSize"
     },
 
+    /** When waiting for a resource to become available, how long to wait before throwing an exception */
     timeout: {
       check: "Number",
       init: 30_000
     },
 
+    /** When waiting for a resource to become available, how long to sleep before checking again */
     pollInterval: {
       check: "Number",
       event: "changePollInterval",
       init: 5_000
     },
 
-    /**
-     * the factory for new resources, and an optional destructor to release them
-     * @type {object}
-     * @prop {() => Promise<TResource>} create - factory function
-     * @prop {(value: TResource) => Promise<void>} [destroy] - optional destructor function
-     */
+    /** The factory for creating and deleting resources */
     factory: {
       check: "zx.utils.IPoolFactory"
     }
   },
 
   events: {
+    /** Fired when a resource is now available, when previously none were available */
     becomeAvailable: "qx.event.type.Event",
+
+    /** Fired when no resources are available, when previously there were some available */
     becomeUnavailable: "qx.event.type.Event",
+
+    /** Fired when a resource is created, the data is the resource */
     createResource: "qx.event.type.Data",
+
+    /** Fired when a resource is about to be destroyed, the data is the resource */
     destroyResource: "qx.event.type.Data"
-  },
-
-  objects: {
-    topup() {
-      const onTopup = async () => {
-        if (this.__pool.size >= this.getMinSize()) {
-          return;
-        }
-        await this.__createNewResource();
-      };
-
-      let topup = new zx.utils.Timeout(null, onTopup);
-      topup.setRecurring(true);
-      this.bind("pollInterval", topup, "duration");
-      return topup;
-    },
-
-    trim() {
-      const onTrim = async () => {
-        let needsTrim = this.__pool.size > this.getMinSize();
-        for (let [resource, availability] of this.__pool) {
-          if (!needsTrim) {
-            break;
-          }
-          if (availability === zx.utils.Pool.UNAVAILABLE) {
-            continue;
-          }
-          await this.__destroyResource(resource);
-          needsTrim = this.__pool.size > this.getMinSize();
-        }
-      };
-
-      let trim = new zx.utils.Timeout(null, onTrim);
-      trim.setRecurring(true);
-      this.bind("pollInterval", trim, "duration");
-      return trim;
-    }
   },
 
   members: {
@@ -120,14 +93,63 @@ qx.Class.define("zx.utils.Pool", {
     __available: false,
 
     /**
+     * Apply method for `minSize`
+     */
+    _applyMinSize(value) {
+      if (value < 0) {
+        throw new Error("Cannot set minSize to be less than 0");
+      }
+      if (value > this.getMaxSize()) {
+        throw new Error("Cannot set minSize to be greater than maxSize");
+      }
+      this.__topup();
+    },
+
+    /**
+     * Apply method for `maxSize`
+     */
+    _applyMaxSize(value) {
+      if (value < this.getMinSize()) {
+        throw new Error("Cannot set maxSize to be less than minSize");
+      }
+      this.__trim();
+    },
+
+    /**
+     * Top up the pool to the minimum size
+     */
+    async __topup() {
+      if (this.__pool.size >= this.getMinSize()) {
+        return;
+      }
+      await this.__createNewResource();
+    },
+
+    /**
+     * Trim the pool to the maximum size
+     */
+    async __trim() {
+      let needsTrim = this.__pool.size > this.getMinSize();
+      for (let [resource, availability] of this.__pool) {
+        if (!needsTrim) {
+          break;
+        }
+        if (availability === zx.utils.Pool.UNAVAILABLE) {
+          continue;
+        }
+        await this.__destroyResource(resource);
+        needsTrim = this.__pool.size > this.getMinSize();
+      }
+    },
+
+    /**
      * startup the pool, begins maintaining the pool size based on `minSize`
      */
     async startup() {
       if (this.__live) {
         return;
       }
-      this.getQxObject("topup").startTimer();
-      this.getQxObject("trim").startTimer();
+      this.__topup();
       this.__updateAvailability();
       this.__live = true;
     },
@@ -139,8 +161,6 @@ qx.Class.define("zx.utils.Pool", {
       if (!this.__live) {
         return;
       }
-      this.getQxObject("topup").killTimer();
-      this.getQxObject("trim").killTimer();
       this.__live = false;
       for (let resource of this.__pool.keys()) {
         await this.__destroyResource(resource);
@@ -259,15 +279,17 @@ qx.Class.define("zx.utils.Pool", {
           throw new Error("Timeout acquiring resource");
         }
 
-        await this.__sleepPollInterval();
+        await zx.utils.Timeout.sleep(this.getPollInterval());
       }
     },
 
     /**
-     * Sleeps for the configured poll interval by awaiting a timeout
+     * Returns the size of the pool
+     *
+     * @returns {Integer}
      */
-    async __sleepPollInterval() {
-      await new Promise(resolve => setTimeout(resolve, this.getPollInterval()));
+    getSize() {
+      return this.__pool.size;
     }
   },
 

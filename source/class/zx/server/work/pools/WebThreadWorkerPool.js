@@ -23,7 +23,7 @@
  */
 qx.Class.define("zx.server.work.pools.WebThreadWorkerPool", {
   /** @template {Worker} TWorker */
-  extend: zx.server.work.WorkerPool,
+  extend: zx.server.work.pools.WorkerPool,
 
   /**
    * @param {object} poolConfig - config for {@link zx.utils.Pool}
@@ -40,7 +40,7 @@ qx.Class.define("zx.server.work.pools.WebThreadWorkerPool", {
   members: {
     /**
      * @override
-     * @returns {Promise<zx.server.work.api.WorkerClientApi>}
+     * @returns {Promise<zx.server.work.IWorkerApi>}
      */
     async _createWorker(apiPath) {
       let webWorker = new Worker(this.__remoteAppPath, { name: apiPath });
