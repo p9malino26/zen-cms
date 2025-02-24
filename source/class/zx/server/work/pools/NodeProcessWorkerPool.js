@@ -25,12 +25,10 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerPool", {
   extend: zx.server.work.pools.WorkerPool,
 
   /**
-   * @param {string} route - the base path on the node remote app for zx apis. Be certain that this exactly
-   *  matches the route configured on the server, eg {@link zx.server.work.runtime.NodePeerService}
    * @param {object} poolConfig - config for {@link zx.utils.Pool}
    */
-  construct(route, poolConfig) {
-    super(route, poolConfig);
+  construct(poolConfig) {
+    super(poolConfig);
     this.__remoteAppPath = remoteAppPath;
   },
 

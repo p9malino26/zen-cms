@@ -37,7 +37,7 @@ qx.Class.define("zx.server.work.pools.LocalWorkerPool", {
       zx.io.api.server.ConnectionManager.getInstance().registerApi(worker.getServerApi(), "/work/pools/local");
       let clientApi = new zx.io.api.client.GenericClientApiProxy(zx.server.work.IWorkerApi, clientTransport, "/work/pools/local");
 
-      let workerTracker = new zx.server.work.pools.LocalWorkerTracker(this, clientApi, serverApi);
+      let workerTracker = new zx.server.work.pools.LocalWorkerTracker(this, worker, clientApi);
       await workerTracker.initialise();
       return workerTracker;
     },

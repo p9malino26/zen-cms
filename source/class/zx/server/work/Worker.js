@@ -7,6 +7,10 @@ qx.Class.define("zx.server.work.Worker", {
     this.__serverApi = new zx.io.api.server.GenericServerApiProxy(zx.server.work.IWorkerApi, this);
   },
 
+  destruct() {
+    this.__serverApi.dispose();
+  },
+
   properties: {
     /** URL to access Chromium, if one is available */
     chromiumUrl: {

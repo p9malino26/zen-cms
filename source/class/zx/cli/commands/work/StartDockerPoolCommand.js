@@ -72,7 +72,7 @@ qx.Class.define("zx.cli.commands.work.StartDockerPoolCommand", {
         return 1;
       }
 
-      let pool = new zx.server.work.pools.DockerWorkerPool("/zx.work", {
+      let pool = new zx.server.work.pools.DockerWorkerPool({
         minSize: args.minSize || 0,
         maxSize: args.maxSize || 2
       });

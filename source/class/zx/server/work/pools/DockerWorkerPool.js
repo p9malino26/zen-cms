@@ -34,13 +34,12 @@ qx.Class.define("zx.server.work.pools.DockerWorkerPool", {
   },
 
   /**
-   * @param {string} route - the base path on the node remote app for zx apis. Be certain that this exactly matches the route configured on the server, eg {@link zx.server.work.runtime.DockerPeerService}
    * @param {object} poolConfig - config for {@link zx.utils.Pool}
    * @param {string} image - the docker image to use. Note: it is expected that the user in the container will be named `zxWorker`
    * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app.
    */
-  construct(route, poolConfig, image, remoteAppPath) {
-    super(route, poolConfig);
+  construct(poolConfig, image, remoteAppPath) {
+    super(poolConfig);
     this.__remoteAppPath = remoteAppPath ?? qx.core.Environment.get("zx.server.work.pools.DockerWorkerPool.remoteAppPath");
     this.__docker = new Docker();
     this.__image = image ?? qx.core.Environment.get("zx.server.work.pools.DockerWorkerPool.imageName");

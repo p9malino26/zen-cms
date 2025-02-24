@@ -305,6 +305,13 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
     },
 
     /**
+     * @Override
+     */
+    getBaseUrl() {
+      return `http://127.0.0.1:${this.__remoteServerPort}`;
+    },
+
+    /**
      * @returns {*} the JSON returned from Chromium's `/json/version` URL
      */
     getJsonVersion() {

@@ -4,7 +4,7 @@ qx.Class.define("zx.demo.server.work.dockerpeer.DockerPeerApp", {
 
   members: {
     async main() {
-      let pool = new zx.server.work.pools.DockerWorkerPool("/zx.work", {
+      let pool = new zx.server.work.pools.DockerWorkerPool({
         minSize: 0,
         maxSize: 2
       }).set({

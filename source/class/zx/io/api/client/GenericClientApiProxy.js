@@ -2,7 +2,7 @@
  * Generic client API proxy, can be used for any API that is defined by an interface
  */
 qx.Class.define("zx.io.api.client.GenericClientApiProxy", {
-  extend: zx.io.api.server.AbstractClientApi,
+  extend: zx.io.api.client.AbstractClientApi,
 
   /**
    * Constructor.  `apiInterface` must conform to the name `package.IName`, and `apiImplementation`

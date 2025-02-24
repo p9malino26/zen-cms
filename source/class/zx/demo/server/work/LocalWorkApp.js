@@ -3,6 +3,9 @@ qx.Class.define("zx.demo.server.work.LocalWorkApp", {
 
   members: {
     async main() {
+      let server = new zx.server.Standalone();
+      await server.start();
+
       let pool = new zx.server.work.pools.LocalWorkerPool({
         minSize: 5
       });

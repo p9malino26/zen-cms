@@ -33,16 +33,9 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
   extend: qx.core.Object,
   implement: [zx.utils.IPoolFactory],
 
-  construct(route, poolConfig, workDir) {
+  construct(poolConfig, workDir) {
     super();
 
-    if (route.endsWith("/")) {
-      route = route.substring(0, route.length - 1);
-    }
-    if (!route.startsWith("/")) {
-      route = `/${route}`;
-    }
-    this.__route = route;
     if (!workDir) {
       workDir = zx.server.Config.resolveTemp("worker-pools/" + this.classname);
     }
@@ -275,13 +268,6 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
         this.__workResultQueue.shift();
         workResult.deleteWorkDir();
       }
-    },
-
-    /**
-     * Returns the API route
-     */
-    getRoute() {
-      return this.__route;
     },
 
     /**
