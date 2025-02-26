@@ -20,6 +20,11 @@ qx.Class.define("zx.server.work.Worker", {
     }
   },
 
+  events: {
+    /** Fired when we are asked to shutdown (eg by the WorkerPool) */
+    shutdown: "qx.event.type.Event"
+  },
+
   members: {
     __workJson: null,
 
@@ -79,6 +84,13 @@ qx.Class.define("zx.server.work.Worker", {
         this.__workJson = null;
       }
       return response;
+    },
+
+    /**
+     * @Override
+     */
+    shutdown() {
+      this.fireEvent("shutdown");
     }
   }
 });

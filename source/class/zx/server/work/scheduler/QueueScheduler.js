@@ -1,3 +1,6 @@
+const fs = require("fs");
+const path = require("path");
+
 /**
  * A simple queue based scheduler
  *
@@ -10,10 +13,11 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
   extend: qx.core.Object,
   implement: [zx.server.work.scheduler.ISchedulerApi],
 
-  construct() {
+  construct(workDir) {
     super();
     this.__queue = [];
     this.__running = {};
+    this.__workDir = workDir;
     this.__serverApi = zx.io.api.ApiUtils.createServerApi(zx.server.work.scheduler.ISchedulerApi, this);
   },
 
@@ -23,6 +27,9 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
   },
 
   members: {
+    /** @type{String?} the directory to store work results */
+    __workDir: null,
+
     /** @type{WorkQueueEntry[]} the queue */
     __queue: null,
 
@@ -31,6 +38,12 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
 
     /** @type{zx.server.work.scheduler.ISchedulerApi} a server API that can be used to call this scheduler */
     __serverApi: null,
+
+    async startup() {
+      if (this.__workDir) {
+        await fs.promises.mkdir(this.__workDir, { recursive: true });
+      }
+    },
 
     /**
      * Adds a work item to the queue
@@ -69,15 +82,23 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
     /**
      * @Override
      */
-    onWorkCompleted(workResult) {
-      this.debug(`Work completed for job ${workResult.workJson.uuid}`);
-      let info = this.__running[workResult.workJson.uuid];
+    onWorkCompleted(workResultData) {
+      this.debug(`Work completed for job ${workResultData.workJson.uuid}`);
+      let info = this.__running[workResultData.workJson.uuid];
       if (info) {
-        delete this.__running[workResult.workJson.uuid];
-        info.promise.resolve(workResult);
-        this.fireDataEvent("workCompleted", workResult);
+        delete this.__running[workResultData.workJson.uuid];
+        info.promise.resolve(workResultData);
+        this.fireDataEvent("workCompleted", workResultData);
       } else {
-        this.debug(`Work completed for job ${workResult.workJson.uuid} but not found in running list (Worker Pool has queued this work)`);
+        this.debug(`Work completed for job ${workResultData.workJson.uuid} but not found in running list (Worker Pool has queued this work)`);
+      }
+      const archiveIt = async () => {
+        let workDir = path.join(this.__workDir, workResultData.workJson.uuid);
+        await fs.promises.mkdir(workDir, { recursive: true });
+        let workResult = zx.server.work.WorkResult.deserializeFromScheduler(workDir, workResultData);
+      };
+      if (this.__workDir) {
+        archiveIt();
       }
     },
 
@@ -88,6 +109,15 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
      */
     getServerApi() {
       return this.__serverApi;
+    },
+
+    /**
+     * Returns the working directory, used for logs etc
+     *
+     * @returns {String?} the directory to store work results
+     */
+    getWorkDir() {
+      return this.__workDir;
     },
 
     /**

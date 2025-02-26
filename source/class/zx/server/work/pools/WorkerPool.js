@@ -124,7 +124,7 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
      * Instruct the pool to start creating workers and polling for work
      */
     async startup() {
-      let workDir = this.getWorkDir();
+      let workDir = path.join(this.getWorkDir(), "work");
       await fs.promises.mkdir(workDir, { recursive: true });
       let files = await fs.promises.readdir(workDir);
       for (let file of files) {
@@ -213,7 +213,7 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
       let workResult = workerTracker.takeWorkResult();
       if (workResult) {
         this.__workResultQueue.push(workResult);
-        delete this.__runningWorkTrackers[workResult.getWorkJson().uuid];
+        delete this.__runningWorkTrackers[workResult.getJsonWork().uuid];
       }
       workerTracker.removeListener("changeStatus", this.__onWorkTrackerStatusChange, this);
     },
@@ -229,6 +229,9 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
       let pool = this.getQxObject("pool");
       let workerTracker = evt.getTarget();
       let workResult = workerTracker.takeWorkResult();
+      if (workResult) {
+        delete this.__runningWorkTrackers[workResult.getJsonWork().uuid];
+      }
       if (status === "dead") {
         pool.destroyResource(workerTracker);
       } else if (status === "stopped") {
@@ -246,13 +249,12 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
      */
     async __pollForNewWork() {
       if (this.getQxObject("pool").available()) {
-        let jsonWork;
+        let jsonWork = null;
         try {
           this.debug(`polling for work...`);
           jsonWork = await this.getSchedulerApi().pollForWork();
         } catch (e) {
           this.debug(`failed to poll for work: ${e}`);
-          return;
         }
         if (jsonWork) {
           this.debug(`received work!`);

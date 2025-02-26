@@ -1,0 +1,56 @@
+Starting node process: wtfnode wtfnode /Users/john/dev/Qooxdoo/Zen-CMS/zx work start-worker --port 3000
+  pid: 43771
+  pwd: /Users/john/dev/Qooxdoo/Zen-CMS
+  httpPort: 3000
+  nodeDebugPort: null
+
+(node:43772) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Using config from /Users/john/dev/Qooxdoo/Zen-CMS/cms.json
+No SMTP server configuration, so sending emails not possible.
+2025-02-26 20:59:53 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 3000
+2025-02-26 20:59:53 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [68a17e6f-ce04-4ce9-843f-05fa9cddc7aa]
+2025-02-26 20:59:57 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [b5748500-44dc-4dcc-9e42-dc9ce63e3842]
+the task is running!
+2025-02-26 20:59:57 zx.server.work.Worker[17-0]: Hello, World!
+2025-02-26 20:59:57 zx.server.work.WorkerApi_Server[30-0]: Publishing log to zx.io.api.server.Session[20-0]
+2025-02-26 20:59:57 zx.io.api.server.Session[20-0]: 68a17e6f-ce04-4ce9-843f-05fa9cddc7aa added publication, all publications: [ {...(3)} ]
+2025-02-26 20:59:57 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+2025-02-26 20:59:57 zx.server.work.Worker[17-0]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+2025-02-26 20:59:57 zx.server.work.WorkerApi_Server[30-0]: Publishing log to zx.io.api.server.Session[20-0]
+2025-02-26 20:59:57 zx.io.api.server.Session[20-0]: 68a17e6f-ce04-4ce9-843f-05fa9cddc7aa added publication, all publications: [ {...(3)}, {...(3)} ]
+2025-02-26 20:59:57 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+2025-02-26 20:59:57 zx.server.work.Worker[17-0]: b5748500 Doing thing 0
+2025-02-26 20:59:57 zx.server.work.WorkerApi_Server[30-0]: Publishing log to zx.io.api.server.Session[20-0]
+2025-02-26 20:59:57 zx.io.api.server.Session[20-0]: 68a17e6f-ce04-4ce9-843f-05fa9cddc7aa added publication, all publications: [ {...(3)}, {...(3)}, {...(3)} ]
+2025-02-26 20:59:57 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+2025-02-26 20:59:58 zx.io.api.server.ConnectionManager[33-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+2025-02-26 20:59:58 zx.io.api.server.ConnectionManager[33-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+2025-02-26 20:59:58 zx.io.api.server.ConnectionManager[33-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+2025-02-26 20:59:58 zx.server.work.Worker[17-0]: b5748500 Doing thing 1
+2025-02-26 20:59:58 zx.server.work.WorkerApi_Server[30-0]: Publishing log to zx.io.api.server.Session[20-0]
+2025-02-26 20:59:58 zx.io.api.server.Session[20-0]: 68a17e6f-ce04-4ce9-843f-05fa9cddc7aa added publication, all publications: [ {...(3)} ]
+2025-02-26 20:59:58 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+2025-02-26 20:59:59 zx.io.api.server.ConnectionManager[33-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+2025-02-26 20:59:59 zx.server.work.Worker[17-0]: b5748500 Doing thing 2
+2025-02-26 20:59:59 zx.server.work.WorkerApi_Server[30-0]: Publishing log to zx.io.api.server.Session[20-0]
+2025-02-26 20:59:59 zx.io.api.server.Session[20-0]: 68a17e6f-ce04-4ce9-843f-05fa9cddc7aa added publication, all publications: [ {...(3)} ]
+2025-02-26 20:59:59 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+2025-02-26 21:00:00 zx.io.api.server.ConnectionManager[33-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+2025-02-26 21:00:00 zx.server.work.Worker[17-0]: zx.demo.server.work.TestWork [b5748500-44dc-4dcc-9e42-dc9ce63e3842] completed successfully, result = success!
+2025-02-26 21:00:00 zx.server.work.WorkerApi_Server[30-0]: Publishing complete to zx.io.api.server.Session[20-0]
+2025-02-26 21:00:00 zx.io.api.server.Session[20-0]: 68a17e6f-ce04-4ce9-843f-05fa9cddc7aa no subscriptionCount
+2025-02-26 21:00:02 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs
+[WTF Node?] open handles:
+- File descriptors: (note: stdio always exists)
+  - fd 2 (stdio)
+  - fd 1 (stdio)
+- Sockets:
+  - 127.0.0.1:52473 -> 127.0.0.1:27017
+  - 127.0.0.1:52474 -> 127.0.0.1:27017
+  - 127.0.0.1:52475 -> 127.0.0.1:27017
+  - 127.0.0.1:52580 -> 127.0.0.1:27017
+- Timers:
+Unable to determine callsite for "Function". Did you require `wtfnode` at the top of your entry point?
+  - (10000 ~ 10 s) (anonymous) @ unknown:0
+  - (1000 ~ 1 s) bound _onTimeout @ /Users/john/dev/Qooxdoo/Zen-CMS/compiled/source-node/transpiled/zx/utils/Timeout.js:127

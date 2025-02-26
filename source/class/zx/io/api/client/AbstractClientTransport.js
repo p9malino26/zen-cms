@@ -16,11 +16,11 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
 
     this.__serverUri = serverUri;
 
-    let pollTimer = new zx.utils.Timeout(null, this.__poll, this);
-    this.__pollTimer = pollTimer;
-    pollTimer.setRecurring(true);
-    this.bind("pollInterval", pollTimer, "duration");
-    this.bind("polling", pollTimer, "enabled");
+    this.__pollTimer = new zx.utils.Timeout(null, this.__poll, this).set({
+      recurring: true,
+      duration: this.getPollInterval(),
+      enabled: this.getPolling()
+    });
   },
 
   destruct() {
@@ -44,13 +44,18 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
     polling: {
       init: false,
       check: "Boolean",
-      event: "changePolling"
+      event: "changePolling",
+      apply: "_applyPolling"
     },
 
+    /**
+     * How often to poll the server for messages
+     */
     pollInterval: {
       init: 1000,
       event: "changePollInterval",
-      check: "Integer"
+      check: "Integer",
+      apply: "_applyPollInterval"
     },
 
     /**
@@ -69,9 +74,13 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
   },
 
   members: {
+    /** @type{Integer} number of consecutive times that we get an exception sending to the server */
+    __numberConsecutiveFailures: 0,
+
     getServerUri() {
       return this.__serverUri;
     },
+
     /**
      * Timer used to poll all subscribed hostnames
      * every given interval
@@ -133,12 +142,42 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
     /**
      * Polls the hostname for this transport,
      * if we have subscriptions.
+     *
      * @returns {Promise<void>}
      */
     async __poll() {
-      if (!this.__serverUri || this.__subscriptions === 0) return;
+      if (!this.__serverUri || this.__subscriptions === 0) {
+        return;
+      }
       let requestJson = { headers: { "Session-Uuid": this.__sessionUuid }, type: "poll", body: {} };
-      await this.postMessage(this.__serverUri, requestJson);
+      try {
+        await this.postMessage(this.__serverUri, requestJson);
+        this.__numberConsecutiveFailures = 0;
+      } catch (e) {
+        this.__numberConsecutiveFailures++;
+        if (this.__numberConsecutiveFailures > zx.io.api.client.AbstractClientTransport.MAX_CONSECUTIVE_POLLING_FAILURES) {
+          this.error("Too many consecutive failures, stopping polling");
+          this.setPolling(false);
+        }
+      }
+    },
+
+    /**
+     * Apply function for the polling property
+     */
+    _applyPolling(value) {
+      this.__pollTimer.setEnabled(value);
+    },
+
+    /**
+     * Apply function for the pollInterval property
+     */
+    _applyPollInterval(value) {
+      this.__pollTimer.setDuration(value);
     }
+  },
+
+  statics: {
+    MAX_CONSECUTIVE_POLLING_FAILURES: 10
   }
 });

@@ -106,18 +106,23 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
      * Note: This does not clear the session data on the server ATMw
      */
     terminate() {
-      if (this.__terminated) return;
+      if (this.__terminated) {
+        return;
+      }
+
       //reject pending subscriptions
       for (let [eventName, subData] of Object.entries(this.__subscriptions)) {
         if (subData.promise) {
-          subData.promise.reject(new Error("Client API terminated"));
+          subData.promise.reject(new Error(`Client API terminated - subscription ${this.classname}.${eventName}`));
         }
         this.__transport.unsubscribe();
       }
 
       //reject pending method calls
       for (let pending of Object.values(this.__pendingMethodCalls)) {
-        pending.promise.reject(new Error("Client API terminated"));
+        let promise = pending.promise;
+        pending.promise = null;
+        promise.reject(new Error(`Client API terminated - method ${this.classname}.${pending.methodName}`));
       }
 
       //Disconnect from the transport
@@ -306,7 +311,9 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
         .catch(e => {
           this.error("Error posting message", e);
           delete this.__pendingMethodCalls[pending.callIndex];
-          promise.reject(e);
+          if (pending.promise !== null) {
+            promise.reject(e);
+          }
         });
 
       return promise;

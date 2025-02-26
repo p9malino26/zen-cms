@@ -143,7 +143,7 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
 
       let returnData;
       if (handler) {
-        returnData = await handler(request, response);
+        returnData = await handler.call(this, request, response);
       } else {
         //If no REST handle found, try to call the method directly, with request and response as arguments
         if (!this[requestMethodPath]) {

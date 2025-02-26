@@ -106,6 +106,15 @@ qx.Class.define("zx.server.work.WorkResult", {
     },
 
     /**
+     * Returns the JSON for the work
+     *
+     * @returns {*} the JSON for the work
+     */
+    getJsonWork() {
+      return this.__jsonWork;
+    },
+
+    /**
      * Deletes the work directory
      */
     async deleteWorkDir() {

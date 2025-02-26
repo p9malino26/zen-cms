@@ -143,7 +143,7 @@ qx.Class.define("zx.utils.Pool", {
         if (availability === zx.utils.Pool.UNAVAILABLE) {
           continue;
         }
-        await this.__destroyResource(resource);
+        await this.destroyResource(resource);
         needsTrim = this.__pool.size > this.getMinSize();
       }
     },
@@ -170,7 +170,7 @@ qx.Class.define("zx.utils.Pool", {
       this.__live = false;
       for (let resource of this.__pool.keys()) {
         if (this.__pool.get(resource) === zx.utils.Pool.AVAILABLE) {
-          await this.__destroyResource(resource);
+          await this.destroyResource(resource);
         }
       }
       if (this.__pool.size > 0) {
@@ -216,7 +216,7 @@ qx.Class.define("zx.utils.Pool", {
      */
     async release(resource) {
       if (!this.__live) {
-        this.__destroyResource(resource);
+        this.destroyResource(resource);
       } else {
         this.__pool.set(resource, zx.utils.Pool.AVAILABLE);
       }
@@ -229,7 +229,12 @@ qx.Class.define("zx.utils.Pool", {
      * @param {TResource} resource - a resource
      */
     async destroyResource(resource) {
-      this.__destroyResource(resource);
+      this.fireDataEvent("destroyResource", resource);
+      this.__pool.delete(resource);
+      await this.getFactory().destroyPoolableEntity(resource);
+      if (this.__shutdownCompletePromise && this.__pool.size === 0) {
+        this.__shutdownCompletePromise.resolve();
+      }
       this.__updateAvailability();
     },
 
@@ -257,19 +262,6 @@ qx.Class.define("zx.utils.Pool", {
       this.fireDataEvent("createResource", resource);
       this.__pool.set(resource, zx.utils.Pool.AVAILABLE);
       return resource;
-    },
-
-    /**
-     * Destroys a resource, only if it is not in use
-     * @param {TResource} resource - a resource
-     */
-    async __destroyResource(resource) {
-      this.fireDataEvent("destroyResource", resource);
-      this.__pool.delete(resource);
-      await this.getFactory().destroyPoolableEntity(resource);
-      if (this.__shutdownCompletePromise && this.__pool.size === 0) {
-        this.__shutdownCompletePromise.resolve();
-      }
     },
 
     /**

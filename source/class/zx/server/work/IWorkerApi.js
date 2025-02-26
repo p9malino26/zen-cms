@@ -47,6 +47,11 @@ qx.Interface.define("zx.server.work.IWorkerApi", {
      * @param {zx.server.work.IWork} work The piece of work to execute
      * @returns {Promise<string>} A promise that resolves with the result of the work
      */
-    run(work) {}
+    run(work) {},
+
+    /**
+     * Called to shutdown the worker process
+     */
+    shutdown() {}
   }
 });

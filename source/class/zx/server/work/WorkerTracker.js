@@ -20,6 +20,12 @@ qx.Class.define("zx.server.work.WorkerTracker", {
     this.__workerClientApi = workerClientApi;
   },
 
+  destruct() {
+    this.__workerClientApi.terminate();
+    this.__workerClientApi.dispose();
+    this.__workerClientApi = null;
+  },
+
   properties: {
     status: {
       init: "waiting",
@@ -74,6 +80,15 @@ qx.Class.define("zx.server.work.WorkerTracker", {
     },
 
     /**
+     * Returns the WorkerPool for this WorkerTracker
+     *
+     * @returns {zx.server.work.pools.WorkerPool}
+     */
+    getWorkerPool() {
+      return this.__workerPool;
+    },
+
+    /**
      * Called to start a new piece of work on the worker
      *
      * @param {*} jsonWork
@@ -83,7 +98,7 @@ qx.Class.define("zx.server.work.WorkerTracker", {
         throw new Error("WorkerTracker already has work");
       }
       this.__jsonWork = jsonWork;
-      let workdir = path.join(this.__workerPool.getWorkDir(), jsonWork.uuid);
+      let workdir = path.join(this.__workerPool.getWorkDir(), "work", jsonWork.uuid);
       this.__workResult = new zx.server.work.WorkResult();
       await this.__workResult.initialize(workdir, jsonWork);
       this.setStatus("running");
@@ -98,7 +113,11 @@ qx.Class.define("zx.server.work.WorkerTracker", {
      * @param {String} message
      */
     appendWorkLog(message) {
-      this.__workResult.appendWorkLog(message);
+      if (this.__workResult) {
+        this.__workResult.appendWorkLog(message);
+      } else {
+        this.info(message);
+      }
     },
 
     /**
