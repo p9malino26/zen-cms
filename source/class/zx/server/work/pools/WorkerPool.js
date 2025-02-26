@@ -96,28 +96,17 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
       pool.setFactory(this);
       pool.addListener("becomeAvailable", () => {
         this.debug("pool sent becomeAvailable");
-        this.getQxObject("pollTimer").startTimer();
+        this.__pollTimer.startTimer();
       });
       pool.addListener("becomeUnavailable", () => {
         this.debug("pool sent becomeUnavailable");
-        this.getQxObject("pollTimer").killTimer();
+        if (this.__pollTimer) {
+          this.__pollTimer.killTimer();
+        }
       });
       pool.addListener("createResource", this.__onPoolCreateResource, this);
       pool.addListener("destroyResource", this.__onPoolDestroyResource, this);
       return pool;
-    },
-
-    pollTimer() {
-      let pollTimer = new zx.utils.Timeout(null, this.__pollForNewWork, this);
-      pollTimer.setRecurring(true);
-      this.bind("pollInterval", pollTimer, "duration");
-      return pollTimer;
-    },
-
-    pushTimer() {
-      let pushTimer = new zx.utils.Timeout(null, () => this.__pushQueuedResultsToScheduler());
-      this.bind("pushInterval", pushTimer, "duration");
-      return pushTimer;
     }
   },
 
@@ -127,6 +116,9 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
 
     /** @type{Object<String,zx.server.work.WorkTracker>} WorkTrackers that are currently running Work, indexed by work UUID */
     __runningWorkTrackers: null,
+
+    __pollTimer: null,
+    __pushTimer: null,
 
     /**
      * Instruct the pool to start creating workers and polling for work
@@ -146,8 +138,18 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
         }
       }
       await this.getQxObject("pool").startup();
-      this.getQxObject("pollTimer").startTimer();
-      this.getQxObject("pushTimer").startTimer();
+      this.__pollTimer = new zx.utils.Timeout(null, this.__pollForNewWork, this).set({
+        recurring: false,
+        duration: this.getPollInterval()
+      });
+
+      this.__pushTimer = new zx.utils.Timeout(null, this.__pushQueuedResultsToScheduler, this).set({
+        recurring: false,
+        duration: this.getPushInterval()
+      });
+
+      this.__pushTimer.startTimer();
+      this.__pollTimer.startTimer();
     },
 
     /**
@@ -157,9 +159,17 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
      * @param {number} [forceAfterMs] - the number of milliseconds to wait before forcibly shutting down. Use any negative value to wait indefinitely. Defaults to -1.
      */
     async shutdown(forceAfterMs = -1) {
-      this.getQxObject("pollTimer").killTimer();
-      this.getQxObject("pushTimer").killTimer();
+      if (!this.__pollTimer) {
+        throw new Error("WorkerPool is not running and cannot be shutdown");
+      }
       await this.getQxObject("pool").shutdown();
+      this.__pollTimer.killTimer();
+      this.__pollTimer.dispose();
+      this.__pollTimer = null;
+      this.__pushTimer.killTimer();
+      this.__pushTimer.dispose();
+      this.__pushTimer = null;
+      await this.__pushQueuedResultsToScheduler();
     },
 
     /**
@@ -227,7 +237,7 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
       }
       if (workResult) {
         this.__workResultQueue.push(workResult);
-        this.getQxObject("pushTimer").startTimer();
+        this.__pushTimer.startTimer();
       }
     },
 
@@ -235,44 +245,54 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
      * Event handler for when we need to poll for new work
      */
     async __pollForNewWork() {
-      if (!this.getQxObject("pool").available()) {
-        return;
-      }
+      if (this.getQxObject("pool").available()) {
+        let jsonWork;
+        try {
+          this.debug(`polling for work...`);
+          jsonWork = await this.getSchedulerApi().pollForWork();
+        } catch (e) {
+          this.debug(`failed to poll for work: ${e}`);
+          return;
+        }
+        if (jsonWork) {
+          this.debug(`received work!`);
 
-      let jsonWork;
-      try {
-        this.debug(`polling for work...`);
-        jsonWork = await this.getSchedulerApi().pollForWork();
-      } catch (e) {
-        this.debug(`failed to poll for work: ${e}`);
-        return;
+          let workerTracker = await this.getQxObject("pool").acquire();
+          this.__runningWorkTrackers[jsonWork.uuid] = workerTracker;
+          workerTracker.runWork(jsonWork);
+        }
       }
-      if (jsonWork) {
-        this.debug(`received work!`);
-
-        let workerTracker = await this.getQxObject("pool").acquire();
-        this.__runningWorkTrackers[jsonWork.uuid] = workerTracker;
-        workerTracker.runWork(jsonWork);
-      }
+      this.__pollTimer.startTimer();
     },
 
     /**
      * Called on a timer to send results back to the scheduler
      */
+    __pushQueuedResultsToSchedulerPromise: null,
     async __pushQueuedResultsToScheduler() {
-      while (this.__workResultQueue.length) {
-        let workResult = this.__workResultQueue[0];
-        let jsonResult = await workResult.serializeForScheduler();
-        try {
-          await this.getSchedulerApi().onWorkCompleted(jsonResult);
-        } catch (ex) {
-          this.error(`Failed to push work result to scheduler: ${ex}`);
-          this.getQxObject("pushTimer").startTimer();
-          return;
-        }
-        this.__workResultQueue.shift();
-        workResult.deleteWorkDir();
+      if (this.__pushQueuedResultsToSchedulerPromise) {
+        return await this.__pushQueuedResultsToSchedulerPromise;
       }
+      const doPushQueuedResultsToScheduler = async () => {
+        while (this.__workResultQueue.length) {
+          let workResult = this.__workResultQueue[0];
+          let jsonResult = await workResult.serializeForScheduler();
+          try {
+            await this.getSchedulerApi().onWorkCompleted(jsonResult);
+          } catch (ex) {
+            this.error(`Failed to push work result to scheduler: ${ex}`);
+            break;
+          }
+          this.__workResultQueue.shift();
+          workResult.deleteWorkDir();
+        }
+        if (this.__workResultQueue.length) {
+          this.__pushTimer.startTimer();
+        }
+      };
+      this.__pushQueuedResultsToSchedulerPromise = doPushQueuedResultsToScheduler();
+      await this.__pushQueuedResultsToSchedulerPromise;
+      this.__pushQueuedResultsToSchedulerPromise = null;
     },
 
     /**

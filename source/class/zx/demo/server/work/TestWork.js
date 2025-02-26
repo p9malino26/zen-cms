@@ -6,7 +6,7 @@ qx.Class.define("zx.demo.server.work.TestWork", {
    *
    * @param {integer} iterations
    */
-  construct(iterations = 10) {
+  construct(iterations = 3) {
     super();
     this.__iterations = iterations;
   },

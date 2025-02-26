@@ -65,6 +65,15 @@ qx.Class.define("zx.server.work.WorkerTracker", {
     },
 
     /**
+     * Returns the WorkerClientApi for this WorkerTracker
+     *
+     * @returns {zx.server.work.IWorkerApi}
+     */
+    getWorkerClientApi() {
+      return this.__workerClientApi;
+    },
+
+    /**
      * Called to start a new piece of work on the worker
      *
      * @param {*} jsonWork

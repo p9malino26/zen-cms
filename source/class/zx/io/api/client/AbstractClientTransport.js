@@ -23,6 +23,11 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
     this.bind("polling", pollTimer, "enabled");
   },
 
+  destruct() {
+    this.__pollTimer.dispose();
+    this.__pollTimer = null;
+  },
+
   events: {
     /**
      * @type {zx.io.api.IRequestJson}
@@ -98,7 +103,7 @@ qx.Class.define("zx.io.api.client.AbstractClientTransport", {
      */
     unsubscribe() {
       this.__subscriptions--;
-      if (qx.core.Environment.get("qx.Debug")) {
+      if (qx.core.Environment.get("qx.debug")) {
         if (this.__subscriptions == -1) {
           console.warn("You have unsubscribed more times than you have subscribed. There is a bug in your code.");
           debugger;

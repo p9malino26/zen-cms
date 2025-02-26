@@ -27,6 +27,11 @@ qx.Class.define("zx.io.persistence.DatabaseController", {
     this.bind("statusFile", this.__watcher, "statusFile");
   },
 
+  destruct() {
+    this.__watcher.dispose();
+    this.__watcher = null;
+  },
+
   properties: {
     /** Status will be periodically saved to this file, if provided */
     statusFile: {

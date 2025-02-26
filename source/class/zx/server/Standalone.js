@@ -118,8 +118,10 @@ qx.Class.define("zx.server.Standalone", {
      * Called to stop the server
      */
     async stop() {
-      this._site.dispose();
-      this._site = null;
+      if (this._site) {
+        this._site.dispose();
+        this._site = null;
+      }
       this._renderer.dispose();
       this._renderer = null;
       await this._dbController.stop();

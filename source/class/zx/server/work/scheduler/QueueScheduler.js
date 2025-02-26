@@ -97,6 +97,15 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
      */
     getQueueSize() {
       return this.__queue.length;
+    },
+
+    /**
+     * Returns the number of tasks currently running
+     *
+     * @returns {Number} the number of items running
+     */
+    getRunningSize() {
+      return Object.keys(this.__running).length;
     }
   }
 });

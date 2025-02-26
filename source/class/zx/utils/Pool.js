@@ -92,6 +92,8 @@ qx.Class.define("zx.utils.Pool", {
     /**@type {boolean}*/
     __available: false,
 
+    __shutdownCompletePromise: null,
+
     /**
      * Apply method for `minSize`
      */
@@ -167,7 +169,13 @@ qx.Class.define("zx.utils.Pool", {
       }
       this.__live = false;
       for (let resource of this.__pool.keys()) {
-        await this.__destroyResource(resource);
+        if (this.__pool.get(resource) === zx.utils.Pool.AVAILABLE) {
+          await this.__destroyResource(resource);
+        }
+      }
+      if (this.__pool.size > 0) {
+        let promise = (this.__shutdownCompletePromise = new qx.Promise());
+        await promise;
       }
       this.__updateAvailability();
     },
@@ -207,7 +215,11 @@ qx.Class.define("zx.utils.Pool", {
      * @param {TResource} resource - a resource
      */
     async release(resource) {
-      this.__pool.set(resource, zx.utils.Pool.AVAILABLE);
+      if (!this.__live) {
+        this.__destroyResource(resource);
+      } else {
+        this.__pool.set(resource, zx.utils.Pool.AVAILABLE);
+      }
       this.__updateAvailability();
     },
 
@@ -252,13 +264,12 @@ qx.Class.define("zx.utils.Pool", {
      * @param {TResource} resource - a resource
      */
     async __destroyResource(resource) {
-      // safety check: do not destroy a resource that is unavailable
-      if (this.__pool.get(resource) === zx.utils.Pool.UNAVAILABLE) {
-        return;
-      }
       this.fireDataEvent("destroyResource", resource);
       this.__pool.delete(resource);
       await this.getFactory().destroyPoolableEntity(resource);
+      if (this.__shutdownCompletePromise && this.__pool.size === 0) {
+        this.__shutdownCompletePromise.resolve();
+      }
     },
 
     /**

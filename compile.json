@@ -148,13 +148,6 @@
       "exclude": ["qx.bom.Selector"],
       "type": "node",
       "class": "zx.demo.io.api.srv.ServerApp"
-    },
-    {
-      "title": "Demo app for running work in the same process",
-      "class": "zx.demo.server.work.LocalWorkApp",
-      "name": "demo-work-local",
-      "type": "node",
-      "include": ["qx.core.Init"]
     }
   ],
   "sass": {

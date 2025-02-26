@@ -1,9 +1,34 @@
-qx.Class.define("zx.demo.server.work.LocalWorkApp", {
-  extend: qx.application.Basic,
+/* ************************************************************************
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2022 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
+
+/**
+ * This command will start a Worker and listen on a port for HTTP traffic for
+ * API requests; this is typically run inside a Docker container, but could also be
+ * run on a local machine for testing and development
+ */
+qx.Class.define("zx.cli.commands.demo.work.LocalWorkerPoolCommand", {
+  extend: zx.cli.Command,
+
+  construct() {
+    super("local-worker-pool", "Demos using a LocalWorkerPool with a scheduler");
+  },
 
   members: {
-    async main() {
-      qx.log.Logger.register(zx.utils.NativeLogger);
+    async run() {
       let server = new zx.server.Standalone();
       await server.start();
 
@@ -37,10 +62,11 @@ qx.Class.define("zx.demo.server.work.LocalWorkApp", {
           compatibility: [],
           args: []
         });
-        scheduler.addListener("workCompleted", e => {
-          if (scheduler.getQueueSize() == 0) {
+        scheduler.addListener("workCompleted", async e => {
+          if (scheduler.getRunningSize() == 0) {
             console.log("All work completed");
-            process.exit(0);
+            await pool.shutdown();
+            await server.stop();
           }
         });
       }, 2000);

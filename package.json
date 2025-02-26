@@ -50,6 +50,7 @@
     "chokidar": "^3.6.0",
     "columnify": "^1.6.0",
     "connect-mongo": "^4.4.1",
+    "console-table-printer": "^2.12.1",
     "cookie-signature": "^1.2.1",
     "dockerode": "^3.3.5",
     "es6-promise-pool": "^2.5.0",

@@ -4,27 +4,32 @@
  */
 qx.Class.define("zx.io.api.server.SessionManager", {
   extend: qx.core.Object,
-  type: "singleton",
 
   construct() {
     super();
-    /**
-     * @type {Object<String, zx.io.api.server.Session>}
-     */
     this.__sessionByUuid = {};
 
-    //sweeper for finding and killing sessions that have been inactive for too long
-    const killSessionsLoop = () => {
-      setTimeout(() => {
-        this.__killOldSessions();
-        killSessionsLoop();
-      }, this.constructor.KILL_OLD_SESSIONS_INTERVAL);
-    };
+    if (zx.io.api.server.SessionManager.__instance) {
+      throw new Error("zx.io.api.server.SessionManager is a singleton");
+    }
 
-    killSessionsLoop();
+    this.__killOldSessionsTimer = new zx.utils.Timeout(zx.io.api.server.SessionManager.KILL_OLD_SESSIONS_INTERVAL, this.__killOldSessions, this).set({
+      recurring: false
+    });
+  },
+
+  destruct() {
+    if (zx.io.api.server.SessionManager.__instance === this) {
+      zx.io.api.server.SessionManager.__instance = null;
+    }
+    this.__killOldSessionsTimer.dispose();
+    this.__killOldSessionsTimer = null;
   },
 
   members: {
+    /** @type {Object<String, zx.io.api.server.Session>} */
+    __sessionByUuid: null,
+
     /**
      * Kills sessions which have been inactive for too long
      */
@@ -36,9 +41,21 @@ qx.Class.define("zx.io.api.server.SessionManager", {
           session.destroy();
         }
       }
+      if (!this.isEmpty()) {
+        this.__killOldSessionsTimer.startTimer();
+      }
+    },
+
+    shutdown() {
+      for (let uuid in this.__sessionByUuid) {
+        let session = this.__sessionByUuid[uuid];
+        session.destroy();
+      }
+      this.__sessionByUuid = {};
     },
 
     /**
+     * Returns a session by UUID
      *
      * @param {string} uuid
      * @returns {zx.io.api.server.Session}
@@ -48,6 +65,7 @@ qx.Class.define("zx.io.api.server.SessionManager", {
     },
 
     /**
+     * Returns all sessions
      *
      * @returns {zx.io.api.server.Session[]}
      */
@@ -56,20 +74,47 @@ qx.Class.define("zx.io.api.server.SessionManager", {
     },
 
     /**
+     * Adds a session to the registry
+     *
      * @param {zx.io.api.server.Session} session
      */
     addSession(session) {
+      let isFirst = !this.isEmpty();
       this.__sessionByUuid[session.toUuid()] = session;
+      if (isFirst) {
+        this.__killOldSessionsTimer.startTimer();
+      }
     },
 
     /**
+     * Removes a session from the registry
+     *
      * @param {zx.io.api.server.Session} session
      */
     removeSession(session) {
       delete this.__sessionByUuid[session.toUuid()];
+    },
+
+    /**
+     * Detects whether there are no sessions
+     *
+     * @returns {Boolean}
+     */
+    isEmpty() {
+      return Object.keys(this.__sessionByUuid).length == 0;
     }
   },
+
   statics: {
+    __instance: null,
+
+    getInstance() {
+      if (!zx.io.api.server.SessionManager.__instance) {
+        zx.io.api.server.SessionManager.__instance = new zx.io.api.server.SessionManager();
+      }
+      return this.__instance;
+    },
+
     /**
      * How often to look for and kill old sessions
      */

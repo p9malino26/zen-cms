@@ -37,6 +37,10 @@ qx.Class.define("zx.utils.Timeout", {
     if (callback) {
       this.addListener("timeout", callback, context);
     }
+    if (!zx.utils.Timeout.__allTimers) {
+      zx.utils.Timeout.__allTimers = {};
+    }
+    zx.utils.Timeout.__allTimers[this.toHashCode()] = this;
   },
 
   /**
@@ -44,6 +48,7 @@ qx.Class.define("zx.utils.Timeout", {
    */
   destruct() {
     this.killTimer();
+    delete zx.utils.Timeout.__allTimers[this.toHashCode()];
   },
 
   properties: {
@@ -109,9 +114,14 @@ qx.Class.define("zx.utils.Timeout", {
      * Starts the timer
      */
     startTimer() {
+      if (qx.core.Environment.get("qx.debug")) {
+        if (this.isDisposed()) {
+          throw new Error("Cannot start a timer that has been disposed");
+        }
+      }
       if (this.isEnabled()) {
         var dur = this.getDuration();
-        if (this.__timerId == null && dur > 0) {
+        if (this.__timerId === null && dur > 0) {
           this.__timerId = setTimeout(this.__onTimeoutBound, dur);
           this.fireEvent("reset");
         }
@@ -154,7 +164,7 @@ qx.Class.define("zx.utils.Timeout", {
         } catch (ex) {
           this.error("Exception while firing timeout: " + ex, ex);
         }
-        if (this.isEnabled() && this.isRecurring()) {
+        if (this.isEnabled() && this.isRecurring() && !this.isDisposed()) {
           this.startTimer();
         }
       }
