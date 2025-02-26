@@ -26,7 +26,7 @@ qx.Class.define("zx.io.api.server.AbstractServerApi", {
      * Override this field in your implementation to define the publications that this API can publish
      * @type {{ [publicationName: string]: any }}
      */
-    _publications: null,
+    _publications: {},
 
     /**
      * @type {string}

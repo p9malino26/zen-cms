@@ -26,7 +26,11 @@ qx.Class.define("zx.io.api.transport.loopback.LoopbackClientTransport", {
   extend: zx.io.api.client.AbstractClientTransport,
 
   events: {
-    message: "qx.event.type.Data"
+    /**
+     * @type {{path: string, requestJson: zx.io.api.IRequestJson}} This event is fired in order to send data
+     * to the loopback server transport
+     */
+    post: "qx.event.type.Data"
   },
 
   members: {
@@ -47,11 +51,11 @@ qx.Class.define("zx.io.api.transport.loopback.LoopbackClientTransport", {
     /**
      * @override
      */
-    postMessage(uri, requestJson) {
+    postMessage(path, requestJson) {
       if (!this.__server) {
         throw new Error("Not connected to server");
       }
-      this.fireDataEvent("post", { uri, requestJson });
+      this.fireDataEvent("post", { path, requestJson });
     },
 
     /**

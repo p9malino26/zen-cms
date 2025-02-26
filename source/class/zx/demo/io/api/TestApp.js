@@ -63,8 +63,8 @@ qx.Class.define("zx.demo.io.api.TestApp", {
     },
 
     async __runTest() {
-      // let clientTransport = this.__getBrowserClientTransport();
-      let clientTransport = this.__getHttpClientTransport();
+      let clientTransport = this.__getBrowserClientTransport();
+      // let clientTransport = this.__getHttpClientTransport();
       //Server
 
       //Client
@@ -95,9 +95,10 @@ qx.Class.define("zx.demo.io.api.TestApp", {
     },
 
     __getBrowserClientTransport() {
-      let serverTransport = new zx.demo.io.api.BrowserTransportServer();
-      let clientTransport = new zx.demo.io.api.BrowserTransportClient(serverTransport);
-      serverTransport.setClient(clientTransport);
+      let clientTransport = new zx.io.api.transport.loopback.LoopbackClientTransport();
+      let serverTransport = new zx.io.api.transport.loopback.LoopbackServerTransport();
+      clientTransport.connect(serverTransport);
+      serverTransport.connect(clientTransport);
 
       let connectionManager = zx.io.api.server.ConnectionManager.getInstance();
       connectionManager.registerApi(new zx.demo.io.api.PlayerMediaServerApi(), "/player/media");

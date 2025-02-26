@@ -44,9 +44,9 @@ qx.Class.define("zx.io.api.transport.loopback.LoopbackServerTransport", {
         throw new Error("Different client already exists with the same UUID");
       }
       client.addListener("post", evt => {
-        let { uri, requestJson } = evt.getData();
+        let { path, requestJson } = evt.getData();
         this.__clientsByApiUuid.set(requestJson.headers["Client-Api-Uuid"], client);
-        this.receiveMessage(uri, requestJson);
+        this.receiveMessage(path, requestJson);
       });
     },
 
@@ -63,14 +63,13 @@ qx.Class.define("zx.io.api.transport.loopback.LoopbackServerTransport", {
      * Called EXCLUSIVELY by zx.io.api.transport.loopback.LoopbackServerTransport
      * when it posts a message to this transport
      *
-     * @param {string} uri
+     * @param {string} path
      * @param {zx.io.api.IRequestJson} requestJson
      */
-    async receiveMessage(uri, requestJson) {
+    async receiveMessage(path, requestJson) {
       let request = new zx.io.api.server.Request(this, requestJson);
-      if (uri) {
-        let breakout = zx.utils.Uri.breakoutUri(uri);
-        request.setPath(breakout.path);
+      if (path) {
+        request.setPath(path);
       }
       let response = new zx.io.api.server.Response();
       await zx.io.api.server.ConnectionManager.getInstance().receiveMessage(request, response);
