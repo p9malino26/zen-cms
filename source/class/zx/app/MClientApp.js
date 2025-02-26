@@ -103,7 +103,7 @@ qx.Mixin.define("zx.app.MClientApp", {
       if (typeof apiName !== "string") {
         apiName = apiName.classname;
       }
-      let cmsConfig = await this.getNetController().getUriMapping("zx.server.CmsConfiguration");
+      let cmsConfig = await this.getNetController().getUriMappingAsync("zx.server.CmsConfiguration");
       let api = cmsConfig.getApi(apiName);
       return api;
     },
