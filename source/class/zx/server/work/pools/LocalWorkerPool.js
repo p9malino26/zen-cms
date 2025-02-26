@@ -27,18 +27,15 @@ qx.Class.define("zx.server.work.pools.LocalWorkerPool", {
      * @override
      */
     async createPoolableEntity() {
-      let serverTransport = new zx.io.api.transport.loopback.LoopbackServerTransport();
-      let clientTransport = new zx.io.api.transport.loopback.LoopbackClientTransport();
-
-      serverTransport.connect(clientTransport);
-      clientTransport.connect(serverTransport);
+      let clientTransport = zx.io.api.ApiUtils.getClientTransport();
 
       let worker = new zx.server.work.Worker();
-      zx.io.api.server.ConnectionManager.getInstance().registerApi(worker.getServerApi(), "/work/pools/local");
-      let clientApi = new zx.io.api.client.GenericClientApiProxy(zx.server.work.IWorkerApi, clientTransport, "/work/pools/local");
+      let apiPath = "/work/pools/local/" + worker.toUuid();
+      zx.io.api.server.ConnectionManager.getInstance().registerApi(worker.getServerApi(), apiPath);
+      let clientApi = zx.io.api.ApiUtils.createClientApi(zx.server.work.IWorkerApi, clientTransport, apiPath);
 
       let workerTracker = new zx.server.work.pools.LocalWorkerTracker(this, worker, clientApi);
-      await workerTracker.initialise();
+      await workerTracker.initialize();
       return workerTracker;
     },
 

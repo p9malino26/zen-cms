@@ -26,11 +26,11 @@ qx.Class.define("zx.server.work.pools.WebThreadWorkerPool", {
   extend: zx.server.work.pools.WorkerPool,
 
   /**
-   * @param {object} poolConfig - config for {@link zx.utils.Pool}
+   * @param {String} workdir - the working directory for the pool
    * @param {string} remoteAppPath - the server request path to the compiled entrypoint for the remote worker app.
    */
-  construct(poolConfig, remoteAppPath) {
-    super(poolConfig);
+  construct(workdir, remoteAppPath) {
+    super(workdir);
     this.getQxObject("pool").setFactory(this);
     this.__remoteAppPath = remoteAppPath;
     debugger;

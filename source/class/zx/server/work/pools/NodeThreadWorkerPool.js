@@ -25,11 +25,11 @@ qx.Class.define("zx.server.work.pools.NodeThreadWorkerPool", {
   extend: zx.server.work.pools.WorkerPool,
 
   /**
-   * @param {object} poolConfig - config for {@link zx.utils.Pool}
+   * @param {string} workdir - working directory for the pool
    * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app.
    */
-  construct(poolConfig, remoteAppPath) {
-    super(poolConfig);
+  construct(workdir, remoteAppPath) {
+    super(workdir);
     this.__remoteAppPath = remoteAppPath;
   },
 
@@ -41,7 +41,7 @@ qx.Class.define("zx.server.work.pools.NodeThreadWorkerPool", {
       let nodeThread = new Worker(this.__remoteAppPath, { name: apiPath, workerData: {} });
 
       let workerTracker = new zx.server.work.pools.NodeThreadWorkerTracker(this, nodeThread);
-      await workerTracker.initialise();
+      await workerTracker.initialize();
       return workerTracker;
     },
 

@@ -33,18 +33,18 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
   extend: qx.core.Object,
   implement: [zx.utils.IPoolFactory],
 
-  construct(poolConfig, workDir) {
+  construct(workdir) {
     super();
 
-    if (!workDir) {
-      workDir = zx.server.Config.resolveTemp("worker-pools/" + this.classname);
+    if (!workdir) {
+      workdir = zx.server.Config.resolveTemp("worker-pools/" + this.classname);
     }
-    this.setWorkDir(workDir);
-    this.setPoolConfig(poolConfig);
+    this.setWorkDir(workdir);
 
     this.__runningWorkTrackers = {};
+    this.__workResultQueue = [];
 
-    let api = new zx.server.work.pools.WorkerPoolServerApi(this);
+    //let api = new zx.server.work.pools.WorkerPoolServerApi(this);
   },
 
   properties: {
@@ -95,11 +95,11 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
       let pool = new zx.utils.Pool();
       pool.setFactory(this);
       pool.addListener("becomeAvailable", () => {
-        console.log("pool sent becomeAvailable");
+        this.debug("pool sent becomeAvailable");
         this.getQxObject("pollTimer").startTimer();
       });
       pool.addListener("becomeUnavailable", () => {
-        console.log("pool sent becomeUnavailable");
+        this.debug("pool sent becomeUnavailable");
         this.getQxObject("pollTimer").killTimer();
       });
       pool.addListener("createResource", this.__onPoolCreateResource, this);
@@ -140,7 +140,9 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
         let stat = await fs.promises.stat(fullPath);
         if (stat.isDirectory()) {
           let workResult = await zx.server.work.WorkResult.loadFromDir(fullPath);
-          this.__workResultQueue.push(workResult);
+          if (workResult) {
+            this.__workResultQueue.push(workResult);
+          }
         }
       }
       await this.getQxObject("pool").startup();
@@ -211,6 +213,9 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
      */
     __onWorkTrackerStatusChange(evt) {
       let status = evt.getData();
+      if (status !== "dead" && status !== "stopped") {
+        return;
+      }
       let pool = this.getQxObject("pool");
       let workerTracker = evt.getTarget();
       let workResult = workerTracker.takeWorkResult();
@@ -236,14 +241,14 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
 
       let jsonWork;
       try {
-        this.log(`polling for work...`);
+        this.debug(`polling for work...`);
         jsonWork = await this.getSchedulerApi().pollForWork();
       } catch (e) {
-        this.log(`failed to poll for work: ${e}`);
+        this.debug(`failed to poll for work: ${e}`);
         return;
       }
       if (jsonWork) {
-        this.log(`received work!`);
+        this.debug(`received work!`);
 
         let workerTracker = await this.getQxObject("pool").acquire();
         this.__runningWorkTrackers[jsonWork.uuid] = workerTracker;

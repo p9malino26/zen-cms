@@ -102,7 +102,9 @@ qx.Class.define("zx.utils.Pool", {
       if (value > this.getMaxSize()) {
         throw new Error("Cannot set minSize to be greater than maxSize");
       }
-      this.__topup();
+      if (this.__live) {
+        this.__topup();
+      }
     },
 
     /**
@@ -112,7 +114,9 @@ qx.Class.define("zx.utils.Pool", {
       if (value < this.getMinSize()) {
         throw new Error("Cannot set maxSize to be less than minSize");
       }
-      this.__trim();
+      if (this.__live) {
+        this.__trim();
+      }
     },
 
     /**

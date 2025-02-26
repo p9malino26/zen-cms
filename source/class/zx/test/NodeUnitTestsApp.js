@@ -26,6 +26,7 @@ qx.Class.define("zx.test.NodeUnitTestsApp", {
 
   members: {
     async main() {
+      qx.log.Logger.register(zx.utils.NativeLogger);
       if (qx.core.Environment.get("qx.debug")) {
         qx.log.appender.Native;
       }

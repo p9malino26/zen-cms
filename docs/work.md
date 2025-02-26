@@ -28,6 +28,10 @@ With all of the different parts that communicate with each other, run independen
 physical servers), this needs to be robust. For example, if the Scheduler goes offline and the Worker finishes the work, it cannot send the
 results of the Work (the status and logs) back to the Scheduler ... until the Scheduler comes back online.
 
+The Worker Pool accumulates logs and status information (collectively called Work Results) from the Worker, which in turn receives these
+from the Work; the Worker Pool persists the Work Results on disk, and when the task is finished passes them up to the Scheduler; it waits
+for the scheduler to become available and accept the Work Results before disposing of them.
+
 ## Chromium
 
 A common use case for scheduling a piece of Work is because it needs to use headless Chromium, eg so that it can render a web page as a PDF
@@ -80,3 +84,5 @@ nodeProcessLocation in DockerWorkerPool (thisprocess, localhost, container)
 connect docker worker to chromium
 
 api paths
+
+(re)move creation of transports

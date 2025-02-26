@@ -149,7 +149,11 @@ qx.Class.define("zx.utils.Timeout", {
     async _onTimeout(evt) {
       this.__timerId = null;
       if (this.isEnabled()) {
-        await this.fire();
+        try {
+          await this.fire();
+        } catch (ex) {
+          this.error("Exception while firing timeout: " + ex, ex);
+        }
         if (this.isEnabled() && this.isRecurring()) {
           this.startTimer();
         }

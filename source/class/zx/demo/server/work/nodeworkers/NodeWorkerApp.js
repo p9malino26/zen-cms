@@ -3,20 +3,18 @@ qx.Class.define("zx.demo.server.work.nodeworkers.NodeWorkerApp", {
 
   members: {
     async main() {
-      let pool = new zx.server.work.pools.NodeThreadWorkerPool({
-        minSize: 0,
-        maxSize: 2
+      qx.log.Logger.register(zx.utils.NativeLogger);
+      let pool = new zx.server.work.pools.NodeThreadWorkerPool().set({
+        poolConfig: {
+          minSize: 0,
+          maxSize: 2
+        }
       });
-
-      let schedulerClientTransport = new zx.io.api.transport.loopback.LoopbackClientTransport();
-      let schedulerServerTransport = new zx.io.api.transport.loopback.LoopbackServerTransport();
-      schedulerClientTransport.connect(schedulerServerTransport);
-      schedulerServerTransport.connect(schedulerClientTransport);
 
       let scheduler = new zx.server.work.scheduler.QueueScheduler();
       zx.io.api.server.ConnectionManager.getInstance().registerApi(scheduler.getServerApi(), "/scheduler");
 
-      let schedulerClientApi = new zx.io.api.client.GenericClientApiProxy(zx.server.work.scheduler.ISchedulerApi, schedulerClientTransport, "/scheduler");
+      let schedulerClientApi = zx.io.api.ApiUtils.createClientApi(zx.server.work.scheduler.ISchedulerApi, zx.io.api.ApiUtils.getClientTransport(), "/scheduler");
       pool.setSchedulerApi(schedulerClientApi);
 
       scheduler.pushWork({

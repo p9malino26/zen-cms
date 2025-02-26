@@ -34,12 +34,12 @@ qx.Class.define("zx.server.work.pools.DockerWorkerPool", {
   },
 
   /**
-   * @param {object} poolConfig - config for {@link zx.utils.Pool}
+   * @param {String} workdir - working directory for the pool
    * @param {string} image - the docker image to use. Note: it is expected that the user in the container will be named `zxWorker`
    * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app.
    */
-  construct(poolConfig, image, remoteAppPath) {
-    super(poolConfig);
+  construct(workdir, image, remoteAppPath) {
+    super(workdir);
     this.__remoteAppPath = remoteAppPath ?? qx.core.Environment.get("zx.server.work.pools.DockerWorkerPool.remoteAppPath");
     this.__docker = new Docker();
     this.__image = image ?? qx.core.Environment.get("zx.server.work.pools.DockerWorkerPool.imageName");
@@ -92,7 +92,7 @@ qx.Class.define("zx.server.work.pools.DockerWorkerPool", {
       };
       let container = await this.__docker.createContainer(dockerConfig);
       let workerTracker = new zx.server.work.pools.DockerWorkerTracker(this, container, dockerConfig);
-      await workerTracker.initialise();
+      await workerTracker.initialize();
       container._config = dockerConfig;
     },
 

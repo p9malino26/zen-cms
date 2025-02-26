@@ -21,8 +21,12 @@ qx.Class.define("zx.server.work.WorkResult", {
     async loadFromDir(workdir) {
       let result = new zx.server.work.WorkResult();
       result.__workdir = workdir;
-      result.__jsonWork = JSON.parse(await fs.promises.readFile(path.join(workdir, "work.json"), "utf8"));
-      result.__workStatus = JSON.parse(await fs.readFile(path.join(workdir, "status.json"), "utf8"));
+      result.__jsonWork = await zx.utils.Json.loadJsonAsync(path.join(workdir, "work.json"));
+      result.__workStatus = await zx.utils.Json.loadJsonAsync(path.join(workdir, "status.json"));
+      if (!result.__jsonWork || !result.__workStatus) {
+        qx.log.Logger.error("Error loading WorkResult from " + workdir + ": jsonWork=" + JSON.stringify(result.__jsonWork) + " workStatus=" + JSON.stringify(result.__workStatus));
+        return null;
+      }
       return result;
     },
 
@@ -57,10 +61,10 @@ qx.Class.define("zx.server.work.WorkResult", {
     /**
      * Called when starting the work to capture the results
      */
-    async initialise(workdir, jsonWork) {
+    async initialize(workdir, jsonWork) {
       this.__workdir = workdir;
       this.__jsonWork = jsonWork;
-      await fs.mkdir(this.__workdir, { recursive: true });
+      await fs.promises.mkdir(this.__workdir, { recursive: true });
       this.__logStream = fs.createWriteStream(path.join(this.__workdir, "log.txt"));
       await fs.promises.writeFile(path.join(this.__workdir, "work.json"), JSON.stringify(jsonWork, null, 2));
       this.__workStatus = {
@@ -85,12 +89,11 @@ qx.Class.define("zx.server.work.WorkResult", {
     /**
      * Called when the work is complete
      */
-    async close(response) {
-      this.__workStatus.response = response;
+    async close() {
       this.__workStatus.completed = new Date();
-      fs.close(this.__logStream);
+      this.__logStream.close();
       this.__logStream = null;
-      this.writeStatus();
+      await this.writeStatus();
     },
 
     /**
@@ -107,7 +110,7 @@ qx.Class.define("zx.server.work.WorkResult", {
      */
     async deleteWorkDir() {
       if (this.__workdir) {
-        await fs.rm(this.__workdir, { recursive: true, force: true });
+        await fs.promises.rm(this.__workdir, { recursive: true, force: true });
         this.__workdir = null;
       }
     },
@@ -132,15 +135,15 @@ qx.Class.define("zx.server.work.WorkResult", {
     /**
      * Returns the log file contents for the work
      */
-    getWorkLog() {
-      return fs.readFile(path.join(this.__workdir, "log.txt"), "utf8");
+    async getWorkLog() {
+      return await fs.promises.readFile(path.join(this.__workdir, "log.txt"), "utf8");
     },
 
     /**
      * Persists the __workStatus to disk
      */
     async writeStatus() {
-      await fs.writeFile(path.join(this.__workdir, "status.json"), JSON.stringify(this.__workStatus, null, 2));
+      await fs.promises.writeFile(path.join(this.__workdir, "status.json"), JSON.stringify(this.__workStatus, null, 2));
     },
 
     /**

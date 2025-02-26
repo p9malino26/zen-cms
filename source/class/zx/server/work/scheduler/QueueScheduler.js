@@ -14,7 +14,7 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
     super();
     this.__queue = [];
     this.__running = {};
-    this.__serverApi = new zx.io.api.server.GenericServerApiProxy(zx.server.work.scheduler.ISchedulerApi, this);
+    this.__serverApi = zx.io.api.ApiUtils.createServerApi(zx.server.work.scheduler.ISchedulerApi, this);
   },
 
   events: {
@@ -45,6 +45,7 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
       if (!workJson.uuid) {
         workJson.uuid = qx.util.Uuid.createUuidV4();
       }
+      this.debug(`Queuing job ${workJson.uuid} of type ${workJson.classname}`);
       let promise = new qx.Promise();
       this.__queue.push({
         workJson,
@@ -62,16 +63,22 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
       }
       let info = this.__queue.shift();
       this.__running[info.workJson.uuid] = info;
+      return info.workJson;
     },
 
     /**
      * @Override
      */
     onWorkCompleted(workResult) {
+      this.debug(`Work completed for job ${workResult.workJson.uuid}`);
       let info = this.__running[workResult.workJson.uuid];
-      delete this.__running[workResult.workJson.uuid];
-      info.promise.resolve(workResult);
-      this.fireDataEvent("workCompleted", workResult);
+      if (info) {
+        delete this.__running[workResult.workJson.uuid];
+        info.promise.resolve(workResult);
+        this.fireDataEvent("workCompleted", workResult);
+      } else {
+        this.debug(`Work completed for job ${workResult.workJson.uuid} but not found in running list (Worker Pool has queued this work)`);
+      }
     },
 
     /**
@@ -81,6 +88,15 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
      */
     getServerApi() {
       return this.__serverApi;
+    },
+
+    /**
+     * Returns the queue size
+     *
+     * @returns {Number} the number of items in the queue
+     */
+    getQueueSize() {
+      return this.__queue.length;
     }
   }
 });

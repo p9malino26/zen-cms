@@ -72,13 +72,15 @@ qx.Class.define("zx.cli.commands.work.StartDockerPoolCommand", {
         return 1;
       }
 
-      let pool = new zx.server.work.pools.DockerWorkerPool({
-        minSize: args.minSize || 0,
-        maxSize: args.maxSize || 2
+      let pool = new zx.server.work.pools.DockerWorkerPool().set({
+        poolConfig: {
+          minSize: args.minSize || 0,
+          maxSize: args.maxSize || 2
+        }
       });
 
       let transport = new zx.io.api.transport.http.HttpClientTransport(protocol + "://" + host + ":" + port);
-      let schedulerApi = new zx.io.api.client.GenericClientApiProxy(zx.server.work.scheduler.ISchedulerApi, transport, path);
+      let schedulerApi = zx.io.api.ApiUtils.createClientApi(zx.server.work.scheduler.ISchedulerApi, transport, path);
       pool.setSchedulerApi(schedulerApi);
       await pool.startup();
     }

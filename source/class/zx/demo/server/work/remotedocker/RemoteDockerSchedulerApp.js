@@ -14,6 +14,7 @@ qx.Class.define("zx.demo.server.work.remotedocker.RemoteDockerSchedulerApp", {
 
   members: {
     async main() {
+      qx.log.Logger.register(zx.utils.NativeLogger);
       let app = this.getQxObject("app");
       new zx.io.api.transport.http.ExpressServerTransport(app, "/zx.work");
 

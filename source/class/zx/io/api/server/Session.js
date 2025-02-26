@@ -22,7 +22,9 @@ qx.Class.define("zx.io.api.server.Session", {
     this.__transport = transport;
     this.__subscriptions = {};
     this.__publicationsQueue = new qx.data.Array();
-    this.info("New session created", this.toUuid(), new Error().stack);
+    if (qx.core.Environment.get("qx.debug")) {
+      this.debug(`New Server API Session created: ${this.classname} [${this.toUuid()}]`);
+    }
   },
 
   properties: {

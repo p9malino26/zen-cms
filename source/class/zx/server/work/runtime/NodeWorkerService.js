@@ -26,6 +26,7 @@ qx.Class.define("zx.server.work.runtime.NodeWorkerService", {
 
   members: {
     async main() {
+      qx.log.Logger.register(zx.utils.NativeLogger);
       if (isMainThread) {
         let currentExecution = typeof window !== "undefined" ? "a browser" : "the main process";
         console.warn(

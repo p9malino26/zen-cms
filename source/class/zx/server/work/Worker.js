@@ -4,7 +4,7 @@ qx.Class.define("zx.server.work.Worker", {
 
   construct() {
     super();
-    this.__serverApi = new zx.io.api.server.GenericServerApiProxy(zx.server.work.IWorkerApi, this);
+    this.__serverApi = zx.io.api.ApiUtils.createServerApi(zx.server.work.IWorkerApi, this);
   },
 
   destruct() {
@@ -36,7 +36,7 @@ qx.Class.define("zx.server.work.Worker", {
      * Called to append to the log of the work, and is also published to the WorkerPool
      */
     appendWorkLog(message) {
-      this.log(message);
+      this.info(message);
       this.__serverApi.publish("log", { caller: this.__workJson.uuid, message });
     },
 
@@ -47,6 +47,8 @@ qx.Class.define("zx.server.work.Worker", {
       if (this.__workJson) {
         throw new Error("Cannot run more than one work at a time");
       }
+      let workId = `${workJson.classname} [${workJson.uuid}]`;
+      this.debug("Running work: " + workId);
       let clazz = qx.Class.getByName(workJson.classname);
       if (!clazz) {
         throw new Error(`Cannot find class '${workJson.classname}'`);
@@ -60,15 +62,23 @@ qx.Class.define("zx.server.work.Worker", {
       workInstance.setExplicitUuid(workJson.uuid);
 
       let uuid = workJson.uuid;
+      let response = {
+        returnValue: null,
+        exception: null
+      };
       try {
-        let message = await workInstance.execute(this);
-        this.__serverApi.publish("complete", { caller: uuid, success: true, message });
-      } catch (cause) {
-        this.error(`[${workInstance.classname}:${uuid}] EXCEPTION: ${cause.message}`);
-        this.__serverApi.publish("complete", { caller: uuid, success: false, message: cause.message });
+        response.returnValue = await workInstance.execute(this);
+        this.debug(`${workId} completed successfully, result = ${response.returnValue}`);
+        this.__serverApi.publish("complete", { caller: uuid, success: true, response });
+      } catch (ex) {
+        response.exception = ex.message || ex + "";
+        response.exceptionStack = qx.dev.StackTrace.getStackTraceFromError(ex).join(", ");
+        this.error(`${workId} EXCEPTION: ${ex.message}`, ex);
+        this.__serverApi.publish("complete", { caller: uuid, success: false, response });
       } finally {
         this.__workJson = null;
       }
+      return response;
     }
   }
 });

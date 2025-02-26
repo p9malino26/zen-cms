@@ -1,0 +1,19 @@
+2025-02-26 11:29:02 Starting work: {
+  "uuid": "5535c5a3-d585-4491-abf5-b7573ff6a523",
+  "classname": "zx.demo.server.work.TestWork",
+  "compatibility": [],
+  "args": []
+}
+2025-02-26 11:29:02 Hello, World!
+2025-02-26 11:29:02 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+2025-02-26 11:29:02 5535c5a3 Doing thing 0
+2025-02-26 11:29:03 5535c5a3 Doing thing 1
+2025-02-26 11:29:04 5535c5a3 Doing thing 2
+2025-02-26 11:29:05 5535c5a3 Doing thing 3
+2025-02-26 11:29:06 5535c5a3 Doing thing 4
+2025-02-26 11:29:45 5535c5a3 Doing thing 5
+2025-02-26 11:29:46 5535c5a3 Doing thing 6
+2025-02-26 11:29:47 5535c5a3 Doing thing 7
+2025-02-26 11:29:48 5535c5a3 Doing thing 8
+2025-02-26 11:29:49 5535c5a3 Doing thing 9
+2025-02-26 11:29:50 Work complete for 5535c5a3-d585-4491-abf5-b7573ff6a523, response = {"returnValue":"success!","exception":null}

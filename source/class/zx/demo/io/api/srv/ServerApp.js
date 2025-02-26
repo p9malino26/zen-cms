@@ -6,6 +6,7 @@ qx.Class.define("zx.demo.io.api.srv.ServerApp", {
   extend: qx.application.Basic,
   members: {
     async main() {
+      qx.log.Logger.register(zx.utils.NativeLogger);
       debugger; //now is a good time to break on caught exceptions
       let app = express();
 

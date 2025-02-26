@@ -25,10 +25,10 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerPool", {
   extend: zx.server.work.pools.WorkerPool,
 
   /**
-   * @param {object} poolConfig - config for {@link zx.utils.Pool}
+   * @param {String} workdir the working directory for the pool
    */
-  construct(poolConfig) {
-    super(poolConfig);
+  construct(workdir) {
+    super(workdir);
     this.__remoteAppPath = remoteAppPath;
   },
 
@@ -67,7 +67,7 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerPool", {
       let nodeProcess = child_process.spawn("node", params, {});
 
       let workerTracker = new zx.server.work.pools.NodeProcessWorkerTracker(this, nodeProcess, httpPort, nodeDebugPort);
-      await workerTracker.initialise();
+      await workerTracker.initialize();
       return workerTracker;
     },
 

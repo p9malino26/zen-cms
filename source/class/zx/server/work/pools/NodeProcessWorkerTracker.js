@@ -13,7 +13,7 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerTracker", {
     __httpPort: null,
     __nodeDebugPort: null,
 
-    async initialise() {
+    async initialize() {
       let nodeProcess = child_process.spawn("node", params, {});
 
       let resolve;
@@ -39,11 +39,11 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerTracker", {
 
       let url = `http://localhost:${this.__httpPort}`;
       let transport = new zx.io.api.transport.http.HttpClientTransport(url);
-      let workerClientApi = new zx.io.api.client.GenericClientApiProxy(zx.server.work.IWorkerApi, transport, "/work/worker");
+      let workerClientApi = zx.io.api.ApiUtils.createClientApi(zx.server.work.IWorkerApi, transport, "/work/worker");
       this._setWorkerClientApi(workerClientApi);
 
       this.debug(`worker ready`);
-      await super.initialise();
+      await super.initialize();
     },
 
     /**

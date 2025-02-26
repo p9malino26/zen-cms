@@ -11,7 +11,7 @@ qx.Class.define("zx.server.work.pools.DockerWorkerTracker", {
     __container: null,
     __dockerConfig: null,
 
-    async initialise() {
+    async initialize() {
       let resolved = false;
       let promise = new Promise(resolve => {
         this.__container.attach({ stream: true, stdout: true, stderr: false }, (err, stream) => {
@@ -46,11 +46,11 @@ qx.Class.define("zx.server.work.pools.DockerWorkerTracker", {
       let chromiumPort = parseInt(this.__dockerConfig.HostConfig.PortBindings["3000/tcp"][0].HostPort, 10);
       let url = `http://localhost:${chromiumPort}`;
       let transport = new zx.io.api.transport.http.HttpClientTransport(url);
-      let workerClientApi = new zx.io.api.client.GenericClientApiProxy(zx.server.work.IWorkerApi, transport, "/work/worker");
+      let workerClientApi = zx.io.api.ApiUtils.createClientApi(zx.server.work.IWorkerApi, transport, "/work/worker");
       this._setWorkerClientApi(workerClientApi);
 
       this.debug(`worker ready`);
-      await super.initialise();
+      await super.initialize();
     },
 
     /**

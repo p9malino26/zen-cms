@@ -73,13 +73,14 @@ qx.Class.define("zx.server.work.WorkerTracker", {
       if (this.__workResult) {
         throw new Error("WorkerTracker already has work");
       }
-      let workdir = path.join(this.__workerPool.getWorkDir(), "work", jsonWork.uuid);
+      this.__jsonWork = jsonWork;
+      let workdir = path.join(this.__workerPool.getWorkDir(), jsonWork.uuid);
       this.__workResult = new zx.server.work.WorkResult();
       await this.__workResult.initialize(workdir, jsonWork);
       this.setStatus("running");
       this.__workResult.writeStatus();
       let promise = this.__workerClientApi.run(jsonWork);
-      promise.then(response => this._onWorkComplete(response));
+      promise.then(async response => await this._onWorkComplete(response));
     },
 
     /**
@@ -93,18 +94,17 @@ qx.Class.define("zx.server.work.WorkerTracker", {
 
     /**
      * Called when the work is complete
-     *
-     * @param {*} response the value returned by the WorkerClientApi.run method
      */
-    _onWorkComplete(response) {
-      this.appendWorkLog("Work complete: " + JSON.stringify(response.result));
-      this.__workResult.writeStatus();
-      if (this.getStatus() === "killing" || response.result == "killed") {
+    async _onWorkComplete(response) {
+      this.appendWorkLog("Work complete for " + this.__jsonWork.uuid + ", response = " + JSON.stringify(response));
+      let workResult = this.__workResult;
+      workResult.response = response;
+      await workResult.close();
+      if (this.getStatus() === "killing" || !!response.exception) {
         this.setStatus("dead");
       } else {
         this.setStatus("stopped");
       }
-      this.__workResult.close(response);
       this.__workStatus = null;
       this.__jsonWork = null;
     },

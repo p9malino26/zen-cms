@@ -15,13 +15,13 @@ qx.Class.define("zx.demo.server.work.TestWork", {
     /**
      * @override
      */
-    async execute(log) {
+    async execute(workResult) {
       console.log("the task is running!");
-      log("Hello, World!");
-      log("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
+      workResult.appendWorkLog("Hello, World!");
+      workResult.appendWorkLog("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
 
       for (let i = 0; i < this.__iterations; i++) {
-        log(`${this.toUuid().split("-")[0]} Doing thing ${i}`);
+        workResult.appendWorkLog(`${this.toUuid().split("-")[0]} Doing thing ${i}`);
         await new Promise(resolve => setTimeout(resolve, 1000));
       }
       // TODO: anything!

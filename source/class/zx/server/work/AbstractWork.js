@@ -36,10 +36,9 @@ qx.Class.define("zx.server.work.AbstractWork", {
     /**
      * Executes the work
      * @abstract
-     * @param {zx.server.work.OutputClientApi} output - the output api
-     * @returns {Promise<string | void> | string | void}
+     * @param {zx.server.work.WorkResult} workResult where to send the output
      */
-    execute() {
+    execute(workResult) {
       throw new Error(`Abstract method 'execute' of ${this.classname} not implemented`);
     }
   }

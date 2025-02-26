@@ -9,6 +9,11 @@
  *
  */
 qx.Interface.define("zx.server.work.scheduler.ISchedulerApi", {
+  events: {
+    /** Fired when a work item is completed, the data is the serialized JSON from `WorkResult.serializeForScheduler` */
+    workCompleted: "qx.event.type.Data"
+  },
+
   members: {
     /**
      * Polls the queue for work to do.  If there is work to do, it is removed from the queue

@@ -26,7 +26,8 @@ qx.Class.define("zx.io.api.transport.loopback.LoopbackClientTransport", {
   extend: zx.io.api.client.AbstractClientTransport,
 
   events: {
-    message: "qx.event.type.Data"
+    message: "qx.event.type.Data",
+    post: "qx.event.type.Data"
   },
 
   members: {
@@ -60,6 +61,7 @@ qx.Class.define("zx.io.api.transport.loopback.LoopbackClientTransport", {
      * @param {zx.io.api.IResponseJson} data
      */
     async receiveMessage(data) {
+      this.trace(`receiveMessage: ${JSON.stringify(data)}`);
       this.fireDataEvent("message", data);
     }
   },
