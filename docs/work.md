@@ -32,6 +32,14 @@ The Worker Pool accumulates logs and status information (collectively called Wor
 from the Work; the Worker Pool persists the Work Results on disk, and when the task is finished passes them up to the Scheduler; it waits
 for the scheduler to become available and accept the Work Results before disposing of them.
 
+Another aspect of a robust system is process isolation - ie the ability to terminate a broken or long running process and reclaim every
+resource, without affecting the main process. To do this, you can optionally choose to run the Work inside a Worker which is in its own
+NodeJS process, which means that the NodeJS process can be terminated safely and cleanly via the operating system
+
+As a further level of isolation, you can also chose to run the NodeJS process inside a Docker Container - this has the advantage that your
+NodeJS process can start applications and have isolation for not just the one JavaScript process. The most typical example of this is to
+run headless Chromium inside the Docker Container as well as the NodeJS process.
+
 ## Chromium
 
 A common use case for scheduling a piece of Work is because it needs to use headless Chromium, eg so that it can render a web page as a PDF
@@ -42,8 +50,9 @@ Container provides.
 
 There are three main types of Worker and Worker Pool:
 (o) Local - this runs in the main Node (or Browser) process
-(o) Thread - this runs in NodeWorker or WebWorker thread
-(o) Docker - this uses Docker to run the Worker and Work in a node process, inside a Container
+(o) Thread - this runs in Node Worker (ie the ES6 Worker, not "our" Workers) or WebWorker thread
+(o) Process - this uses Docker to run the Worker and Work in a NodeJS process, optionally inside a Container, and optionally with Chromium
+also inside that container
 
 ### Docker variations
 
@@ -71,18 +80,12 @@ which in turn talks to (4) the web page inside Chromium.
 Obviously while that works very well for production, in development it is a tricky problem to be able to debug across so many process boundaries,
 and so there is a configuration where the Scheduler, the Worker Pool, the Worker, and the Work can all run in the current process, and only the
 Chromium instance runs inside the Docker Container. Debugging your app is only one node process that needs to be debugged, and only the web page
-inside Chromium is the other side of a process boundary.
+inside Chromium is the other side of a process boundary (which it is anyway).
 
-> NOTE:: While the Docker Pool creates and manages Docker Containers, each of which can run Chromium, this is not the same as the class in
+> NOTE:: While the Docker Pool creates and manages Docker Containers, each of which can run Chromium, this is **not** the same as the class in
 > `zx.server.puppeteer.ChromiumDocker` - that class also manages a pool of Chromium instances in Docker, but is deprecated because it has nothing to
 > do with the Work/Worker/Worker Pool mechanisms decribed here
 
 # TODO
 
 time and queue Schedulers
-nodeProcessLocation in DockerWorkerPool (thisprocess, localhost, container)
-connect docker worker to chromium
-
-api paths
-
-(re)move creation of transports

@@ -6,3 +6,4 @@ qx_packages
 .package-cache.json
 /tmp/
 website-data/database-status.json
+/temp/

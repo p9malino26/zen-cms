@@ -1,4 +1,3 @@
-const Docker = require("dockerode");
 const path = require("path");
 
 /**
@@ -129,7 +128,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
       }
 
       let appConfig = zx.server.puppeteer.chromiumdocker.PoolManager.getInstance().getConfiguration();
-      const webServerPorts = this.__generatePorts("webServer");
+      let webServerPorts = this.__generatePorts("webServer");
       let containerConfig = {
         Image: appConfig.imageName,
         name: "puppeteer-" + this.__remoteServerPort,
@@ -179,6 +178,7 @@ qx.Class.define("zx.server.puppeteer.ChromiumDocker", {
         }
       }
 
+      const Docker = require("dockerode");
       this.debug("Creating container: " + JSON.stringify(containerConfig, null, 2));
       mgr.initialise();
       try {

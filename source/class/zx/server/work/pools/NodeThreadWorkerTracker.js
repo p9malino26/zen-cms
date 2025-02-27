@@ -54,6 +54,16 @@ qx.Class.define("zx.server.work.pools.NodeThreadWorkerTracker", {
       await clientApi.terminate();
       this.__nodeThread.terminate();
       this.__nodeThread = null;
+    },
+
+    /**
+     * @Override
+     */
+    appendWorkLog(message) {
+      super.appendWorkLog(message);
+      if (!this.getWorkResult()) {
+        this.info(message);
+      }
     }
   }
 });

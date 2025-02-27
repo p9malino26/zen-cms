@@ -14,6 +14,16 @@ qx.Class.define("zx.server.work.pools.LocalWorkerTracker", {
     __workerServerApi: null,
 
     /**
+     * @Override
+     */
+    appendWorkLog(message) {
+      super.appendWorkLog(message);
+      if (!this.getWorkResult()) {
+        this.info(message);
+      }
+    },
+
+    /**
      * Kills the node process
      */
     async stop() {

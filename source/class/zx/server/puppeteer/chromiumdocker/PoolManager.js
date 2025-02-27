@@ -1,5 +1,3 @@
-const Docker = require("dockerode");
-
 /**
  * This class manages a pool of Chromium docker instances
  */
@@ -115,6 +113,8 @@ qx.Class.define("zx.server.puppeteer.chromiumdocker.PoolManager", {
      * Makes sure that global initialisation is complete
      */
     initialise() {
+      const Docker = require("dockerode");
+
       if (this.__docker == null) {
         this.__docker = new Docker();
       }

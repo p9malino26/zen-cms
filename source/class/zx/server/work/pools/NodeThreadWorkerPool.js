@@ -25,10 +25,10 @@ qx.Class.define("zx.server.work.pools.NodeThreadWorkerPool", {
   extend: zx.server.work.pools.WorkerPool,
 
   /**
-   * @param {string} remoteAppPath - the path on disk to the compiled entrypoint for the remote worker app.
    * @param {string?} workdir - working directory for the pool
+   * @param {string} remoteAppPath - the path on disk to the compiled entrypoint for the remote worker app.
    */
-  construct(remoteAppPath, workdir) {
+  construct(workdir, remoteAppPath) {
     super(workdir);
     this.__remoteAppPath = remoteAppPath;
   },

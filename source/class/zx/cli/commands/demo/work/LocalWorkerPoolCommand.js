@@ -33,8 +33,23 @@ qx.Class.define("zx.cli.commands.demo.work.LocalWorkerPoolCommand", {
       new zx.cli.Flag("worker-location").set({
         description: "where to run the workers",
         type: "enum",
-        enumValues: ["local", "node-process", "node-thread"],
+        enumValues: ["local", "node-process", "node-thread", "docker"],
         required: true
+      })
+    );
+    this.addFlag(
+      new zx.cli.Flag("chromium").set({
+        description: "whether to enable chromium",
+        type: "boolean",
+        value: false,
+        required: true
+      })
+    );
+    this.addFlag(
+      new zx.cli.Flag("containerHome").set({
+        description: "where to mount the container home (override the default)",
+        type: "string",
+        value: null
       })
     );
     this.addFlag(
@@ -85,21 +100,52 @@ qx.Class.define("zx.cli.commands.demo.work.LocalWorkerPoolCommand", {
         maxSize: flags.poolMaxSize
       };
 
+      const cliError = message => {
+        console.error(message);
+        process.exit(1);
+      };
+
       if (flags.workerLocation == "local") {
+        if (flags.chromium) {
+          cliError("Cannot enable chromium in local worker");
+        }
         pool = new zx.server.work.pools.LocalWorkerPool().set({
           poolConfig
         });
-      } else if (flags.workerLocation == "node-process") {
-        pool = new zx.server.work.pools.NodeProcessWorkerPool().set({
-          poolConfig,
-          nodeInspect: flags.inspect
-        });
       } else if (flags.workerLocation == "node-thread") {
+        if (flags.chromium) {
+          cliError("Cannot enable chromium in node thread");
+        }
         pool = new zx.server.work.pools.NodeThreadWorkerPool("./compiled/source-node/cli/index.js").set({
           poolConfig
         });
       } else {
-        throw new Error("Unknown worker location: " + flags.workerLocation);
+        let settings = {
+          poolConfig,
+          nodeInspect: flags.inspect,
+          nodeLocation: "host",
+          enableChromium: flags.chromium,
+          dockerMounts: null
+        };
+
+        let stat = await fs.promises.stat("./puppeteer-server/base");
+        if (stat?.isDirectory()) {
+          // prettier-ignore
+          settings.dockerMounts = [
+            "puppeteer-server/base/container/app:/home/pptruser/app", 
+            "puppeteer-server/base/container/bin:/home/pptruser/bin"
+          ];
+        }
+
+        if (flags.workerLocation == "node-process") {
+          settings.nodeLocation = "host";
+        } else if (flags.workerLocation == "docker") {
+          settings.nodeLocation = "container";
+        } else {
+          throw new Error("Unknown worker location: " + flags.workerLocation);
+        }
+        pool = new zx.server.work.pools.NodeProcessWorkerPool().set(settings);
+        await pool.cleanupOldContainers();
       }
 
       let scheduler = new zx.server.work.scheduler.QueueScheduler("temp/scheduler/");

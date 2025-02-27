@@ -115,8 +115,6 @@ qx.Class.define("zx.server.work.WorkerTracker", {
     appendWorkLog(message) {
       if (this.__workResult) {
         this.__workResult.appendWorkLog(message);
-      } else {
-        this.info(message);
       }
     },
 

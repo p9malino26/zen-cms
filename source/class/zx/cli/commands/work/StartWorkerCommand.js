@@ -21,6 +21,9 @@ const express = require("express");
  * This command will start a Worker and listen on a port for HTTP traffic for
  * API requests; this is typically run inside a Docker container, but could also be
  * run on a local machine for testing and development
+ *
+ * @use(zx.demo.server.work.TestWork)
+ * @use(zx.demo.server.work.ErrorWork)
  */
 qx.Class.define("zx.cli.commands.work.StartWorkerCommand", {
   extend: zx.cli.Command,

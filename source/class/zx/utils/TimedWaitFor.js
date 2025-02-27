@@ -47,10 +47,7 @@ qx.Class.define("zx.utils.TimedWaitFor", {
         this.warn("Cannot change duration after firing");
         return;
       }
-      if (this.__timerId) {
-        this.killTimer();
-        this.restartTimer();
-      }
+      this.restartTimer();
     },
 
     /**
@@ -60,7 +57,9 @@ qx.Class.define("zx.utils.TimedWaitFor", {
       if (this.__timerId) {
         clearTimeout(this.__timerId);
       }
-      this.__timerId = setTimeout(() => this.fire(), this.getDuration());
+      if (this.getDuration()) {
+        this.__timerId = setTimeout(() => this.fire(), this.getDuration());
+      }
     },
 
     /**

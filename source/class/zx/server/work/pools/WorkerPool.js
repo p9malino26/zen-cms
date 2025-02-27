@@ -87,6 +87,15 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
       check: "Integer",
       init: 10_000,
       event: "changePushInterval"
+    },
+
+    /**
+     * Whether to copy the console output of the WorkerPool and WorkerTracker
+     */
+    copyConsoleTo: {
+      init: null,
+      nullable: true,
+      check: ["info", "warn", "debug"]
     }
   },
 

@@ -23,10 +23,10 @@ qx.Class.define("zx.server.PortRanges", {
     __NODE_DEBUG_PORT_RANGE: new zx.utils.Range(9000, 10000),
 
     /** @type{zx.utils.Range} allocatable port range for Chromium poirts */
-    __CHROMIUM_PORT_RANGE: new zx.utils.Range(3000, 4000),
+    __CHROMIUM_PORT_RANGE: new zx.utils.Range(11000, 11999),
 
     /** @type{zx.utils.Range} allocatable port range for Node child processes' HTTP server API */
-    __NODE_HTTP_SERVER_API_PORT_RANGE: new zx.utils.Range(3000, 4000),
+    __NODE_HTTP_SERVER_API_PORT_RANGE: new zx.utils.Range(10000, 10999),
 
     /**
      * Range of ports to allocate for debuggable node processes

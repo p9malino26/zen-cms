@@ -1,0 +1,20 @@
+{
+  "$schema": "../../source/resource/zx/cms/schema/cms-1-0-0.json",
+
+  "database": {
+    "type": "mongo",
+    "mongo": {
+      "uri": "mongodb://host.docker.internal/zxdemo",
+      "databaseName": "zxdemo"
+    },
+    "blobs": {
+      "directory": "cms/blobs"
+    },
+    "statusFile": "database-status.json"
+  },
+
+  "createProxies": {
+    "outputPath": "source/proxies",
+    "compilerTargetPath": "compiled/source-node"
+  }
+}

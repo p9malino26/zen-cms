@@ -1,0 +1,1275 @@
+Debugger listening on ws://0.0.0.0:9229/be85dd20-7cdd-478f-a6f1-6ac10e4dbfda
+For help, see: https://nodejs.org/en/docs/inspector
+Chrome launched on port 9001
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:9000
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module '/home/pptruser/app/cli/index.js'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:174:12)
+    at node:internal/main/run_main_module:28:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v20.18.0
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module '/home/pptruser/app/cli/index.js'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:174:12)
+    at node:internal/main/run_main_module:28:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v20.18.0
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module '/home/pptruser/app/runtime/cli/index.js'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:174:12)
+    at node:internal/main/run_main_module:28:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v20.18.0
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module '/home/pptruser/app/runtime/cli/index.js'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:174:12)
+    at node:internal/main/run_main_module:28:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/d16ee8d1-6fb3-49a6-8c38-bad78a812ea1
+For help, see: https://nodejs.org/en/docs/inspector
+Chrome launched on port 9001
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:9000
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module '/home/pptruser/app/runtime/cli/index.js'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:174:12)
+    at node:internal/main/run_main_module:28:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v20.18.0
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module '/home/pptruser/app/runtime/cli/index.js'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:174:12)
+    at node:internal/main/run_main_module:28:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v20.18.0
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module '/home/pptruser/app/runtime/cli/index.js'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:174:12)
+    at node:internal/main/run_main_module:28:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/90c9add3-3c24-4462-9a35-2aa743823a87
+For help, see: https://nodejs.org/en/docs/inspector
+Welcome to Node.js v20.18.0.
+Type ".help" for more information.
+> > Debugger listening on ws://0.0.0.0:9229/c0b281e6-0ab7-4c10-ac76-69ae5ae06e40
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'cheerio'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:34:19
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:67:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/53f3c0e4-e8ef-40c0-999d-939fb1aaf927
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'cheerio'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:34:19
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:67:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/99b69d6a-eafc-4340-8ddf-9db8196cf756
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'cheerio'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:34:19
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:67:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/a0d6bf97-2586-4483-9db8-7ced2001c08e
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'cheerio'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:34:19
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:67:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/27ccc64e-bc3d-42dd-be32-7f3f379d0304
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'cheerio'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:34:19
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:67:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/5a2e229e-b421-4c64-b926-92fbcf2446dd
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'cheerio'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:34:19
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:67:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/8a159360-0a25-4dc3-87a9-1b8933e7bb73
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'cheerio'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:34:19
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:67:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/77033687-afdb-41eb-a82c-bfa0a7cf518d
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'cheerio'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:34:19
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:67:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/5468e7c6-1c63-459b-8870-a8feb0194ee1
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'cheerio'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:34:19
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:67:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/6262eedb-9e9a-4d79-bfc6-3153f2289f51
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'cheerio'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:34:19
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:67:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/fa5c44a3-2046-4fd0-86e1-eb82117955d5
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'cheerio'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:34:19
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:67:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/b8022b89-c925-4ba5-8a3e-9a230ccbc520
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'cheerio'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:34:19
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js:67:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/test/cms/TestRendering.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/0943caa4-2d69-4d8b-ae3c-0e5caf357636
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'ip'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/server/WebServer.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/server/WebServer.js:58:14
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/server/WebServer.js:998:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/server/WebServer.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/deae360a-f32b-4cb6-99b3-63060853cabf
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'mongodb'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/io/persistence/db/MongoDatabase.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/io/persistence/db/MongoDatabase.js:42:7
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/io/persistence/db/MongoDatabase.js:291:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/io/persistence/db/MongoDatabase.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/346f1a8e-27fa-4cdb-8c10-a41992dc7702
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'dockerode'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/server/puppeteer/ChromiumDocker.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/server/puppeteer/ChromiumDocker.js:32:18
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/server/puppeteer/ChromiumDocker.js:463:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/server/puppeteer/ChromiumDocker.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/1318177d-bed4-4259-adfc-d26c36597009
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'dockerode'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/server/puppeteer/ChromiumDocker.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/server/puppeteer/ChromiumDocker.js:32:18
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/server/puppeteer/ChromiumDocker.js:464:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/server/puppeteer/ChromiumDocker.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/4c4c4dec-a79a-4281-a3e5-dd1243c1f722
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'console-table-printer'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/server/email/commands/ShowQueueCommand.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/server/email/commands/ShowQueueCommand.js:24:7
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/server/email/commands/ShowQueueCommand.js:89:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/server/email/commands/ShowQueueCommand.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/ed561d32-a20a-4930-bd37-ad35ff432844
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'dockerode'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/server/puppeteer/chromiumdocker/PoolManager.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/server/puppeteer/chromiumdocker/PoolManager.js:22:18
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/server/puppeteer/chromiumdocker/PoolManager.js:239:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/server/puppeteer/chromiumdocker/PoolManager.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/312c3114-69db-4c0d-934e-f9c60adbfda0
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'nunjucks'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/cms/render/NunjucksController.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/cms/render/NunjucksController.js:42:20
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/cms/render/NunjucksController.js:345:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/cms/render/NunjucksController.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/b6007176-dc5e-45e3-ad40-a8ef8e0c28dc
+For help, see: https://nodejs.org/en/docs/inspector
+
+/home/pptruser/app/runtime/transpiled/qx/core/Assert.js:84
+          throw err;
+          ^
+Error: Expected 'function' but found 'object'!
+    at Error.construct (/home/pptruser/app/runtime/transpiled/qx/type/BaseError.js:43:24)
+    at Error.constructor (/home/pptruser/app/runtime/transpiled/qx/Bootstrap.js:49:24)
+    at Error.construct (/home/pptruser/app/runtime/transpiled/qx/core/AssertionError.js:53:25)
+    at new <anonymous> (/home/pptruser/app/runtime/transpiled/qx/Bootstrap.js:49:24)
+    at Object.__fail__P_90_1 (/home/pptruser/app/runtime/transpiled/qx/core/Assert.js:80:36)
+    at Object.assertEquals (/home/pptruser/app/runtime/transpiled/qx/core/Assert.js:164:35)
+    at Object.promisify (/home/pptruser/app/runtime/transpiled/zx/utils/Promisify.js:85:24)
+    at /home/pptruser/app/runtime/transpiled/zx/cms/render/Theme.js:46:35
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/cms/render/Theme.js:289:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19 {
+  __comment__P_131_0: '',
+  __trace__P_132_0: [
+    'qx.core.AssertionError:54:49',
+    'qx.Bootstrap:49:24',
+    'qx.core.Assert:80:36',
+    'qx.core.Assert:164:35',
+    'zx.utils.Promisify:85:24',
+    'zx.cms.render.Theme:46:35',
+    'zx.cms.render.Theme:289:3',
+    'node:internal/modules/cjs/loader:1469:14',
+    'node:internal/modules/cjs/loader:1548:10',
+    'node:internal/modules/cjs/loader:1288:32',
+    'node:internal/modules/cjs/loader:1104:12',
+    'node:internal/modules/cjs/loader:1311:19',
+    'node:internal/modules/helpers:179:18',
+    '/home/pptruser/app/runtime/cli/index.js:10871:19',
+    'Array.forEach (<anonymous>)'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/bdb03f69-c25c-4a7d-beb6-95704dc7ceee
+For help, see: https://nodejs.org/en/docs/inspector
+
+/home/pptruser/app/runtime/transpiled/qx/core/Assert.js:84
+          throw err;
+          ^
+Error: Expected 'function' but found 'object'!
+    at Error.construct (/home/pptruser/app/runtime/transpiled/qx/type/BaseError.js:43:24)
+    at Error.constructor (/home/pptruser/app/runtime/transpiled/qx/Bootstrap.js:49:24)
+    at Error.construct (/home/pptruser/app/runtime/transpiled/qx/core/AssertionError.js:53:25)
+    at new <anonymous> (/home/pptruser/app/runtime/transpiled/qx/Bootstrap.js:49:24)
+    at Object.__fail__P_90_1 (/home/pptruser/app/runtime/transpiled/qx/core/Assert.js:80:36)
+    at Object.assertEquals (/home/pptruser/app/runtime/transpiled/qx/core/Assert.js:164:35)
+    at Object.promisify (/home/pptruser/app/runtime/transpiled/zx/utils/Promisify.js:85:24)
+    at /home/pptruser/app/runtime/transpiled/zx/cms/render/Theme.js:46:35
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/cms/render/Theme.js:289:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19 {
+  __comment__P_131_0: '',
+  __trace__P_132_0: [
+    'qx.core.AssertionError:54:49',
+    'qx.Bootstrap:49:24',
+    'qx.core.Assert:80:36',
+    'qx.core.Assert:164:35',
+    'zx.utils.Promisify:85:24',
+    'zx.cms.render.Theme:46:35',
+    'zx.cms.render.Theme:289:3',
+    'node:internal/modules/cjs/loader:1469:14',
+    'node:internal/modules/cjs/loader:1548:10',
+    'node:internal/modules/cjs/loader:1288:32',
+    'node:internal/modules/cjs/loader:1104:12',
+    'node:internal/modules/cjs/loader:1311:19',
+    'node:internal/modules/helpers:179:18',
+    '/home/pptruser/app/runtime/cli/index.js:10871:19',
+    'Array.forEach (<anonymous>)'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/530ba602-42cc-4e89-b54c-9d1c9e061ab7
+For help, see: https://nodejs.org/en/docs/inspector
+
+/home/pptruser/app/runtime/transpiled/qx/core/Assert.js:84
+          throw err;
+          ^
+Error: Expected 'function' but found 'object'!
+    at Error.construct (/home/pptruser/app/runtime/transpiled/qx/type/BaseError.js:43:24)
+    at Error.constructor (/home/pptruser/app/runtime/transpiled/qx/Bootstrap.js:49:24)
+    at Error.construct (/home/pptruser/app/runtime/transpiled/qx/core/AssertionError.js:53:25)
+    at new <anonymous> (/home/pptruser/app/runtime/transpiled/qx/Bootstrap.js:49:24)
+    at Object.__fail__P_90_1 (/home/pptruser/app/runtime/transpiled/qx/core/Assert.js:80:36)
+    at Object.assertEquals (/home/pptruser/app/runtime/transpiled/qx/core/Assert.js:164:35)
+    at Object.promisify (/home/pptruser/app/runtime/transpiled/zx/utils/Promisify.js:85:24)
+    at /home/pptruser/app/runtime/transpiled/zx/cms/render/Theme.js:46:35
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/cms/render/Theme.js:289:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19 {
+  __comment__P_131_0: '',
+  __trace__P_132_0: [
+    'qx.core.AssertionError:54:49',
+    'qx.Bootstrap:49:24',
+    'qx.core.Assert:80:36',
+    'qx.core.Assert:164:35',
+    'zx.utils.Promisify:85:24',
+    'zx.cms.render.Theme:46:35',
+    'zx.cms.render.Theme:289:3',
+    'node:internal/modules/cjs/loader:1469:14',
+    'node:internal/modules/cjs/loader:1548:10',
+    'node:internal/modules/cjs/loader:1288:32',
+    'node:internal/modules/cjs/loader:1104:12',
+    'node:internal/modules/cjs/loader:1311:19',
+    'node:internal/modules/helpers:179:18',
+    '/home/pptruser/app/runtime/cli/index.js:10871:19',
+    'Array.forEach (<anonymous>)'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/c2c54de8-700f-4d80-80b1-d0577cd60058
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'uid-safe'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/server/Session.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/server/Session.js:18:15
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/server/Session.js:222:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/server/Session.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/1d5dfe41-1862-46fc-87c8-07ac6c7b7f02
+For help, see: https://nodejs.org/en/docs/inspector
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module 'dockerode'
+Require stack:
+- /home/pptruser/app/runtime/transpiled/zx/server/work/pools/NodeProcessWorkerTracker.js
+- /home/pptruser/app/runtime/cli/index.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/transpiled/zx/server/work/pools/NodeProcessWorkerTracker.js:24:18
+    at Object.<anonymous> (/home/pptruser/app/runtime/transpiled/zx/server/work/pools/NodeProcessWorkerTracker.js:329:3)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
+    at Module._load (node:internal/modules/cjs/loader:1104:12)
+    at Module.require (node:internal/modules/cjs/loader:1311:19)
+    at require (node:internal/modules/helpers:179:18)
+    at /home/pptruser/app/runtime/cli/index.js:10871:19
+    at Array.forEach (<anonymous>)
+    at Object.loadScriptList (/home/pptruser/app/runtime/cli/index.js:10869:14)
+    at /home/pptruser/app/runtime/cli/index.js:10858:13 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/pptruser/app/runtime/transpiled/zx/server/work/pools/NodeProcessWorkerTracker.js',
+    '/home/pptruser/app/runtime/cli/index.js'
+  ]
+}
+
+Node.js v20.18.0
+Debugger listening on ws://0.0.0.0:9229/862cb16b-12e2-485a-8eb0-9db04860dd6b
+For help, see: https://nodejs.org/en/docs/inspector
+USAGE:
+   index.js [FLAGS] [COMMAND]
+
+FLAGS:
+   --help (Boolean) Outputs usage summary
+
+COMMANDS:
+   launch       Runs the Puppeteer server
+   start-worker Starts a Node Worker     
+
+More arguments than expected, starting from work
+Debugger listening on ws://0.0.0.0:9229/1a12d585-ce9e-419e-84e0-4d970128b30e
+For help, see: https://nodejs.org/en/docs/inspector
+Debugger listening on ws://0.0.0.0:9229/daeef08b-410e-40cc-beba-93d51c302a1e
+For help, see: https://nodejs.org/en/docs/inspector
+Using config from /home/pptruser/app/cms.json
+000826 qx.Promise: Unhandled promise rejection: TypeError: Cannot read properties of null (reading 'directory')
+    at wrapper.loadConfig (/home/pptruser/app/runtime/transpiled/zx/server/Config.js:86:71)
+    at async Function.getConfig (/home/pptruser/app/runtime/transpiled/zx/server/Config.js:204:16)
+    at async wrapper.start (/home/pptruser/app/runtime/transpiled/zx/server/Standalone.js:115:24)
+    at async wrapper.run (/home/pptruser/app/runtime/transpiled/zx/cli/commands/work/StartWorkerCommand.js:71:9)
+    at async wrapper.execute (/home/pptruser/app/runtime/transpiled/zx/cli/Command.js:499:24)
+    at async wrapper.main (/home/pptruser/app/runtime/transpiled/zx/cli/PuppeteerServerApp.js:53:9)
+Debugger listening on ws://0.0.0.0:9229/2a82371c-f582-4968-901a-c24fccce276b
+For help, see: https://nodejs.org/en/docs/inspector
+Using config from /home/pptruser/app/cms.json
+000641 qx.Promise: Unhandled promise rejection: TypeError: Cannot read properties of null (reading 'directory')
+    at wrapper.loadConfig (/home/pptruser/app/runtime/transpiled/zx/server/Config.js:86:71)
+    at async Function.getConfig (/home/pptruser/app/runtime/transpiled/zx/server/Config.js:204:16)
+    at async wrapper.start (/home/pptruser/app/runtime/transpiled/zx/server/Standalone.js:115:24)
+    at async wrapper.run (/home/pptruser/app/runtime/transpiled/zx/cli/commands/work/StartWorkerCommand.js:71:9)
+    at async wrapper.execute (/home/pptruser/app/runtime/transpiled/zx/cli/Command.js:499:24)
+    at async wrapper.main (/home/pptruser/app/runtime/transpiled/zx/cli/PuppeteerServerApp.js:53:9)
+Debugger listening on ws://0.0.0.0:9229/b22c6223-8a49-415d-bea8-791c131e6c61
+For help, see: https://nodejs.org/en/docs/inspector
+Debugger listening on ws://0.0.0.0:9229/84837477-1355-4bc2-87ae-44738b3deec8
+For help, see: https://nodejs.org/en/docs/inspector
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+000668 qx.Promise: Unhandled promise rejection: Error: Cannot open database because it is an unexpected type: null
+    at wrapper._openDatabase (/home/pptruser/app/runtime/transpiled/zx/server/Standalone.js:181:34)
+    at wrapper.start (/home/pptruser/app/runtime/transpiled/zx/server/Standalone.js:127:20)
+    at async wrapper.run (/home/pptruser/app/runtime/transpiled/zx/cli/commands/work/StartWorkerCommand.js:71:9)
+    at async wrapper.execute (/home/pptruser/app/runtime/transpiled/zx/cli/Command.js:499:24)
+    at async wrapper.main (/home/pptruser/app/runtime/transpiled/zx/cli/PuppeteerServerApp.js:53:9)
+Debugger listening on ws://0.0.0.0:9229/8ff5576a-4bb6-4619-b229-3bb692e17bb7
+For help, see: https://nodejs.org/en/docs/inspector
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+030898 qx.Promise: Unhandled promise rejection: MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+    at Topology.selectServer (/home/pptruser/app/node_modules/mongodb/lib/sdam/topology.js:321:38)
+    at async Topology._connect (/home/pptruser/app/node_modules/mongodb/lib/sdam/topology.js:200:28)
+    at async Topology.connect (/home/pptruser/app/node_modules/mongodb/lib/sdam/topology.js:152:13)
+    at async topologyConnect (/home/pptruser/app/node_modules/mongodb/lib/mongo_client.js:233:17)
+    at async MongoClient._connect (/home/pptruser/app/node_modules/mongodb/lib/mongo_client.js:246:13)
+    at async MongoClient.connect (/home/pptruser/app/node_modules/mongodb/lib/mongo_client.js:171:13)
+    at async wrapper.open (/home/pptruser/app/runtime/transpiled/zx/io/persistence/db/MongoDatabase.js:81:9)
+    at async wrapper._openDatabase (/home/pptruser/app/runtime/transpiled/zx/server/Standalone.js:193:9)
+    at async wrapper.start (/home/pptruser/app/runtime/transpiled/zx/server/Standalone.js:127:9)
+    at async wrapper.run (/home/pptruser/app/runtime/transpiled/zx/cli/commands/work/StartWorkerCommand.js:71:9)
+    at async wrapper.execute (/home/pptruser/app/runtime/transpiled/zx/cli/Command.js:499:24)
+    at async wrapper.main (/home/pptruser/app/runtime/transpiled/zx/cli/PuppeteerServerApp.js:53:9)
+Debugger listening on ws://0.0.0.0:9229/e253778d-6a21-47e9-b646-d3ae59ed069f
+For help, see: https://nodejs.org/en/docs/inspector
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+000676 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+000676 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module '/home/pptruser/app/runtime/puppeteer-server/index.js'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:174:12)
+    at node:internal/main/run_main_module:28:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v20.18.0
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
+
+Error: Cannot find module '/home/pptruser/app/runtime/puppeteer-server/index.js'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:174:12)
+    at node:internal/main/run_main_module:28:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v20.18.0
+++ bash
+++ bash
+++ bash
+++ bash
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+000943 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+000943 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+000962 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [9a85604b-a82c-4903-9354-731413f047f0]
+004359 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [e16ef855-9d33-4109-a4f6-d62c277aae15]
+004361 zx.server.work.WorkerApi_Server[28-0]: Error calling method run in API zx.server.work.WorkerApi: Error: Cannot find class 'zx.demo.server.work.TestWork'
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+000913 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+000913 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+000929 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [1c9d1e61-5f02-4119-8da3-14a6a5e991a4]
+004360 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [86e6a16b-9884-4eb3-88a6-8cf65ca7c6a5]
+the task is running!
+004360 zx.server.work.Worker[17-0]: Hello, World!
+004361 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004361 zx.io.api.server.Session[20-0]: 1c9d1e61-5f02-4119-8da3-14a6a5e991a4 added publication, all publications: [ {...(3)} ]
+004361 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004361 zx.server.work.Worker[17-0]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+004361 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004361 zx.io.api.server.Session[20-0]: 1c9d1e61-5f02-4119-8da3-14a6a5e991a4 added publication, all publications: [ {...(3)}, {...(3)} ]
+004361 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004361 zx.server.work.Worker[17-0]: 86e6a16b Doing thing 0
+004361 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004361 zx.io.api.server.Session[20-0]: 1c9d1e61-5f02-4119-8da3-14a6a5e991a4 added publication, all publications: [ {...(3)}, {...(3)}, {...(3)} ]
+004361 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004955 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+004956 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+004956 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+005364 zx.server.work.Worker[17-0]: 86e6a16b Doing thing 1
+005364 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+005364 zx.io.api.server.Session[20-0]: 1c9d1e61-5f02-4119-8da3-14a6a5e991a4 added publication, all publications: [ {...(3)} ]
+005364 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+005965 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+006371 zx.server.work.Worker[17-0]: 86e6a16b Doing thing 2
+006371 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+006372 zx.io.api.server.Session[20-0]: 1c9d1e61-5f02-4119-8da3-14a6a5e991a4 added publication, all publications: [ {...(3)} ]
+006372 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+006976 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+007375 zx.server.work.Worker[17-0]: zx.demo.server.work.TestWork [86e6a16b-9884-4eb3-88a6-8cf65ca7c6a5] completed successfully, result = success!
+007375 zx.server.work.WorkerApi_Server[28-0]: Publishing complete to zx.io.api.server.Session[20-0]
+007375 zx.io.api.server.Session[20-0]: 1c9d1e61-5f02-4119-8da3-14a6a5e991a4 no subscriptionCount
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+000965 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+000966 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+000982 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [356c0d56-615e-4711-b202-761963c56ae0]
+004363 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [9922ff35-78c0-450a-b4ed-e80c8b77835b]
+the task is running!
+004363 zx.server.work.Worker[17-0]: Hello, World!
+004364 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004364 zx.io.api.server.Session[20-0]: 356c0d56-615e-4711-b202-761963c56ae0 added publication, all publications: [ {...(3)} ]
+004364 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004364 zx.server.work.Worker[17-0]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+004365 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004365 zx.io.api.server.Session[20-0]: 356c0d56-615e-4711-b202-761963c56ae0 added publication, all publications: [ {...(3)}, {...(3)} ]
+004365 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004365 zx.server.work.Worker[17-0]: 9922ff35 Doing thing 0
+004365 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004365 zx.io.api.server.Session[20-0]: 356c0d56-615e-4711-b202-761963c56ae0 added publication, all publications: [ {...(3)}, {...(3)}, {...(3)} ]
+004366 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+005005 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+005005 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+005005 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+005367 zx.server.work.Worker[17-0]: 9922ff35 Doing thing 1
+005368 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+005369 zx.io.api.server.Session[20-0]: 356c0d56-615e-4711-b202-761963c56ae0 added publication, all publications: [ {...(3)} ]
+005370 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+006017 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+006371 zx.server.work.Worker[17-0]: 9922ff35 Doing thing 2
+006371 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+006371 zx.io.api.server.Session[20-0]: 356c0d56-615e-4711-b202-761963c56ae0 added publication, all publications: [ {...(3)} ]
+006371 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+007028 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+007375 zx.server.work.Worker[17-0]: zx.demo.server.work.TestWork [9922ff35-78c0-450a-b4ed-e80c8b77835b] completed successfully, result = success!
+007375 zx.server.work.WorkerApi_Server[28-0]: Publishing complete to zx.io.api.server.Session[20-0]
+007375 zx.io.api.server.Session[20-0]: 356c0d56-615e-4711-b202-761963c56ae0 no subscriptionCount
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+000937 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+000937 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+000952 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [2fbd00f9-e7fa-4de4-a5fa-51a87bd4b785]
+004333 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [61a6a84d-d26d-4b59-b4f6-4450e380a864]
+the task is running!
+004333 zx.server.work.Worker[17-0]: Hello, World!
+004334 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004334 zx.io.api.server.Session[20-0]: 2fbd00f9-e7fa-4de4-a5fa-51a87bd4b785 added publication, all publications: [ {...(3)} ]
+004334 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004335 zx.server.work.Worker[17-0]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+004335 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004335 zx.io.api.server.Session[20-0]: 2fbd00f9-e7fa-4de4-a5fa-51a87bd4b785 added publication, all publications: [ {...(3)}, {...(3)} ]
+004335 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004335 zx.server.work.Worker[17-0]: 61a6a84d Doing thing 0
+004335 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004336 zx.io.api.server.Session[20-0]: 2fbd00f9-e7fa-4de4-a5fa-51a87bd4b785 added publication, all publications: [ {...(3)}, {...(3)}, {...(3)} ]
+004336 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004988 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+004988 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+004989 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+005342 zx.server.work.Worker[17-0]: 61a6a84d Doing thing 1
+005343 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+005344 zx.io.api.server.Session[20-0]: 2fbd00f9-e7fa-4de4-a5fa-51a87bd4b785 added publication, all publications: [ {...(3)} ]
+005345 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+006003 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+006346 zx.server.work.Worker[17-0]: 61a6a84d Doing thing 2
+006347 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+006348 zx.io.api.server.Session[20-0]: 2fbd00f9-e7fa-4de4-a5fa-51a87bd4b785 added publication, all publications: [ {...(3)} ]
+006348 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+007016 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+007348 zx.server.work.Worker[17-0]: zx.demo.server.work.TestWork [61a6a84d-d26d-4b59-b4f6-4450e380a864] completed successfully, result = success!
+007349 zx.server.work.WorkerApi_Server[28-0]: Publishing complete to zx.io.api.server.Session[20-0]
+007349 zx.io.api.server.Session[20-0]: 2fbd00f9-e7fa-4de4-a5fa-51a87bd4b785 no subscriptionCount
+009335 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.ErrorWork [5ba3bba3-b594-4c79-8260-f46d535b8f2f]
+009336 zx.server.work.Worker[17-0]: I'm about to throw an exception!
+009336 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+009337 zx.io.api.server.Session[20-0]: 2fbd00f9-e7fa-4de4-a5fa-51a87bd4b785 added publication, all publications: [ {...(3)} ]
+009337 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+009339 zx.server.work.Worker[17-0]: zx.demo.server.work.ErrorWork [5ba3bba3-b594-4c79-8260-f46d535b8f2f] EXCEPTION: oops Error: oops
+zx.demo.server.work.ErrorWork:26:30,qx.Interface:473:33,zx.server.work.Worker:93:53,qx.Interface:473:33,zx.io.api.ApiUtils:152:48,zx.io.api.server.AbstractServerApi:172:49,zx.io.api.server.AbstractServerApi:107:22,zx.io.api.server.AbstractServerApi:82:22,zx.io.api.server.ConnectionManager:109:21,zx.io.api.transport.http.ExpressServerTransport:81:66,/home/pptruser/app/node_modules/express/lib/router/layer.js:95:5,/home/pptruser/app/node_modules/express/lib/router/route.js:149:13,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7
+009340 zx.server.work.WorkerApi_Server[28-0]: Publishing complete to zx.io.api.server.Session[20-0]
+009340 zx.io.api.server.Session[20-0]: 2fbd00f9-e7fa-4de4-a5fa-51a87bd4b785 no subscriptionCount
+009341 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+009347 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+000929 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+000929 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+000945 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [472ca042-cf49-4f85-85ac-9866ebac9d63]
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+000971 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+000971 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+000991 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [fc4d798b-b19d-4aba-890a-97d1cb469691]
+004358 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [91d5f0b7-649e-4bcc-894c-cbfa05040866]
+the task is running!
+004359 zx.server.work.Worker[17-0]: Hello, World!
+004359 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004360 zx.io.api.server.Session[20-0]: fc4d798b-b19d-4aba-890a-97d1cb469691 added publication, all publications: [ {...(3)} ]
+004360 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004360 zx.server.work.Worker[17-0]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+004360 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004360 zx.io.api.server.Session[20-0]: fc4d798b-b19d-4aba-890a-97d1cb469691 added publication, all publications: [ {...(3)}, {...(3)} ]
+004360 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004360 zx.server.work.Worker[17-0]: 91d5f0b7 Doing thing 0
+004360 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004360 zx.io.api.server.Session[20-0]: fc4d798b-b19d-4aba-890a-97d1cb469691 added publication, all publications: [ {...(3)}, {...(3)}, {...(3)} ]
+004360 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+005022 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+005022 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+005022 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+005361 zx.server.work.Worker[17-0]: 91d5f0b7 Doing thing 1
+005361 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+005362 zx.io.api.server.Session[20-0]: fc4d798b-b19d-4aba-890a-97d1cb469691 added publication, all publications: [ {...(3)} ]
+005362 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+006033 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+006364 zx.server.work.Worker[17-0]: 91d5f0b7 Doing thing 2
+006365 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+006366 zx.io.api.server.Session[20-0]: fc4d798b-b19d-4aba-890a-97d1cb469691 added publication, all publications: [ {...(3)} ]
+006366 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+007050 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+007369 zx.server.work.Worker[17-0]: zx.demo.server.work.TestWork [91d5f0b7-649e-4bcc-894c-cbfa05040866] completed successfully, result = success!
+007369 zx.server.work.WorkerApi_Server[28-0]: Publishing complete to zx.io.api.server.Session[20-0]
+007369 zx.io.api.server.Session[20-0]: fc4d798b-b19d-4aba-890a-97d1cb469691 no subscriptionCount
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+000953 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+000953 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+000980 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [e3729074-0c05-48cc-bbe0-b3419676c02d]
+004358 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [e64da6ad-507e-4472-9d9e-84621dca73ef]
+the task is running!
+004358 zx.server.work.Worker[17-0]: Hello, World!
+004358 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004359 zx.io.api.server.Session[20-0]: e3729074-0c05-48cc-bbe0-b3419676c02d added publication, all publications: [ {...(3)} ]
+004359 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004359 zx.server.work.Worker[17-0]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+004360 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004360 zx.io.api.server.Session[20-0]: e3729074-0c05-48cc-bbe0-b3419676c02d added publication, all publications: [ {...(3)}, {...(3)} ]
+004360 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004360 zx.server.work.Worker[17-0]: e64da6ad Doing thing 0
+004360 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004360 zx.io.api.server.Session[20-0]: e3729074-0c05-48cc-bbe0-b3419676c02d added publication, all publications: [ {...(3)}, {...(3)}, {...(3)} ]
+004360 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+005005 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+005006 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+005006 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+005364 zx.server.work.Worker[17-0]: e64da6ad Doing thing 1
+005365 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+005367 zx.io.api.server.Session[20-0]: e3729074-0c05-48cc-bbe0-b3419676c02d added publication, all publications: [ {...(3)} ]
+005367 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+006019 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+006370 zx.server.work.Worker[17-0]: e64da6ad Doing thing 2
+006370 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+006371 zx.io.api.server.Session[20-0]: e3729074-0c05-48cc-bbe0-b3419676c02d added publication, all publications: [ {...(3)} ]
+006371 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+007029 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+007373 zx.server.work.Worker[17-0]: zx.demo.server.work.TestWork [e64da6ad-507e-4472-9d9e-84621dca73ef] completed successfully, result = success!
+007374 zx.server.work.WorkerApi_Server[28-0]: Publishing complete to zx.io.api.server.Session[20-0]
+007374 zx.io.api.server.Session[20-0]: e3729074-0c05-48cc-bbe0-b3419676c02d no subscriptionCount
+009360 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.ErrorWork [93d7b8a3-d1db-4326-9e6b-f79ac88c3ebb]
+009361 zx.server.work.Worker[17-0]: I'm about to throw an exception!
+009361 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+009361 zx.io.api.server.Session[20-0]: e3729074-0c05-48cc-bbe0-b3419676c02d added publication, all publications: [ {...(3)} ]
+009361 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+009363 zx.server.work.Worker[17-0]: zx.demo.server.work.ErrorWork [93d7b8a3-d1db-4326-9e6b-f79ac88c3ebb] EXCEPTION: oops Error: oops
+zx.demo.server.work.ErrorWork:26:30,qx.Interface:473:33,zx.server.work.Worker:93:53,qx.Interface:473:33,zx.io.api.ApiUtils:152:48,zx.io.api.server.AbstractServerApi:172:49,zx.io.api.server.AbstractServerApi:107:22,zx.io.api.server.AbstractServerApi:82:22,zx.io.api.server.ConnectionManager:109:21,zx.io.api.transport.http.ExpressServerTransport:81:66,/home/pptruser/app/node_modules/express/lib/router/layer.js:95:5,/home/pptruser/app/node_modules/express/lib/router/route.js:149:13,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7
+009363 zx.server.work.WorkerApi_Server[28-0]: Publishing complete to zx.io.api.server.Session[20-0]
+009363 zx.io.api.server.Session[20-0]: e3729074-0c05-48cc-bbe0-b3419676c02d no subscriptionCount
+009363 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+009368 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs

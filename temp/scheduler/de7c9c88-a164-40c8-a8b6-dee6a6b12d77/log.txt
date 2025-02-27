@@ -1,8 +1,0 @@
-2025-02-27 00:19:11 Starting work: {
-  "uuid": "de7c9c88-a164-40c8-a8b6-dee6a6b12d77",
-  "classname": "zx.demo.server.work.ErrorWork",
-  "compatibility": [],
-  "args": []
-}
-2025-02-27 00:19:11 I'm about to throw an exception!
-2025-02-27 00:19:11 Work complete for de7c9c88-a164-40c8-a8b6-dee6a6b12d77, response = {"returnValue":null,"exception":"oops","exceptionStack":"zx.demo.server.work.ErrorWork:26:30, qx.Interface:473:33, zx.server.work.Worker:93:53, qx.Interface:473:33, zx.io.api.ApiUtils:152:48, zx.io.api.server.AbstractServerApi:172:49, zx.io.api.server.AbstractServerApi:107:22, zx.io.api.server.AbstractServerApi:82:22, zx.io.api.server.ConnectionManager:109:21, zx.io.api.transport.nodeworker.NodeWorkerServerTransport:101:64, zx.io.api.transport.nodeworker.NodeWorkerServerTransport:78:16, node:internal/event_target:822:20, node:internal/per_context/messageport:23:28, node:internal/async_hooks:130:17"}

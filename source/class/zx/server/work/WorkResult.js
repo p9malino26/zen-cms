@@ -130,7 +130,9 @@ qx.Class.define("zx.server.work.WorkResult", {
      * @param {String} message
      */
     appendWorkLog(message) {
-      this.__logStream.write(zx.server.work.WorkResult.__DF_LOG.format(new Date()) + " " + message + "\n");
+      if (this.__logStream) {
+        this.__logStream.write(zx.server.work.WorkResult.__DF_LOG.format(new Date()) + " " + message + "\n");
+      }
     },
 
     /**
