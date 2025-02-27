@@ -43,7 +43,7 @@ qx.Class.define("zx.server.work.pools.LocalWorkerPool", {
      * @override
      */
     async destroyPoolableEntity(entity) {
-      entity.stop();
+      entity.close();
       entity.dispose();
     }
   }

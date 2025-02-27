@@ -42,8 +42,8 @@ qx.Class.define("zx.cli.commands.work.StartWorkerCommand", {
       })
     );
     this.addFlag(
-      new zx.cli.Flag("chromium").set({
-        description: "port to listen on",
+      new zx.cli.Flag("chromium-url").set({
+        description: "Chromium Web URL to use",
         type: "string"
       })
     );
@@ -58,8 +58,8 @@ qx.Class.define("zx.cli.commands.work.StartWorkerCommand", {
       await server.start();
 
       let worker = new zx.server.work.Worker();
-      if (flags.chromium) {
-        worker.setChromiumUrl(flags.chromium);
+      if (flags.chromiumUrl) {
+        worker.setChromiumUrl(flags.chromiumUrl);
       }
       zx.io.api.server.ConnectionManager.getInstance().registerApi(worker.getServerApi(), "/work/worker");
 

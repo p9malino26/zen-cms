@@ -46,13 +46,6 @@ qx.Class.define("zx.cli.commands.demo.work.LocalWorkerPoolCommand", {
       })
     );
     this.addFlag(
-      new zx.cli.Flag("containerHome").set({
-        description: "where to mount the container home (override the default)",
-        type: "string",
-        value: null
-      })
-    );
-    this.addFlag(
       new zx.cli.Flag("pool-min-size").set({
         description: "Minimum size of the worker pool",
         type: "integer",
@@ -106,17 +99,11 @@ qx.Class.define("zx.cli.commands.demo.work.LocalWorkerPoolCommand", {
       };
 
       if (flags.workerLocation == "local") {
-        if (flags.chromium) {
-          cliError("Cannot enable chromium in local worker");
-        }
         pool = new zx.server.work.pools.LocalWorkerPool().set({
           poolConfig
         });
       } else if (flags.workerLocation == "node-thread") {
-        if (flags.chromium) {
-          cliError("Cannot enable chromium in node thread");
-        }
-        pool = new zx.server.work.pools.NodeThreadWorkerPool("./compiled/source-node/cli/index.js").set({
+        pool = new zx.server.work.pools.NodeThreadWorkerPool(null, "./compiled/source-node/cli/index.js").set({
           poolConfig
         });
       } else {
@@ -145,8 +132,9 @@ qx.Class.define("zx.cli.commands.demo.work.LocalWorkerPoolCommand", {
           throw new Error("Unknown worker location: " + flags.workerLocation);
         }
         pool = new zx.server.work.pools.NodeProcessWorkerPool().set(settings);
-        await pool.cleanupOldContainers();
       }
+
+      await pool.cleanupOldContainers();
 
       let scheduler = new zx.server.work.scheduler.QueueScheduler("temp/scheduler/");
 

@@ -50,6 +50,12 @@ qx.Interface.define("zx.server.work.IWorkerApi", {
     run(work) {},
 
     /**
+     * Sets the URL for the Chromium instance
+     * @param {String} url
+     */
+    setChromiumUrl(url) {},
+
+    /**
      * Called to shutdown the worker process
      */
     shutdown() {}

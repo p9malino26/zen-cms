@@ -16,6 +16,18 @@ qx.Class.define("zx.server.work.pools.LocalWorkerTracker", {
     /**
      * @Override
      */
+    async initialize() {
+      await super.initialize();
+      if (this.getWorkerPool().isEnableChromium()) {
+        await this._createDockerContainer();
+        let chromiumUrl = `http://localhost:${this._getNodeHttpPort()}`;
+        this.__worker.setChromiumUrl(chromiumUrl);
+      }
+    },
+
+    /**
+     * @Override
+     */
     appendWorkLog(message) {
       super.appendWorkLog(message);
       if (!this.getWorkResult()) {
@@ -26,12 +38,11 @@ qx.Class.define("zx.server.work.pools.LocalWorkerTracker", {
     /**
      * Kills the node process
      */
-    async stop() {
+    async close() {
+      await super.close();
       if (this.__worker) {
         this.__worker.dispose();
         this.__worker = null;
-        this.getWorkerClientApi().terminate();
-        this.getWorkerClientApi().dispose();
       }
     }
   }

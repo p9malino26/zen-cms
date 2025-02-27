@@ -25,7 +25,7 @@ function __run_puppeteer() {
   . $HOME/bin/pre-start-hook.sh 2>&1 | tee -a ./console.log
 
   # Run the web server; this shouldnt crash, but if it does, we restart it
-  runNode ./runtime/puppeteer-server/index.js launch
+  runNode $ZX_NODE_ARGS
   if [ -f $HOME/.shutdown-docker ] ; then
     echo "Shutdown detected" >> ./console.log
     exit 0

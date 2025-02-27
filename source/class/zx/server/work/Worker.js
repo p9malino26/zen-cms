@@ -27,6 +27,7 @@ qx.Class.define("zx.server.work.Worker", {
 
   members: {
     __workJson: null,
+    __chromium: null,
 
     /**
      * Returns the Server API for this worker
@@ -91,6 +92,23 @@ qx.Class.define("zx.server.work.Worker", {
      */
     shutdown() {
       this.fireEvent("shutdown");
+    },
+
+    /**
+     * Returns the IChromium instance for this worker, if one is available
+     *
+     * @returns {zx.server.puppeteer.IChromium}
+     */
+    async getChromium() {
+      if (this.__chromium) {
+        return this.__chromium;
+      }
+      if (!this.getChromiumUrl()) {
+        return null;
+      }
+      this.__chromium = new zx.server.work.WorkerChromium(this);
+      await this.__chromium.initialise();
+      return this.__chromium;
     }
   }
 });

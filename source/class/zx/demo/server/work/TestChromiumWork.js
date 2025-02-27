@@ -1,4 +1,4 @@
-qx.Class.define("zx.demo.server.work.TestWork", {
+qx.Class.define("zx.demo.server.work.TestChromiumWork", {
   implement: zx.server.work.IWork,
   extend: qx.core.Object,
 
@@ -16,7 +16,10 @@ qx.Class.define("zx.demo.server.work.TestWork", {
      * @override
      */
     async execute(worker) {
-      console.log("the task is running!");
+      console.log("the chromium task is running!");
+      let chromium = await worker.getChromium();
+      let ctlr = new zx.server.puppeteer.PuppeteerController();
+
       worker.appendWorkLog("Hello, World!");
       worker.appendWorkLog("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
 

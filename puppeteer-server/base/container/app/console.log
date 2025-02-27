@@ -1273,3 +1273,49 @@ zx.demo.server.work.ErrorWork:26:30,qx.Interface:473:33,zx.server.work.Worker:93
 009363 zx.io.api.server.Session[20-0]: e3729074-0c05-48cc-bbe0-b3419676c02d no subscriptionCount
 009363 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
 009368 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+000908 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+000908 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+000925 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [358f556f-fd5c-4579-a775-eaf9b265b3aa]
+004371 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [2476e933-a0c7-4a89-8f7f-cbdc9b079b09]
+the task is running!
+004371 zx.server.work.Worker[17-0]: Hello, World!
+004371 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004372 zx.io.api.server.Session[20-0]: 358f556f-fd5c-4579-a775-eaf9b265b3aa added publication, all publications: [ {...(3)} ]
+004372 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004373 zx.server.work.Worker[17-0]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+004373 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004373 zx.io.api.server.Session[20-0]: 358f556f-fd5c-4579-a775-eaf9b265b3aa added publication, all publications: [ {...(3)}, {...(3)} ]
+004374 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004374 zx.server.work.Worker[17-0]: 2476e933 Doing thing 0
+004374 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+004374 zx.io.api.server.Session[20-0]: 358f556f-fd5c-4579-a775-eaf9b265b3aa added publication, all publications: [ {...(3)}, {...(3)}, {...(3)} ]
+004374 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004957 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+004957 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+004957 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+005381 zx.server.work.Worker[17-0]: 2476e933 Doing thing 1
+005382 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+005383 zx.io.api.server.Session[20-0]: 358f556f-fd5c-4579-a775-eaf9b265b3aa added publication, all publications: [ {...(3)} ]
+005383 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+005970 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+006389 zx.server.work.Worker[17-0]: 2476e933 Doing thing 2
+006390 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+006390 zx.io.api.server.Session[20-0]: 358f556f-fd5c-4579-a775-eaf9b265b3aa added publication, all publications: [ {...(3)} ]
+006390 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+006987 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+007393 zx.server.work.Worker[17-0]: zx.demo.server.work.TestWork [2476e933-a0c7-4a89-8f7f-cbdc9b079b09] completed successfully, result = success!
+007394 zx.server.work.WorkerApi_Server[28-0]: Publishing complete to zx.io.api.server.Session[20-0]
+007395 zx.io.api.server.Session[20-0]: 358f556f-fd5c-4579-a775-eaf9b265b3aa no subscriptionCount
+009370 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.ErrorWork [49b3b4d3-08a2-4498-94d1-fc6e2d4ee005]
+009371 zx.server.work.Worker[17-0]: I'm about to throw an exception!
+009371 zx.server.work.WorkerApi_Server[28-0]: Publishing log to zx.io.api.server.Session[20-0]
+009371 zx.io.api.server.Session[20-0]: 358f556f-fd5c-4579-a775-eaf9b265b3aa added publication, all publications: [ {...(3)} ]
+009371 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+009374 zx.server.work.Worker[17-0]: zx.demo.server.work.ErrorWork [49b3b4d3-08a2-4498-94d1-fc6e2d4ee005] EXCEPTION: oops Error: oops
+zx.demo.server.work.ErrorWork:26:30,qx.Interface:473:33,zx.server.work.Worker:93:53,qx.Interface:473:33,zx.io.api.ApiUtils:152:48,zx.io.api.server.AbstractServerApi:172:49,zx.io.api.server.AbstractServerApi:107:22,zx.io.api.server.AbstractServerApi:82:22,zx.io.api.server.ConnectionManager:109:21,zx.io.api.transport.http.ExpressServerTransport:81:66,/home/pptruser/app/node_modules/express/lib/router/layer.js:95:5,/home/pptruser/app/node_modules/express/lib/router/route.js:149:13,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7
+009374 zx.server.work.WorkerApi_Server[28-0]: Publishing complete to zx.io.api.server.Session[20-0]
+009374 zx.io.api.server.Session[20-0]: 358f556f-fd5c-4579-a775-eaf9b265b3aa no subscriptionCount
+009374 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+009380 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs

@@ -73,19 +73,19 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
       console.log("ChromiumDocker aquired");
 
       $checkPuppeteerVersion: {
-        const response = await fetch(`{this.__chromium.getBaseUrl()}/version`);
-        const responseJson = await response.json();
+        let response = await fetch(`{this.__chromium.getBaseUrl()}/puppeteer-version`);
+        let responseJson = await response.json();
         if (!responseJson) {
           throw new Error("Failed to get version from remote container. Please make sure you are using the latest docker image.");
         }
-        const remoteVersion = responseJson.version;
-        const remoteVersionSegments = remoteVersion.split(".").map(x => parseInt(x));
+        let remoteVersion = responseJson.version;
+        let remoteVersionSegments = remoteVersion.split(".").map(x => parseInt(x));
         if (remoteVersionSegments.some(x => isNaN(x)) || remoteVersionSegments.length !== 3) {
           throw new Error(`Invalid version number from remote container '${remoteVersion}'. Expected restricted SemVer format 'major.minor.patch'`);
         }
 
-        const localVersion = PUPPETEER_VERSION;
-        const localVersionSegments = localVersion.split(".").map(x => parseInt(x));
+        let localVersion = PUPPETEER_VERSION;
+        let localVersionSegments = localVersion.split(".").map(x => parseInt(x));
         if (localVersionSegments.some(x => isNaN(x)) || localVersionSegments.length !== 3) {
           throw new Error(`Invalid version number for local server '${localVersion}'. Expected restricted SemVer format 'major.minor.patch'`);
         }

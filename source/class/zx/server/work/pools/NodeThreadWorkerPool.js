@@ -50,13 +50,6 @@ qx.Class.define("zx.server.work.pools.NodeThreadWorkerPool", {
       let workerTracker = new zx.server.work.pools.NodeThreadWorkerTracker(this, nodeThread);
       await workerTracker.initialize();
       return workerTracker;
-    },
-
-    /**
-     * @override
-     */
-    async destroyPoolableEntity(entity) {
-      entity.dispose();
     }
   }
 });

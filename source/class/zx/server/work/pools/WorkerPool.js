@@ -96,6 +96,50 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
       init: null,
       nullable: true,
       check: ["info", "warn", "debug"]
+    },
+
+    /** Whether to enable Chromium for the Workers */
+    enableChromium: {
+      init: true,
+      check: "Boolean"
+    },
+
+    /** Docker image name to use for containers */
+    dockerImage: {
+      init: "zenesisuk/zx-puppeteer-server-base:latest",
+      check: "String"
+    },
+
+    /** What folder to map into the /home/pptruser/app folder in the container */
+    appMountVolume: {
+      init: "compiled/source-node",
+      check: "String"
+    },
+
+    /** @type{String[]?} array of mounts, in the form "sourcePath:containerPath", all paths must be absolute */
+    dockerMounts: {
+      init: null,
+      nullable: true,
+      check: "Array"
+    },
+
+    /** Command to run in docker */
+    dockerCommand: {
+      init: "/home/pptruser/bin/start.sh",
+      nullable: true,
+      check: "String"
+    },
+
+    /** Label used to identify old containers, so that they can be cleaned up */
+    dockerServicesTypeLabel: {
+      init: "zx-worker",
+      check: "String"
+    },
+
+    /** How long to wait for the node process to shutdown gracefully */
+    shutdownTimeout: {
+      init: 10000,
+      check: "Integer"
     }
   },
 
@@ -179,6 +223,36 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
       this.__pushTimer.dispose();
       this.__pushTimer = null;
       await this.__pushQueuedResultsToScheduler();
+    },
+
+    /**
+     * Cleans up any old containers that may have been left behind; the containers are identified by the
+     * label `dockerServicesTypeLabel`
+     */
+    async cleanupOldContainers() {
+      const Docker = require("dockerode");
+      let docker = new Docker();
+      let containers = await docker.listContainers({
+        all: true
+      });
+
+      for (let containerInfo of containers) {
+        if (containerInfo.Labels && containerInfo.Labels["zx.services.type"] == this.getDockerServicesTypeLabel()) {
+          let container = docker.getContainer(containerInfo.Id);
+          if (containerInfo.State == "running") {
+            try {
+              await container.kill();
+            } catch (ex) {
+              // Nothing
+            }
+          }
+          try {
+            await container.remove();
+          } catch (ex) {
+            // Nothing
+          }
+        }
+      }
     },
 
     /**
@@ -314,10 +388,10 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
     },
 
     /**
-     * @Override
+     * @override
      */
-    destroyPoolableEntity(entity) {
-      throw new Error(`Abstract method ${this.classname}.destroyPoolableEntity from IPoolFactory not implemented`);
+    async destroyPoolableEntity(entity) {
+      await entity.close();
     },
 
     /**

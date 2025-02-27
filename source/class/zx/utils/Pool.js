@@ -104,9 +104,6 @@ qx.Class.define("zx.utils.Pool", {
       if (value > this.getMaxSize()) {
         throw new Error("Cannot set minSize to be greater than maxSize");
       }
-      if (this.__live) {
-        this.__topup();
-      }
     },
 
     /**
@@ -119,16 +116,6 @@ qx.Class.define("zx.utils.Pool", {
       if (this.__live) {
         this.__trim();
       }
-    },
-
-    /**
-     * Top up the pool to the minimum size
-     */
-    async __topup() {
-      if (this.__pool.size >= this.getMinSize()) {
-        return;
-      }
-      await this.__createNewResource();
     },
 
     /**
@@ -155,7 +142,6 @@ qx.Class.define("zx.utils.Pool", {
       if (this.__live) {
         return;
       }
-      this.__topup();
       this.__updateAvailability();
       this.__live = true;
     },
@@ -269,25 +255,33 @@ qx.Class.define("zx.utils.Pool", {
      * @returns {TResource} a resource
      */
     async __getOrCreateResource() {
-      let startTime = Date.now();
-      while (true) {
-        for (let [resource, availability] of this.__pool) {
-          if (availability === zx.utils.Pool.UNAVAILABLE) {
-            continue;
+      const getIt = async () => {
+        let startTime = Date.now();
+        while (true) {
+          for (let [resource, availability] of this.__pool) {
+            if (availability === zx.utils.Pool.UNAVAILABLE) {
+              continue;
+            }
+            return resource;
           }
-          return resource;
-        }
 
-        if (this.__pool.size < this.getMaxSize()) {
-          return await this.__createNewResource();
-        }
+          if (this.__pool.size < this.getMaxSize()) {
+            return await this.__createNewResource();
+          }
 
-        if (Date.now() - startTime > this.getTimeout()) {
-          throw new Error("Timeout acquiring resource");
-        }
+          if (Date.now() - startTime > this.getTimeout()) {
+            throw new Error("Timeout acquiring resource");
+          }
 
-        await zx.utils.Timeout.sleep(this.getPollInterval());
+          await zx.utils.Timeout.sleep(this.getPollInterval());
+        }
+      };
+
+      if (this.__getOrCreateResourcePromise) {
+        return await this.__getOrCreateResourcePromise.then(getIt);
       }
+      this.__getOrCreateResourcePromise = getIt();
+      return await this.__getOrCreateResourcePromise;
     },
 
     /**

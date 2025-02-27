@@ -10,6 +10,9 @@ qx.Class.define("zx.server.work.pools.NodeThreadWorkerTracker", {
     /** @type{import("node:worker_threads").Worker} */
     __nodeThread: null,
 
+    /**
+     * @Override
+     */
     async initialize() {
       this.__nodeThread.on("error", err => {
         this.debug("Node Worker error: " + err);
@@ -31,9 +34,15 @@ qx.Class.define("zx.server.work.pools.NodeThreadWorkerTracker", {
       let workerClientApi = zx.io.api.ApiUtils.createClientApi(zx.server.work.IWorkerApi, this.__apiClientTransport, "/work/worker");
       this._setWorkerClientApi(workerClientApi);
       await super.initialize();
+
+      if (this.getWorkerPool().isEnableChromium()) {
+        await this._createDockerContainer();
+        let chromiumUrl = `http://localhost:${this._getNodeHttpPort()}`;
+        await workerClientApi.setChromiumUrl(chromiumUrl);
+      }
     },
 
-    async shutdown() {
+    async close() {
       if (!this.__nodeThread) {
         this.debug("Node thread already terminated");
         return;
@@ -52,6 +61,7 @@ qx.Class.define("zx.server.work.pools.NodeThreadWorkerTracker", {
       }
       await timedWaitFor.wait();
       await clientApi.terminate();
+      await this._closeContainer();
       this.__nodeThread.terminate();
       this.__nodeThread = null;
     },
