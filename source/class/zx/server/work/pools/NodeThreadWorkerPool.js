@@ -25,10 +25,10 @@ qx.Class.define("zx.server.work.pools.NodeThreadWorkerPool", {
   extend: zx.server.work.pools.WorkerPool,
 
   /**
-   * @param {string} workdir - working directory for the pool
-   * @param {string} [remoteAppPath] - the path on disk to the compiled entrypoint for the remote worker app.
+   * @param {string} remoteAppPath - the path on disk to the compiled entrypoint for the remote worker app.
+   * @param {string?} workdir - working directory for the pool
    */
-  construct(workdir, remoteAppPath) {
+  construct(remoteAppPath, workdir) {
     super(workdir);
     this.__remoteAppPath = remoteAppPath;
   },
@@ -38,7 +38,14 @@ qx.Class.define("zx.server.work.pools.NodeThreadWorkerPool", {
      * @override
      */
     async createPoolableEntity() {
-      let nodeThread = new Worker(this.__remoteAppPath, { name: apiPath, workerData: {} });
+      this.debug(`Creating new NodeThreadWorkerTracker using ${this.__remoteAppPath}`);
+      let nodeThread = new Worker(this.__remoteAppPath, {
+        //name: this.classname + "[" + this.toHashCode() + "]",
+        //argv: ["work", "start-worker-thread"],
+        workerData: {
+          classname: "zx.server.work.runtime.NodeWorkerService"
+        }
+      });
 
       let workerTracker = new zx.server.work.pools.NodeThreadWorkerTracker(this, nodeThread);
       await workerTracker.initialize();
@@ -49,7 +56,7 @@ qx.Class.define("zx.server.work.pools.NodeThreadWorkerPool", {
      * @override
      */
     async destroyPoolableEntity(entity) {
-      // Nothing
+      entity.dispose();
     }
   }
 });

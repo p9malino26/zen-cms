@@ -29,9 +29,10 @@ qx.Class.define("zx.io.api.transport.nodeworker.NodeWorkerServerTransport", {
     super();
     this.__clientsByApiUuid = new Map();
 
-    if (!isMainThread) {
-      this.connect(parentPort);
+    if (isMainThread) {
+      throw new Error("zx.io.api.transport.nodeworker.NodeWorkerServerTransport must be created in a Worker thread");
     }
+    this.connect(parentPort);
   },
 
   members: {
@@ -46,6 +47,7 @@ qx.Class.define("zx.io.api.transport.nodeworker.NodeWorkerServerTransport", {
       if (!(client instanceof Worker) && !(client instanceof MessagePort)) {
         throw new Error(["Client must be a node Worker or MessagePort", '\tconst { Worker, MessagePort } = require("node:worker_threads")'].join("\n"));
       }
+      client.postMessage({ uri: null, ready: true });
       client.on("message", ({ uri, requestJson }) => {
         this.__clientsByApiUuid.set(requestJson.headers["Client-Api-Uuid"], client);
         this.__receiveMessage(uri, requestJson);

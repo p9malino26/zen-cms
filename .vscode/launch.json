@@ -41,9 +41,12 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Zen CMS: Custom Command",
+      "name": "Zen CMS: Worker Pool of Node Threads Demo",
       "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/compiled/source-node/demo-work-node-workers/index.js"
+      "program": "${workspaceFolder}/compiled/source-node/cli/index.js",
+      "args": [
+        "demo", "work", "local-worker-pool", "--worker-location=node-thread", "--pool-min-size=1", "--pool-max-size=1", "--clean"
+      ]
     },
     {
       "address": "localhost",

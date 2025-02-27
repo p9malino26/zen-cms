@@ -25,24 +25,55 @@ const { Worker, MessagePort } = require("node:worker_threads");
 qx.Class.define("zx.io.api.transport.nodeworker.NodeWorkerClientTransport", {
   extend: zx.io.api.client.AbstractClientTransport,
 
+  construct() {
+    super();
+    this.__promiseReady = new qx.Promise();
+  },
+
   events: {
     message: "qx.event.type.Data"
   },
 
   members: {
-    /**@type {Worker | MessagePort}*/
+    /** @type {Worker | MessagePort}*/
     __server: null,
+
+    /** @type{Promise} resolves when the server transport has connected */
+    __promiseReady: null,
 
     /**
      * Connects to a server
      * @param {Worker | MessagePort} server
      */
-    connect(server) {
+    async connect(server) {
       if (this.__server) {
         throw new Error("Already connected to server");
       }
       this.__server = server;
-      this.__server.on("message", transportableJson => this.fireDataEvent("message", transportableJson));
+      this.__server.on("message", message => this.__onMessage(message));
+      await this.__promiseReady;
+    },
+
+    /**
+     * Event handler for incoming messages from the server
+     *
+     * @param {*} message
+     */
+    __onMessage(message) {
+      if (message.ready) {
+        this.__promiseReady.resolve();
+        return;
+      }
+      this.fireDataEvent("message", message);
+    },
+
+    /**
+     * Waits until the server has started up and connected
+     *
+     * @returns {Promise} resolves when the server is ready
+     */
+    async waitForReady() {
+      return await this.__promiseReady;
     },
 
     /**

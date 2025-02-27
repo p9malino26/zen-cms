@@ -143,14 +143,14 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerTracker", {
         await new Promise(async resolve => {
           let timedWaitFor = new zx.utils.TimedWaitFor(5000);
           this.__nodeProcess.once("close", () => {
-            this.debug(`Node process ${this.__pid} killed`);
+            this.debug(`Node process ${this.__pid} terminated`);
             timedWaitFor.fire();
           });
           try {
             await clientApi.shutdown();
           } catch (ex) {
             // Shutdown will reject the method call, so this is actually expected
-            this.warn(`Error shutting down worker: ${ex}`);
+            this.trace(`Expected exception while shutting down worker: ${ex}`);
           }
           await timedWaitFor.wait();
           await clientApi.terminate();

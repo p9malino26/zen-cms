@@ -21,6 +21,8 @@ const fs = require("fs");
  * This command will start a Worker and listen on a port for HTTP traffic for
  * API requests; this is typically run inside a Docker container, but could also be
  * run on a local machine for testing and development
+ *
+ * @use(zx.server.work.runtime.NodeWorkerService)
  */
 qx.Class.define("zx.cli.commands.demo.work.LocalWorkerPoolCommand", {
   extend: zx.cli.Command,
@@ -31,7 +33,7 @@ qx.Class.define("zx.cli.commands.demo.work.LocalWorkerPoolCommand", {
       new zx.cli.Flag("worker-location").set({
         description: "where to run the workers",
         type: "enum",
-        enumValues: ["local", "node"],
+        enumValues: ["local", "node-process", "node-thread"],
         required: true
       })
     );
@@ -87,11 +89,17 @@ qx.Class.define("zx.cli.commands.demo.work.LocalWorkerPoolCommand", {
         pool = new zx.server.work.pools.LocalWorkerPool().set({
           poolConfig
         });
-      } else {
+      } else if (flags.workerLocation == "node-process") {
         pool = new zx.server.work.pools.NodeProcessWorkerPool().set({
           poolConfig,
           nodeInspect: flags.inspect
         });
+      } else if (flags.workerLocation == "node-thread") {
+        pool = new zx.server.work.pools.NodeThreadWorkerPool("./compiled/source-node/cli/index.js").set({
+          poolConfig
+        });
+      } else {
+        throw new Error("Unknown worker location: " + flags.workerLocation);
       }
 
       let scheduler = new zx.server.work.scheduler.QueueScheduler("temp/scheduler/");
@@ -128,7 +136,7 @@ qx.Class.define("zx.cli.commands.demo.work.LocalWorkerPoolCommand", {
           args: []
         });
         scheduler.addListener("workCompleted", async e => {
-          if (scheduler.getRunningSize() == 0) {
+          if (scheduler.getRunningSize() + scheduler.getQueueSize() == 0) {
             console.log("All work completed");
             await pool.shutdown();
             await server.stop();

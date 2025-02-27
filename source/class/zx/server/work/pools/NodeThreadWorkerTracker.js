@@ -1,4 +1,4 @@
-qx.Class.define("zx.server.work.pools.nodeThreadWorkerTracker", {
+qx.Class.define("zx.server.work.pools.NodeThreadWorkerTracker", {
   extend: zx.server.work.WorkerTracker,
 
   construct(workerPool, nodeThread) {
@@ -12,22 +12,48 @@ qx.Class.define("zx.server.work.pools.nodeThreadWorkerTracker", {
 
     async initialize() {
       this.__nodeThread.on("error", err => {
-        if (this.getState() == "running") {
+        this.debug("Node Worker error: " + err);
+        if (this.getStatus() == "running") {
           this.appendWorkLog(err);
-        } else {
-          this.debug(err);
         }
       });
       this.__nodeThread.on("exit", code => {
-        if (this.getState() == "running") {
+        this.error(`Worker stopped with exit code ${code}`);
+        if (this.getStatus() == "running") {
           this.appendWorkLog(`Worker stopped with exit code ${code}`);
         }
-        this.error(`Worker stopped with exit code ${code}`);
-        this.setState("dead");
+        this.setStatus("dead");
       });
-      let clientApi = new zx.io.api.transport.nodeworker.NodeWorkerClientTransport();
-      this._setWorkerClientApi(clientApi);
+
+      this.__apiClientTransport = new zx.io.api.transport.nodeworker.NodeWorkerClientTransport("");
+      await this.__apiClientTransport.connect(this.__nodeThread);
+
+      let workerClientApi = zx.io.api.ApiUtils.createClientApi(zx.server.work.IWorkerApi, this.__apiClientTransport, "/work/worker");
+      this._setWorkerClientApi(workerClientApi);
       await super.initialize();
+    },
+
+    async shutdown() {
+      if (!this.__nodeThread) {
+        this.debug("Node thread already terminated");
+        return;
+      }
+      let clientApi = this.getWorkerClientApi();
+      let timedWaitFor = new zx.utils.TimedWaitFor(5000);
+      this.__nodeThread.once("exit", () => {
+        this.debug(`Node thread terminated`);
+        timedWaitFor.fire();
+      });
+      try {
+        await clientApi.shutdown();
+      } catch (ex) {
+        // Shutdown will reject the method call, so this is actually expected
+        this.trace(`Expected exception while shutting down worker: ${ex}`);
+      }
+      await timedWaitFor.wait();
+      await clientApi.terminate();
+      this.__nodeThread.terminate();
+      this.__nodeThread = null;
     }
   }
 });

@@ -50,6 +50,7 @@ qx.Class.define("zx.cli.commands.work.StartWorkerCommand", {
     async run() {
       let { flags } = this.getValues();
 
+      debugger;
       let server = new zx.server.Standalone();
       await server.start();
 
@@ -62,7 +63,7 @@ qx.Class.define("zx.cli.commands.work.StartWorkerCommand", {
       let app = express();
       app.use(zx.io.api.transport.http.ExpressServerTransport.jsonMiddleware());
 
-      let serverTransport = new zx.io.api.transport.http.ExpressServerTransport(app);
+      new zx.io.api.transport.http.ExpressServerTransport(app);
       let httpServer = app.listen(flags.port, () => {
         this.info(`Worker server is running on port ${flags.port}`);
         this.info("zx.server.work.WORKER_READY_SIGNAL");
