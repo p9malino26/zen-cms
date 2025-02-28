@@ -19,9 +19,8 @@ qx.Class.define("zx.server.work.pools.LocalWorkerTracker", {
     async initialize() {
       await super.initialize();
       if (this.getWorkerPool().isEnableChromium()) {
-        await this._createDockerContainer();
-        let chromiumUrl = `http://localhost:${this._getNodeHttpPort()}`;
-        this.__worker.setChromiumUrl(chromiumUrl);
+        await this._createDockerConfiguration("this-process", this.getWorkerPool().getNodeInspect());
+        await this.getDockerContainer();
       }
     },
 

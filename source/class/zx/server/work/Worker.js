@@ -1,3 +1,5 @@
+const path = require("node:path");
+
 qx.Class.define("zx.server.work.Worker", {
   extend: qx.core.Object,
   implement: [zx.server.work.IWorker],
@@ -17,6 +19,14 @@ qx.Class.define("zx.server.work.Worker", {
       init: null,
       nullable: true,
       check: "String"
+    },
+
+    /** @type{String[]?} array of mounts, in the form "alias:path" */
+    dataMounts: {
+      init: null,
+      nullable: true,
+      check: "Array",
+      apply: "_applyDataMounts"
     }
   },
 
@@ -28,6 +38,9 @@ qx.Class.define("zx.server.work.Worker", {
   members: {
     __workJson: null,
     __chromium: null,
+
+    /** @type{Object<String,String>} list of paths for each data mount alias (ie decoded version of the `dataMounts` property) */
+    __dataMountPaths: null,
 
     /**
      * Returns the Server API for this worker
@@ -44,6 +57,58 @@ qx.Class.define("zx.server.work.Worker", {
     appendWorkLog(message) {
       this.info(message);
       this.__serverApi.publish("log", { caller: this.__workJson.uuid, message });
+    },
+
+    /**
+     * Apply for `dataMounts` property
+     */
+    _applyDataMounts(value) {
+      this.debug("Data mounts: " + value);
+      if (value) {
+        this.__dataMountPaths = {};
+        value.forEach(mount => {
+          let pos = mount.indexOf(":");
+          let alias = mount.substring(0, pos);
+          let filename = path.resolve(mount.substring(pos + 1));
+          this.__dataMountPaths[alias] = filename;
+        });
+      }
+    },
+
+    /**
+     * Resolves a filename to a full path, assuming that the first part of the filename is an alias
+     * from the dataMounts property
+     *
+     * @param {String} filename
+     * @returns {String}
+     */
+    resolveFile(filename) {
+      if (!this.getDataMounts()) {
+        return filename;
+      }
+      let pos = filename.indexOf("/");
+      let alias = pos > 0 ? filename.substring(0, pos) : filename;
+      let remainder = pos > 0 ? filename.substring(pos + 1) : "";
+
+      let dataMount = this.__dataMountPaths[alias];
+      if (!dataMount) {
+        return filename;
+      }
+      let newFilename = path.resolve(dataMount, remainder);
+      if (!newFilename.startsWith(dataMount)) {
+        throw new Error(`Invalid filename: ${filename} - it must be within the data mount ${dataMount}`);
+      }
+      return newFilename;
+    },
+
+    /**
+     * Returns the path for a mounted alias
+     *
+     * @param {String} alias
+     * @returns {String}
+     */
+    getDataMount(alias) {
+      return this.__dataMountPaths[alias] || null;
     },
 
     /**

@@ -1319,3 +1319,892 @@ zx.demo.server.work.ErrorWork:26:30,qx.Interface:473:33,zx.server.work.Worker:93
 009374 zx.io.api.server.Session[20-0]: 358f556f-fd5c-4579-a775-eaf9b265b3aa no subscriptionCount
 009374 zx.io.api.server.ConnectionManager[31-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
 009380 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs
+Chrome launched on port 11000
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:10000
+Chrome launched on port 11000
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:10000
+Chrome launched on port 11000
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:10000
+Chrome launched on port 11000
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:10000
+Chrome launched on port 11000
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:10000
+Chrome launched on port 11000
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:10000
+Chrome launched on port 11000
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:10000
+Chrome launched on port 11000
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:10000
+Chrome launched on port 11000
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:10000
+Chrome launched on port 11001
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:11000
+Chrome launched on port 11001
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:11000
+Chrome launched on port 11001
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:11000
+Chrome launched on port 11001
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:11000
+Chrome launched on port 11001
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:11000
+Chrome launched on port 11001
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:11000
+Chrome launched on port 11001
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+Webserver started on http://127.0.0.1:11000
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+000934 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+000934 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+000965 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [1102a727-da0b-4e70-979f-babae9a79845]
+000970 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [177cfe28-c094-4ee7-8563-0ff3adb01623]
+the task is running!
+000971 zx.server.work.Worker[17-0]: Hello, World!
+000971 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+000971 zx.io.api.server.Session[20-0]: 1102a727-da0b-4e70-979f-babae9a79845 added publication, all publications: [ {...(3)} ]
+000971 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+000971 zx.server.work.Worker[17-0]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+000971 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+000971 zx.io.api.server.Session[20-0]: 1102a727-da0b-4e70-979f-babae9a79845 added publication, all publications: [ {...(3)}, {...(3)} ]
+000971 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+000971 zx.server.work.Worker[17-0]: 177cfe28 Doing thing 0
+000971 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+000971 zx.io.api.server.Session[20-0]: 1102a727-da0b-4e70-979f-babae9a79845 added publication, all publications: [ {...(3)}, {...(3)}, {...(3)} ]
+000971 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+001947 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+001947 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+001947 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+001977 zx.server.work.Worker[17-0]: 177cfe28 Doing thing 1
+001978 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001979 zx.io.api.server.Session[20-0]: 1102a727-da0b-4e70-979f-babae9a79845 added publication, all publications: [ {...(3)} ]
+001979 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+002964 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002983 zx.server.work.Worker[17-0]: 177cfe28 Doing thing 2
+002983 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+002983 zx.io.api.server.Session[20-0]: 1102a727-da0b-4e70-979f-babae9a79845 added publication, all publications: [ {...(3)} ]
+002983 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+003979 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+003984 zx.server.work.Worker[17-0]: zx.demo.server.work.TestWork [177cfe28-c094-4ee7-8563-0ff3adb01623] completed successfully, result = success!
+003984 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+003985 zx.io.api.server.Session[20-0]: 1102a727-da0b-4e70-979f-babae9a79845 no subscriptionCount
+005982 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestChromiumWork [4f916b77-70a7-4d05-b9c3-0037d3bb0b38]
+005984 zx.server.work.WorkerApi_Server[22-0]: Error calling method run in API zx.server.work.WorkerApi: Error: Cannot find class 'zx.demo.server.work.TestChromiumWork'
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+000915 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+000915 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+000944 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [82ea857e-0c6f-403a-a149-9dd6bec09f8e]
+000949 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [afd402a3-ff0c-462c-af3e-372914fb98cb]
+the task is running!
+000949 zx.server.work.Worker[17-0]: Hello, World!
+000949 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+000949 zx.io.api.server.Session[20-0]: 82ea857e-0c6f-403a-a149-9dd6bec09f8e added publication, all publications: [ {...(3)} ]
+000949 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+000950 zx.server.work.Worker[17-0]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+000950 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+000950 zx.io.api.server.Session[20-0]: 82ea857e-0c6f-403a-a149-9dd6bec09f8e added publication, all publications: [ {...(3)}, {...(3)} ]
+000950 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+000950 zx.server.work.Worker[17-0]: afd402a3 Doing thing 0
+000950 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+000950 zx.io.api.server.Session[20-0]: 82ea857e-0c6f-403a-a149-9dd6bec09f8e added publication, all publications: [ {...(3)}, {...(3)}, {...(3)} ]
+000950 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+001927 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+001928 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+001928 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+001954 zx.server.work.Worker[17-0]: afd402a3 Doing thing 1
+001955 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001955 zx.io.api.server.Session[20-0]: 82ea857e-0c6f-403a-a149-9dd6bec09f8e added publication, all publications: [ {...(3)} ]
+001955 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+002937 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002958 zx.server.work.Worker[17-0]: afd402a3 Doing thing 2
+002958 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+002958 zx.io.api.server.Session[20-0]: 82ea857e-0c6f-403a-a149-9dd6bec09f8e added publication, all publications: [ {...(3)} ]
+002958 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+003950 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+003960 zx.server.work.Worker[17-0]: zx.demo.server.work.TestWork [afd402a3-ff0c-462c-af3e-372914fb98cb] completed successfully, result = success!
+003960 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+003960 zx.io.api.server.Session[20-0]: 82ea857e-0c6f-403a-a149-9dd6bec09f8e no subscriptionCount
+005955 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestChromiumWork [0c16560d-0e51-465d-8991-08f61e029248]
+the chromium task is running!
+005960 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+008964 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+011971 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+014980 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+017988 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+020995 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+024008 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+027021 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+030026 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+033033 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+036039 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+036042 zx.server.work.Worker[17-0]: zx.demo.server.work.TestChromiumWork [0c16560d-0e51-465d-8991-08f61e029248] EXCEPTION: Chromium not available after 11 attempts Error: Chromium not available after 11 attempts
+zx.server.work.WorkerChromium:93:34,node:internal/process/task_queues:95:5,zx.server.work.Worker:135:9,zx.demo.server.work.TestChromiumWork:27:24,zx.server.work.Worker:95:34,zx.io.api.ApiUtils:152:48,zx.io.api.server.AbstractServerApi:172:20,zx.io.api.server.AbstractServerApi:107:11,zx.io.api.server.AbstractServerApi:82:11,zx.io.api.server.ConnectionManager:109:11,zx.io.api.transport.http.ExpressServerTransport:81:11
+036042 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+036042 zx.io.api.server.Session[20-0]: 82ea857e-0c6f-403a-a149-9dd6bec09f8e no subscriptionCount
+036053 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+000956 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+000956 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+000981 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [fb77cf0a-5e62-434d-97d3-5fa6a85a7409]
+000986 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [bed5c185-87de-40ec-bc34-cd68a6f0fadf]
+the task is running!
+000986 zx.server.work.Worker[17-0]: Hello, World!
+000986 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+000986 zx.io.api.server.Session[20-0]: fb77cf0a-5e62-434d-97d3-5fa6a85a7409 added publication, all publications: [ {...(3)} ]
+000986 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+000987 zx.server.work.Worker[17-0]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+000987 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+000987 zx.io.api.server.Session[20-0]: fb77cf0a-5e62-434d-97d3-5fa6a85a7409 added publication, all publications: [ {...(3)}, {...(3)} ]
+000987 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+000987 zx.server.work.Worker[17-0]: bed5c185 Doing thing 0
+000987 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+000987 zx.io.api.server.Session[20-0]: fb77cf0a-5e62-434d-97d3-5fa6a85a7409 added publication, all publications: [ {...(3)}, {...(3)}, {...(3)} ]
+000987 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+001966 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+001966 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+001967 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+001987 zx.server.work.Worker[17-0]: bed5c185 Doing thing 1
+001989 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001989 zx.io.api.server.Session[20-0]: fb77cf0a-5e62-434d-97d3-5fa6a85a7409 added publication, all publications: [ {...(3)} ]
+001989 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+002982 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002991 zx.server.work.Worker[17-0]: bed5c185 Doing thing 2
+002992 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+002992 zx.io.api.server.Session[20-0]: fb77cf0a-5e62-434d-97d3-5fa6a85a7409 added publication, all publications: [ {...(3)} ]
+002992 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+003994 zx.server.work.Worker[17-0]: zx.demo.server.work.TestWork [bed5c185-87de-40ec-bc34-cd68a6f0fadf] completed successfully, result = success!
+003995 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+003995 zx.io.api.server.Session[20-0]: fb77cf0a-5e62-434d-97d3-5fa6a85a7409 no subscriptionCount
+003996 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+005991 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestChromiumWork [551d3bcb-0a05-4f9c-9f0b-5ac6f6255798]
+the chromium task is running!
+005995 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+009005 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+012014 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+015021 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+018030 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+021035 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+024044 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+027054 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+030059 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+033061 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+036069 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+036070 zx.server.work.Worker[17-0]: zx.demo.server.work.TestChromiumWork [551d3bcb-0a05-4f9c-9f0b-5ac6f6255798] EXCEPTION: Chromium not available after 11 attempts Error: Chromium not available after 11 attempts
+zx.server.work.WorkerChromium:93:34,node:internal/process/task_queues:95:5,zx.server.work.Worker:135:9,zx.demo.server.work.TestChromiumWork:27:24,zx.server.work.Worker:95:34,zx.io.api.ApiUtils:152:48,zx.io.api.server.AbstractServerApi:172:20,zx.io.api.server.AbstractServerApi:107:11,zx.io.api.server.AbstractServerApi:82:11,zx.io.api.server.ConnectionManager:109:11,zx.io.api.transport.http.ExpressServerTransport:81:11
+036070 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+036070 zx.io.api.server.Session[20-0]: fb77cf0a-5e62-434d-97d3-5fa6a85a7409 no subscriptionCount
+036078 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+000932 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+000932 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+000949 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [82a87159-8dc6-4335-b997-6445a5555573]
+000952 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.ErrorWork [4cacb28d-0d26-4826-b286-e23070192964]
+000952 zx.server.work.Worker[17-0]: I'm about to throw an exception!
+000952 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+000952 zx.io.api.server.Session[20-0]: 82a87159-8dc6-4335-b997-6445a5555573 added publication, all publications: [ {...(3)} ]
+000952 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+000953 zx.server.work.Worker[17-0]: zx.demo.server.work.ErrorWork [4cacb28d-0d26-4826-b286-e23070192964] EXCEPTION: oops Error: oops
+zx.demo.server.work.ErrorWork:26:30,qx.Interface:473:33,zx.server.work.Worker:95:53,qx.Interface:473:33,zx.io.api.ApiUtils:152:48,zx.io.api.server.AbstractServerApi:172:49,zx.io.api.server.AbstractServerApi:107:22,zx.io.api.server.AbstractServerApi:82:22,zx.io.api.server.ConnectionManager:109:21,zx.io.api.transport.http.ExpressServerTransport:81:66,/home/pptruser/app/node_modules/express/lib/router/layer.js:95:5,/home/pptruser/app/node_modules/express/lib/router/route.js:149:13,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7
+000953 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+000953 zx.io.api.server.Session[20-0]: 82a87159-8dc6-4335-b997-6445a5555573 no subscriptionCount
+000953 zx.io.api.server.ConnectionManager[24-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+000956 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+000854 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+000854 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+000889 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [cee9c243-2d39-40db-ad80-663ebb8f4ec9]
+000896 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [79c4b878-433d-4b60-af84-4cebf00d29d5]
+the task is running!
+000896 zx.server.work.Worker[17-0]: Hello, World!
+000896 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+000897 zx.io.api.server.Session[20-0]: cee9c243-2d39-40db-ad80-663ebb8f4ec9 added publication, all publications: [ {...(3)} ]
+000897 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+000897 zx.server.work.Worker[17-0]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+000897 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+000897 zx.io.api.server.Session[20-0]: cee9c243-2d39-40db-ad80-663ebb8f4ec9 added publication, all publications: [ {...(3)}, {...(3)} ]
+000897 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+000897 zx.server.work.Worker[17-0]: 79c4b878 Doing thing 0
+000897 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+000897 zx.io.api.server.Session[20-0]: cee9c243-2d39-40db-ad80-663ebb8f4ec9 added publication, all publications: [ {...(3)}, {...(3)}, {...(3)} ]
+000897 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+001870 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+001870 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+001870 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+001902 zx.server.work.Worker[17-0]: 79c4b878 Doing thing 1
+001903 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001904 zx.io.api.server.Session[20-0]: cee9c243-2d39-40db-ad80-663ebb8f4ec9 added publication, all publications: [ {...(3)} ]
+001904 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+002885 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002905 zx.server.work.Worker[17-0]: 79c4b878 Doing thing 2
+002906 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+002907 zx.io.api.server.Session[20-0]: cee9c243-2d39-40db-ad80-663ebb8f4ec9 added publication, all publications: [ {...(3)} ]
+002907 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+003907 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+003908 zx.server.work.Worker[17-0]: zx.demo.server.work.TestWork [79c4b878-433d-4b60-af84-4cebf00d29d5] completed successfully, result = success!
+003910 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+003910 zx.io.api.server.Session[20-0]: cee9c243-2d39-40db-ad80-663ebb8f4ec9 no subscriptionCount
+005905 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestChromiumWork [8021ffa2-7661-48f2-808e-4d21ad81fe25]
+the chromium task is running!
+005911 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+008914 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+011923 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+014929 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+017937 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+020944 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+023954 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+026965 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+029976 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+032982 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+035990 zx.server.work.WorkerChromium[34-0]: Chromium not yet available on 'http://localhost:11000/json/version', waiting 3 seconds: Error: connect ECONNREFUSED 127.0.0.1:11000
+035992 zx.server.work.Worker[17-0]: zx.demo.server.work.TestChromiumWork [8021ffa2-7661-48f2-808e-4d21ad81fe25] EXCEPTION: Chromium not available after 11 attempts Error: Chromium not available after 11 attempts
+zx.server.work.WorkerChromium:93:34,node:internal/process/task_queues:95:5,zx.server.work.Worker:135:9,zx.demo.server.work.TestChromiumWork:27:24,zx.server.work.Worker:95:34,zx.io.api.ApiUtils:152:48,zx.io.api.server.AbstractServerApi:172:20,zx.io.api.server.AbstractServerApi:107:11,zx.io.api.server.AbstractServerApi:82:11,zx.io.api.server.ConnectionManager:109:11,zx.io.api.transport.http.ExpressServerTransport:81:11
+035992 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+035992 zx.io.api.server.Session[20-0]: cee9c243-2d39-40db-ad80-663ebb8f4ec9 no subscriptionCount
+036006 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+000982 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+000982 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+001002 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [2272b0bc-cdfd-419f-9354-737b37212e20]
+001008 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.ErrorWork [0605df65-cf8c-4b8c-ba8c-9f7aa379f9f6]
+001008 zx.server.work.Worker[17-0]: I'm about to throw an exception!
+001008 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001008 zx.io.api.server.Session[20-0]: 2272b0bc-cdfd-419f-9354-737b37212e20 added publication, all publications: [ {...(3)} ]
+001008 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+001009 zx.server.work.Worker[17-0]: zx.demo.server.work.ErrorWork [0605df65-cf8c-4b8c-ba8c-9f7aa379f9f6] EXCEPTION: oops Error: oops
+zx.demo.server.work.ErrorWork:26:30,qx.Interface:473:33,zx.server.work.Worker:95:53,qx.Interface:473:33,zx.io.api.ApiUtils:152:48,zx.io.api.server.AbstractServerApi:172:49,zx.io.api.server.AbstractServerApi:107:22,zx.io.api.server.AbstractServerApi:82:22,zx.io.api.server.ConnectionManager:109:21,zx.io.api.transport.http.ExpressServerTransport:81:66,/home/pptruser/app/node_modules/express/lib/router/layer.js:95:5,/home/pptruser/app/node_modules/express/lib/router/route.js:149:13,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7
+001009 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+001009 zx.io.api.server.Session[20-0]: 2272b0bc-cdfd-419f-9354-737b37212e20 no subscriptionCount
+001009 zx.io.api.server.ConnectionManager[24-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+001014 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+Chrome launched on port 11000
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+001108 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+001108 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+001143 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [842085c5-6311-4f89-8726-93e500d8606f]
+001150 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [ff2fcdfd-cb45-4b65-9f44-d43e5ac38df0]
+the task is running!
+001150 zx.server.work.Worker[17-0]: Hello, World!
+001150 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001150 zx.io.api.server.Session[20-0]: 842085c5-6311-4f89-8726-93e500d8606f added publication, all publications: [ {...(3)} ]
+001150 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+001150 zx.server.work.Worker[17-0]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+001150 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001151 zx.io.api.server.Session[20-0]: 842085c5-6311-4f89-8726-93e500d8606f added publication, all publications: [ {...(3)}, {...(3)} ]
+001151 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+001151 zx.server.work.Worker[17-0]: ff2fcdfd Doing thing 0
+001151 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001151 zx.io.api.server.Session[20-0]: 842085c5-6311-4f89-8726-93e500d8606f added publication, all publications: [ {...(3)}, {...(3)}, {...(3)} ]
+001151 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+002120 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002121 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002121 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002156 zx.server.work.Worker[17-0]: ff2fcdfd Doing thing 1
+002156 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+002157 zx.io.api.server.Session[20-0]: 842085c5-6311-4f89-8726-93e500d8606f added publication, all publications: [ {...(3)} ]
+002157 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+003135 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+003164 zx.server.work.Worker[17-0]: ff2fcdfd Doing thing 2
+003165 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+003166 zx.io.api.server.Session[20-0]: 842085c5-6311-4f89-8726-93e500d8606f added publication, all publications: [ {...(3)} ]
+003166 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004161 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+004169 zx.server.work.Worker[17-0]: zx.demo.server.work.TestWork [ff2fcdfd-cb45-4b65-9f44-d43e5ac38df0] completed successfully, result = success!
+004169 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+004169 zx.io.api.server.Session[20-0]: 842085c5-6311-4f89-8726-93e500d8606f no subscriptionCount
+006165 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestChromiumWork [0d23512b-619e-4cd0-b2da-6385b0b4ba13]
+the chromium task is running!
+006169 zx.server.work.WorkerChromium[34-0]: Chromium JSON: {
+  "Browser": "Chrome/130.0.6723.31",
+  "Protocol-Version": "1.3",
+  "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36",
+  "V8-Version": "13.0.245.13",
+  "WebKit-Version": "537.36 (@0000000000000000000000000000000000000000)",
+  "webSocketDebuggerUrl": "ws://localhost:11000/devtools/browser/277f4b64-4637-48f2-89c7-b9ebb04f5bfb"
+}
+006170 zx.server.work.WorkerChromium[34-0]: Chromium started: {
+  "Browser": "Chrome/130.0.6723.31",
+  "Protocol-Version": "1.3",
+  "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36",
+  "V8-Version": "13.0.245.13",
+  "WebKit-Version": "537.36 (@0000000000000000000000000000000000000000)",
+  "webSocketDebuggerUrl": "ws://localhost:11000/devtools/browser/277f4b64-4637-48f2-89c7-b9ebb04f5bfb"
+}
+006171 zx.demo.server.work.TestChromiumWork[36-0]: Puppeteer client created
+[attempt:0/10] connecting to puppeteer - opts: {
+  "browserWSEndpoint": "ws://localhost:11000/devtools/browser/277f4b64-4637-48f2-89c7-b9ebb04f5bfb",
+  "defaultViewport": {
+    "width": 1920,
+    "height": 1080,
+    "isLandscape": true
+  },
+  "args": [
+    "--no-sandbox",
+    "--disable-setuid-sandbox"
+  ]
+}
+006179 zx.server.puppeteer.PuppeteerClient[35-0]: Started Puppeteer - http://localhost:11000/devtools/browser/277f4b64-4637-48f2-89c7-b9ebb04f5bfb
+new page viewport { width: 1920, height: 1080 }
+Going to http://www.google.co.uk
+006572 zx.server.work.Worker[17-0]: { PUPPET CONSOLE: Autofocus processing was blocked because a document already has a focused element., info }
+006572 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+006572 zx.io.api.server.Session[20-0]: 842085c5-6311-4f89-8726-93e500d8606f added publication, all publications: [ {...(3)} ]
+006572 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+007199 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+ ********** At http://www.google.co.uk
+007964 zx.demo.server.work.TestChromiumWork[36-0]: Puppeteer client started
+008048 zx.server.work.Worker[17-0]: zx.demo.server.work.TestChromiumWork [0d23512b-619e-4cd0-b2da-6385b0b4ba13] EXCEPTION: ENOENT: no such file or directory, open './temp/www.google.co.uk.pdf' Error: ENOENT: no such file or directory, open './temp/www.google.co.uk.pdf'
+node:internal/fs/promises:639:25,/home/pptruser/app/node_modules/puppeteer-core/lib/cjs/puppeteer/common/util.js:167:28,/home/pptruser/app/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Page.js:830:28,zx.server.puppeteer.PuppeteerClient:350:16,zx.demo.server.work.TestChromiumWork:53:9,zx.server.work.Worker:95:34,zx.io.api.ApiUtils:152:48,zx.io.api.server.AbstractServerApi:172:20,zx.io.api.server.AbstractServerApi:107:11,zx.io.api.server.AbstractServerApi:82:11,zx.io.api.server.ConnectionManager:109:11,zx.io.api.transport.http.ExpressServerTransport:81:11
+008048 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+008048 zx.io.api.server.Session[20-0]: 842085c5-6311-4f89-8726-93e500d8606f no subscriptionCount
+008056 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+Chrome launched on port 11000
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+001065 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+001065 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+001098 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [82ab499f-07d1-4e44-8dec-ced5091cc004]
+001104 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [59a6a74b-dcad-4706-b128-85874e4a84bb]
+the task is running!
+001104 zx.server.work.Worker[17-0]: Hello, World!
+001104 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001104 zx.io.api.server.Session[20-0]: 82ab499f-07d1-4e44-8dec-ced5091cc004 added publication, all publications: [ {...(3)} ]
+001104 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+001104 zx.server.work.Worker[17-0]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+001105 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001105 zx.io.api.server.Session[20-0]: 82ab499f-07d1-4e44-8dec-ced5091cc004 added publication, all publications: [ {...(3)}, {...(3)} ]
+001105 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+001105 zx.server.work.Worker[17-0]: 59a6a74b Doing thing 0
+001105 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001105 zx.io.api.server.Session[20-0]: 82ab499f-07d1-4e44-8dec-ced5091cc004 added publication, all publications: [ {...(3)}, {...(3)}, {...(3)} ]
+001105 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+002079 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002079 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002079 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002106 zx.server.work.Worker[17-0]: 59a6a74b Doing thing 1
+002107 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+002107 zx.io.api.server.Session[20-0]: 82ab499f-07d1-4e44-8dec-ced5091cc004 added publication, all publications: [ {...(3)} ]
+002107 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+003101 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+003108 zx.server.work.Worker[17-0]: 59a6a74b Doing thing 2
+003108 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+003108 zx.io.api.server.Session[20-0]: 82ab499f-07d1-4e44-8dec-ced5091cc004 added publication, all publications: [ {...(3)} ]
+003108 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004111 zx.server.work.Worker[17-0]: zx.demo.server.work.TestWork [59a6a74b-dcad-4706-b128-85874e4a84bb] completed successfully, result = success!
+004112 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+004113 zx.io.api.server.Session[20-0]: 82ab499f-07d1-4e44-8dec-ced5091cc004 no subscriptionCount
+004114 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+006113 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestChromiumWork [bddb4942-ac0a-46a5-af03-ce32225d403b]
+the chromium task is running!
+006116 zx.server.work.WorkerChromium[34-0]: Chromium JSON: {
+  "Browser": "Chrome/130.0.6723.31",
+  "Protocol-Version": "1.3",
+  "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36",
+  "V8-Version": "13.0.245.13",
+  "WebKit-Version": "537.36 (@0000000000000000000000000000000000000000)",
+  "webSocketDebuggerUrl": "ws://localhost:11000/devtools/browser/573c97d0-f426-4f0a-b267-66045932abd0"
+}
+006117 zx.server.work.WorkerChromium[34-0]: Chromium started: {
+  "Browser": "Chrome/130.0.6723.31",
+  "Protocol-Version": "1.3",
+  "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36",
+  "V8-Version": "13.0.245.13",
+  "WebKit-Version": "537.36 (@0000000000000000000000000000000000000000)",
+  "webSocketDebuggerUrl": "ws://localhost:11000/devtools/browser/573c97d0-f426-4f0a-b267-66045932abd0"
+}
+006118 zx.demo.server.work.TestChromiumWork[36-0]: Puppeteer client created
+[attempt:0/10] connecting to puppeteer - opts: {
+  "browserWSEndpoint": "ws://localhost:11000/devtools/browser/573c97d0-f426-4f0a-b267-66045932abd0",
+  "defaultViewport": {
+    "width": 1920,
+    "height": 1080,
+    "isLandscape": true
+  },
+  "args": [
+    "--no-sandbox",
+    "--disable-setuid-sandbox"
+  ]
+}
+006124 zx.server.puppeteer.PuppeteerClient[35-0]: Started Puppeteer - http://localhost:11000/devtools/browser/573c97d0-f426-4f0a-b267-66045932abd0
+new page viewport { width: 1920, height: 1080 }
+Going to http://www.google.co.uk
+ ********** At http://www.google.co.uk
+007774 zx.demo.server.work.TestChromiumWork[36-0]: Puppeteer client started
+007847 zx.server.work.Worker[17-0]: zx.demo.server.work.TestChromiumWork [bddb4942-ac0a-46a5-af03-ce32225d403b] EXCEPTION: ENOENT: no such file or directory, open './temp/www.google.co.uk.pdf' Error: ENOENT: no such file or directory, open './temp/www.google.co.uk.pdf'
+node:internal/fs/promises:639:25,/home/pptruser/app/node_modules/puppeteer-core/lib/cjs/puppeteer/common/util.js:167:28,/home/pptruser/app/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Page.js:830:28,zx.server.puppeteer.PuppeteerClient:350:16,zx.demo.server.work.TestChromiumWork:53:9,zx.server.work.Worker:95:34,zx.io.api.ApiUtils:152:48,zx.io.api.server.AbstractServerApi:172:20,zx.io.api.server.AbstractServerApi:107:11,zx.io.api.server.AbstractServerApi:82:11,zx.io.api.server.ConnectionManager:109:11,zx.io.api.transport.http.ExpressServerTransport:81:11
+007847 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+007847 zx.io.api.server.Session[20-0]: 82ab499f-07d1-4e44-8dec-ced5091cc004 no subscriptionCount
+007858 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+Chrome launched on port 11000
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+001094 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+001094 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+001129 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [d4bd32e2-aa89-4fbc-ba2d-25280b8a0611]
+001135 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [6ddf3653-79de-4b71-9bb6-4ef0319a17b1]
+the task is running!
+001135 zx.server.work.Worker[17-0]: Hello, World!
+001135 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001136 zx.io.api.server.Session[20-0]: d4bd32e2-aa89-4fbc-ba2d-25280b8a0611 added publication, all publications: [ {...(3)} ]
+001136 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+001136 zx.server.work.Worker[17-0]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+001136 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001136 zx.io.api.server.Session[20-0]: d4bd32e2-aa89-4fbc-ba2d-25280b8a0611 added publication, all publications: [ {...(3)}, {...(3)} ]
+001136 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+001136 zx.server.work.Worker[17-0]: 6ddf3653 Doing thing 0
+001136 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001136 zx.io.api.server.Session[20-0]: d4bd32e2-aa89-4fbc-ba2d-25280b8a0611 added publication, all publications: [ {...(3)}, {...(3)}, {...(3)} ]
+001137 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+002107 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002107 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002107 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002138 zx.server.work.Worker[17-0]: 6ddf3653 Doing thing 1
+002139 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+002139 zx.io.api.server.Session[20-0]: d4bd32e2-aa89-4fbc-ba2d-25280b8a0611 added publication, all publications: [ {...(3)} ]
+002140 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+003136 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+003141 zx.server.work.Worker[17-0]: 6ddf3653 Doing thing 2
+003141 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+003141 zx.io.api.server.Session[20-0]: d4bd32e2-aa89-4fbc-ba2d-25280b8a0611 added publication, all publications: [ {...(3)} ]
+003141 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004148 zx.server.work.Worker[17-0]: zx.demo.server.work.TestWork [6ddf3653-79de-4b71-9bb6-4ef0319a17b1] completed successfully, result = success!
+004149 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+004149 zx.io.api.server.Session[20-0]: d4bd32e2-aa89-4fbc-ba2d-25280b8a0611 no subscriptionCount
+004150 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+006149 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestChromiumWork [67c98dc8-2528-4e53-8cc3-69f199286177]
+the chromium task is running!
+006152 zx.server.work.WorkerChromium[34-0]: Chromium JSON: {
+  "Browser": "Chrome/130.0.6723.31",
+  "Protocol-Version": "1.3",
+  "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36",
+  "V8-Version": "13.0.245.13",
+  "WebKit-Version": "537.36 (@0000000000000000000000000000000000000000)",
+  "webSocketDebuggerUrl": "ws://localhost:11000/devtools/browser/28a9a384-e92b-4093-b4be-e879f787404e"
+}
+006154 zx.server.work.WorkerChromium[34-0]: Chromium started: {
+  "Browser": "Chrome/130.0.6723.31",
+  "Protocol-Version": "1.3",
+  "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36",
+  "V8-Version": "13.0.245.13",
+  "WebKit-Version": "537.36 (@0000000000000000000000000000000000000000)",
+  "webSocketDebuggerUrl": "ws://localhost:11000/devtools/browser/28a9a384-e92b-4093-b4be-e879f787404e"
+}
+006154 zx.demo.server.work.TestChromiumWork[36-0]: Puppeteer client created
+[attempt:0/10] connecting to puppeteer - opts: {
+  "browserWSEndpoint": "ws://localhost:11000/devtools/browser/28a9a384-e92b-4093-b4be-e879f787404e",
+  "defaultViewport": {
+    "width": 1920,
+    "height": 1080,
+    "isLandscape": true
+  },
+  "args": [
+    "--no-sandbox",
+    "--disable-setuid-sandbox"
+  ]
+}
+006161 zx.server.puppeteer.PuppeteerClient[35-0]: Started Puppeteer - http://localhost:11000/devtools/browser/28a9a384-e92b-4093-b4be-e879f787404e
+new page viewport { width: 1920, height: 1080 }
+Going to http://www.google.co.uk
+006504 zx.server.work.Worker[17-0]: { PUPPET CONSOLE: Autofocus processing was blocked because a document already has a focused element., info }
+006505 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+006505 zx.io.api.server.Session[20-0]: d4bd32e2-aa89-4fbc-ba2d-25280b8a0611 added publication, all publications: [ {...(3)} ]
+006505 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+007192 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+ ********** At http://www.google.co.uk
+007664 zx.demo.server.work.TestChromiumWork[36-0]: Puppeteer client started
+007743 zx.server.work.Worker[17-0]: zx.demo.server.work.TestChromiumWork [67c98dc8-2528-4e53-8cc3-69f199286177] EXCEPTION: ENOENT: no such file or directory, open './temp/www.google.co.uk.pdf' Error: ENOENT: no such file or directory, open './temp/www.google.co.uk.pdf'
+node:internal/fs/promises:639:25,/home/pptruser/app/node_modules/puppeteer-core/lib/cjs/puppeteer/common/util.js:167:28,/home/pptruser/app/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Page.js:830:28,zx.server.puppeteer.PuppeteerClient:350:16,zx.demo.server.work.TestChromiumWork:53:9,zx.server.work.Worker:95:34,zx.io.api.ApiUtils:152:48,zx.io.api.server.AbstractServerApi:172:20,zx.io.api.server.AbstractServerApi:107:11,zx.io.api.server.AbstractServerApi:82:11,zx.io.api.server.ConnectionManager:109:11,zx.io.api.transport.http.ExpressServerTransport:81:11
+007743 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+007743 zx.io.api.server.Session[20-0]: d4bd32e2-aa89-4fbc-ba2d-25280b8a0611 no subscriptionCount
+007754 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+Chrome launched on port 11000
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+001091 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+001092 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+001125 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [8f0a87a1-52e4-4ab5-b874-c2162d27e03c]
+001131 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [8d4a6110-2c5e-4fb2-b529-942f519379fc]
+the task is running!
+001131 zx.server.work.Worker[17-0]: Hello, World!
+001131 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001131 zx.io.api.server.Session[20-0]: 8f0a87a1-52e4-4ab5-b874-c2162d27e03c added publication, all publications: [ {...(3)} ]
+001132 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+001132 zx.server.work.Worker[17-0]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+001132 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001132 zx.io.api.server.Session[20-0]: 8f0a87a1-52e4-4ab5-b874-c2162d27e03c added publication, all publications: [ {...(3)}, {...(3)} ]
+001132 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+001132 zx.server.work.Worker[17-0]: 8d4a6110 Doing thing 0
+001132 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001132 zx.io.api.server.Session[20-0]: 8f0a87a1-52e4-4ab5-b874-c2162d27e03c added publication, all publications: [ {...(3)}, {...(3)}, {...(3)} ]
+001132 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+002102 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002103 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002104 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002137 zx.server.work.Worker[17-0]: 8d4a6110 Doing thing 1
+002137 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+002138 zx.io.api.server.Session[20-0]: 8f0a87a1-52e4-4ab5-b874-c2162d27e03c added publication, all publications: [ {...(3)} ]
+002138 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+003118 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+003141 zx.server.work.Worker[17-0]: 8d4a6110 Doing thing 2
+003141 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+003141 zx.io.api.server.Session[20-0]: 8f0a87a1-52e4-4ab5-b874-c2162d27e03c added publication, all publications: [ {...(3)} ]
+003141 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004134 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+004142 zx.server.work.Worker[17-0]: zx.demo.server.work.TestWork [8d4a6110-2c5e-4fb2-b529-942f519379fc] completed successfully, result = success!
+004142 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+004143 zx.io.api.server.Session[20-0]: 8f0a87a1-52e4-4ab5-b874-c2162d27e03c no subscriptionCount
+011364 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestChromiumWork [4f58dd05-cd23-4ab1-97ee-237a36b38dba]
+the chromium task is running!
+011367 zx.server.work.WorkerChromium[38-0]: Chromium JSON: {
+  "Browser": "Chrome/130.0.6723.31",
+  "Protocol-Version": "1.3",
+  "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36",
+  "V8-Version": "13.0.245.13",
+  "WebKit-Version": "537.36 (@0000000000000000000000000000000000000000)",
+  "webSocketDebuggerUrl": "ws://localhost:11000/devtools/browser/ac20acf0-62e8-40ba-bd3e-1a72e1dc020e"
+}
+011368 zx.server.work.WorkerChromium[38-0]: Chromium started: {
+  "Browser": "Chrome/130.0.6723.31",
+  "Protocol-Version": "1.3",
+  "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36",
+  "V8-Version": "13.0.245.13",
+  "WebKit-Version": "537.36 (@0000000000000000000000000000000000000000)",
+  "webSocketDebuggerUrl": "ws://localhost:11000/devtools/browser/ac20acf0-62e8-40ba-bd3e-1a72e1dc020e"
+}
+011368 zx.demo.server.work.TestChromiumWork[40-0]: Puppeteer client created
+[attempt:0/10] connecting to puppeteer - opts: {
+  "browserWSEndpoint": "ws://localhost:11000/devtools/browser/ac20acf0-62e8-40ba-bd3e-1a72e1dc020e",
+  "defaultViewport": {
+    "width": 1920,
+    "height": 1080,
+    "isLandscape": true
+  },
+  "args": [
+    "--no-sandbox",
+    "--disable-setuid-sandbox"
+  ]
+}
+011373 zx.server.puppeteer.PuppeteerClient[39-0]: Started Puppeteer - http://localhost:11000/devtools/browser/ac20acf0-62e8-40ba-bd3e-1a72e1dc020e
+new page viewport { width: 1920, height: 1080 }
+Going to http://www.google.co.uk
+ ********** At http://www.google.co.uk
+013036 zx.demo.server.work.TestChromiumWork[40-0]: Puppeteer client started
+013098 zx.server.work.Worker[17-0]: zx.demo.server.work.TestChromiumWork [4f58dd05-cd23-4ab1-97ee-237a36b38dba] EXCEPTION: ENOENT: no such file or directory, open './temp/www.google.co.uk.pdf' Error: ENOENT: no such file or directory, open './temp/www.google.co.uk.pdf'
+node:internal/fs/promises:639:25,/home/pptruser/app/node_modules/puppeteer-core/lib/cjs/puppeteer/common/util.js:167:28,/home/pptruser/app/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Page.js:830:28,zx.server.puppeteer.PuppeteerClient:350:16,zx.demo.server.work.TestChromiumWork:53:9,zx.server.work.Worker:95:34,zx.io.api.ApiUtils:152:48,zx.io.api.server.AbstractServerApi:172:20,zx.io.api.server.AbstractServerApi:107:11,zx.io.api.server.AbstractServerApi:82:11,zx.io.api.server.ConnectionManager:109:11,zx.io.api.transport.http.ExpressServerTransport:81:11
+013099 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+013099 zx.io.api.server.Session[20-0]: 8f0a87a1-52e4-4ab5-b874-c2162d27e03c no subscriptionCount
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+Chrome launched on port 11000
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+000948 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+000949 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+000978 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [06a7043e-8f4d-4586-80c2-f56c6b14f552]
+000983 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.ErrorWork [5fe762fc-53f1-4f23-b606-b8a9b1a136a9]
+000983 zx.server.work.Worker[17-0]: I'm about to throw an exception!
+000983 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+000983 zx.io.api.server.Session[20-0]: 06a7043e-8f4d-4586-80c2-f56c6b14f552 added publication, all publications: [ {...(3)} ]
+000983 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+000984 zx.server.work.Worker[17-0]: zx.demo.server.work.ErrorWork [5fe762fc-53f1-4f23-b606-b8a9b1a136a9] EXCEPTION: oops Error: oops
+zx.demo.server.work.ErrorWork:26:30,qx.Interface:473:33,zx.server.work.Worker:95:53,qx.Interface:473:33,zx.io.api.ApiUtils:152:48,zx.io.api.server.AbstractServerApi:172:49,zx.io.api.server.AbstractServerApi:107:22,zx.io.api.server.AbstractServerApi:82:22,zx.io.api.server.ConnectionManager:109:21,zx.io.api.transport.http.ExpressServerTransport:81:66,/home/pptruser/app/node_modules/express/lib/router/layer.js:95:5,/home/pptruser/app/node_modules/express/lib/router/route.js:149:13,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7
+000984 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+000984 zx.io.api.server.Session[20-0]: 06a7043e-8f4d-4586-80c2-f56c6b14f552 no subscriptionCount
+000984 zx.io.api.server.ConnectionManager[24-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+005195 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+Chrome launched on port 11000
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+001091 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+001091 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+001121 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [73cd3f86-854e-4e6c-86ed-ade6f6dfd717]
+001126 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [a36b0a8b-e5c1-41bb-a7f6-b5c1d385d294]
+the task is running!
+001126 zx.server.work.Worker[17-0]: Hello, World!
+001126 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001127 zx.io.api.server.Session[20-0]: 73cd3f86-854e-4e6c-86ed-ade6f6dfd717 added publication, all publications: [ {...(3)} ]
+001127 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+001127 zx.server.work.Worker[17-0]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+001127 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001127 zx.io.api.server.Session[20-0]: 73cd3f86-854e-4e6c-86ed-ade6f6dfd717 added publication, all publications: [ {...(3)}, {...(3)} ]
+001127 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+001127 zx.server.work.Worker[17-0]: a36b0a8b Doing thing 0
+001127 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001127 zx.io.api.server.Session[20-0]: 73cd3f86-854e-4e6c-86ed-ade6f6dfd717 added publication, all publications: [ {...(3)}, {...(3)}, {...(3)} ]
+001127 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+002102 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002103 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002103 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002132 zx.server.work.Worker[17-0]: a36b0a8b Doing thing 1
+002132 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+002133 zx.io.api.server.Session[20-0]: 73cd3f86-854e-4e6c-86ed-ade6f6dfd717 added publication, all publications: [ {...(3)} ]
+002133 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+003112 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+003136 zx.server.work.Worker[17-0]: a36b0a8b Doing thing 2
+003136 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+003137 zx.io.api.server.Session[20-0]: 73cd3f86-854e-4e6c-86ed-ade6f6dfd717 added publication, all publications: [ {...(3)} ]
+003137 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004121 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+004141 zx.server.work.Worker[17-0]: zx.demo.server.work.TestWork [a36b0a8b-e5c1-41bb-a7f6-b5c1d385d294] completed successfully, result = success!
+004141 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+004141 zx.io.api.server.Session[20-0]: 73cd3f86-854e-4e6c-86ed-ade6f6dfd717 no subscriptionCount
+006134 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestChromiumWork [3be74b7a-c3b9-4b71-9f58-4afb9dba7529]
+the chromium task is running!
+006148 zx.server.work.WorkerChromium[34-0]: Chromium JSON: {
+  "Browser": "Chrome/130.0.6723.31",
+  "Protocol-Version": "1.3",
+  "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36",
+  "V8-Version": "13.0.245.13",
+  "WebKit-Version": "537.36 (@0000000000000000000000000000000000000000)",
+  "webSocketDebuggerUrl": "ws://localhost:11000/devtools/browser/70ada5ac-5da0-410e-b487-d5487cb01e2d"
+}
+006151 zx.server.work.WorkerChromium[34-0]: Chromium started: {
+  "Browser": "Chrome/130.0.6723.31",
+  "Protocol-Version": "1.3",
+  "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36",
+  "V8-Version": "13.0.245.13",
+  "WebKit-Version": "537.36 (@0000000000000000000000000000000000000000)",
+  "webSocketDebuggerUrl": "ws://localhost:11000/devtools/browser/70ada5ac-5da0-410e-b487-d5487cb01e2d"
+}
+006152 zx.demo.server.work.TestChromiumWork[37-0]: Puppeteer client created
+[attempt:0/10] connecting to puppeteer - opts: {
+  "browserWSEndpoint": "ws://localhost:11000/devtools/browser/70ada5ac-5da0-410e-b487-d5487cb01e2d",
+  "defaultViewport": {
+    "width": 1920,
+    "height": 1080,
+    "isLandscape": true
+  },
+  "args": [
+    "--no-sandbox",
+    "--disable-setuid-sandbox"
+  ]
+}
+006159 zx.server.puppeteer.PuppeteerClient[36-0]: Started Puppeteer - http://localhost:11000/devtools/browser/70ada5ac-5da0-410e-b487-d5487cb01e2d
+new page viewport { width: 1920, height: 1080 }
+Going to http://www.google.co.uk
+006507 zx.server.work.Worker[17-0]: { PUPPET CONSOLE: Autofocus processing was blocked because a document already has a focused element., info }
+006507 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+006507 zx.io.api.server.Session[20-0]: 73cd3f86-854e-4e6c-86ed-ade6f6dfd717 added publication, all publications: [ {...(3)} ]
+006507 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+006993 zx.server.work.Worker[17-0]: { PUPPET CONSOLE: Failed to load resource: the server responded with a status of 503 (), error }
+006993 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+006993 zx.io.api.server.Session[20-0]: 73cd3f86-854e-4e6c-86ed-ade6f6dfd717 added publication, all publications: [ {...(3)}, {...(3)} ]
+006993 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+007162 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+007162 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+ ********** At http://www.google.co.uk
+007682 zx.demo.server.work.TestChromiumWork[37-0]: Puppeteer client started
+007753 zx.server.work.Worker[17-0]: zx.demo.server.work.TestChromiumWork [3be74b7a-c3b9-4b71-9f58-4afb9dba7529] EXCEPTION: ENOENT: no such file or directory, open './temp/www.google.co.uk.pdf' Error: ENOENT: no such file or directory, open './temp/www.google.co.uk.pdf'
+node:internal/fs/promises:639:25,/home/pptruser/app/node_modules/puppeteer-core/lib/cjs/puppeteer/common/util.js:167:28,/home/pptruser/app/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Page.js:830:28,zx.server.puppeteer.PuppeteerClient:350:16,zx.demo.server.work.TestChromiumWork:53:9,zx.server.work.Worker:95:34,zx.io.api.ApiUtils:152:48,zx.io.api.server.AbstractServerApi:172:20,zx.io.api.server.AbstractServerApi:107:11,zx.io.api.server.AbstractServerApi:82:11,zx.io.api.server.ConnectionManager:109:11,zx.io.api.transport.http.ExpressServerTransport:81:11
+007753 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+007753 zx.io.api.server.Session[20-0]: 73cd3f86-854e-4e6c-86ed-ade6f6dfd717 no subscriptionCount
+007761 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+Chrome launched on port 11000
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+000975 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+000975 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+000992 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [1b462099-f008-433e-99d3-759244188651]
+000996 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.ErrorWork [62ded677-37b2-4bb4-95c8-bdbaa9c451b6]
+000996 zx.server.work.Worker[17-0]: I'm about to throw an exception!
+000996 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+000997 zx.io.api.server.Session[20-0]: 1b462099-f008-433e-99d3-759244188651 added publication, all publications: [ {...(3)} ]
+000997 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+000998 zx.server.work.Worker[17-0]: zx.demo.server.work.ErrorWork [62ded677-37b2-4bb4-95c8-bdbaa9c451b6] EXCEPTION: oops Error: oops
+zx.demo.server.work.ErrorWork:26:30,qx.Interface:473:33,zx.server.work.Worker:95:53,qx.Interface:473:33,zx.io.api.ApiUtils:152:48,zx.io.api.server.AbstractServerApi:172:49,zx.io.api.server.AbstractServerApi:107:22,zx.io.api.server.AbstractServerApi:82:22,zx.io.api.server.ConnectionManager:109:21,zx.io.api.transport.http.ExpressServerTransport:81:66,/home/pptruser/app/node_modules/express/lib/router/layer.js:95:5,/home/pptruser/app/node_modules/express/lib/router/route.js:149:13,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7
+000998 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+000998 zx.io.api.server.Session[20-0]: 1b462099-f008-433e-99d3-759244188651 no subscriptionCount
+000998 zx.io.api.server.ConnectionManager[24-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+001004 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs
+Using config from /home/pptruser/app/cms.json
+No SMTP server configuration, so sending emails not possible.
+Chrome launched on port 11000
+Chromium ready {
+  "version": "Chrome/130.0.6723.31",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"
+}
+001101 zx.cli.commands.work.StartWorkerCommand[18-0]: Worker server is running on port 10000
+001101 zx.cli.commands.work.StartWorkerCommand[18-0]: zx.server.work.WORKER_READY_SIGNAL
+001127 zx.server.work.Worker[17-0]: Data mounts: demodata:/home/pptruser/data/demodata
+001131 zx.io.api.server.Session[20-0]: New Server API Session created: zx.io.api.server.Session [b8922a01-d6ce-4a08-b0ff-b998cec92260]
+001135 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestWork [5ddbd93b-7352-47b8-b2eb-4afd53653eed]
+the task is running!
+001135 zx.server.work.Worker[17-0]: Hello, World!
+001135 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001135 zx.io.api.server.Session[20-0]: b8922a01-d6ce-4a08-b0ff-b998cec92260 added publication, all publications: [ {...(3)} ]
+001135 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+001136 zx.server.work.Worker[17-0]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+001136 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001136 zx.io.api.server.Session[20-0]: b8922a01-d6ce-4a08-b0ff-b998cec92260 added publication, all publications: [ {...(3)}, {...(3)} ]
+001136 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+001136 zx.server.work.Worker[17-0]: 5ddbd93b Doing thing 0
+001136 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+001136 zx.io.api.server.Session[20-0]: b8922a01-d6ce-4a08-b0ff-b998cec92260 added publication, all publications: [ {...(3)}, {...(3)}, {...(3)} ]
+001136 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+002114 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002114 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002115 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+002141 zx.server.work.Worker[17-0]: 5ddbd93b Doing thing 1
+002141 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+002142 zx.io.api.server.Session[20-0]: b8922a01-d6ce-4a08-b0ff-b998cec92260 added publication, all publications: [ {...(3)} ]
+002142 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+003131 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+003145 zx.server.work.Worker[17-0]: 5ddbd93b Doing thing 2
+003145 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+003145 zx.io.api.server.Session[20-0]: b8922a01-d6ce-4a08-b0ff-b998cec92260 added publication, all publications: [ {...(3)} ]
+003145 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+004148 zx.server.work.Worker[17-0]: zx.demo.server.work.TestWork [5ddbd93b-7352-47b8-b2eb-4afd53653eed] completed successfully, result = success!
+004148 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+004149 zx.io.api.server.Session[20-0]: b8922a01-d6ce-4a08-b0ff-b998cec92260 no subscriptionCount
+004150 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+006151 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.TestChromiumWork [90e1bc55-ad2f-439a-9875-46a9e805cc39]
+the chromium task is running!
+006154 zx.server.work.WorkerChromium[34-0]: Chromium JSON: {
+  "Browser": "Chrome/130.0.6723.31",
+  "Protocol-Version": "1.3",
+  "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36",
+  "V8-Version": "13.0.245.13",
+  "WebKit-Version": "537.36 (@0000000000000000000000000000000000000000)",
+  "webSocketDebuggerUrl": "ws://localhost:11000/devtools/browser/1fe73bf5-ce3e-474a-912f-58a7330c167e"
+}
+006156 zx.server.work.WorkerChromium[34-0]: Chromium started: {
+  "Browser": "Chrome/130.0.6723.31",
+  "Protocol-Version": "1.3",
+  "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36",
+  "V8-Version": "13.0.245.13",
+  "WebKit-Version": "537.36 (@0000000000000000000000000000000000000000)",
+  "webSocketDebuggerUrl": "ws://localhost:11000/devtools/browser/1fe73bf5-ce3e-474a-912f-58a7330c167e"
+}
+006157 zx.demo.server.work.TestChromiumWork[36-0]: Puppeteer client created
+[attempt:0/10] connecting to puppeteer - opts: {
+  "browserWSEndpoint": "ws://localhost:11000/devtools/browser/1fe73bf5-ce3e-474a-912f-58a7330c167e",
+  "defaultViewport": {
+    "width": 1920,
+    "height": 1080,
+    "isLandscape": true
+  },
+  "args": [
+    "--no-sandbox",
+    "--disable-setuid-sandbox"
+  ]
+}
+006165 zx.server.puppeteer.PuppeteerClient[35-0]: Started Puppeteer - http://localhost:11000/devtools/browser/1fe73bf5-ce3e-474a-912f-58a7330c167e
+new page viewport { width: 1920, height: 1080 }
+Going to http://www.google.co.uk
+006498 zx.server.work.Worker[17-0]: { PUPPET CONSOLE: Autofocus processing was blocked because a document already has a focused element., info }
+006498 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+006499 zx.io.api.server.Session[20-0]: b8922a01-d6ce-4a08-b0ff-b998cec92260 added publication, all publications: [ {...(3)} ]
+006499 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+007191 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+ ********** At http://www.google.co.uk
+009026 zx.demo.server.work.TestChromiumWork[36-0]: Puppeteer client started
+009026 zx.demo.server.work.TestChromiumWork[36-0]: Printing PDF to /home/pptruser/data/demodata/www.google.co.uk.pdf
+009100 zx.demo.server.work.TestChromiumWork[36-0]: PDF printed
+009101 zx.demo.server.work.TestChromiumWork[36-0]: Puppeteer client stopped
+009101 zx.server.work.Worker[17-0]: zx.demo.server.work.TestChromiumWork [90e1bc55-ad2f-439a-9875-46a9e805cc39] completed successfully, result = success!
+009101 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+009101 zx.io.api.server.Session[20-0]: b8922a01-d6ce-4a08-b0ff-b998cec92260 no subscriptionCount
+011154 zx.server.work.Worker[17-0]: Running work: zx.demo.server.work.ErrorWork [a513b209-5b88-487c-bb5d-bc1a53c9e1f6]
+011156 zx.server.work.Worker[17-0]: I'm about to throw an exception!
+011157 zx.server.work.WorkerApi_Server[22-0]: Publishing log to zx.io.api.server.Session[20-0]
+011157 zx.io.api.server.Session[20-0]: b8922a01-d6ce-4a08-b0ff-b998cec92260 added publication, all publications: [ {...(3)} ]
+011157 zx.io.api.server.Session[20-0]: Transport zx.io.api.transport.http.ExpressServerTransport does not support server push. Publications will be queued until they can piggyback on a client-initiated message.
+011160 zx.server.work.Worker[17-0]: zx.demo.server.work.ErrorWork [a513b209-5b88-487c-bb5d-bc1a53c9e1f6] EXCEPTION: oops Error: oops
+zx.demo.server.work.ErrorWork:26:30,qx.Interface:473:33,zx.server.work.Worker:153:53,qx.Interface:473:33,zx.io.api.ApiUtils:152:48,zx.io.api.server.AbstractServerApi:172:49,zx.io.api.server.AbstractServerApi:107:22,zx.io.api.server.AbstractServerApi:82:22,zx.io.api.server.ConnectionManager:109:21,zx.io.api.transport.http.ExpressServerTransport:81:66,/home/pptruser/app/node_modules/express/lib/router/layer.js:95:5,/home/pptruser/app/node_modules/express/lib/router/route.js:149:13,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7,/home/pptruser/app/node_modules/express/lib/router/route.js:145:7
+011160 zx.server.work.WorkerApi_Server[22-0]: Publishing complete to zx.io.api.server.Session[20-0]
+011160 zx.io.api.server.Session[20-0]: b8922a01-d6ce-4a08-b0ff-b998cec92260 no subscriptionCount
+011160 zx.io.api.server.ConnectionManager[25-0]: Sending publication to transport { {...(3)}, zx.io.api.server.Session[20-0] }
+011167 zx.cli.commands.work.StartWorkerCommand[18-0]: Shutting down expressjs

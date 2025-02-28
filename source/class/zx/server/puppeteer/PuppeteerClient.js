@@ -86,6 +86,12 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
     debugOnStartup: {
       init: false,
       check: "Boolean"
+    },
+
+    /** Whether the pages are expected to support the `zx.io.api.*` framework */
+    usesZxApi: {
+      init: false,
+      check: "Boolean"
     }
   },
 
@@ -228,24 +234,28 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         throw new Error(`Page navigation error: ${JSON.stringify(result, null, 2)}`);
       }
 
-      //wait until page is ready to use Remote APIs
-      //by repeatedly polling the page for the ready flag
-      this.__readyPromise = new Promise(async (resolve, reject) => {
-        const TIMEOUT = 30; //massive 30 second timeout
-        const INTERVAL = 100;
-        const MAX_PASSES = (TIMEOUT * 1000) / INTERVAL;
+      if (this.isUsesZxApi()) {
+        //wait until page is ready to use Remote APIs
+        //by repeatedly polling the page for the ready flag
+        this.__readyPromise = new Promise(async (resolve, reject) => {
+          const TIMEOUT = 30; //massive 30 second timeout
+          const INTERVAL = 100;
+          const MAX_PASSES = (TIMEOUT * 1000) / INTERVAL;
 
-        for (let pass = 0; pass < MAX_PASSES; pass++) {
-          let ready = await page.evaluate(() => window["zx"].thin.puppeteer.PuppeteerServerTransport.getInstance().isReady());
-          if (ready) {
-            return resolve();
+          for (let pass = 0; pass < MAX_PASSES; pass++) {
+            let ready = await page.evaluate(() => window["zx"].thin.puppeteer.PuppeteerServerTransport.getInstance().isReady());
+            if (ready) {
+              return resolve();
+            }
+            console.log("Page remote API not ready yet, waiting...");
+            await new Promise(res => setTimeout(res, INTERVAL));
           }
-          console.log("Page remote API not ready yet, waiting...");
-          await new Promise(res => setTimeout(res, INTERVAL));
-        }
 
-        reject(new Error("Page did not become ready to use remote APIs within timeout"));
-      });
+          reject(new Error("Page did not become ready to use remote APIs within timeout"));
+        });
+      } else {
+        this.__readyPromise = Promise.resolve();
+      }
       return result;
     },
 

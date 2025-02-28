@@ -26,9 +26,9 @@ qx.Class.define("zx.server.work.WorkerTracker", {
     this.__workerClientApi.terminate();
     this.__workerClientApi.dispose();
     this.__workerClientApi = null;
-    if (this.__containerConsoleLog) {
-      this.__containerConsoleLog.dispose();
-      this.__containerConsoleLog = null;
+    if (this._containerConsoleLog) {
+      this._containerConsoleLog.dispose();
+      this._containerConsoleLog = null;
     }
   },
 
@@ -54,13 +54,16 @@ qx.Class.define("zx.server.work.WorkerTracker", {
     __workResult: null,
 
     /** @type{zx.utils.IncrementalLogWriter} where to log the container console output */
-    __containerConsoleLog: null,
+    _containerConsoleLog: null,
 
     /** @type{zx.utils.Timeout} timer used to watch the container to see if it disappears */
-    __containerWatcher: null,
+    _containerWatcher: null,
 
     /** @type{Integer} the port that the node process will be listening to; this can be for API calls or it's the puppeteer server in docker */
     _nodeHttpPort: null,
+
+    /** @type{Promise} promise that resolves when the currently queued getDockerContainer method completes (ie a mutex) */
+    __createDockerContainerPromise: null,
 
     /**
      * Called when starting the WorkTracker
@@ -231,30 +234,111 @@ qx.Class.define("zx.server.work.WorkerTracker", {
     },
 
     /**
-     * Creates a Docker container for the worker; if configCb is provided, it will be called with
-     * the Docker config so that it can be adjusted to suit
+     * Gets a Docker Container for this Work, creating the container if necessary
      *
-     * @param {Function?} configCb
-     * @returns {import('dockerode').Container}
+     * @returns {Docker.Container}
      */
-    async _createDockerContainer(configCb, readySignal) {
+    async getDockerContainer() {
+      if (!this.getWorkerPool().isEnableChromium()) {
+        this.error(`Chromium is not enabled for ${this.classname}`);
+      }
+
+      if (this._container) {
+        return this._container;
+      }
+
+      const createContainer = async (configCb, readySignal) => {
+        this._container = await this._createDockerContainer();
+        let chromiumUrl = `http://localhost:${this._getChromiumPort()}`;
+        await this.getWorkerClientApi().setChromiumUrl(chromiumUrl);
+        await this.getWorkerClientApi().setDataMounts(this.getWorkerPool().getDataMounts());
+      };
+      if (!this.__createDockerContainerPromise) {
+        this.__createDockerContainerPromise = createContainer();
+      }
+      await this.__createDockerContainerPromise;
+      return this._container;
+    },
+
+    /**
+     * Creates a Docker configuration for the worker; if configCb is provided, it will be called with
+     * the Docker config so that it can be adjusted to suit.  This allows the implementation of the
+     * tracker to adjust the Docker configuration as necessary, but leaves the actual creation of the
+     * container to the _createDockerContainer method which is called as needed by the Work
+     *
+     * @param {String} workerLocation one of: "this-process" or "host" or "container"
+     * @param {String} inspect one of "inspect", "inspect-brk", "none"
+     * @param {Function?} configCb
+     * @param {String?} readySignal
+     */
+    async _createDockerConfiguration(workerLocation, inspect, configCb, readySignal) {
       if (!readySignal) {
         readySignal = "Webserver started on http";
       }
       let workerPool = this.getWorkerPool();
 
+      /*
+       * If the Worker is in this process then:
+       *    Worker HTTP (for API):              N/A    [nodeHttpPort]
+       *    Worker Node Debug:                  N/A    [nodeDebugPort]
+       *    Puppeteer Server (from Container):  11000  [chromiumPort]
+       *    Chromium (from Container):          11000 (proxied by Puppeteer Server)
+       *    Puppeteer Server Node Debug:        9230   [chromiumDebugPort]
+       *
+       * If the Worker in on the host, then:
+       *    Worker HTTP (for API):              10000  [nodeHttpPort]
+       *    Worker Node Debug:                  9229   [nodeDebugPort]
+       *    Puppeteer Server (from Container):  11000  [chromiumPort]
+       *    Chromium (from Container):          11000 (proxied by Puppeteer Server)
+       *    Puppeteer Server Node Debug:        9230   [chromiumDebugPort]
+       *
+       * If the Worker is in a Container, then:
+       *    Worker HTTP (for API) (from Container):  10000  [nodeHttpPort]
+       *    Worker Node Debug (from Container):      9229   [nodeDebugPort]
+       *    Chromium (from Container):               11000  [chromiumPort]
+       */
+
       let ExposedPorts = {};
       let PortBindings = {};
-      let Env = [];
+      let Env = {};
 
-      ExposedPorts["11000/tcp"] = {};
-      PortBindings["11000/tcp"] = [{ HostPort: String(this._getChromiumPort()) }];
+      if (workerLocation == "this-process") {
+        ExposedPorts[`11000/tcp`] = {};
+        PortBindings[`11000/tcp`] = [{ HostPort: String(this._getChromiumPort()) }];
+
+        if (inspect != "none") {
+          this.__chromiumDebugPort = zx.server.PortRanges.getNodeDebugPortRange().acquire();
+          ExposedPorts[`9230/tcp`] = {};
+          PortBindings[`9230/tcp`] = [{ HostPort: String(this.__chromiumDebugPort) }];
+          Env.ZX_NODE_INSPECT = `--${inspect}=0.0.0.0:9230`;
+        }
+      } else if (workerLocation == "host") {
+        ExposedPorts[`11000/tcp`] = {};
+        PortBindings[`11000/tcp`] = [{ HostPort: String(this._getChromiumPort()) }];
+
+        if (inspect != "none") {
+          this.__chromiumDebugPort = zx.server.PortRanges.getNodeDebugPortRange().acquire();
+          ExposedPorts[`9230/tcp`] = {};
+          PortBindings[`9230/tcp`] = [{ HostPort: String(this.__chromiumDebugPort) }];
+          Env.ZX_NODE_INSPECT = `--${inspect}=0.0.0.0:9230`;
+        }
+      } else {
+        ExposedPorts[`10000/tcp`] = {};
+        PortBindings[`10000/tcp`] = [{ HostPort: String(this._getNodeHttpPort()) }];
+
+        if (inspect != "none") {
+          ExposedPorts[`9229/tcp`] = {};
+          PortBindings[`9229/tcp`] = [{ HostPort: String(this._getNodeDebugPort()) }];
+          Env.ZX_NODE_INSPECT = `--${inspect}=0.0.0.0:9229`;
+        }
+
+        ExposedPorts[`11000/tcp`] = {};
+        PortBindings[`11000/tcp`] = [{ HostPort: String(this._getChromiumPort()) }];
+      }
 
       // prettier-ignore
-      Env = [
-        `ZX_NODE_ARGS=./runtime/puppeteer-server/index.js launch --port=10000 --chromium-port=11000`, 
-        "ZX_MODE=worker"
-      ];
+      Env.ZX_NODE_ARGS=`./runtime/puppeteer-server/index.js launch --port=11000`;
+      Env.ZX_MODE = `worker`;
 
       /** @type {import('dockerode').ContainerCreateOptions} */
       let dockerConfig = {
@@ -296,12 +380,27 @@ qx.Class.define("zx.server.work.WorkerTracker", {
         configCb(dockerConfig);
       }
 
-      let containerDir = path.join(workerPool.getWorkDir(), "container", "" + this._getNodeHttpPort());
+      dockerConfig.Env = Object.keys(dockerConfig.Env).map(key => `${key}=${dockerConfig.Env[key]}`);
+
+      this.__dockerConfiguration = dockerConfig;
+      this.__dockerReadySignal = readySignal || "Webserver started on http";
+    },
+
+    /**
+     * Creates a Docker container for the worker, using the configuration created by _createDockerConfiguration
+     *
+     * @returns {import('dockerode').Container}
+     */
+    async _createDockerContainer() {
+      let dockerConfig = this.__dockerConfiguration;
+      let containerDir = path.join(this.getWorkerPool().getWorkDir(), "container", "" + this._getNodeHttpPort());
       await fs.promises.mkdir(containerDir, { recursive: true });
-      this.__containerConsoleLog = new zx.utils.IncrementalLogWriter(path.join(containerDir, "console.log"));
+      this._containerConsoleLog = new zx.utils.IncrementalLogWriter(path.join(containerDir, "console.log"));
 
       const onContainerMessage = message => {
-        this.__containerConsoleLog.write(message + "\n");
+        if (this._containerConsoleLog) {
+          this._containerConsoleLog.write(message + "\n");
+        }
         this.appendWorkLog(message);
       };
 
@@ -316,24 +415,24 @@ qx.Class.define("zx.server.work.WorkerTracker", {
 
       let docker = new Docker();
       let container = await docker.createContainer(dockerConfig);
-      this.__container = container;
+      this._container = container;
 
       let promise = new qx.Promise();
       let streams = new zx.utils.BufferedIoStreams(line => {
-        if (line.toString().indexOf(readySignal) > -1) {
+        if (line.toString().indexOf(this.__dockerReadySignal) > -1) {
           promise.resolve();
         } else {
           onContainerMessage(line);
         }
       });
-      this.__container.attach({ stream: true, stdout: true, stderr: false }, (err, stream) => {
+      this._container.attach({ stream: true, stdout: true, stderr: false }, (err, stream) => {
         if (err) {
           this.error("Error attached to stdout stream from Docker: " + err);
         } else {
           streams.add(stream);
         }
       });
-      this.__container.attach({ stream: true, stdout: false, stderr: true }, (err, stream) => {
+      this._container.attach({ stream: true, stdout: false, stderr: true }, (err, stream) => {
         if (err) {
           this.error("Error attached to stderr stream from Docker: " + err);
         } else {
@@ -342,7 +441,7 @@ qx.Class.define("zx.server.work.WorkerTracker", {
       });
       await container.start();
       let shutdownDetected = false;
-      this.__containerWatcher = new zx.utils.Timeout(2000, async () => {
+      this._containerWatcher = new zx.utils.Timeout(2000, async () => {
         let state;
         try {
           state = await container.inspect();
@@ -351,10 +450,10 @@ qx.Class.define("zx.server.work.WorkerTracker", {
         }
         if (!state?.State?.Running && !shutdownDetected) {
           shutdownDetected = false;
-          this.__containerWatcher.setEnabled(false);
+          this._containerWatcher.setEnabled(false);
           this.fireEvent("containerShutdown");
           if (promise != null) {
-            let log = await this.__containerConsoleLog.read();
+            let log = await this._containerConsoleLog.read();
             this.debug("Container did not start: \n" + log);
             promise.reject(new Error("Container did not start"));
             promise = null;
@@ -363,7 +462,7 @@ qx.Class.define("zx.server.work.WorkerTracker", {
       }).set({
         recurring: true
       });
-      this.__containerWatcher.startTimer();
+      this._containerWatcher.startTimer();
       this.debug(`started container, waiting for ready signal...`);
       await promise;
       promise = null;
@@ -375,16 +474,16 @@ qx.Class.define("zx.server.work.WorkerTracker", {
      * Closes the container and releases the chromium port
      */
     async _closeContainer() {
-      if (this.__container) {
-        this.__containerWatcher.dispose();
+      if (this._container) {
+        this._containerWatcher.dispose();
         let timeout = this.getWorkerPool().getShutdownTimeout();
         let timedWaitFor = new zx.utils.TimedWaitFor(timeout);
-        this.__container.stop(() => {
+        this._container.stop(() => {
           this.debug(`Container stopped`);
           timedWaitFor.fire();
         });
         await timedWaitFor.wait();
-        this.__container = null;
+        this._container = null;
       }
       if (this.__chromiumPort) {
         zx.server.PortRanges.getChromiumPortRange().release(this.__chromiumPort);

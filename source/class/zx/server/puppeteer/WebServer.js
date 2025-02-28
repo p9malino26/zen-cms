@@ -55,7 +55,9 @@ qx.Class.define("zx.server.puppeteer.WebServer", {
         let app = await this._createApplication();
 
         let chromePort = this.getChromePort() ?? this.getListenPort() + 1;
-        if (chromePort < 1 || chromePort > 65535) throw new Error(`Invalid chromePort '${chromePort}'. Expected 1-65535`);
+        if (chromePort < 1 || chromePort > 65535) {
+          throw new Error(`Invalid chromePort '${chromePort}'. Expected 1-65535`);
+        }
 
         let executablePath = playwright.chromium.executablePath();
         if (!fs.existsSync(executablePath)) {

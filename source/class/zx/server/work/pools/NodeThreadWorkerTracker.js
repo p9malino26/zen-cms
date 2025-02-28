@@ -34,11 +34,9 @@ qx.Class.define("zx.server.work.pools.NodeThreadWorkerTracker", {
       let workerClientApi = zx.io.api.ApiUtils.createClientApi(zx.server.work.IWorkerApi, this.__apiClientTransport, "/work/worker");
       this._setWorkerClientApi(workerClientApi);
       await super.initialize();
-
       if (this.getWorkerPool().isEnableChromium()) {
-        await this._createDockerContainer();
-        let chromiumUrl = `http://localhost:${this._getNodeHttpPort()}`;
-        await workerClientApi.setChromiumUrl(chromiumUrl);
+        await this._createDockerConfiguration("this-process", this.getWorkerPool().getNodeInspect());
+        await this.getDockerContainer();
       }
     },
 

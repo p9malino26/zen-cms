@@ -16,7 +16,7 @@ qx.Class.define("zx.demo.server.work.TestChromiumWork", {
         chromiumEndpoint: chromium.getEndpoint()
       });
       puppeteer.addListener("log", evt => {
-        this.appendWorkLog(evt.getData());
+        worker.appendWorkLog(evt.getData());
         evt.preventDefault();
       });
       puppeteer.addListener("ping", evt => this.debug("ping"));
@@ -39,7 +39,9 @@ qx.Class.define("zx.demo.server.work.TestChromiumWork", {
 
       puppeteer.addListenerOnce("close", () => this.debug("Puppeteer client closed"));
 
-      puppeteer.printToPdf("./temp/worker/www.google.co.uk.pdf");
+      let path = worker.resolveFile("demodata/www.google.co.uk.pdf");
+      this.debug("Printing PDF to " + path);
+      await puppeteer.printToPdf(path);
       this.debug("PDF printed");
 
       await puppeteer.stop();

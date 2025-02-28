@@ -16,6 +16,7 @@
  * ************************************************************************ */
 
 const express = require("express");
+const fs = require("fs");
 
 /**
  * This command will start a Worker and listen on a port for HTTP traffic for
@@ -24,6 +25,7 @@ const express = require("express");
  *
  * @use(zx.demo.server.work.TestWork)
  * @use(zx.demo.server.work.ErrorWork)
+ * @use(zx.demo.server.work.TestChromiumWork)
  */
 qx.Class.define("zx.cli.commands.work.StartWorkerCommand", {
   extend: zx.cli.Command,
@@ -42,9 +44,11 @@ qx.Class.define("zx.cli.commands.work.StartWorkerCommand", {
       })
     );
     this.addFlag(
-      new zx.cli.Flag("chromium-url").set({
-        description: "Chromium Web URL to use",
-        type: "string"
+      new zx.cli.Flag("launch-chromium").set({
+        description: "whether to launch chromium (because we are running in the container)",
+        type: "boolean",
+        value: false,
+        required: true
       })
     );
   },
@@ -57,10 +61,30 @@ qx.Class.define("zx.cli.commands.work.StartWorkerCommand", {
       let server = new zx.server.Standalone();
       await server.start();
 
-      let worker = new zx.server.work.Worker();
-      if (flags.chromiumUrl) {
-        worker.setChromiumUrl(flags.chromiumUrl);
+      if (flags.launchChromium) {
+        const playwright = require("playwright-core");
+        const puppeteer = require("puppeteer-core");
+
+        let executablePath = playwright.chromium.executablePath();
+        if (!fs.existsSync(executablePath)) {
+          throw new Error(`Chromium executable not found at ${executablePath}`);
+        }
+        let options = {
+          headless: true,
+          devtools: true,
+          executablePath,
+          args: [`--remote-debugging-port=11000`, "--remote-debugging-address=0.0.0.0", `--no-sandbox`]
+        };
+
+        this.__browser = await puppeteer.launch(options);
+        console.log(`Chrome launched on port 11000`);
+
+        let response = await zx.utils.Http.httpGet(`http://127.0.0.1:11000/json/version`);
+        let data = response.body;
+        console.log("Chromium ready", JSON.stringify({ version: data["Browser"], userAgent: data["User-Agent"] }, null, 2));
       }
+
+      let worker = new zx.server.work.Worker();
       zx.io.api.server.ConnectionManager.getInstance().registerApi(worker.getServerApi(), "/work/worker");
 
       let app = express();

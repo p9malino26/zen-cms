@@ -46,7 +46,8 @@ qx.Class.define("zx.server.work.WorkerChromium", {
           let json = get.body;
           if (json) {
             this.__chromiumJson = json;
-            this.setEndpoint(json.webSocketDebuggerUrl);
+            this.__endpoint = json.webSocketDebuggerUrl;
+            this.debug("Chromium JSON: " + JSON.stringify(json, null, 2));
 
             try {
               get = await zx.utils.Http.httpGet(`${this.__chromiumUrl}/puppeteer-version`);
@@ -56,7 +57,7 @@ qx.Class.define("zx.server.work.WorkerChromium", {
               get = null;
             }
             if (get) {
-              let remoteVersion = get.body?.match(/^([^.]+)\.([^.]+)\.([^.]+)$/);
+              let remoteVersion = get.body?.version?.match(/^([^.]+)\.([^.]+)\.([^.]+)$/);
               const PUPPETEER_VERSION = require("puppeteer-core/package.json")["version"];
               let localVersion = PUPPETEER_VERSION.match(/^([^.]+)\.([^.]+)\.([^.]+)$/);
               if (remoteVersion && localVersion) {

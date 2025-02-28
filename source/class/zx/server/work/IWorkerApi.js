@@ -56,6 +56,13 @@ qx.Interface.define("zx.server.work.IWorkerApi", {
     setChromiumUrl(url) {},
 
     /**
+     * Sets the data mounts, each is in the from of an array "alias:path"
+     *
+     * @param {String[]} dataMounts
+     */
+    setDataMounts(dataMounts) {},
+
+    /**
      * Called to shutdown the worker process
      */
     shutdown() {}

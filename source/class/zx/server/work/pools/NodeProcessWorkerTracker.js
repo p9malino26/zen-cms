@@ -39,47 +39,82 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerTracker", {
     /** @type{zx.utils.IncrementalLogWriter} where to log the process console output */
     __processConsoleLog: null,
 
+    /** @type{Integer} port that the node server in the container is available from, when the Worker node process runs on the host */
+    __containerNodePort: null,
+
     /**
      * Called when starting the WorkerTracker.
      */
     async initialize() {
       let workerPool = this.getWorkerPool();
 
+      let readySignal = null;
+      if (workerPool.getNodeLocation() == "container") {
+        readySignal = "zx.server.work.WORKER_READY_SIGNAL";
+      }
+      let clientApiMounts = workerPool.getDataMounts();
+
+      /*
+       * If the Worker in on the host, then:
+       *    Worker HTTP (for API):              10000  [nodeHttpPort]
+       *    Worker Node Debug:                  9229   [nodeDebugPort]
+       *    Puppeteer Server (from Container):  11000  [chromiumPort]
+       *    Chromium (from Container):          11000 (proxied by Puppeteer Server)
+       *    Puppeteer Server Node Debug:        9230   [chromiumDebugPort]
+       *
+       * If the Worker is in a Container, then:
+       *    Worker HTTP (for API):              10000  [nodeHttpPort]
+       *    Worker Node Debug (from Container): 9229   [nodeDebugPort]
+       *    Chromium (from Container):          11000  [chromiumPort]
+       */
+
       if (workerPool.getNodeLocation() == "container" || workerPool.isEnableChromium()) {
-        await this._createContainer(dockerConfig => {
-          if (workerPool.getNodeLocation() == "container") {
-            dockerConfig.ExposedPorts["10000/tcp"] = {};
-            dockerConfig.PortBindings["10000/tcp"] = [{ HostPort: String(this._getNodeHttpPort()) }];
+        let inspect = workerPool.getNodeInspect();
+        await this._createDockerConfiguration(
+          workerPool.getNodeLocation(),
+          inspect,
+          dockerConfig => {
+            if (workerPool.getNodeLocation() == "container") {
+              let chromiumUrl = null;
+              if (workerPool.isEnableChromium()) {
+                chromiumUrl = `http://localhost:11000`;
+              }
 
-            let inspect = workerPool.getNodeInspect();
-            if (inspect != "none") {
-              dockerConfig.ExposedPorts["9229/tcp"] = {};
-              dockerConfig.PortBindings["9229/tcp"] = [{ HostPort: String(this._getNodeDebugPort()) }];
-              dockerConfig.Env.push(`ZX_NODE_INSPECT=--${inspect}=0.0.0.0`);
+              let nodeCmd = workerPool.getFullNodeProcessCommandLine(10000, inspect, inspect != "none" ? 9229 : null);
+              nodeCmd[0] = path.join("runtime", nodeCmd[0]);
+
+              dockerConfig.Env.ZX_NODE_ARGS = nodeCmd.join(" ");
+              dockerConfig.Env.ZX_MODE = "worker";
+
+              let dataMounts = workerPool.getDataMounts();
+              clientApiMounts = [];
+              if (dataMounts) {
+                for (let dataMount of dataMounts) {
+                  let pos = dataMount.indexOf(":");
+                  if (pos == -1) {
+                    throw new Error(`Invalid data mount: ${dataMount}`);
+                  }
+                  let alias = dataMount.substring(0, pos);
+                  let dir = dataMount.substring(pos + 1);
+                  dir = path.resolve(process.cwd(), dir);
+                  dockerConfig.HostConfig.Binds.push(`${dir}:/home/pptruser/data/${alias}`);
+                  clientApiMounts.push(`${alias}:/home/pptruser/data/${alias}`);
+                }
+              }
             }
-
-            let chromiumUrl = null;
-            if (workerPool.isEnableChromium()) {
-              chromiumUrl = `http://localhost:11000`;
-            }
-
-            let nodeCmd = workerPool.getFullNodeProcessCommandLine(10000, chromiumUrl, inspect, inspect != "none" ? 9229 : null);
-            // prettier-ignore
-            dockerConfig.Env = [
-              `ZX_NODE_ARGS=${nodeCmd.join(" ")}`, 
-              "ZX_MODE=worker"
-            ];
-          }
-        }, "zx.server.work.WORKER_READY_SIGNAL");
+          },
+          readySignal
+        );
+        this._container = await this._createDockerContainer();
       }
 
       if (workerPool.getNodeLocation() == "host") {
         let inspect = workerPool.getNodeInspect();
         let chromiumUrl = null;
         if (workerPool.isEnableChromium()) {
-          chromiumUrl = `http://localhost:${this._getNodeHttpPort()}`;
+          chromiumUrl = `http://localhost:${this._getChromiumPort()}`;
         }
-        let nodeCmd = workerPool.getFullNodeProcessCommandLine(this._getNodeHttpPort(), chromiumUrl, inspect, inspect != "none" ? this._getNodeDebugPort() : null);
+        let nodeCmd = workerPool.getFullNodeProcessCommandLine(this._getNodeHttpPort(), inspect, inspect != "none" ? this._getNodeDebugPort() : null);
         if (!path.isAbsolute(nodeCmd[0])) {
           let appMountVolume = workerPool.getAppMountVolume();
           if (!path.isAbsolute(appMountVolume)) {
@@ -135,10 +170,26 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerTracker", {
       let workerClientApi = zx.io.api.ApiUtils.createClientApi(zx.server.work.IWorkerApi, this.__apiClientTransport, "/work/worker");
       this._setWorkerClientApi(workerClientApi);
 
+      if (this._container) {
+        let chromiumUrl = `http://localhost:${this._getChromiumPort()}`;
+        await this.getWorkerClientApi().setChromiumUrl(chromiumUrl);
+        await this.getWorkerClientApi().setDataMounts(clientApiMounts);
+      }
+
       this.debug(`worker ready`);
       await super.initialize();
     },
 
+    /**
+     * @Override
+     */
+    async getDockerContainer() {
+      return this._container;
+    },
+
+    /**
+     * @Override
+     */
     async close() {
       this.debug(`Closing worker`);
       let clientApi = this.getWorkerClientApi();
@@ -171,7 +222,7 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerTracker", {
         }
         this.__nodeProcess = null;
       }
-      this._closeContainer();
+      await this._closeContainer();
       await clientApi.terminate();
       zx.server.PortRanges.getNodeHttpServerApiPortRange().release(this._nodeHttpPort);
       this._nodeHttpPort = null;

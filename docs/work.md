@@ -56,7 +56,7 @@ also inside that container
 
 ### Docker variations
 
-In production, running Workers and Work inside a container is really useful because there is process isolation and it allows automatic scaling
+In production, running Workers and Work inside a container is really useful because there is process isolation and it allows easy scaling
 according to the environment - and if you have a large deployment, you might have multiple Docker installations, each one on different, dedicated
 servers, each one operating a Pool of Docker Containers.
 
@@ -82,10 +82,11 @@ and so there is a configuration where the Scheduler, the Worker Pool, the Worker
 Chromium instance runs inside the Docker Container. Debugging your app is only one node process that needs to be debugged, and only the web page
 inside Chromium is the other side of a process boundary (which it is anyway).
 
-> NOTE:: While the Docker Pool creates and manages Docker Containers, each of which can run Chromium, this is **not** the same as the class in
+> NOTE:: While the Worker creates and manages a Docker Container which can run Chromium, this is **not** the same as the class in
 > `zx.server.puppeteer.ChromiumDocker` - that class also manages a pool of Chromium instances in Docker, but is deprecated because it has nothing to
 > do with the Work/Worker/Worker Pool mechanisms decribed here
 
 # TODO
 
-time and queue Schedulers
+time Scheduler
+start container only if called for

@@ -40,7 +40,7 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerPool", {
 
     /** The command line to pass to node, defaults to this app using the command line "work start-worker" */
     nodeCommand: {
-      init: ["./runtime/puppeteer-server/index.js", "start-worker"],
+      init: null,
       nullable: true,
       check: "Array"
     },
@@ -53,13 +53,19 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerPool", {
   },
 
   members: {
-    getFullNodeProcessCommandLine(nodeHttpPort, chromiumUrl, inspect, nodeDebugPort) {
+    getFullNodeProcessCommandLine(nodeHttpPort, inspect, nodeDebugPort) {
       let nodeCmd = this.getNodeCommand();
+      if (nodeCmd == null) {
+        if (this.getNodeLocation() == "host") {
+          nodeCmd = ["./cli/index.js", "work", "start-worker"];
+        } else {
+          nodeCmd = ["./puppeteer-server/index.js", "start-worker", "--launch-chromium"];
+        }
+      }
       if (inspect !== "none") {
         nodeCmd.unshift(`--${inspect}=0.0.0.0:${nodeDebugPort}`);
         this.info(`Node process will be debuggable on port ${nodeDebugPort}`);
       }
-      nodeCmd.push(`--chromium-url=${chromiumUrl}`);
       nodeCmd.push(`--port=${nodeHttpPort}`);
       return nodeCmd;
     },

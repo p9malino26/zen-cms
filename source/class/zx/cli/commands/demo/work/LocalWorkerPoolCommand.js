@@ -134,6 +134,7 @@ qx.Class.define("zx.cli.commands.demo.work.LocalWorkerPoolCommand", {
         pool = new zx.server.work.pools.NodeProcessWorkerPool().set(settings);
       }
 
+      pool.setDataMounts(["demodata:./temp"]);
       await pool.cleanupOldContainers();
 
       let scheduler = new zx.server.work.scheduler.QueueScheduler("temp/scheduler/");

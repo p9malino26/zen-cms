@@ -240,17 +240,6 @@ qx.Class.define("zx.utils.Pool", {
     },
 
     /**
-     * Creates a resource
-     * @returns {TResource} a resource
-     */
-    async __createNewResource() {
-      let resource = await this.getFactory().createPoolableEntity();
-      this.fireDataEvent("createResource", resource);
-      this.__pool.set(resource, zx.utils.Pool.AVAILABLE);
-      return resource;
-    },
-
-    /**
      * Gets an existing resource, or creates a new one if none are available. Implements a timeout-retry loop.
      * @returns {TResource} a resource
      */
@@ -266,7 +255,10 @@ qx.Class.define("zx.utils.Pool", {
           }
 
           if (this.__pool.size < this.getMaxSize()) {
-            return await this.__createNewResource();
+            let resource = await this.getFactory().createPoolableEntity();
+            this.fireDataEvent("createResource", resource);
+            this.__pool.set(resource, zx.utils.Pool.AVAILABLE);
+            return resource;
           }
 
           if (Date.now() - startTime > this.getTimeout()) {

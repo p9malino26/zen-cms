@@ -110,10 +110,17 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
       check: "String"
     },
 
-    /** What folder to map into the /home/pptruser/app folder in the container */
+    /** What folder to map into the /home/pptruser/app/runtime folder in the container */
     appMountVolume: {
       init: "compiled/source-node",
       check: "String"
+    },
+
+    /** @type{String[]?} array of mounts, in the form "aliasName:hostPath" */
+    dataMounts: {
+      init: null,
+      nullable: true,
+      check: "Array"
     },
 
     /** @type{String[]?} array of mounts, in the form "sourcePath:containerPath", all paths must be absolute */
@@ -169,6 +176,9 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
 
     /** @type{Object<String,zx.server.work.WorkTracker>} WorkTrackers that are currently running Work, indexed by work UUID */
     __runningWorkTrackers: null,
+
+    /** @type{Promise} mutex for `__pushQueuedResultsToScheduler` */
+    __pushQueuedResultsToSchedulerPromise: null,
 
     __pollTimer: null,
     __pushTimer: null,
@@ -353,7 +363,6 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
     /**
      * Called on a timer to send results back to the scheduler
      */
-    __pushQueuedResultsToSchedulerPromise: null,
     async __pushQueuedResultsToScheduler() {
       if (this.__pushQueuedResultsToSchedulerPromise) {
         return await this.__pushQueuedResultsToSchedulerPromise;
