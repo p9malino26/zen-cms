@@ -3,6 +3,6 @@ qx.Class.define("zx.cli.commands.DemoCommand", {
 
   construct() {
     super("demo", "Utility commands for running demos");
-    this.addSubcommand(new zx.cli.commands.demo.WorkCommand());
+    this.addSubcommand(new zx.cli.commands.demo.WorkerPoolsCommand());
   }
 });

@@ -24,11 +24,11 @@ const fs = require("fs");
  *
  * @use(zx.server.work.runtime.NodeWorkerService)
  */
-qx.Class.define("zx.cli.commands.demo.work.LocalWorkerPoolCommand", {
+qx.Class.define("zx.cli.commands.demo.WorkerPoolsCommand", {
   extend: zx.cli.Command,
 
   construct() {
-    super("local-worker-pool", "Demos using a LocalWorkerPool with a scheduler");
+    super("worker-pools", "Demos using a LocalWorkerPool with a scheduler");
     this.addFlag(
       new zx.cli.Flag("worker-location").set({
         description: "where to run the workers",

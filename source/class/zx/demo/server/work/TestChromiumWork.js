@@ -39,9 +39,9 @@ qx.Class.define("zx.demo.server.work.TestChromiumWork", {
 
       puppeteer.addListenerOnce("close", () => this.debug("Puppeteer client closed"));
 
-      let path = worker.resolveFile("demodata/www.google.co.uk.pdf");
-      this.debug("Printing PDF to " + path);
-      await puppeteer.printToPdf(path);
+      let filename = worker.resolveFile("demodata/www.google.co.uk.pdf");
+      this.debug("Printing PDF to " + filename);
+      await puppeteer.printToPdf(filename);
       this.debug("PDF printed");
 
       await puppeteer.stop();

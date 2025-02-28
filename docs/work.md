@@ -51,10 +51,12 @@ Container provides.
 There are three main types of Worker and Worker Pool:
 (o) Local - this runs in the main Node (or Browser) process
 (o) Thread - this runs in Node Worker (ie the ES6 Worker, not "our" Workers) or WebWorker thread
-(o) Process - this uses Docker to run the Worker and Work in a NodeJS process, optionally inside a Container, and optionally with Chromium
-also inside that container
+(o) Process - this runs in a separate NodeJS process, optionally inside a Docker Container
 
-### Docker variations
+All three types of Worker Pool can start Docker Containers to run Chromium - if running Workers inside a Node JS Process, then you can choose
+for that NodeJS process to also be inside the Docker Container.
+
+## Docker Containers
 
 In production, running Workers and Work inside a container is really useful because there is process isolation and it allows easy scaling
 according to the environment - and if you have a large deployment, you might have multiple Docker installations, each one on different, dedicated
@@ -86,7 +88,81 @@ inside Chromium is the other side of a process boundary (which it is anyway).
 > `zx.server.puppeteer.ChromiumDocker` - that class also manages a pool of Chromium instances in Docker, but is deprecated because it has nothing to
 > do with the Work/Worker/Worker Pool mechanisms decribed here
 
+# Examples
+
+There is a command line demo obtained by running `./zx demo worker-pools`; it supports a number of options:
+
+- `--worker-location` - this can be one of:
+
+  - `local` - run a `zx.io.server.work.pools.LocalWorkerPool` so that the tests are in the one process, and in the main event loop
+  - `node-thread` - run a `zx.io.server.pools.NodeThreadWorkerPool` so that the tests are in the one process, but in a NodeJS Worker thread
+  - `node-process` - run a `zx.io.server.pools.NodeProcessWorkerPool` so that the tests are a seperate NodeJS process, in your operating system
+  - `docker` - run a `zx.io.server.pools.NodeProcessWorkerPool` so that the tests are a seperate NodeJS process, inside a Docker Container
+
+- `--pool-min-size` - Workers are kept in a pool, this is the size below which the pool will not drop
+- `--pool-max-size` - the largest the pool can be, if the pool is fully used then Work will queue until a Worker is available
+- `--clean` - deletes the temporary working directory of the pool
+- `--chromium` - enables the Pool to use Chromium, in a Docker Container; this also enabled the Chromium-based test/demo
+
+For example:
+
+```
+$ ./zx demo worker-pools --worker-location=docker --pool-min-size=1 --pool-max-size=1 --clean --chromium
+```
+
+This command line demo is implemented in the `zx.cli.commands.demo.WorkerPoolsCommand` class
+
+The demo outputs into the ``temp` directory - you'll see folders for the scheduler and for the Worker Pool that you asked it to create; you
+should be able to find a directory for each Work, both as it is being processed, and after it has been handed back to the Scheduler.
+
+The Chromium demo will start Chromium, visit `www.google.co.uk` and print the page as a PDF, saving it in `temp/www.google.co.uk.pdf`
+
+# Creating and running Work
+
+Queuing a Work is done by passing a JSON block to the scheduler; the JSON must have as a minimum a `classname` - if you provide a `uuid` property
+that will be the `uuid` for the Work, and logs and other working directories will use the `uuid` that you provide, so it is often useful to
+make sure that you provide one. If you don't, the Scheduler will provide a random one for you.
+
+The class that you name must implement the `zx.server.work.IWork` interface.
+
+For example:
+
+```
+      scheduler.pushWork({
+        uuid: qx.util.Uuid.createUuidV4(),
+        classname: zx.demo.server.work.TestWork.classname
+      });
+```
+
+When a Worker runs the Work, it instantiates the class and call's it's execute method, passing an instance of the Worker class that is calling it;
+you can use the `Worker` class to access Chromium and get path mappings. The `zx.demo.server.work.TestChromiumWork` has examples of using both,
+but the principal is that this will save a PDF of a web page:
+
+```
+  execute(worker) {
+      let chromium = await worker.getChromium();
+
+      let puppeteer = new zx.server.puppeteer.PuppeteerClient().set({
+        url: "http://www.google.co.uk",
+        debugOnStartup: false,
+        chromiumEndpoint: chromium.getEndpoint()
+      });
+      await puppeteer.start();
+      let filename = worker.resolveFile("demodata/www.google.co.uk.pdf");
+      await puppeteer.printToPdf(filename);
+      await puppeteer.stop();
+```
+
+# Mapping filenames
+
+Because Worker and Work can run in different Operating Systems (whether inside a Docker Container, or on a remote server, or a Docker Container
+inside a remote server), the Work dfoes not necessarily share the same disk access as the main NodeJS process.
+
+The Worker Pool can be configured to map aliases (ie a kind of short, alphabetic name) to filing system paths - it is up to the Worker Pool to
+map these into the Container. For example, in the `zx demo worker-pools` command, the `demodata` directory is mapped to the `temp` directory
+which means that the `zx.demo.server.work.TestChromiumWork` class can write to `demodata/www.google.co.uk.pdf` file and have that appear inside
+the `temp` directory - regardless of whether the Work in the NodeJS process, or whether it is in a Docker Container.
+
 # TODO
 
 time Scheduler
-start container only if called for
