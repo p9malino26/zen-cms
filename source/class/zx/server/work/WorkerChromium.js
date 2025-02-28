@@ -74,7 +74,7 @@ qx.Class.define("zx.server.work.WorkerChromium", {
             break;
           }
         } catch (ex) {
-          this.warn(`Chromium not yet available on '${this.__worker.__chromiumUrl}/json/version', waiting 3 seconds: ${ex}`);
+          this.warn(`Chromium not yet available on '${this.__chromiumUrl}/json/version', waiting 3 seconds: ${ex}`);
         }
         if (pass > maxPasses) {
           throw new Error("Chromium not available after " + pass + " attempts");

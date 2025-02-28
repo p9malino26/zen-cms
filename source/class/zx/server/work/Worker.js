@@ -106,7 +106,7 @@ qx.Class.define("zx.server.work.Worker", {
       if (!this.getChromiumUrl()) {
         return null;
       }
-      this.__chromium = new zx.server.work.WorkerChromium(this);
+      this.__chromium = new zx.server.work.WorkerChromium(this.getChromiumUrl());
       await this.__chromium.initialise();
       return this.__chromium;
     }

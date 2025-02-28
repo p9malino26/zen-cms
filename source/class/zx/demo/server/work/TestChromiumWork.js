@@ -2,15 +2,6 @@ qx.Class.define("zx.demo.server.work.TestChromiumWork", {
   implement: zx.server.work.IWork,
   extend: qx.core.Object,
 
-  /**
-   *
-   * @param {integer} iterations
-   */
-  construct(iterations = 3) {
-    super();
-    this.__iterations = iterations;
-  },
-
   members: {
     /**
      * @override
@@ -18,16 +9,43 @@ qx.Class.define("zx.demo.server.work.TestChromiumWork", {
     async execute(worker) {
       console.log("the chromium task is running!");
       let chromium = await worker.getChromium();
-      let ctlr = new zx.server.puppeteer.PuppeteerController();
 
-      worker.appendWorkLog("Hello, World!");
-      worker.appendWorkLog("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
+      let puppeteer = new zx.server.puppeteer.PuppeteerClient().set({
+        url: "http://www.google.co.uk",
+        debugOnStartup: false,
+        chromiumEndpoint: chromium.getEndpoint()
+      });
+      puppeteer.addListener("log", evt => {
+        this.appendWorkLog(evt.getData());
+        evt.preventDefault();
+      });
+      puppeteer.addListener("ping", evt => this.debug("ping"));
 
-      for (let i = 0; i < this.__iterations; i++) {
-        worker.appendWorkLog(`${this.toUuid().split("-")[0]} Doing thing ${i}`);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+      this.debug("Puppeteer client created");
+
+      try {
+        // This can throw an exception if the URL is refused or other reasons
+        await puppeteer.start();
+        this.debug("Puppeteer client started");
+      } catch (ex) {
+        try {
+          await puppeteer.stop();
+          puppeteer.dispose();
+        } catch (ex2) {
+          this.error("Exception in closeDown after exception: " + (ex2.stack || ex2));
+        }
+        throw ex;
       }
-      // TODO: anything!
+
+      puppeteer.addListenerOnce("close", () => this.debug("Puppeteer client closed"));
+
+      puppeteer.printToPdf("./temp/worker/www.google.co.uk.pdf");
+      this.debug("PDF printed");
+
+      await puppeteer.stop();
+      puppeteer.dispose();
+      this.debug("Puppeteer client stopped");
+
       return "success!";
     }
   }

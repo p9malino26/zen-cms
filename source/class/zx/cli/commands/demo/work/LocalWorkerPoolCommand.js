@@ -162,6 +162,15 @@ qx.Class.define("zx.cli.commands.demo.work.LocalWorkerPoolCommand", {
         args: []
       });
 
+      if (flags.chromium) {
+        scheduler.pushWork({
+          uuid: qx.util.Uuid.createUuidV4(),
+          classname: zx.demo.server.work.TestChromiumWork.classname,
+          compatibility: [],
+          args: []
+        });
+      }
+
       setTimeout(() => {
         scheduler.pushWork({
           uuid: qx.util.Uuid.createUuidV4(),
