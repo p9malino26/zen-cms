@@ -23,7 +23,6 @@ qx.Class.define("zx.cli.commands.WorkCommand", {
     this.set({
       description: "Utility commands for operating workers"
     });
-    this.addSubcommand(new zx.cli.commands.work.StartDockerPoolCommand());
     this.addSubcommand(new zx.cli.commands.work.StartWorkerCommand());
   }
 });
