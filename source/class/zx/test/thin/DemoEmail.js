@@ -30,18 +30,22 @@ qx.Class.define("zx.test.thin.DemoEmail", {
      * @Override
      */
     onReady(options) {
-      let email = new zx.thin.puppeteer.api.EmailBrowserApi();
+      let emailApi = zx.io.api.ApiUtils.createServerApi("zx.server.puppeteer.IPageApi");
 
-      email.addListener("start", () => {
+      emailApi.addListener("start", () => {
         let params = qx.bom.Selector.query("#parameters")[0].innerHTML;
         params = JSON.parse(params);
 
-        email.inlineStylesForEmail();
-        email.sendEmail(document.body.outerHTML, "Your email client does not support markup emails", params);
+        zx.thin.puppeteer.EmailUtils.inlineStylesForEmail();
+        emailApi.publish("pageReady", {
+          htmlBody: document.body.outerHTML,
+          textBody: "Your email client does not support markup emails",
+          parameters: params
+        });
       });
 
-      email.addListener("next", () => {
-        email.complete();
+      emailApi.addListener("next", () => {
+        emailApi.complete();
       });
     }
   }

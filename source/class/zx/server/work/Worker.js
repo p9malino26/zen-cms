@@ -52,6 +52,13 @@ qx.Class.define("zx.server.work.Worker", {
     },
 
     /**
+     * @Override
+     */
+    getWorkJson() {
+      return this.__workJson;
+    },
+
+    /**
      * Called to append to the log of the work, and is also published to the WorkerPool
      */
     appendWorkLog(message) {

@@ -7,63 +7,16 @@
  * When the `next` event is fired, you should either send the next email (via a call to `sendEmail`) or call
  * `complete` to finish.
  */
-qx.Class.define("zx.thin.puppeteer.api.EmailBrowserApi", {
-  extend: zx.thin.puppeteer.api.AbstractBrowserApi,
+qx.Class.define("zx.thin.puppeteer.EmailUtils", {
+  extend: qx.core.Object,
 
-  construct() {
-    super("zx.server.puppeteer.api.EmailApi");
-  },
-
-  events: {
-    /** Fired when the everything is ready and the web page should sending the first email via call to `sendEmail` */
-    start: "qx.event.type.Event",
-
-    /** Fired every time an email has been successfully sent, and the web page should send the next email or complete */
-    next: "qx.event.type.Event"
-  },
-
-  members: {
-    /**@override */
-    _publications: {
-      /**@override */
-      complete: null,
-      /**
-       * Tell the client to pull the email from the page and send the email
-       */
-      sendEmail: {}
-    },
-
-    /**
-     * REMOTE METHOD
-     */
-    start() {
-      this.fireEvent("start");
-    },
-
-    /**
-     * REMOTE METHOD
-     */
-    next() {
-      this.fireEvent("next");
-    },
-
-    /**
-     * Sends an email
-     *
-     * @param {String} htmlBody the HTML of the email to send
-     * @param {String} textBody the text body of the email to send
-     * @param {EmailParameters} parameters see {@link zx.server.email.Message}
-     */
-    sendEmail(htmlBody, textBody, parameters) {
-      this.publish("sendEmail", { htmlBody, textBody, parameters });
-    },
-
+  statics: {
     /**
      * Inlines all styles in the page in preparation for sending as HTML email;
      * removes script, style, and link tags.  After this has run, document.body.innerHTML
      * can be used verbatim in HTML emails.
      */
-    inlineStylesForEmail: function (doc) {
+    inlineStylesForEmail(doc) {
       qx.html.Element.flush();
       doc = doc || document;
       var body = doc.body;
@@ -117,7 +70,7 @@ qx.Class.define("zx.thin.puppeteer.api.EmailBrowserApi", {
         this.src = "" + this.src;
       });
 
-      const remove = element => element.parentNode.removeChild(element);
+      let remove = element => element.parentNode.removeChild(element);
 
       qx.bom.Selector.query("div[style*='display:none'],nav[style*='display:none'],header[style*='display:none'],footer[style*='display:none']", body).forEach(remove);
       qx.bom.Selector.query("style", body).forEach(remove);

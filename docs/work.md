@@ -84,10 +84,6 @@ and so there is a configuration where the Scheduler, the Worker Pool, the Worker
 Chromium instance runs inside the Docker Container. Debugging your app is only one node process that needs to be debugged, and only the web page
 inside Chromium is the other side of a process boundary (which it is anyway).
 
-> NOTE:: While the Worker creates and manages a Docker Container which can run Chromium, this is **not** the same as the class in
-> `zx.server.puppeteer.ChromiumDocker` - that class also manages a pool of Chromium instances in Docker, but is deprecated because it has nothing to
-> do with the Work/Worker/Worker Pool mechanisms decribed here
-
 # Examples
 
 There is a command line demo obtained by running `./zx demo worker-pools`; it supports a number of options:

@@ -129,38 +129,45 @@ qx.Class.define("zx.io.api.ApiUtils", {
         serverClass: null
       };
 
-      classes.clientClass = qx.Class.define(apiName + "_Client", {
-        extend: zx.io.api.client.AbstractClientApi,
-        construct(transport, path) {
-          super(transport, apiName, methodNames, path);
-        },
-        events: ApiUtils.getEventsFromInterface(apiInterface)
-      });
+      const AbstractClientApi = qx.Class.getByName("zx.io.api.client.AbstractClientApi");
+      const AbstractServerApi = qx.Class.getByName("zx.io.api.server.AbstractServerApi");
 
-      let members = {};
-      // prettier-ignore
-      let serverConstructorCode = [
-        `zx.io.api.server.AbstractServerApi.constructor.call(this, "${apiName}");`, 
-        `this.__apiImplementation = apiImplementation;`
-      ];
-      const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
-      for (let methodName of methodNames) {
-        members[methodName] = new AsyncFunction("...args", "return await this.__apiImplementation." + methodName + "(...args);");
-        serverConstructorCode.push(`this._registerGet('${methodName}', this.${methodName});`);
+      if (AbstractClientApi) {
+        classes.clientClass = qx.Class.define(apiName + "_Client", {
+          extend: AbstractClientApi,
+          construct(transport, path) {
+            super(transport, apiName, methodNames, path);
+          },
+          events: ApiUtils.getEventsFromInterface(apiInterface)
+        });
       }
-      if (apiInterface.$$members._publications) {
-        members._publications = {};
-        for (let publication in apiInterface.$$members._publications) {
-          members._publications[publication] = apiInterface.$$members._publications[publication];
+
+      if (AbstractServerApi) {
+        let members = {};
+        // prettier-ignore
+        let serverConstructorCode = [
+          `zx.io.api.server.AbstractServerApi.constructor.call(this, "${apiName}");`, 
+          `this.__apiImplementation = apiImplementation;`
+        ];
+        const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+        for (let methodName of methodNames) {
+          members[methodName] = new AsyncFunction("...args", "if (this.__apiImplementation) return await this.__apiImplementation." + methodName + "(...args);");
+          serverConstructorCode.push(`this._registerGet('${methodName}', this.${methodName});`);
         }
-      }
+        if (apiInterface.$$members._publications) {
+          members._publications = {};
+          for (let publication in apiInterface.$$members._publications) {
+            members._publications[publication] = apiInterface.$$members._publications[publication];
+          }
+        }
 
-      classes.serverClass = qx.Class.define(apiName + "_Server", {
-        extend: zx.io.api.server.AbstractServerApi,
-        construct: new Function("apiImplementation", serverConstructorCode.join("\n")),
-        events: ApiUtils.getEventsFromInterface(apiInterface),
-        members
-      });
+        classes.serverClass = qx.Class.define(apiName + "_Server", {
+          extend: AbstractServerApi,
+          construct: new Function("apiImplementation", serverConstructorCode.join("\n")),
+          events: ApiUtils.getEventsFromInterface(apiInterface),
+          members
+        });
+      }
 
       ApiUtils.__apiClasses[apiInterface.name] = classes;
       return classes;

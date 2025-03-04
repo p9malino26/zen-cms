@@ -12,6 +12,7 @@ qx.Class.define("zx.thin.puppeteer.PuppeteerServerTransport", {
   },
   members: {
     __ready: false,
+
     /**
      * Called when we receive a message posted back to us
      *

@@ -198,6 +198,15 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
       return promise;
     },
 
+    async whenNextSubscriptionFired(publishName) {
+      let promise = new qx.Promise();
+      const cb = evt => {
+        this.unsubscribe(publishName, cb);
+        promise.resolve(evt);
+      };
+      await this.subscribe(publishName, cb);
+    },
+
     /**
      * Removes a subscription from a publication fired by the server API
      * @param {string} eventName

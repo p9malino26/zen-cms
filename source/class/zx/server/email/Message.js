@@ -30,6 +30,7 @@ qx.Class.define("zx.server.email.Message", {
       nullable: true,
       event: "changeWebsiteName"
     },
+
     /**
      * Date when the email was put into the queue
      */
