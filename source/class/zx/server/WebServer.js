@@ -603,9 +603,8 @@ qx.Class.define("zx.server.WebServer", {
 
       await pool.cleanupOldContainers();
 
-      let scheduler = new zx.server.work.scheduler.QueueScheduler("temp/scheduler/").set({
-        enableDatabase: true
-      });
+      let scheduler = new zx.server.work.scheduler.QueueScheduler("temp/scheduler/");
+      let dbScanner = new zx.server.work.scheduler.DbScanner(scheduler);
       await fs.promises.rm(pool.getWorkDir(), { force: true, recursive: true });
       await fs.promises.rm(scheduler.getWorkDir(), { force: true, recursive: true });
 
@@ -615,7 +614,8 @@ qx.Class.define("zx.server.WebServer", {
       pool.setSchedulerApi(schedulerClientApi);
 
       await pool.startup();
-      await scheduler.start();
+      await scheduler.startup();
+      dbScanner.start();
       this.__scheduler = scheduler;
     },
 

@@ -5,6 +5,7 @@
  */
 qx.Class.define("zx.server.work.scheduler.DbScanner", {
   extend: qx.core.Object,
+  include: [uk.co.spar.services.MMongoClient],
 
   /**
    * Constructor; adds work to the QueueScheduler from the database
@@ -98,7 +99,7 @@ qx.Class.define("zx.server.work.scheduler.DbScanner", {
       let workJson = evt.getData();
       await this.updateOne(
         zx.server.work.scheduler.ScheduledTask,
-        { _uuid: workResultJson.workJson.uuid },
+        { _uuid: workJson.uuid },
         {
           $set: {
             dateStarted: new Date()

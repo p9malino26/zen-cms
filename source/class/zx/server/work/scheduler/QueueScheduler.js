@@ -8,10 +8,11 @@ const path = require("path");
  * @property {WorkJson} workJson the work to do
  * @property {Promise} promise the promise which resolves when the work is done
  *
+ *
+ * @use(zx.io.api.client.AbstractClientApi)
  */
 qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
   extend: qx.core.Object,
-  include: [uk.co.spar.services.MMongoClient],
   implement: [zx.server.work.scheduler.ISchedulerApi],
 
   construct(workDir) {
@@ -50,7 +51,6 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
       if (this.__workDir) {
         await fs.promises.mkdir(this.__workDir, { recursive: true });
       }
-      this.__initDatabasePolling();
     },
 
     /**
