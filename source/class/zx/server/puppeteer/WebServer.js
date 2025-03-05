@@ -6,6 +6,7 @@ const path = require("node:path");
 
 /**
  * @asset(zx/server/puppeteer/dev/*)
+ * @ignore(fetch)
  */
 qx.Class.define("zx.server.puppeteer.WebServer", {
   extend: qx.core.Object,
@@ -51,16 +52,18 @@ qx.Class.define("zx.server.puppeteer.WebServer", {
      */
     async start() {
       try {
-        const app = await this._createApplication();
+        let app = await this._createApplication();
 
-        const chromePort = this.getChromePort() ?? this.getListenPort() + 1;
-        if (chromePort < 1 || chromePort > 65535) throw new Error(`Invalid chromePort '${chromePort}'. Expected 1-65535`);
+        let chromePort = this.getChromePort() ?? this.getListenPort() + 1;
+        if (chromePort < 1 || chromePort > 65535) {
+          throw new Error(`Invalid chromePort '${chromePort}'. Expected 1-65535`);
+        }
 
-        const executablePath = playwright.chromium.executablePath();
+        let executablePath = playwright.chromium.executablePath();
         if (!fs.existsSync(executablePath)) {
           throw new Error(`Chromium executable not found at ${executablePath}`);
         }
-        const options = {
+        let options = {
           headless: true,
           devtools: true,
           executablePath,
@@ -70,7 +73,7 @@ qx.Class.define("zx.server.puppeteer.WebServer", {
         this.__browser = await puppeteer.launch(options);
         console.log(`Chrome launched on port ${chromePort}`);
 
-        const response = await fetch(`http://127.0.0.1:${chromePort}/json/version`);
+        let response = await fetch(`http://127.0.0.1:${chromePort}/json/version`);
         let data = await response.json();
         console.log("Chromium ready", JSON.stringify({ version: data["Browser"], userAgent: data["User-Agent"] }, null, 2));
 
@@ -93,7 +96,7 @@ qx.Class.define("zx.server.puppeteer.WebServer", {
             data.map(d => recursivePatchChromiumReply(d, newHost, newPort));
           }
           if (data && typeof data === "object") {
-            for (const key in data) {
+            for (let key in data) {
               data[key] = recursivePatchChromiumReply(data[key], newHost, newPort);
             }
           }
@@ -103,13 +106,13 @@ qx.Class.define("zx.server.puppeteer.WebServer", {
           return data;
         };
         app.get("/json/*", async (req, rep) => {
-          const response = await fetch(`http://127.0.0.1:${chromePort}${req.url}`);
-          const data = await response.json();
+          let response = await fetch(`http://127.0.0.1:${chromePort}${req.url}`);
+          let data = await response.json();
           debugger;
           rep.json(recursivePatchChromiumReply(data, req.hostname, req.port));
         });
 
-        app.get("/version", (req, rep) => rep.json({ version: PUPPETEER_VERSION }));
+        app.get("/puppeteer-version", (req, rep) => rep.json({ version: PUPPETEER_VERSION }));
 
         await app.listen({ port: this.getListenPort(), host: "0.0.0.0" });
         console.log(`Webserver started on http://127.0.0.1:${this.getListenPort()}`);
@@ -158,7 +161,7 @@ qx.Class.define("zx.server.puppeteer.WebServer", {
         );
       }
 
-      const app = (this._app = require("fastify")(options));
+      let app = (this._app = require("fastify")(options));
       app.register(require("@fastify/multipart"), {
         limits: {
           fieldNameSize: 100, // Max field name size in bytes

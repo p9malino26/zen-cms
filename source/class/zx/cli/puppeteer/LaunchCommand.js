@@ -28,6 +28,9 @@ qx.Class.define("zx.cli.puppeteer.LaunchCommand", {
       if (flags.port) {
         server.setListenPort(flags.port);
       }
+      if (flags["chromium-port"]) {
+        server.setChromePort(flags["chromium-port"]);
+      }
       await server.start();
     }
   },
@@ -47,6 +50,13 @@ qx.Class.define("zx.cli.puppeteer.LaunchCommand", {
         new zx.cli.Flag("port").set({
           shortCode: "p",
           description: "Port to listen on",
+          type: "integer"
+        })
+      );
+
+      cmd.addFlag(
+        new zx.cli.Flag("chromium-port").set({
+          description: "Port for chromium to listen on",
           type: "integer"
         })
       );

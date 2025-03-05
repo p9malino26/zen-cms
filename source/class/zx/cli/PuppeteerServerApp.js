@@ -33,6 +33,7 @@ qx.Class.define("zx.cli.PuppeteerServerApp", {
       debugger;
       let rootCmd = new zx.cli.Command("*");
       rootCmd.addSubcommand(zx.cli.puppeteer.LaunchCommand.createCliCommand());
+      rootCmd.addSubcommand(new zx.cli.commands.work.StartWorkerCommand());
       await rootCmd.execute();
     }
   }

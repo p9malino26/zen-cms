@@ -37,6 +37,25 @@
         "<node_internals>/**",
         "**/polyfill.js"
       ]
-    }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Zen CMS: Worker Pool of Node Threads Demo",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/compiled/source-node/cli/index.js",
+      "args": [
+        "demo", "work", "local-worker-pool", "--worker-location=node-thread", "--pool-min-size=1", "--pool-max-size=1", "--clean"
+      ]
+    },
+    {
+      "address": "localhost",
+      "name": "Attach to Remote API test server",
+      "port": 9105,
+      "restart": true,
+      "request": "attach",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node"
+    },
   ]
 }

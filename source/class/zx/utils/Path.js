@@ -28,6 +28,44 @@ qx.Class.define("zx.utils.Path", {
 
   statics: {
     /**
+     * Normalises a path, converting all separators to the platform's native separator and making sure that it
+     * does not have a leading / or drive letter.
+     *
+     * @param {String} filename the filename to normalise
+     * @returns {String} the normalised filename
+     */
+    cleanupPath(filename) {
+      if (path.sep == "/") {
+        filename = filename.replace(/\\/g, "/");
+      }
+      filename = path.normalize(filename);
+      if (filename.match(/^[a-zA-Z]:/)) {
+        filename = filename.substring(2);
+      }
+      if (filename.startsWith("/")) {
+        filename = filename.substring(1);
+      }
+      return filename;
+    },
+
+    /**
+     * Locks a path within a given directory, returning the normalised, relative filename from the lockedPath
+     * if it is within the locked path, or null if it is not
+     *
+     * @param {String} filename the filename to lock
+     * @param {String} lockedPath the path to lock within
+     * @returns {String} the absolute filename, or null
+     */
+    lockPathWithin(filename, lockedPath) {
+      filename = path.resolve(filename);
+      lockedPath = path.resolve(lockedPath);
+      if (filename.startsWith(lockedPath)) {
+        return path.relative(lockedPath, filename);
+      }
+      return null;
+    },
+
+    /**
      * Creates the parent directory of a filename, if it does not already exist
      *
      * @param {String} filename the filename to create the parent directory of

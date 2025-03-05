@@ -27,7 +27,8 @@
         "zx.cms.thinClientTargetPath": "compiled/source",
         "zx.io.remote.NetworkEndpoint.server": true
       },
-      "writeCompileInfo": true
+      "writeCompileInfo": true,
+      "addCreatedAt": true
     },
     {
       "type": "build",
@@ -132,6 +133,21 @@
       "theme": "zx.cms.client.theme.tangible.Theme",
       "name": "peertwo",
       "group": ["tests"]
+    },
+    {
+      "title": "Remote API browser test app",
+      "class": "zx.demo.io.api.TestApp",
+      "theme": "zx.cms.client.theme.tangible.Theme",
+      "name": "remote-api-browser-test",
+      "type": "browser",
+      "bootPath": "source/boot"
+    },
+    {
+      "title": "Remote API HTTP server test app",
+      "name": "remote-api-server-test",
+      "exclude": ["qx.bom.Selector"],
+      "type": "node",
+      "class": "zx.demo.io.api.srv.ServerApp"
     }
   ],
   "sass": {

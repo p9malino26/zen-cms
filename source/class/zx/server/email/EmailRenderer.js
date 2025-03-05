@@ -8,43 +8,38 @@ qx.Class.define("zx.server.email.EmailRenderer", {
      * @param {((msg: string) => void) | null} log Function to log messages
      * @returns {Promise<zx.server.email.Message[]>} Array of messages to send
      */
-    async run(url, log) {
+    async run(worker, url) {
       let messages = [];
-      if (log === undefined) {
-        log = console.log;
-      }
       let config = grasshopper.services.ServicesConfig.getInstance().getConfigData();
 
-      let controller = new zx.server.puppeteer.PuppeteerController(zx.server.puppeteer.api.EmailServerApi).set({
+      let ctlr = new zx.server.puppeteer.PuppeteerWorkController(worker, url, ["zx.server.puppeteer.IPageApi"], {
         username: config.authUser,
         password: config.authTokens["grasshopper.automatedLogin"] || null
       });
 
-      controller.addListener("consoleLog", evt => {
+      ctlr.addListener("consoleLog", evt => {
         let data = evt.getData();
-        log("Message from puppeteer: " + JSON.stringify(data));
+        worker.appendWorkLog("Message from puppeteer: " + JSON.stringify(data));
       });
 
-      log("Initializing controller...");
-      await controller.initialise(url);
-      log("Initialised browser controller");
+      worker.appendWorkLog("Initializing controller...");
+      await ctlr.open();
+      worker.appendWorkLog("Initialised browser controller");
 
-      let puppeteer = controller.getPuppeteer();
-      await puppeteer.waitForReadySignal();
-      log("Received ready signal");
-      let api = controller.getApi();
-      api.addListener("sendEmail", async evt => {
+      worker.appendWorkLog("Received ready signal");
+      let pageApi = ctlr.getClientApi("zx.server.puppeteer.IPageApi");
+      await pageApi.subscribe("pageReady", async data => {
         const {
           htmlBody,
           textBody,
           /**@type {EmailParameters}*/
           parameters
-        } = evt.getData();
+        } = data;
         parameters.to = parameters.to?.split(",") ?? [];
         parameters.cc = parameters.cc?.split(",") ?? [];
         parameters.bcc = parameters.bcc?.split(",") ?? [];
-        log("Email body to send: " + htmlBody);
-        log("Email parameters: " + JSON.stringify(parameters, null, 2));
+        worker.appendWorkLog("Email body to send: " + htmlBody);
+        worker.appendWorkLog("Email parameters: " + JSON.stringify(parameters, null, 2));
 
         if (parameters.attachments) {
           const attachments = new qx.data.Array();
@@ -68,18 +63,37 @@ qx.Class.define("zx.server.email.EmailRenderer", {
           parameters[key] ??= null;
         }
 
-        log("Composing email...");
-        let message = await zx.server.email.Message.compose({ parameters, htmlBody, textBody });
-        log("Email composed");
+        worker.appendWorkLog("Composing email...");
+        let message = await zx.server.email.Message.set({ ...parameters, htmlBody, textBody });
+        await message.save();
+        worker.appendWorkLog("Email composed");
         messages.push(message);
-        api.next();
+        pageApi.next();
       });
 
-      await api.start();
-      log("Started API");
-      await controller.promiseFinished();
-      log("Finished browser controller");
+      let promiseComplete = pageApi.whenNextSubscriptionFired("complete");
+      await pageApi.start();
+      await promiseComplete;
+      await ctlr.close();
+      ctlr.dispose();
+
+      worker.appendWorkLog("Finished browser controller");
       return messages;
+    },
+
+    async createGenericEmail(worker, subject, message, to) {
+      let params = {
+        title: subject,
+        message,
+        to,
+        subject
+      };
+      let config = grasshopper.services.ServicesConfig.getInstance().getConfigData();
+      let url = `${config.baseUrl}/generic-email.html?`;
+      // prettier-ignore
+      url += Object.entries(params).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join("&");
+
+      await zx.server.email.EmailRenderer.run(worker, url);
     }
   }
 });

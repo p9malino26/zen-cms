@@ -17,6 +17,11 @@ qx.Class.define("zx.io.persistence.Watcher", {
     };
   },
 
+  destruct() {
+    this.__statusTimeout.dispose();
+    this.__statusTimeout = null;
+  },
+
   events: {
     objectChanged: "qx.event.type.Data",
     propertyChanged: "qx.event.type.Data"

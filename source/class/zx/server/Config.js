@@ -125,6 +125,16 @@ qx.Class.define("zx.server.Config", {
      */
     resolveData(...args) {
       return path.resolve(path.join(this._config.directory || ".", ...args));
+    },
+
+    /**
+     * Helper method to resolve a filename relative to the temporary directory
+     */
+    resolveTemp(...args) {
+      let tempDir = this._config.tempDirectory || path.join(this._config.directory || ".", "temp");
+      let filename = zx.utils.Path.cleanupPath(path.join(tempDir, ...args));
+      let tempFile = path.resolve(path.join(tempDir, filename));
+      return filename;
     }
   },
 
@@ -151,6 +161,7 @@ qx.Class.define("zx.server.Config", {
 
     /**
      * Shortcut to getInstance().resolveApp
+     *
      * @returns {String}
      */
     resolveApp(...args) {
@@ -159,10 +170,20 @@ qx.Class.define("zx.server.Config", {
 
     /**
      * Shortcut to getInstance().resolveData
+     *
      * @returns {String}
      */
     resolveData(...args) {
       return this.getInstance().resolveData(...args);
+    },
+
+    /**
+     * Shortcut to getInstance().resolveTemp
+     *
+     * @returns {String}
+     */
+    resolveTemp(...args) {
+      return this.getInstance().resolveTemp(...args);
     },
 
     /**

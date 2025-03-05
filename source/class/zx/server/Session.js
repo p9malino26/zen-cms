@@ -1,6 +1,3 @@
-const uid = require("uid-safe").sync;
-const cookieSignature = require("cookie-signature");
-
 /**
  * Represents a session
  */
@@ -147,6 +144,7 @@ qx.Class.define("zx.server.Session", {
      * Apply for `sessionId`
      */
     _applySessionId(value) {
+      const cookieSignature = require("cookie-signature");
       this.__encryptedSessionId = cookieSignature.sign(value, this.__manager.getSecret());
     },
 
@@ -163,6 +161,7 @@ qx.Class.define("zx.server.Session", {
      * Generates a new session ID
      */
     regenerate() {
+      const uid = require("uid-safe").sync;
       this.setSessionId(uid(24));
     },
 

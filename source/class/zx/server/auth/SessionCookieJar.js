@@ -16,7 +16,7 @@
  * ************************************************************************ */
 
 /**
- * Store for tough-cookie that stores the cookies in the expressjs request session.
+ * Store for tough-cookie that stores the cookies in the request session.
  * The implementation is based heavily on the MemoryCookieStore in
  * https://github.com/salesforce/tough-cookie/blob/master/lib/memstore.js, hence the
  * verbatim reproduction of the header and licence agreement.

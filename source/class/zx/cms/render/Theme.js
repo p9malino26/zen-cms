@@ -18,7 +18,7 @@
 const fs = zx.utils.Promisify.fs;
 const path = require("path");
 const chokidar = require("chokidar");
-const glob = zx.utils.Promisify.promisify(require("glob"));
+const { glob } = require("glob");
 
 /**
  * All themes derived from Theme

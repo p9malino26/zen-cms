@@ -31,7 +31,8 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
     /**
      * Fired when the Puppeteer client prints a message in the console
      */
-    consoleLog: "qx.event.type.Data"
+    consoleLog: "qx.event.type.Data",
+    ping: "qx.event.type.Event"
   },
 
   environment: {
@@ -40,13 +41,18 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
   },
 
   members: {
-    /** @type{qx.Class<zx.server.puppeteer.AbstractServerApi>} the API class */
+    /**
+     * @type {zx.server.puppeteer.PuppeteerClientTransport}
+     */
+    __transport: null,
+
+    /** @type{qx.Class<zx.io.api.client.AbstractClientApi>} the API class */
     __apiClass: null,
 
-    /** @type{zx.server.puppeteer.AbstractServerApi} the API instance */
+    /** @type{zx.io.api.client.AbstractClientApi} the API instance */
     __api: null,
 
-    /** @type{zx.server.puppeteer.ChromiumDocker} the Chromium instance */
+    /** @type{zx.server.puppeteer.IChromium} the Chromium instance */
     __chromium: null,
 
     /** @type{zx.server.puppeteer.PuppeteerClient} the Puppeteer instance attached to the Chromium instance */
@@ -59,26 +65,27 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
      * Visits a URL, creating an API instance to talk to the page
      *
      * @param {String} url
+     * @oaram {zx.server.puppeteer.IChromium} chromium
      * @param {Object} [clientProperties] Properties to set to the Puppeteer client. Must be properties of zx.server.puppeteer.PuppeteerClient
      */
-    async initialise(url, clientProperties = {}) {
-      this.__chromium = await zx.server.puppeteer.chromiumdocker.PoolManager.getInstance().acquire();
+    async initialise(url, chromium, clientProperties = {}) {
+      this.__chromium = chromium;
       console.log("ChromiumDocker aquired");
 
       $checkPuppeteerVersion: {
-        const response = await fetch(`http://127.0.0.1:${this.__chromium.getPortNumber()}/version`);
-        const responseJson = await response.json();
+        let response = await fetch(`{this.__chromium.getBaseUrl()}/puppeteer-version`);
+        let responseJson = await response.json();
         if (!responseJson) {
           throw new Error("Failed to get version from remote container. Please make sure you are using the latest docker image.");
         }
-        const remoteVersion = responseJson.version;
-        const remoteVersionSegments = remoteVersion.split(".").map(x => parseInt(x));
+        let remoteVersion = responseJson.version;
+        let remoteVersionSegments = remoteVersion.split(".").map(x => parseInt(x));
         if (remoteVersionSegments.some(x => isNaN(x)) || remoteVersionSegments.length !== 3) {
           throw new Error(`Invalid version number from remote container '${remoteVersion}'. Expected restricted SemVer format 'major.minor.patch'`);
         }
 
-        const localVersion = PUPPETEER_VERSION;
-        const localVersionSegments = localVersion.split(".").map(x => parseInt(x));
+        let localVersion = PUPPETEER_VERSION;
+        let localVersionSegments = localVersion.split(".").map(x => parseInt(x));
         if (localVersionSegments.some(x => isNaN(x)) || localVersionSegments.length !== 3) {
           throw new Error(`Invalid version number for local server '${localVersion}'. Expected restricted SemVer format 'major.minor.patch'`);
         }
@@ -107,8 +114,11 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
         password: this.getPassword(),
         ...clientProperties
       });
-
-      this.__puppeteer.addListener("log", evt => this.fireDataEvent("consoleLog", evt.getData()));
+      this.__puppeteer.addListener("log", evt => {
+        this.fireDataEvent("consoleLog", evt.getData());
+        evt.preventDefault();
+      });
+      this.__puppeteer.addListener("ping", evt => this.fireEvent("ping"));
 
       this.debug("Puppeteer client created");
 
@@ -125,16 +135,18 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
         throw ex;
       }
 
-      this.__api = this.__puppeteer.createRemoteApi(this.__apiClass);
+      let puppeteer = this.__puppeteer;
+      let transport = new zx.server.puppeteer.PuppeteerClientTransport(puppeteer.getPage());
+
+      puppeteer.addListenerOnce("close", () => transport.shutdown());
+
+      let Clazz = this.__apiClass;
+      this.__api = new Clazz(transport);
+
       let apiFinished = new qx.Promise();
       this.__promiseFinished = apiFinished.then(() => this.__closeDown());
-
-      this.__api.addListener("complete", evt => apiFinished.resolve());
-    },
-
-    async start() {
-      await this.__api.start();
-      console.log("Email API started");
+      await puppeteer.waitForReadySignal();
+      await this.__api.subscribe("complete", () => apiFinished.resolve());
     },
 
     /**
@@ -156,7 +168,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerController", {
     /**
      * The API instance
      *
-     * @returns {zx.server.puppeteer.AbstractServerApi} the API instance
+     * @returns {zx.io.api.client.AbstractClientApi} the API instance
      */
     getApi() {
       return this.__api;

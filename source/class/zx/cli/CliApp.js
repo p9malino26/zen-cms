@@ -16,6 +16,7 @@
  * ************************************************************************ */
 
 const path = require("path");
+const { isMainThread, workerData } = require("node:worker_threads");
 
 /**
  * @use(zx.cli.CreateProxiesCommand)
@@ -34,12 +35,18 @@ qx.Class.define("zx.cli.CliApp", {
       qx.log.Logger.register(zx.utils.NativeLogger);
       qx.log.appender.Formatter.getFormatter().setFormatTimeAs("datetime");
       await zx.utils.LogFilter.loadFiltersAutoDetect();
+
       /*
       if (qx.core.Environment.get("qx.debug")) {
         zx.test.TestRunner.runAll(zx.test.cli.TestCli);
       }
       */
-      await this.runCli();
+
+      if (isMainThread) {
+        await this.runCli();
+      } else {
+        await this.runWorkerThread();
+      }
     },
 
     /**
@@ -53,6 +60,18 @@ qx.Class.define("zx.cli.CliApp", {
         console.error(ex);
         process.exit(1);
       }
+    },
+
+    /**
+     * Called to run from a worker thread
+     */
+    async runWorkerThread() {
+      let clazz = workerData.classname ? qx.Class.getByName(workerData.classname) : null;
+      if (!clazz) {
+        throw new Error("Cannot create a class for Worker, workerData=" + JSON.stringify(workerData));
+      }
+      let service = new clazz(workerData);
+      await service.run();
     },
 
     /**
@@ -70,8 +89,11 @@ qx.Class.define("zx.cli.CliApp", {
       rootCmd.addSubcommand(zx.test.cli.TestCommand.createCliCommand());
       rootCmd.addSubcommand(zx.cli.commands.ShortenCommand.createCliCommand());
       rootCmd.addSubcommand(zx.cli.commands.LicenseCommand.createCliCommand());
-      rootCmd.addSubcommand(zx.cli.puppeteer.PuppeteerCommand.createCliCommand());
       rootCmd.addSubcommand(new zx.server.email.commands.EmailCommand());
+      rootCmd.addSubcommand(new zx.cli.commands.WorkCommand());
+      if (qx.core.Environment.get("qx.debug")) {
+        rootCmd.addSubcommand(new zx.cli.commands.DemoCommand());
+      }
       return rootCmd;
     }
   }
