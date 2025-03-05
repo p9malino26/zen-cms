@@ -15,7 +15,6 @@
  *
  * ************************************************************************ */
 
-const express = require("express");
 const fs = require("fs");
 
 /**
@@ -87,6 +86,7 @@ qx.Class.define("zx.cli.commands.work.StartWorkerCommand", {
       let worker = new zx.server.work.Worker();
       zx.io.api.server.ConnectionManager.getInstance().registerApi(worker.getServerApi(), "/work/worker");
 
+      const express = require("express");
       let app = express();
       app.use(zx.io.api.transport.http.ExpressServerTransport.jsonMiddleware());
 

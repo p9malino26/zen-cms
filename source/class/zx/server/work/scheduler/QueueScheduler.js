@@ -11,6 +11,7 @@ const path = require("path");
  */
 qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
   extend: qx.core.Object,
+  include: [uk.co.spar.services.MMongoClient],
   implement: [zx.server.work.scheduler.ISchedulerApi],
 
   construct(workDir) {
@@ -23,7 +24,10 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
 
   events: {
     /** Fired when a work item is completed, the data is the serialized JSON from `WorkResult.serializeForScheduler` */
-    workCompleted: "qx.event.type.Data"
+    workCompleted: "qx.event.type.Data",
+
+    /** Fired when there is no work to do */
+    noWork: "qx.event.type.Event"
   },
 
   members: {
@@ -39,10 +43,14 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
     /** @type{zx.server.work.scheduler.ISchedulerApi} a server API that can be used to call this scheduler */
     __serverApi: null,
 
+    /**
+     * Starts the scheduler
+     */
     async startup() {
       if (this.__workDir) {
         await fs.promises.mkdir(this.__workDir, { recursive: true });
       }
+      this.__initDatabasePolling();
     },
 
     /**
@@ -52,13 +60,13 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
      * @return {Promise} resolves when the work is completed
      */
     async pushWork(workJson) {
-      if (!workJson.classname) {
-        throw new Error("workJson must have a classname");
+      if (!workJson.workClassname) {
+        throw new Error("workJson must have a workClassname");
       }
       if (!workJson.uuid) {
         workJson.uuid = qx.util.Uuid.createUuidV4();
       }
-      this.debug(`Queuing job ${workJson.uuid} of type ${workJson.classname}`);
+      this.debug(`Queuing job ${workJson.uuid} of type ${workJson.workClassname}`);
       let promise = new qx.Promise();
       this.__queue.push({
         workJson,
@@ -70,25 +78,27 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
     /**
      * @Override
      */
-    pollForWork() {
+    async pollForWork() {
       if (this.__queue.length === 0) {
+        this.fireEvent("noWork");
         return null;
       }
       let info = this.__queue.shift();
       this.__running[info.workJson.uuid] = info;
+      await this.fireDataEventAsync("workStarted", info.workJson);
       return info.workJson;
     },
 
     /**
      * @Override
      */
-    onWorkCompleted(workResultData) {
+    async onWorkCompleted(workResultData) {
       this.debug(`Work completed for job ${workResultData.workJson.uuid}`);
       let info = this.__running[workResultData.workJson.uuid];
       if (info) {
         delete this.__running[workResultData.workJson.uuid];
         info.promise.resolve(workResultData);
-        this.fireDataEvent("workCompleted", workResultData);
+        await this.fireDataEventAsync("workCompleted", workResultData);
       } else {
         this.debug(`Work completed for job ${workResultData.workJson.uuid} but not found in running list (Worker Pool has queued this work)`);
       }

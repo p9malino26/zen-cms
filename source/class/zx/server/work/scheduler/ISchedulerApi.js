@@ -20,13 +20,13 @@ qx.Interface.define("zx.server.work.scheduler.ISchedulerApi", {
      *
      * @return {WorkJson?} the work to do, or null if there is no work
      */
-    pollForWork() {},
+    async pollForWork() {},
 
     /**
      * Called when work is completed.  This should be called by the worker pool when work is completed.
      *
      * @param {*} workResult the result of the work, serialized to JSON via `zx.server.work.WorkResult.serializeForScheduler()`
      */
-    onWorkCompleted(workResult) {}
+    async onWorkCompleted(workResult) {}
   }
 });

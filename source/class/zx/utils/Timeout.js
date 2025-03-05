@@ -154,10 +154,10 @@ qx.Class.define("zx.utils.Timeout", {
     },
 
     /**
-     * Event handler for timeouts
+     * Triggers the timeout
      */
-    async _onTimeout(evt) {
-      this.__timerId = null;
+    async trigger() {
+      this.killTimer();
       if (this.isEnabled()) {
         try {
           await this.fire();
@@ -168,6 +168,13 @@ qx.Class.define("zx.utils.Timeout", {
           this.startTimer();
         }
       }
+    },
+
+    /**
+     * Event handler for timeouts
+     */
+    async _onTimeout(evt) {
+      this.trigger();
     }
   },
 

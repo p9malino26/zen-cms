@@ -158,7 +158,7 @@ qx.Class.define("zx.cli.commands.demo.WorkerPoolsCommand", {
 
       scheduler.pushWork({
         uuid: qx.util.Uuid.createUuidV4(),
-        classname: zx.demo.server.work.TestWork.classname,
+        workClassname: zx.demo.server.work.TestWork.classname,
         compatibility: [],
         args: []
       });
@@ -166,7 +166,7 @@ qx.Class.define("zx.cli.commands.demo.WorkerPoolsCommand", {
       if (flags.chromium) {
         scheduler.pushWork({
           uuid: qx.util.Uuid.createUuidV4(),
-          classname: zx.demo.server.work.TestChromiumWork.classname,
+          workClassname: zx.demo.server.work.TestChromiumWork.classname,
           compatibility: [],
           args: []
         });
@@ -175,7 +175,7 @@ qx.Class.define("zx.cli.commands.demo.WorkerPoolsCommand", {
       setTimeout(() => {
         scheduler.pushWork({
           uuid: qx.util.Uuid.createUuidV4(),
-          classname: zx.demo.server.work.ErrorWork.classname,
+          workClassname: zx.demo.server.work.ErrorWork.classname,
           compatibility: [],
           args: []
         });

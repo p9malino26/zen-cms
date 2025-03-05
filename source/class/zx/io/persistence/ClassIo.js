@@ -467,6 +467,10 @@ qx.Class.define("zx.io.persistence.ClassIo", {
       json._classname = obj.classname;
       json._uuid = obj.toUuid();
 
+      if (qx.Class.hasInterface(obj.constructor, zx.io.persistence.IObjectNotifications)) {
+        await obj.receiveDataNotification(zx.io.persistence.IObjectNotifications.BEFORE_WRITE_TO_JSON);
+      }
+
       for (let propertyName in this.__properties) {
         let propertyDef = this.__properties[propertyName];
         let propertyPath = this.__clazz.classname + "." + propertyName;

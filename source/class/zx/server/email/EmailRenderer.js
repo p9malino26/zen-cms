@@ -12,12 +12,12 @@ qx.Class.define("zx.server.email.EmailRenderer", {
       let messages = [];
       let config = grasshopper.services.ServicesConfig.getInstance().getConfigData();
 
-      let controller = new zx.server.puppeteer.PuppeteerWorkController(worker, url, ["zx.server.puppeteer.IPageApi"], {
+      let ctlr = new zx.server.puppeteer.PuppeteerWorkController(worker, url, ["zx.server.puppeteer.IPageApi"], {
         username: config.authUser,
         password: config.authTokens["grasshopper.automatedLogin"] || null
       });
 
-      controller.addListener("consoleLog", evt => {
+      ctlr.addListener("consoleLog", evt => {
         let data = evt.getData();
         worker.appendWorkLog("Message from puppeteer: " + JSON.stringify(data));
       });
@@ -64,7 +64,7 @@ qx.Class.define("zx.server.email.EmailRenderer", {
         }
 
         worker.appendWorkLog("Composing email...");
-        let message = await zx.server.email.Message.compose({ parameters, htmlBody, textBody });
+        let message = await zx.server.email.Message.set({ ...parameters, htmlBody, textBody });
         await message.save();
         worker.appendWorkLog("Email composed");
         messages.push(message);
@@ -74,6 +74,8 @@ qx.Class.define("zx.server.email.EmailRenderer", {
       let promiseComplete = pageApi.whenNextSubscriptionFired("complete");
       await pageApi.start();
       await promiseComplete;
+      await ctlr.close();
+      ctlr.dispose();
 
       worker.appendWorkLog("Finished browser controller");
       return messages;

@@ -17,6 +17,7 @@ const path = require("path");
  */
 qx.Class.define("zx.server.email.Message", {
   extend: zx.server.Object,
+  implement: [zx.io.persistence.IObjectNotifications],
 
   properties: {
     /**
@@ -181,6 +182,21 @@ qx.Class.define("zx.server.email.Message", {
     },
 
     /**
+     * @Override
+     */
+    async receiveDataNotification(key, data) {
+      await super.receiveDataNotification(key, data);
+      if (key === zx.io.persistence.IObjectNotifications.BEFORE_SAVE) {
+        if (!this.getDateQueued()) {
+          this.setDateQueued(new Date());
+        }
+        if (!this.getWebsiteName()) {
+          this.setWebsiteName(zx.server.Standalone.getInstance().getWebsiteName());
+        }
+      }
+    },
+
+    /**
      * @param {(message: string) => void} [log] Callback for logging
      * @returns {Promise<boolean>} If the email was successfully sent
      */
@@ -265,20 +281,6 @@ qx.Class.define("zx.server.email.Message", {
       }
 
       return !error;
-    }
-  },
-
-  statics: {
-    /**
-     * Composes an email message and saves it in the queue
-     * @param {{ parameters?: EmailParameters; textBody?: string; htmlBody?: string; }} params
-     * @returns {Promise<zx.server.email.Message>}
-     */
-    async compose({ parameters, textBody, htmlBody }) {
-      let websiteName = zx.server.Standalone.getInstance().getWebsiteName();
-      let email = new zx.server.email.Message().set({ ...parameters, textBody, htmlBody, dateQueued: new Date(), websiteName });
-      await email.save();
-      return email;
     }
   }
 });

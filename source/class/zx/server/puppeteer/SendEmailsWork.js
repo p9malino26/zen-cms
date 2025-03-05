@@ -52,7 +52,8 @@ qx.Class.define("zx.server.puppeteer.PrintPdfWork", {
         }
 
         log("Composing email...");
-        let message = await zx.server.email.Message.compose({ parameters, htmlBody, textBody });
+        let message = new zx.server.email.Message().set({ ...parameters, htmlBody, textBody });
+        await message.save();
         log("Email composed");
         messages.push(message);
         pageApi.next();

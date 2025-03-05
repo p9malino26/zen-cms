@@ -115,6 +115,9 @@ qx.Class.define("zx.server.WebServer", {
     /** @type{zx.utils.PublicPrivate} the proxy servers encryption, used for remote authentication */
     __proxyPublicPrivate: undefined,
 
+    /** @type{zx.server.work.scheduler.QueueScheduler} the scheduler, if configured */
+    __scheduler: null,
+
     /**
      * Called to start the server
      */
@@ -297,6 +300,7 @@ qx.Class.define("zx.server.WebServer", {
       await this._initSessions(app);
       await this._initApplication(app);
       await this._initApis(app);
+      await this._initWorkScheduler();
       await this._initUrlRules();
       return app;
     },
@@ -550,6 +554,73 @@ qx.Class.define("zx.server.WebServer", {
      */
     async _initExtraPaths(app) {
       // Nothing
+    },
+
+    /**
+     * Initialises the schedule and Worker pool
+     */
+    async _initWorkScheduler() {
+      let config = this._config.work;
+      if (!config.pool) {
+        this.error("No work configuration found in cms.json");
+        return;
+      }
+      let poolType = config.pool.type || "local";
+      let poolConfig = {
+        minSize: config.pool.minSize || 1,
+        maxSize: config.pool.maxSize || 1
+      };
+      let pool = null;
+
+      if (poolType == "local") {
+        pool = new zx.server.work.pools.LocalWorkerPool().set({
+          poolConfig
+        });
+      } else if (poolType == "node-thread") {
+        pool = new zx.server.work.pools.NodeThreadWorkerPool(null, "./compiled/source-node/cli/index.js").set({
+          poolConfig
+        });
+      } else {
+        let settings = {
+          poolConfig,
+          nodeInspect: config.inspect || "none",
+          nodeLocation: "host",
+          dockerMounts: null
+        };
+
+        if (poolType == "node-process") {
+          settings.nodeLocation = "host";
+        } else if (poolType == "docker") {
+          settings.nodeLocation = "container";
+        } else {
+          throw new Error("Unknown pool type: " + poolType);
+        }
+        pool = new zx.server.work.pools.NodeProcessWorkerPool().set(settings);
+      }
+      if (config.enableChromium !== false) {
+        pool.setEnableChromium(true);
+      }
+
+      await pool.cleanupOldContainers();
+
+      let scheduler = new zx.server.work.scheduler.QueueScheduler("temp/scheduler/").set({
+        enableDatabase: true
+      });
+      await fs.promises.rm(pool.getWorkDir(), { force: true, recursive: true });
+      await fs.promises.rm(scheduler.getWorkDir(), { force: true, recursive: true });
+
+      zx.io.api.server.ConnectionManager.getInstance().registerApi(scheduler.getServerApi(), "/scheduler");
+
+      let schedulerClientApi = zx.io.api.ApiUtils.createClientApi(zx.server.work.scheduler.ISchedulerApi, zx.io.api.ApiUtils.getClientTransport(), "/scheduler");
+      pool.setSchedulerApi(schedulerClientApi);
+
+      await pool.startup();
+      await scheduler.start();
+      this.__scheduler = scheduler;
+    },
+
+    getScheduler() {
+      return this.__scheduler;
     },
 
     /**

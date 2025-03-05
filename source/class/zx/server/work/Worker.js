@@ -125,14 +125,14 @@ qx.Class.define("zx.server.work.Worker", {
       if (this.__workJson) {
         throw new Error("Cannot run more than one work at a time");
       }
-      let workId = `${workJson.classname} [${workJson.uuid}]`;
+      let workId = `${workJson.workClassname} [${workJson.uuid}]`;
       this.debug("Running work: " + workId);
-      let clazz = qx.Class.getByName(workJson.classname);
+      let clazz = qx.Class.getByName(workJson.workClassname);
       if (!clazz) {
-        throw new Error(`Cannot find class '${workJson.classname}'`);
+        throw new Error(`Cannot find class '${workJson.workClassname}'`);
       }
       if (!qx.Class.hasInterface(clazz, zx.server.work.IWork)) {
-        throw new Error(`Class '${workJson.classname}' does not implement interface zx.server.work.IWork !`);
+        throw new Error(`Class '${workJson.workClassname}' does not implement interface zx.server.work.IWork !`);
       }
 
       let workInstance = new clazz(...(workJson.args || []));

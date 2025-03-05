@@ -15,8 +15,6 @@
  *
  * ************************************************************************ */
 
-const bodyParser = require("body-parser");
-
 /**
  * Implementation of server transport for Express.js
  */
@@ -83,6 +81,8 @@ qx.Class.define("zx.io.api.transport.http.ExpressServerTransport", {
      * ```
      */
     jsonMiddleware() {
+      const bodyParser = require("body-parser");
+
       // TODO: test this middleware
       return (req, res, next) => {
         bodyParser.text()(req, res, () => {
