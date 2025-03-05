@@ -121,8 +121,6 @@ qx.Class.define("zx.ui.files.FileUpload", {
       let url = this.getValue()?.getUrl();
       if (!url) return;
       else {
-        url = grasshopper.utils.Url.matchOrigin(url);
-        url = grasshopper.utils.Url.encodeUrlPath(url);
         window.open(url, "_blank");
       }
     }
