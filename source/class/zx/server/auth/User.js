@@ -272,7 +272,8 @@ qx.Class.define("zx.server.auth.User", {
      */
     async getUserFromSession(req) {
       if (!req) {
-        req = zx.server.WebServer.getCurrentRequest();
+        const WebServer = qx.Class.getByName("zx.server.WebServer");
+        req = WebServer?.getCurrentRequest();
       }
       let classname = qx.core.Environment.get("zx.server.auth.User.classname") || zx.server.auth.User.classname;
       let data = req.session?.get(classname);

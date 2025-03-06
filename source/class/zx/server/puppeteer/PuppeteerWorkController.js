@@ -1,13 +1,13 @@
 qx.Class.define("zx.server.puppeteer.PuppeteerWorkController", {
   extend: qx.core.Object,
 
-  construct(worker, url, apiClassnames, clientProperties) {
+  construct(worker, url, apiInterfaces, clientProperties) {
     super();
     this.__clientApis = {};
     this.__url = url;
     this.__clientProperties = clientProperties;
-    for (let apiClassname of apiClassnames) {
-      this.__clientApis[apiClassname] = null;
+    for (let ifc of apiInterfaces) {
+      this.__clientApis[ifc.name] = null;
     }
     this.__worker = worker;
   },
@@ -26,13 +26,13 @@ qx.Class.define("zx.server.puppeteer.PuppeteerWorkController", {
     __puppeteerClient: null,
 
     /**
-     * Finds a Client API by name
+     * Finds a Client API for a given interface
      *
-     * @param {String} apiClassname
+     * @param {Interface} ifc
      * @returns {zx.io.api.client.AbstractClientApi}
      */
-    getClientApi(apiClassname) {
-      return this.__clientApis[apiClassname];
+    getClientApi(ifc) {
+      return this.__clientApis[ifc.name];
     },
 
     /**
@@ -99,7 +99,8 @@ qx.Class.define("zx.server.puppeteer.PuppeteerWorkController", {
       if (Object.keys(this.__clientApis).length) {
         this.__transport = new zx.server.puppeteer.PuppeteerClientTransport(puppeteerClient.getPage());
         for (let apiName in this.__clientApis) {
-          let api = zx.io.api.ApiUtils.createClientApi(apiName, this.__transport);
+          let ifc = qx.Interface.getByName(apiName);
+          let api = zx.io.api.ApiUtils.createClientApi(ifc, this.__transport);
           this.__clientApis[apiName] = api;
         }
       }

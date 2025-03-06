@@ -18,7 +18,7 @@
 const fs = zx.utils.Promisify.fs;
 const path = require("path");
 const chokidar = require("chokidar");
-const { glob } = require("glob");
+const glob = require("glob").sync;
 
 /**
  * All themes derived from Theme
@@ -223,7 +223,7 @@ qx.Class.define("zx.cms.render.Theme", {
           if (rebuildAll) {
             rebuildAll = false;
             rebuildSass = {};
-            sassFiles = await glob(path.join(this.__localDir, "**.scss"));
+            sassFiles = glob(path.join(this.__localDir, "**.scss"));
             sassFiles = sassFiles.filter(filename => path.basename(filename)[0] != "_");
           } else {
             sassFiles = Object.keys(rebuildSass);

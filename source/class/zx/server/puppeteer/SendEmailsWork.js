@@ -12,9 +12,9 @@ qx.Class.define("zx.server.puppeteer.PrintPdfWork", {
         throw new Error("No filename specified");
       }
 
-      let ctlr = new zx.server.puppeteer.PuppeteerWorkController(worker, ["zx.server.puppeteer.api.IPageApi"]);
+      let ctlr = new zx.server.puppeteer.PuppeteerWorkController(worker, [zx.server.puppeteer.api.IPageApi]);
       await ctlr.open();
-      let pageApi = ctlr.getClientApi("zx.server.puppeteer.api.IPageApi");
+      let pageApi = ctlr.getClientApi(zx.server.puppeteer.api.IPageApi);
       await pageApi.subscribe("pageReady", async evt => {
         let data = evt.getData();
         const {

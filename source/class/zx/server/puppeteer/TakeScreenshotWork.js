@@ -12,9 +12,9 @@ qx.Class.define("zx.server.puppeteer.TakeScreenshotWork", {
         throw new Error("No filename specified");
       }
 
-      let ctlr = new zx.server.puppeteer.PuppeteerWorkController(worker, ["zx.server.puppeteer.api.IPageApi"]);
+      let ctlr = new zx.server.puppeteer.PuppeteerWorkController(worker, [zx.server.puppeteer.api.IPageApi]);
       await ctlr.open();
-      let pageApi = ctlr.getClientApi("zx.server.puppeteer.api.IPageApi");
+      let pageApi = ctlr.getClientApi(zx.server.puppeteer.api.IPageApi);
       await pageApi.start();
 
       let filename = worker.resolveFile(json.filename);

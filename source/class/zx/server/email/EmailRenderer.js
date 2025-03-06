@@ -12,7 +12,7 @@ qx.Class.define("zx.server.email.EmailRenderer", {
       let messages = [];
       let config = grasshopper.services.ServicesConfig.getInstance().getConfigData();
 
-      let ctlr = new zx.server.puppeteer.PuppeteerWorkController(worker, url, ["zx.server.puppeteer.IPageApi"], {
+      let ctlr = new zx.server.puppeteer.PuppeteerWorkController(worker, url, [zx.server.puppeteer.api.IPageApi], {
         username: config.authUser,
         password: config.authTokens["grasshopper.automatedLogin"] || null
       });
@@ -27,7 +27,7 @@ qx.Class.define("zx.server.email.EmailRenderer", {
       worker.appendWorkLog("Initialised browser controller");
 
       worker.appendWorkLog("Received ready signal");
-      let pageApi = ctlr.getClientApi("zx.server.puppeteer.IPageApi");
+      let pageApi = ctlr.getClientApi(zx.server.puppeteer.api.IPageApi);
       await pageApi.subscribe("pageReady", async data => {
         const {
           htmlBody,

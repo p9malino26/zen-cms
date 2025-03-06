@@ -30,7 +30,7 @@ qx.Class.define("zx.test.thin.DemoEmail", {
      * @Override
      */
     onReady(options) {
-      let emailApi = zx.io.api.ApiUtils.createServerApi("zx.server.puppeteer.IPageApi");
+      let emailApi = zx.io.api.ApiUtils.createServerApi(zx.server.puppeteer.api.IPageApi);
 
       emailApi.addListener("start", () => {
         let params = qx.bom.Selector.query("#parameters")[0].innerHTML;

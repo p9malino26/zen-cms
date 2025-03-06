@@ -62,6 +62,12 @@ qx.Class.define("zx.server.work.Worker", {
      * Called to append to the log of the work, and is also published to the WorkerPool
      */
     appendWorkLog(message) {
+      if (qx.core.Environment.get("qx.debug")) {
+        if (String(message).indexOf("[object") > -1) {
+          this.error("Invalid message: " + message);
+          debugger;
+        }
+      }
       this.info(message);
       this.__serverApi.publish("log", { caller: this.__workJson.uuid, message });
     },

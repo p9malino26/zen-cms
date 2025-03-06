@@ -115,10 +115,11 @@ qx.Class.define("zx.server.work.scheduler.DbScanner", {
      */
     async __onWorkCompleted(evt) {
       let workResultJson = evt.getData();
+      let uuid = workResultJson.workJson.uuid;
       if (this.__pendingImmediateTasks[uuid]) {
         await this.updateOne(
           zx.server.work.scheduler.ScheduledTask,
-          { _uuid: workResultJson.workJson.uuid },
+          { _uuid: uuid },
           {
             $set: {
               enabled: false,
@@ -131,7 +132,7 @@ qx.Class.define("zx.server.work.scheduler.DbScanner", {
         let dt = new Date();
         await this.updateOne(
           zx.server.work.scheduler.ScheduledTask,
-          { _uuid: workResultJson.workJson.uuid },
+          { _uuid: uuid },
           {
             $set: {
               dateCompleted: dt
