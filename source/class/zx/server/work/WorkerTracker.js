@@ -362,6 +362,10 @@ qx.Class.define("zx.server.work.WorkerTracker", {
         dockerConfig.Cmd = workerPool.getDockerCommand().split(" ");
       }
 
+      if (workerPool.getDockerExtraHosts()) {
+        dockerConfig.HostConfig.ExtraHosts = workerPool.getDockerExtraHosts();
+      }
+
       if (workerPool.getDockerMounts()) {
         for (let mount of workerPool.getDockerMounts()) {
           let segs = mount.split(":");
@@ -373,8 +377,6 @@ qx.Class.define("zx.server.work.WorkerTracker", {
           dockerConfig.HostConfig.Binds.push(mount);
         }
       }
-      let appMountVolume = path.resolve(process.cwd(), workerPool.getAppMountVolume());
-      dockerConfig.HostConfig.Binds.push(`${appMountVolume}:/home/pptruser/app/runtime/`);
 
       if (configCb) {
         configCb(dockerConfig);

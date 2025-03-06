@@ -561,7 +561,7 @@ qx.Class.define("zx.server.WebServer", {
      */
     async _initWorkScheduler() {
       let config = this._config.work;
-      if (!config.pool) {
+      if (!config?.pool) {
         this.error("No work configuration found in cms.json");
         return;
       }
@@ -584,9 +584,14 @@ qx.Class.define("zx.server.WebServer", {
         let settings = {
           poolConfig,
           nodeInspect: config.inspect || "none",
-          nodeLocation: "host",
-          dockerMounts: null
+          nodeLocation: "host"
         };
+
+        if (qx.core.Environment.get("qx.debug")) {
+          settings.hostNodeCommand = ["./compiled/source-node/cli/index.js", "work", "start-worker"];
+        } else {
+          settings.hostNodeCommand = ["./compiled/build-node/cli/index.js", "work", "start-worker"];
+        }
 
         if (poolType == "node-process") {
           settings.nodeLocation = "host";
@@ -597,9 +602,19 @@ qx.Class.define("zx.server.WebServer", {
         }
         pool = new zx.server.work.pools.NodeProcessWorkerPool().set(settings);
       }
+      if (qx.core.Environment.get("qx.debug")) {
+        let dockerMounts = pool.getDockerMounts() || [];
+        dockerMounts.push("compiled/source-node:/home/pptruser/app/runtime");
+        pool.setDockerMounts(dockerMounts);
+      }
+      if (config.extraHosts) {
+        pool.setDockerExtraHosts(config.extraHosts);
+      }
+
       if (config.enableChromium !== false) {
         pool.setEnableChromium(true);
       }
+      this._configureWorkPool(pool);
 
       await pool.cleanupOldContainers();
 
@@ -617,6 +632,15 @@ qx.Class.define("zx.server.WebServer", {
       await scheduler.startup();
       dbScanner.start();
       this.__scheduler = scheduler;
+    },
+
+    /**
+     * Provides an opportunity to configure the worker pool, prior to starting it
+     *
+     * @param {zx.server.work.pools.WorkerPool} pool
+     */
+    async _configureWorkPool(pool) {
+      // Nothing
     },
 
     getScheduler() {

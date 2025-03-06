@@ -20,7 +20,7 @@
       "outputPath": "compiled/source-node",
       "application-types": ["node"],
       "babelOptions": {
-        "targets": "node >= 14"
+        "targets": "node >= 21"
       },
       "environment": {
         "qx.buildType": "source",
@@ -48,7 +48,7 @@
       "outputPath": "compiled/build-node",
       "application-types": ["node"],
       "babelOptions": {
-        "targets": "node >= 14"
+        "targets": "node >= 21"
       },
       "environment": {
         "qx.buildType": "build",

@@ -94,7 +94,6 @@ qx.Class.define("zx.server.work.scheduler.ScheduledTask", {
     workJson: {
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       nullable: false,
-      check: "String",
       event: "changeWorkJson"
     }
   },

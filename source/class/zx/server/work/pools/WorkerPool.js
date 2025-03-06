@@ -106,13 +106,7 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
 
     /** Docker image name to use for containers */
     dockerImage: {
-      init: "zenesisuk/zx-puppeteer-server-base:latest",
-      check: "String"
-    },
-
-    /** What folder to map into the /home/pptruser/app/runtime folder in the container */
-    appMountVolume: {
-      init: "compiled/source-node",
+      init: "zenesisuk/zx-puppeteer-server:latest",
       check: "String"
     },
 
@@ -130,6 +124,12 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
       check: "Array"
     },
 
+    dockerExtraHosts: {
+      init: null,
+      nullable: true,
+      check: "Array"
+    },
+
     /** Command to run in docker */
     dockerCommand: {
       init: "/home/pptruser/bin/start.sh",
@@ -141,6 +141,12 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
     dockerServicesTypeLabel: {
       init: "zx-worker",
       check: "String"
+    },
+
+    /** Whether to make the child node process debuggable */
+    nodeInspect: {
+      init: "none",
+      check: ["none", "inspect", "inspect-brk"]
     },
 
     /** How long to wait for the node process to shutdown gracefully */

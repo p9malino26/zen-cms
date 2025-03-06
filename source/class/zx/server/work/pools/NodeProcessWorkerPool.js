@@ -32,36 +32,34 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerPool", {
   },
 
   properties: {
-    /** Whether to make the child node process debuggable */
-    nodeInspect: {
-      init: "none",
-      check: ["none", "inspect", "inspect-brk"]
-    },
-
-    /** The command line to pass to node, defaults to this app using the command line "work start-worker" */
-    nodeCommand: {
-      init: null,
-      nullable: true,
-      check: "Array"
-    },
-
     /** Where the node process should run */
     nodeLocation: {
       init: "host",
       check: ["host", "container"]
+    },
+
+    hostNodeCommand: {
+      init: ["./compiled/source-node/cli/index.js", "work", "start-worker"],
+      nullable: false,
+      check: "Array"
+    },
+
+    containerNodeCommand: {
+      init: ["./puppeteer-server/index.js", "start-worker", "--launch-chromium"],
+      nullable: false,
+      check: "Array"
     }
   },
 
   members: {
     getFullNodeProcessCommandLine(nodeHttpPort, inspect, nodeDebugPort) {
-      let nodeCmd = this.getNodeCommand();
-      if (nodeCmd == null) {
-        if (this.getNodeLocation() == "host") {
-          nodeCmd = ["./cli/index.js", "work", "start-worker"];
-        } else {
-          nodeCmd = ["./puppeteer-server/index.js", "start-worker", "--launch-chromium"];
-        }
+      let nodeCmd;
+      if (this.getNodeLocation() == "host") {
+        nodeCmd = this.getHostNodeCommand();
+      } else {
+        nodeCmd = this.getContainerNodeCommand();
       }
+
       if (inspect !== "none") {
         nodeCmd.unshift(`--${inspect}=0.0.0.0:${nodeDebugPort}`);
         this.info(`Node process will be debuggable on port ${nodeDebugPort}`);

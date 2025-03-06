@@ -115,13 +115,6 @@ qx.Class.define("zx.server.work.pools.NodeProcessWorkerTracker", {
           chromiumUrl = `http://localhost:${this._getChromiumPort()}`;
         }
         let nodeCmd = workerPool.getFullNodeProcessCommandLine(this._getNodeHttpPort(), inspect, inspect != "none" ? this._getNodeDebugPort() : null);
-        if (!path.isAbsolute(nodeCmd[0])) {
-          let appMountVolume = workerPool.getAppMountVolume();
-          if (!path.isAbsolute(appMountVolume)) {
-            appMountVolume = path.join(process.cwd(), appMountVolume);
-          }
-          nodeCmd[0] = path.join(appMountVolume, nodeCmd[0]);
-        }
 
         this.debug("Running command: " + nodeCmd.join(" "));
         this.__nodeProcess = child_process.spawn("node", nodeCmd, {});

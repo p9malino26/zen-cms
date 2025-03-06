@@ -144,9 +144,10 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         }
       };
 
-      if ((this.isDebug() && this.isAllowHeadfull()) || (qx.core.Environment.get("qx.debug") && qx.core.Environment.get("zx.server.puppeteer.ChromiumDocker.useLocalContainer"))) {
-        opts.headless = false;
-        opts.slowMo = 200;
+      if (this.isDebug()) {
+        if (this.isAllowHeadfull()) {
+          opts.slowMo = 200;
+        }
         opts.devtools = true;
       }
 

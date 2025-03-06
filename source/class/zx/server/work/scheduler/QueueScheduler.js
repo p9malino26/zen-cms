@@ -24,6 +24,9 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
   },
 
   events: {
+    /** Fired when a work item is started, the data is the serialized JSON from `WorkResult.serializeForScheduler` */
+    workStarted: "qx.event.type.Data",
+
     /** Fired when a work item is completed, the data is the serialized JSON from `WorkResult.serializeForScheduler` */
     workCompleted: "qx.event.type.Data",
 

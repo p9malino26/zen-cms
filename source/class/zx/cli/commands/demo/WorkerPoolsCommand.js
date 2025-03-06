@@ -112,16 +112,20 @@ qx.Class.define("zx.cli.commands.demo.WorkerPoolsCommand", {
           nodeInspect: flags.inspect,
           nodeLocation: "host",
           enableChromium: flags.chromium,
-          dockerMounts: null
+          dockerMounts: []
         };
 
         let stat = await fs.promises.stat("./puppeteer-server/base");
         if (stat?.isDirectory()) {
           // prettier-ignore
-          settings.dockerMounts = [
-            "puppeteer-server/base/container/app:/home/pptruser/app", 
-            "puppeteer-server/base/container/bin:/home/pptruser/bin"
-          ];
+          settings.dockerMounts.push("puppeteer-server/base/container/app:/home/pptruser/app");
+          settings.dockerMounts.push("puppeteer-server/base/container/bin:/home/pptruser/bin");
+        }
+        if (qx.core.Environment.get("qx.debug")) {
+          settings.dockerMounts.push("compiled/source-node:/home/pptruser/app/runtime");
+          settings.hostNodeCommand = ["./compiled/source-node/cli/index.js", "work", "start-worker"];
+        } else {
+          settings.hostNodeCommand = ["./compiled/build-node/cli/index.js", "work", "start-worker"];
         }
 
         if (flags.workerLocation == "node-process") {
