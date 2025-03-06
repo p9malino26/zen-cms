@@ -90,6 +90,30 @@ qx.Class.define("zx.server.files.DataFile", {
       return filename;
     },
 
+    /**
+     * Makes a name that can be used to identify this file, but is not the filename.  EG it is used
+     * in downloads or email attachments
+     *
+     * @returns {String}
+     */
+    getPresentableFilename() {
+      let name = this.getOriginalFilename();
+      if (!name) {
+        name = this.getTitle();
+        if (name) {
+          name
+            .replace(/[^a-z0-9._-]+/gi, "-")
+            .replace(/-+/g, "-")
+            .replace(/-+$/, "")
+            .replace(/^-+/, "");
+        } else {
+          name = this.toUuid();
+        }
+      }
+      name += this.getExtension();
+      return name;
+    },
+
     "@deleteFromDisk": zx.io.remote.anno.Method.DEFAULT,
     async deleteFromDisk() {
       let fileName = this.getFilename();

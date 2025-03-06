@@ -74,7 +74,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerWorkController", {
         ...clientProperties
       });
       puppeteerClient.addListener("log", evt => {
-        this.__worker.appendWorkLog(evt.getData());
+        this.__worker.appendWorkLog(evt.getData().msg);
         evt.preventDefault();
       });
       puppeteerClient.addListener("ping", evt => this.debug("ping"));

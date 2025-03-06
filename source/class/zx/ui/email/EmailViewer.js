@@ -143,7 +143,7 @@ qx.Class.define("zx.ui.email.EmailViewer", {
       let ctlr = new qx.data.controller.List(null, this.getQxObject("lstAttachments"), "name");
       ctlr.getSelection().addListener("change", () => {
         let attachment = ctlr.getSelection().getItem(0);
-        this.setCurrentAttachment(attachment);
+        this.setCurrentAttachment(attachment || null);
       });
       return ctlr;
     },

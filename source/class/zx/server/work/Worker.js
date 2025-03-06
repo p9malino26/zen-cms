@@ -63,7 +63,7 @@ qx.Class.define("zx.server.work.Worker", {
      */
     appendWorkLog(message) {
       if (qx.core.Environment.get("qx.debug")) {
-        if (String(message).indexOf("[object") > -1) {
+        if (String(message).indexOf("[object Object]") > -1) {
           this.error("Invalid message: " + message);
           debugger;
         }
