@@ -350,7 +350,6 @@ qx.Class.define("zx.server.work.pools.WorkerPool", {
       if (this.getQxObject("pool").available()) {
         let jsonWork = null;
         try {
-          this.debug(`polling for work...`);
           jsonWork = await this.getSchedulerApi().pollForWork();
         } catch (e) {
           this.debug(`failed to poll for work: ${e}`);

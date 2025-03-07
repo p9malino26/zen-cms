@@ -58,6 +58,9 @@ qx.Class.define("zx.server.Session", {
     /** @type{String} encrypted version of this.sessionId */
     __encryptedSessionId: null,
 
+    /** @type{Boolean} whether the session has been modified */
+    __modified: false,
+
     /**
      * Sets a value in the session; the value should be a primitive value.  If the
      * value is null or undefined then it will be deleted from the session (null cannot
@@ -69,7 +72,10 @@ qx.Class.define("zx.server.Session", {
     set(key, value) {
       if (value === null || value === undefined) {
         this.__values.remove(key);
-      } else this.__values.put(key, value);
+      } else {
+        this.__values.put(key, value);
+      }
+      this.__modified = true;
     },
 
     /**
@@ -138,6 +144,7 @@ qx.Class.define("zx.server.Session", {
         let dt = new Date(Date.now() + options.maxAge);
         this.setExpires(dt);
       }
+      this.__modified = true;
     },
 
     /**
@@ -146,6 +153,7 @@ qx.Class.define("zx.server.Session", {
     _applySessionId(value) {
       const cookieSignature = require("cookie-signature");
       this.__encryptedSessionId = cookieSignature.sign(value, this.__manager.getSecret());
+      this.__modified = true;
     },
 
     /**
@@ -163,6 +171,7 @@ qx.Class.define("zx.server.Session", {
     regenerate() {
       const uid = require("uid-safe").sync;
       this.setSessionId(uid(24));
+      this.__modified = true;
     },
 
     /**
@@ -176,6 +185,15 @@ qx.Class.define("zx.server.Session", {
       }
       this.setExpires(data.expires || null);
       this.__values.replace(data.values);
+      this.__modified = false;
+    },
+
+    isModified() {
+      return this.__modified;
+    },
+
+    clearModified() {
+      this.__modified = false;
     },
 
     /**

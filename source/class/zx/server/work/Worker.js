@@ -69,7 +69,9 @@ qx.Class.define("zx.server.work.Worker", {
         }
       }
       this.info(message);
-      this.__serverApi.publish("log", { caller: this.__workJson.uuid, message });
+      if (this.__workJson) {
+        this.__serverApi.publish("log", { caller: this.__workJson.uuid, message });
+      }
     },
 
     /**

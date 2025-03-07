@@ -51,6 +51,10 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClientTransport", {
      * @override
      */
     async postMessage(uri, msg) {
+      if (msg === undefined) {
+        debugger;
+        throw new Error(`Invalid value to send to ${this.classname}.postMessage: ${msg}`);
+      }
       const MSG_PREFIX = zx.thin.puppeteer.PuppeteerUtil.MSG_PREFIX;
       const MSG_SUFFIX = zx.thin.puppeteer.PuppeteerUtil.MSG_SUFFIX;
       let strMsg = zx.utils.Json.stringifyJson(msg);
@@ -62,7 +66,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClientTransport", {
     },
 
     shutdown() {
-      this.postMessage([{ type: "shutdown" }]);
+      //this.postMessage(null, [{ type: "shutdown" }]);
     }
   }
 });

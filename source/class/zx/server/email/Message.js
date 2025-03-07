@@ -26,9 +26,9 @@ qx.Class.define("zx.server.email.Message", {
      */
     websiteName: {
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
-      check: "String",
       init: null,
       nullable: true,
+      check: "String",
       event: "changeWebsiteName"
     },
 
@@ -37,6 +37,8 @@ qx.Class.define("zx.server.email.Message", {
      */
     dateQueued: {
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      init: null,
+      nullable: true,
       check: "Date",
       event: "changeDateQueued"
     },
@@ -46,10 +48,10 @@ qx.Class.define("zx.server.email.Message", {
      */
     dateDelivered: {
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
-      check: "Date",
-      event: "changeDateDelivered",
+      init: null,
       nullable: true,
-      init: null
+      check: "Date",
+      event: "changeDateDelivered"
     },
 
     /**
@@ -57,10 +59,10 @@ qx.Class.define("zx.server.email.Message", {
      */
     from: {
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
-      check: "String",
-      event: "changeFrom",
+      init: null,
       nullable: true,
-      init: null
+      check: "String",
+      event: "changeFrom"
     },
 
     /**
@@ -69,6 +71,8 @@ qx.Class.define("zx.server.email.Message", {
      */
     to: {
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      init: null,
+      nullable: true,
       transform: "__ensureQxArray",
       check(value) {
         return this.__isStringArray(value);
@@ -82,12 +86,12 @@ qx.Class.define("zx.server.email.Message", {
      */
     cc: {
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      init: null,
+      nullable: true,
       transform: "__ensureQxArray",
       check(value) {
         return this.__isStringArray(value);
       },
-      init: null,
-      nullable: true,
       event: "changeCc"
     },
 
@@ -97,12 +101,12 @@ qx.Class.define("zx.server.email.Message", {
      */
     bcc: {
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      init: null,
+      nullable: true,
       transform: "__ensureQxArray",
       check(value) {
         return this.__isStringArray(value);
       },
-      init: null,
-      nullable: true,
       event: "changeBcc"
     },
 
@@ -111,6 +115,8 @@ qx.Class.define("zx.server.email.Message", {
      */
     subject: {
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      init: null,
+      nullable: true,
       check: "String",
       event: "changeSubject"
     },
@@ -120,10 +126,10 @@ qx.Class.define("zx.server.email.Message", {
      */
     htmlBody: {
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
-      check: "String",
-      event: "changeHtmlBody",
       init: null,
-      nullable: true
+      nullable: true,
+      check: "String",
+      event: "changeHtmlBody"
     },
 
     /**
@@ -131,10 +137,10 @@ qx.Class.define("zx.server.email.Message", {
      */
     textBody: {
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
-      check: "String",
-      event: "changeTextBody",
       init: null,
-      nullable: true
+      nullable: true,
+      check: "String",
+      event: "changeTextBody"
     },
 
     /**
@@ -143,10 +149,11 @@ qx.Class.define("zx.server.email.Message", {
      */
     attachments: {
       "@": [zx.io.persistence.anno.Property.EMBED, zx.io.remote.anno.Property.PROTECTED],
+      init: null,
+      nullable: true,
       check: "qx.data.Array",
       event: "changeAttachments",
-      init: null,
-      nullable: true
+      transform: "__ensureQxArray"
     },
 
     /**
@@ -154,10 +161,10 @@ qx.Class.define("zx.server.email.Message", {
      */
     lastErrorMessage: {
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
-      check: "String",
-      event: "changeLastErrorMessage",
       init: null,
-      nullable: true
+      nullable: true,
+      check: "String",
+      event: "changeLastErrorMessage"
     }
   },
 

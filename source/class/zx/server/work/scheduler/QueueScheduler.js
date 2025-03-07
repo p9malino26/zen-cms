@@ -23,6 +23,14 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
     this.__serverApi = zx.io.api.ApiUtils.createServerApi(zx.server.work.scheduler.ISchedulerApi, this);
   },
 
+  properties: {
+    /** Whether to rotate working directories so that there is a seperate dir per day and startup, inside the `workDir` given to the constructor */
+    rotateWorkDir: {
+      check: "Boolean",
+      init: false
+    }
+  },
+
   events: {
     /** Fired when a work item is started, the data is the serialized JSON from `WorkResult.serializeForScheduler` */
     workStarted: "qx.event.type.Data",
@@ -37,6 +45,12 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
   members: {
     /** @type{String?} the directory to store work results */
     __workDir: null,
+
+    /** @type{String} the directory to store work results, after rotation */
+    __rotatedWorkDir: null,
+
+    /** @type{Date} the last day that we tried to rotate - we only check once per day */
+    __lastRotation: null,
 
     /** @type{WorkQueueEntry[]} the queue */
     __queue: null,
@@ -54,6 +68,43 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
       if (this.__workDir) {
         await fs.promises.mkdir(this.__workDir, { recursive: true });
       }
+    },
+
+    /**
+     * Returns the working directory, used for logs etc
+     *
+     * @returns {String?} the directory to store work results
+     */
+    getWorkDir() {
+      if (!this.__workDir) {
+        return null;
+      }
+      if (this.getRotateWorkDir()) {
+        if (!zx.utils.Dates.sameDay(this.__lastRotation, new Date())) {
+          const DF = new qx.util.format.DateFormat("yyyy-MM-dd");
+          let dir = path.join(this.__workDir, DF.format(new Date()));
+          let testForDir = dir;
+          let pass = 0;
+          while (true) {
+            let stat = null;
+            try {
+              stat = fs.statSync(this.__workDir);
+            } catch (ex) {
+              // Nothing - does not exist
+            }
+            if (stat) {
+              pass++;
+              testForDir = `${dir}-${pass}`;
+            } else {
+              break;
+            }
+          }
+          this.__rotatedWorkDir = testForDir;
+          this.__lastRotation = new Date();
+        }
+        return this.__rotatedWorkDir;
+      }
+      return this.__workDir;
     },
 
     /**
@@ -106,7 +157,7 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
         this.debug(`Work completed for job ${workResultData.workJson.uuid} but not found in running list (Worker Pool has queued this work)`);
       }
       const archiveIt = async () => {
-        let workDir = path.join(this.__workDir, workResultData.workJson.uuid);
+        let workDir = path.join(this.getWorkDir(), workResultData.workJson.uuid);
         await fs.promises.mkdir(workDir, { recursive: true });
         let workResult = zx.server.work.WorkResult.deserializeFromScheduler(workDir, workResultData);
       };
@@ -122,15 +173,6 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
      */
     getServerApi() {
       return this.__serverApi;
-    },
-
-    /**
-     * Returns the working directory, used for logs etc
-     *
-     * @returns {String?} the directory to store work results
-     */
-    getWorkDir() {
-      return this.__workDir;
     },
 
     /**

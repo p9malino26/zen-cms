@@ -191,9 +191,20 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         var authHeader = new Buffer.from(username + ":" + password).toString("base64");
         if (url.indexOf("?") > -1) {
           url += "&";
-        } else url += "?";
+        } else {
+          url += "?";
+        }
         url += "X-Authorization=" + encodeURIComponent("Basic " + authHeader) + "&X-Auth-Login=true";
         console.log("Setting auth header Basic " + authHeader);
+      }
+
+      if (this.isDebugOnStartup()) {
+        let pos = url.indexOf("?");
+        if (pos > -1) {
+          url = url.substring(0, pos + 1) + "qx.waitAtStartup=true&" + url.substring(pos + 1);
+        } else {
+          url += "?qx.waitAtStartup=true";
+        }
       }
 
       page.setDefaultNavigationTimeout(0);
@@ -212,9 +223,11 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
         this.fireEvent("close");
       });
 
+      /*
       if (this.isDebugOnStartup()) {
         url = `http://127.0.0.1:9000/dev/puppeteer-debug-corral?redirect=${encodeURIComponent(url)}`;
       }
+        */
       console.log("Going to " + url);
       let response = await page.goto(url, {
         waitUntil: "networkidle0",
@@ -264,7 +277,14 @@ qx.Class.define("zx.server.puppeteer.PuppeteerClient", {
      * Gracefully shuts down the connection and lets go of the chromium
      */
     async stop() {
-      this._page = null;
+      if (this._page) {
+        try {
+          await this._page.close();
+        } catch (ex) {
+          // Nothing
+        }
+        this._page = null;
+      }
       try {
         await this._browser.disconnect();
       } catch (ex) {

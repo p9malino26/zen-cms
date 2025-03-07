@@ -138,6 +138,7 @@ qx.Class.define("zx.server.SessionManager", {
         let sessionId = request.session.getSessionId();
         request.session.decUse();
         if (!request.session.isInUse()) {
+          this.__saveSession(request);
           delete this.__sessionCache[sessionId];
         }
         request.session = null;
@@ -197,14 +198,12 @@ qx.Class.define("zx.server.SessionManager", {
      * @param {var} payload
      */
     async _onSend(request, reply, payload) {
-      const session = request.session;
+      let session = request.session;
       if (!session || !session.getSessionId() || !this.__shouldSaveSession(request)) {
         return payload;
       }
 
-      let json = session.exportSession();
-      let sessionId = session.getSessionId();
-      await this.__collection.replaceOne({ sessionId: sessionId }, json, { upsert: true });
+      this.__saveSession(request);
       reply.setCookie(this.getCookieName(), session.getEncryptedSessionId(), session.getCookieConfiguration(this.__isConnectionSecure(request)));
 
       return payload;
@@ -223,6 +222,7 @@ qx.Class.define("zx.server.SessionManager", {
       }
       request.session.decUse();
       if (!request.session.isInUse()) {
+        await this.__saveSession(request);
         delete this.__sessionCache[request.session.getSessionId()];
       }
     },
@@ -246,6 +246,20 @@ qx.Class.define("zx.server.SessionManager", {
       }
       const forwardedProto = this.__getRequestProto(request);
       return forwardedProto === "https";
+    },
+
+    /**
+     * Saves the session to the database
+     *
+     * @param {import("fastify").FastifyRequest} request
+     */
+    __saveSession(request) {
+      if (this.__shouldSaveSession(request) && request.session.isModified()) {
+        let session = request.session;
+        let json = session.exportSession();
+        let sessionId = session.getSessionId();
+        this.__collection.replaceOne({ sessionId: sessionId }, json, { upsert: true });
+      }
     },
 
     /**
@@ -278,7 +292,7 @@ qx.Class.define("zx.server.SessionManager", {
      * @returns {Boolean}
      */
     __isConnectionEncrypted(request) {
-      const socket = request.raw.socket;
+      let socket = request.raw.socket;
       return socket && socket.encrypted === true;
     },
 

@@ -144,6 +144,7 @@ qx.Class.define("zx.io.api.ApiUtils", {
 
       if (AbstractServerApi) {
         let members = {};
+        let events = ApiUtils.getEventsFromInterface(apiInterface);
         // prettier-ignore
         let serverConstructorCode = [
           `zx.io.api.server.AbstractServerApi.constructor.call(this, "${apiName}");`, 
@@ -151,8 +152,15 @@ qx.Class.define("zx.io.api.ApiUtils", {
         ];
         const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
         for (let methodName of methodNames) {
-          members[methodName] = new AsyncFunction("...args", "if (this.__apiImplementation) return await this.__apiImplementation." + methodName + "(...args);");
+          // prettier-ignore
+          members[methodName] = new AsyncFunction(
+            "...args",
+            "this.fireDataEvent('" + methodName + "', ...args);\n" + 
+            "if (this.__apiImplementation) \n" + 
+            "  return await this.__apiImplementation." + methodName + "(...args);"
+          );
           serverConstructorCode.push(`this._registerGet('${methodName}', this.${methodName});`);
+          events[methodName] = "qx.event.type.Data";
         }
         if (apiInterface.$$members._publications) {
           members._publications = {};
@@ -164,7 +172,7 @@ qx.Class.define("zx.io.api.ApiUtils", {
         classes.serverClass = qx.Class.define(apiName + "_Server", {
           extend: AbstractServerApi,
           construct: new Function("apiImplementation", serverConstructorCode.join("\n")),
-          events: ApiUtils.getEventsFromInterface(apiInterface),
+          events,
           members
         });
       }

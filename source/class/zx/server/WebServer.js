@@ -852,7 +852,8 @@ qx.Class.define("zx.server.WebServer", {
 
         let currentUser = await zx.server.auth.User.getUserFromSession(request);
         if (currentUser && currentUser.getUsername().toLowerCase() != email.toLowerCase()) {
-          await zx.server.WebServer.getSessionManager().disposeSession(request);
+          await this.__sessionManager.disposeSession(request);
+          this.__sessionManager.newSession(request);
           currentUser = null;
         }
 
@@ -863,6 +864,9 @@ qx.Class.define("zx.server.WebServer", {
               this.__sessionManager.newSession(request);
             }
             user.login(request);
+
+            // This causes the session to be cached in memopry
+            request.session.addUse();
             currentUser = user;
           }
         }

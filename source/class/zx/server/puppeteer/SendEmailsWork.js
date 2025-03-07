@@ -15,9 +15,8 @@ qx.Class.define("zx.server.puppeteer.PrintPdfWork", {
       let ctlr = new zx.server.puppeteer.PuppeteerWorkController(worker, [zx.server.puppeteer.api.IPageApi]);
       await ctlr.open();
       let pageApi = ctlr.getClientApi(zx.server.puppeteer.api.IPageApi);
-      await pageApi.subscribe("pageReady", async evt => {
-        let data = evt.getData();
-        const {
+      await pageApi.subscribe("pageReady", async data => {
+        let {
           htmlBody,
           textBody,
           /**@type {EmailParameters}*/

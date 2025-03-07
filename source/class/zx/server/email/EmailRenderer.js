@@ -29,7 +29,7 @@ qx.Class.define("zx.server.email.EmailRenderer", {
       worker.appendWorkLog("Received ready signal");
       let pageApi = ctlr.getClientApi(zx.server.puppeteer.api.IPageApi);
       await pageApi.subscribe("pageReady", async data => {
-        const {
+        let {
           htmlBody,
           textBody,
           /**@type {EmailParameters}*/

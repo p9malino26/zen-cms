@@ -45,7 +45,7 @@ qx.Class.define("zx.test.thin.DemoEmail", {
       });
 
       emailApi.addListener("next", () => {
-        emailApi.complete();
+        emailApi.publish("complete");
       });
     }
   }

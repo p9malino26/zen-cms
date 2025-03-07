@@ -12,6 +12,13 @@ qx.Class.define("zx.server.puppeteer.PuppeteerWorkController", {
     this.__worker = worker;
   },
 
+  properties: {
+    debug: {
+      init: false,
+      check: "Boolean"
+    }
+  },
+
   members: {
     /** @type{zx.server.work.IWorker} the worker we're operating for */
     __worker: null,
@@ -56,7 +63,7 @@ qx.Class.define("zx.server.puppeteer.PuppeteerWorkController", {
 
       let chromium = await this.__worker.getChromium();
 
-      let debugOnStartup = !!json.debugOnStartup;
+      let debugOnStartup = !!json.debugOnStartup || this.getDebug();
       if (qx.core.Environment.get(this.classname + ".askDebugOnStartup")) {
         // you may want to set `debugOnStartup` to `true`
         debugger;
@@ -69,8 +76,10 @@ qx.Class.define("zx.server.puppeteer.PuppeteerWorkController", {
 
       let puppeteerClient = new zx.server.puppeteer.PuppeteerClient().set({
         url: this.__url,
+        debug: this.getDebug(),
         debugOnStartup: debugOnStartup,
         chromiumEndpoint: chromium.getEndpoint(),
+        usesZxApi: true,
         ...clientProperties
       });
       puppeteerClient.addListener("log", evt => {
@@ -106,6 +115,8 @@ qx.Class.define("zx.server.puppeteer.PuppeteerWorkController", {
       }
 
       puppeteerClient.addListenerOnce("close", () => this.close());
+
+      await puppeteerClient.waitForReadySignal();
     },
 
     /**
@@ -117,9 +128,10 @@ qx.Class.define("zx.server.puppeteer.PuppeteerWorkController", {
         this.__transport = null;
       }
       if (this.__puppeteerClient) {
-        await this.__puppeteerClient.stop();
-        this.__puppeteerClient.dispose();
+        let puppeteerClient = this.__puppeteerClient;
         this.__puppeteerClient = null;
+        await puppeteerClient.stop();
+        puppeteerClient.dispose();
       }
       this.debug("Puppeteer client closed");
     }

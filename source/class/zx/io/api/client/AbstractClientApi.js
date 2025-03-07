@@ -205,6 +205,7 @@ qx.Class.define("zx.io.api.client.AbstractClientApi", {
         promise.resolve(evt);
       };
       await this.subscribe(publishName, cb);
+      await promise;
     },
 
     /**
