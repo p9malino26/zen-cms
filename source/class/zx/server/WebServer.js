@@ -116,7 +116,7 @@ qx.Class.define("zx.server.WebServer", {
     __proxyPublicPrivate: undefined,
 
     /** @type{zx.server.work.scheduler.QueueScheduler} the scheduler, if configured */
-    __scheduler: null,
+    __workScheduler: null,
 
     /**
      * Called to start the server
@@ -618,20 +618,20 @@ qx.Class.define("zx.server.WebServer", {
 
       await pool.cleanupOldContainers();
 
-      let scheduler = new zx.server.work.scheduler.QueueScheduler("temp/scheduler/");
-      let dbScanner = new zx.server.work.scheduler.DbScanner(scheduler);
+      let workScheduler = new zx.server.work.scheduler.QueueScheduler("temp/scheduler/");
+      let dbScanner = new zx.server.work.scheduler.DbScanner(workScheduler);
       await fs.promises.rm(pool.getWorkDir(), { force: true, recursive: true });
-      await fs.promises.rm(scheduler.getWorkDir(), { force: true, recursive: true });
+      await fs.promises.rm(workScheduler.getWorkDir(), { force: true, recursive: true });
 
-      zx.io.api.server.ConnectionManager.getInstance().registerApi(scheduler.getServerApi(), "/scheduler");
+      zx.io.api.server.ConnectionManager.getInstance().registerApi(workScheduler.getServerApi(), "/scheduler");
 
       let schedulerClientApi = zx.io.api.ApiUtils.createClientApi(zx.server.work.scheduler.ISchedulerApi, zx.io.api.ApiUtils.getClientTransport(), "/scheduler");
       pool.setSchedulerApi(schedulerClientApi);
 
       await pool.startup();
-      await scheduler.startup();
+      await workScheduler.startup();
       dbScanner.start();
-      this.__scheduler = scheduler;
+      this.__workScheduler = workScheduler;
     },
 
     /**
@@ -643,8 +643,8 @@ qx.Class.define("zx.server.WebServer", {
       // Nothing
     },
 
-    getScheduler() {
-      return this.__scheduler;
+    getWorkScheduler() {
+      return this.__workScheduler;
     },
 
     /**

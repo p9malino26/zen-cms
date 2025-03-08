@@ -2,6 +2,13 @@ const fs = require("fs");
 const path = require("path");
 
 /**
+ * 
+db.getCollection("zx.server.email.Message").createIndex(
+   {
+      "to": "text",
+      "htmlBody": "text"
+   }
+)
  * @typedef EmailParameters
  * @property {String} from the email address to send from, if supported
  * @property {String} to the email address to send to
@@ -193,7 +200,7 @@ qx.Class.define("zx.server.email.Message", {
      */
     async receiveDataNotification(key, data) {
       await super.receiveDataNotification(key, data);
-      if (key === zx.io.persistence.IObjectNotifications.BEFORE_SAVE) {
+      if (key === zx.io.persistence.IObjectNotifications.BEFORE_WRITE_TO_JSON) {
         if (!this.getDateQueued()) {
           this.setDateQueued(new Date());
         }

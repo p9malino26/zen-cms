@@ -10,6 +10,14 @@ qx.Class.define("zx.server.work.scheduler.ScheduledTask", {
       event: "changeTitle"
     },
 
+    wellKnownId: {
+      "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
+      init: null,
+      nullable: true,
+      check: "String",
+      event: "changeWellKnownId"
+    },
+
     /** Description of the task */
     description: {
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],

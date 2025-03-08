@@ -120,6 +120,14 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
       if (!workJson.uuid) {
         workJson.uuid = qx.util.Uuid.createUuidV4();
       }
+      if (this.__running[workJson.uuid]) {
+        this.error(`Work ${workJson.uuid} is already running`);
+        return;
+      }
+      if (this.__queue.find(entry => entry.workJson.uuid === workJson.uuid)) {
+        this.error(`Work ${workJson.uuid} is already queued`);
+        return;
+      }
       this.debug(`Queuing job ${workJson.uuid} of type ${workJson.workClassname}`);
       let promise = new qx.Promise();
       this.__queue.push({
