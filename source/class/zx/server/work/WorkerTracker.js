@@ -132,7 +132,7 @@ qx.Class.define("zx.server.work.WorkerTracker", {
         throw new Error("WorkerTracker already has work");
       }
       this.__jsonWork = jsonWork;
-      let workdir = path.join(this.__workerPool.getWorkDir(), "work", jsonWork.uuid);
+      let workdir = path.join(this.__workerPool.getWorkDir(), "work", zx.server.Standalone.getUuidAsPath(jsonWork.uuid));
       this.__workResult = new zx.server.work.WorkResult();
       await this.__workResult.initialize(workdir, jsonWork);
       this.setStatus("running");
@@ -337,7 +337,9 @@ qx.Class.define("zx.server.work.WorkerTracker", {
       }
 
       // prettier-ignore
-      Env.ZX_NODE_ARGS=`./runtime/puppeteer-server/index.js launch --port=11000`;
+      let config = zx.server.Config.getInstance().getConfigData();
+      let websiteName = config.websiteName;
+      Env.ZX_NODE_ARGS = `./runtime/${websiteName}/puppeteer-server/index.js launch --port=11000`;
       Env.ZX_MODE = `worker`;
 
       /** @type {import('dockerode').ContainerCreateOptions} */

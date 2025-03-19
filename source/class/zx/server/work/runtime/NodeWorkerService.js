@@ -39,7 +39,12 @@ qx.Class.define("zx.server.work.runtime.NodeWorkerService", {
         throw new Error(`zx.server.work.runtime.NodeWorkerApp is designed for use in a worker thread and should not be executed in ${currentExecution}`);
       }
 
-      let server = new zx.server.Standalone();
+      let clazz = qx.core.Environment.get("zx.server.work.runtime.NodeWorkerService.serverClass");
+      if (!clazz) {
+        clazz = "zx.server.Standalone";
+      }
+      clazz = qx.Class.getByName(clazz);
+      let server = new clazz();
       await server.start();
 
       let worker = new zx.server.work.Worker();

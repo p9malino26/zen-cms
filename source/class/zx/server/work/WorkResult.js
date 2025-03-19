@@ -82,7 +82,8 @@ qx.Class.define("zx.server.work.WorkResult", {
       return {
         workJson: this.__jsonWork,
         workStatus: this.__workStatus,
-        log: await this.getWorkLog()
+        log: await this.getWorkLog(),
+        response: this.response
       };
     },
 

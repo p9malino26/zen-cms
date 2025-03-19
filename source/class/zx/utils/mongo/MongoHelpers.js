@@ -1,4 +1,6 @@
 /**
+ * @deprecated use `zx.utils.mongo.MMongoClient` instead
+ *
  * @typedef {{
  *   from: string;
  *   as: string;

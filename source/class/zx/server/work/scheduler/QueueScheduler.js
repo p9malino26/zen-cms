@@ -165,7 +165,7 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
         this.debug(`Work completed for job ${workResultData.workJson.uuid} but not found in running list (Worker Pool has queued this work)`);
       }
       const archiveIt = async () => {
-        let workDir = path.join(this.getWorkDir(), workResultData.workJson.uuid);
+        let workDir = path.join(this.getWorkDir(), zx.server.Standalone.getUuidAsPath(workResultData.workJson.uuid));
         await fs.promises.mkdir(workDir, { recursive: true });
         let workResult = zx.server.work.WorkResult.deserializeFromScheduler(workDir, workResultData);
       };

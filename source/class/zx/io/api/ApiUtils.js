@@ -7,7 +7,7 @@
  * respectively
  */
 qx.Class.define("zx.io.api.ApiUtils", {
-  extend: qx.core.Object,
+  type: "static",
 
   statics: {
     /**
