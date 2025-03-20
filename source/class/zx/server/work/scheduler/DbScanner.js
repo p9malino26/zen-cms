@@ -1,7 +1,6 @@
 /**
- * @typedef WorkQueueEntry
- * @property {String} cronExpression the cron expression for the task
- * @property {String} workJson the work to do
+ * Scans the database of tasks `zx.server.work.scheduler.ScheduledTask` for work to be done
+ * and adds it to the QueueScheduler
  */
 qx.Class.define("zx.server.work.scheduler.DbScanner", {
   extend: qx.core.Object,
@@ -87,6 +86,14 @@ qx.Class.define("zx.server.work.scheduler.DbScanner", {
 
         if (!workJson.uuid) {
           workJson.uuid = taskJson._uuid + "-work-task";
+        }
+
+        if (!workJson.title) {
+          workJson.title = "Task: " + taskJson.title;
+        }
+
+        if (!workJson.description) {
+          workJson.description = taskJson.description;
         }
 
         let taskIsRunning = Object.values(this.__runningTasks).find(task => task._uuid === taskJson._uuid);

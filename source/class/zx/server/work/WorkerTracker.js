@@ -41,6 +41,12 @@ qx.Class.define("zx.server.work.WorkerTracker", {
   },
 
   members: {
+    /**
+     * @type {zx.utils.Debounce} A watchdog which terminates the running work if its has
+     * not shown activity for a certain time
+     */
+    __watchDog: null,
+
     /** @type{zx.server.work.pools.WorkerPool} the pool this belong to */
     __workerPool: null,
 
@@ -70,11 +76,18 @@ qx.Class.define("zx.server.work.WorkerTracker", {
      */
     async initialize() {
       await this.__workerClientApi.subscribe("log", data => {
+        if (this.getStatus() !== "running") return;
+
         if (this.__jsonWork?.uuid === data.caller) {
           this.appendWorkLog(data.message);
         } else {
           this.error(data.message);
         }
+        this.__watchDog.run();
+      });
+      await this.__workerClientApi.subscribe("ping", () => {
+        if (this.getStatus() !== "running") return;
+        this.__watchDog.run();
       });
     },
 
@@ -91,7 +104,7 @@ qx.Class.define("zx.server.work.WorkerTracker", {
         this.trace(`Expected exception while shutting down worker: ${ex}`);
       }
       await this._closeContainer();
-      await clientApi.terminate();
+      clientApi.terminate();
     },
 
     /**
@@ -128,6 +141,9 @@ qx.Class.define("zx.server.work.WorkerTracker", {
      * @param {*} jsonWork
      */
     async runWork(jsonWork) {
+      this.setStatus("running");
+
+      //Initialize work result
       if (this.__workResult) {
         throw new Error("WorkerTracker already has work");
       }
@@ -135,8 +151,17 @@ qx.Class.define("zx.server.work.WorkerTracker", {
       let workdir = path.join(this.__workerPool.getWorkDir(), "work", zx.server.Standalone.getUuidAsPath(jsonWork.uuid));
       this.__workResult = new zx.server.work.WorkResult();
       await this.__workResult.initialize(workdir, jsonWork);
-      this.setStatus("running");
+
       this.__workResult.writeStatus();
+
+      //Set up watchdog
+      const WATCHDOG_TIMEOUT = 5 * 60 * 1000;
+      this.__watchDog = new zx.utils.Debounce(() => {
+        this.appendWorkLog("Task aborted due to inactivity timeout.");
+        this.killWork();
+      }, WATCHDOG_TIMEOUT).set({ repeatedTrigger: "restart" });
+
+      //Run the work!
       let promise = this.__workerClientApi.run(jsonWork);
       promise.then(async response => await this._onWorkComplete(response));
     },
@@ -156,27 +181,49 @@ qx.Class.define("zx.server.work.WorkerTracker", {
      * Called when the work is complete
      */
     async _onWorkComplete(response) {
+      if (this.getStatus() != "running") {
+        this.debug(`Ignoring work complete as status is ${this.getStatus()}`);
+        return;
+      }
+
       this.appendWorkLog("Work complete for " + this.__jsonWork.uuid + ", response = " + JSON.stringify(response));
-      let workResult = this.__workResult;
-      workResult.response = response;
-      await workResult.close();
-      if (this.getStatus() === "killing" || !!response.exception) {
+      await this.__closeWorkResult(response);
+
+      if (response.exception) {
         this.setStatus("dead");
       } else {
         this.setStatus("stopped");
       }
-      this.__workStatus = null;
-      this.__jsonWork = null;
+
+      await this.__cleanupAfterWork();
     },
 
     /**
      * Kills the work and the worker
      */
-    killWork() {
-      if (this.getStatus() != "dead") {
-        this.setStatus("killing");
-        this.__workerClientApi.terminate();
+    async killWork() {
+      if (this.getStatus() != "running") {
+        this.debug("Ignoring killWork as status is " + this.getStatus());
+        return;
       }
+
+      this.setStatus("killing");
+
+      await this.__closeWorkResult({ exception: "Task aborted." });
+      this.setStatus("dead");
+      this.__cleanupAfterWork();
+    },
+
+    async __closeWorkResult(response) {
+      let workResult = this.__workResult;
+      workResult.response = response;
+      await workResult.close();
+    },
+
+    async __cleanupAfterWork() {
+      this.__jsonWork = null;
+      this.__watchDog.dispose();
+      this.__watchDog = null;
     },
 
     getWorkResult() {
@@ -475,7 +522,7 @@ qx.Class.define("zx.server.work.WorkerTracker", {
     },
 
     /**
-     * Closes the container and releases the chromium port
+     * Closes the Docker container and releases the chromium port
      */
     async _closeContainer() {
       if (this._container) {

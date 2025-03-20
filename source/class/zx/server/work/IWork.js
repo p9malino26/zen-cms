@@ -10,5 +10,13 @@ qx.Interface.define("zx.server.work.IWork", {
      * @returns {Promise<>} A promise that resolves when the work is complete
      */
     async execute(worker) {}
+
+    /**
+     * @optional
+     * Attempts to cleanly shut down the work
+     * Can be called when we are in the middle of execute.
+     * @param {zx.server.work.IWorker} worker
+     */
+    // async abort(worker) {}
   }
 });

@@ -54,14 +54,8 @@ qx.Class.define("zx.server.work.runtime.NodeWorkerService", {
       zx.io.api.server.ConnectionManager.getInstance().registerApi(worker.getServerApi(), "/work/worker");
 
       new zx.io.api.transport.nodeworker.NodeWorkerServerTransport();
-      let promise = new qx.Promise();
-      worker.addListener("shutdown", () => {
-        this.info("Shutting down worker thread");
-        worker.dispose();
-        server.stop();
-        promise.resolve();
-      });
-      await promise;
+      await worker.waitUntilShutdown();
+      server.stop();
     }
   }
 });
