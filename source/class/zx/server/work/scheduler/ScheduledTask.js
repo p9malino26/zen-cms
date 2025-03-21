@@ -121,7 +121,12 @@ qx.Class.define("zx.server.work.scheduler.ScheduledTask", {
       event: "changeEnabled"
     },
 
-    /** JSON object for Work */
+    /**
+     * @type {zx.server.work.IWorkJson}
+     * JSON object for Work
+     * Title and description fields are optional.
+     * If empty, they are taken from the ScheduledTask object
+     */
     workJson: {
       "@": [zx.io.persistence.anno.Property.DEFAULT, zx.io.remote.anno.Property.PROTECTED],
       nullable: false,

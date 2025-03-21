@@ -70,7 +70,7 @@ qx.Class.define("zx.server.work.WorkResult", {
       await fs.promises.writeFile(path.join(this.__workdir, "work.json"), JSON.stringify(jsonWork, null, 2));
       this.__workStatus = {
         started: new Date(),
-        logFile: logFilePath
+        logFile: path.resolve(logFilePath)
       };
       this.appendWorkLog("Starting work: " + JSON.stringify(jsonWork, null, 2));
       this.writeStatus();
