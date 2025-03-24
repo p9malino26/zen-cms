@@ -1,3 +1,20 @@
+/* ************************************************************************
+*
+*  Zen [and the art of] CMS
+*
+*  https://zenesis.com
+*
+*  Copyright:
+*    2019-2025 Zenesis Ltd, https://www.zenesis.com
+*
+*  License:
+*    MIT (see LICENSE in project root)
+*
+*  Authors:
+*    John Spackman (john.spackman@zenesis.com, @johnspackman)
+*
+* ************************************************************************ */
+
 /**
  * Interface for a scheduler that can be polled for work and notify when work is completed.  This is
  * effectively the Server API for work schedulers.

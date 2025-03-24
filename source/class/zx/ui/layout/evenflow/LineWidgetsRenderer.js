@@ -1,3 +1,20 @@
+/* ************************************************************************
+*
+*  Zen [and the art of] CMS
+*
+*  https://zenesis.com
+*
+*  Copyright:
+*    2019-2025 Zenesis Ltd, https://www.zenesis.com
+*
+*  License:
+*    MIT (see LICENSE in project root)
+*
+*  Authors:
+*    John Spackman (john.spackman@zenesis.com, @johnspackman)
+*
+* ************************************************************************ */
+
 /**
  * This class is responsible for rendering the widgets in one line for a parent widget using zx.ui.layout.evenflow.EvenFlowLayout
  * It determines the positions of the widgets in the line,
