@@ -1,30 +1,39 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2025 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2025 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
-qx.Class.define("zx.reports.TableColumn", {
+qx.Class.define("zx.reports.table.TableAccumulatorColumn", {
   extend: qx.core.Object,
 
-  construct(caption, columnName, format) {
+  construct(caption, accumulatorId, format) {
     super();
     if (caption) {
       this.setCaption(caption);
     }
-    if (columnName) {
-      this.setColumnName(columnName);
+    if (accumulatorId) {
+      this.setAccumulatorId(accumulatorId);
+    }
+    if (format) {
+      this.setFormat(format);
+    }
+    if (caption) {
+      this.setCaption(caption);
+    }
+    if (accumulatorId) {
+      this.setAccumulatorId(accumulatorId);
     }
     if (format) {
       this.setFormat(format);
@@ -36,26 +45,25 @@ qx.Class.define("zx.reports.TableColumn", {
       check: "String"
     },
 
-    columnName: {
+    accumulatorId: {
       check: "String"
     },
 
     format: {
-      init: null,
-      nullable: true,
       check: "Object"
     }
   },
 
   members: {
     getDisplayValue(ds, table) {
-      let value = ds.get(this.getColumnName());
+      let acc = table.getAccumulator(this.getAccumulatorId());
+      if (!acc) {
+        return "No accumulator called " + this.getAccumulatorId();
+      }
+
+      let value = acc.getValue();
       value = this.formatValue(value);
       return value;
-    },
-
-    getHeaderValue(ds, table) {
-      return this.getCaption() || this.getColumnName();
     },
 
     /**
@@ -68,7 +76,6 @@ qx.Class.define("zx.reports.TableColumn", {
       if (value === null) {
         return "";
       }
-      let format = this.getFormat();
       if (format) {
         if (format instanceof qx.util.format.DateFormat) {
           if (!qx.lang.Type.isDate(value)) {

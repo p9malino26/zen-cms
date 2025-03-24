@@ -11,9 +11,12 @@
 *    MIT (see LICENSE in project root)
 *
 *  Authors:
+*    Patryk Malinowski (@p9malino26)
 *    John Spackman (john.spackman@zenesis.com, @johnspackman)
 *
 * ************************************************************************ */
+
+
 
 /**
  * Tagging interface for the POJO that will be sent as a request from a client transport to a server transport

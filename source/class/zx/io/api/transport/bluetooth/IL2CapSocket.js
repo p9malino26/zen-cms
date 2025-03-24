@@ -11,9 +11,12 @@
 *    MIT (see LICENSE in project root)
 *
 *  Authors:
+*    Patryk Malinowski (@p9malino26)
 *    John Spackman (john.spackman@zenesis.com, @johnspackman)
 *
 * ************************************************************************ */
+
+
 
 /**
  * This interface represents an object which sends and receives data over a Bluetooth L2CAP connection

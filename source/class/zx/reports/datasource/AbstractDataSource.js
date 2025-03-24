@@ -1,29 +1,30 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2025 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2025 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 qx.Class.define("zx.reports.datasource.AbstractDataSource", {
   extend: qx.core.Object,
+  implement: [zx.reports.datasource.IDataSource],
 
   members: {
     /** @type{String} the position, one of [ "before-start", "on-row", "at-eof", "beyond-eof" ] */
     __position: null,
 
     /**
-     * Opens the data source and advances to the first row
+     * @Override
      */
     async open() {
       if (this.__position !== null) {
@@ -35,7 +36,7 @@ qx.Class.define("zx.reports.datasource.AbstractDataSource", {
     },
 
     /**
-     * Closes the data source
+     * @Override
      */
     close() {
       if (this.__position === null) {
@@ -46,7 +47,7 @@ qx.Class.define("zx.reports.datasource.AbstractDataSource", {
     },
 
     /**
-     * Moves to the next row
+     * @Override
      */
     async next() {
       if (this.__position == "beyond-eof") {
@@ -66,12 +67,17 @@ qx.Class.define("zx.reports.datasource.AbstractDataSource", {
     },
 
     /**
-     * Tests whether at EOF or not
-     *
-     * @returns {Boolean}
+     * @Override
      */
     isAtEof() {
       return this.__position == "at-eof" || this.__position == "beyond-eof";
+    },
+
+    /**
+     * @Override
+     */
+    current() {
+      throw new Error(`No such implementation for ${this.classname}.current`);
     },
 
     /**
@@ -95,24 +101,6 @@ qx.Class.define("zx.reports.datasource.AbstractDataSource", {
      */
     async _nextImpl() {
       throw new Error(`No such implementation for ${this.classname}._nextImpl`);
-    },
-
-    /**
-     * Returns a value for the column
-     *
-     * @param {String} columnName
-     */
-    get(columnName) {
-      throw new Error(`No such implementation for ${this.classname}.get`);
-    },
-
-    /**
-     * Returns a list of all column names
-     *
-     * @return {String[]}
-     */
-    getColumnNames() {
-      throw new Error(`No such implementation for ${this.classname}.get`);
     }
   }
 });

@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2025 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2025 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Provides a simple datasource that accesses a remote zx.reports.server.Cursor
@@ -50,25 +50,11 @@ qx.Class.define("zx.reports.datasource.CursorDataSource", {
       return this.__data !== null;
     },
 
-    getRowData() {
+    /**
+     * @Override
+     */
+    current() {
       return this.__data;
-    },
-
-    /**
-     * @Override
-     */
-    get(columnName) {
-      if (this.__data === null) {
-        return null;
-      }
-      return this.__data[columnName];
-    },
-
-    /**
-     * @Override
-     */
-    getColumnNames() {
-      return Object.keys(this.__data);
     }
   }
 });

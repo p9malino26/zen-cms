@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2025 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2025 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Provides a simple datasource that accesses arrays of JSON objects
@@ -51,18 +51,11 @@ qx.Class.define("zx.reports.datasource.JsonDataSource", {
     /**
      * @Override
      */
-    get(columnName) {
+    current() {
       if (this.__index < 0 || this.__index > this.__json.length - 1) {
         return null;
       }
-      return this.__json[columnName];
-    },
-
-    /**
-     * @Override
-     */
-    getColumnNames() {
-      return Object.keys(this.__json);
+      return this.__json[this.__index];
     }
   }
 });

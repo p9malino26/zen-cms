@@ -1,32 +1,32 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2025 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2025 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
-qx.Class.define("zx.reports.TableRow", {
+qx.Class.define("zx.reports.table.TableRow", {
   extend: zx.reports.Block,
 
   members: {
     /**
      * Finds the nearest parent table
      *
-     * @returns {zx.reports.Table?}
+     * @returns {zx.reports.table.Table?}
      */
     getTable() {
       for (let tmp = this.getParent(); tmp; tmp = tmp.getParent()) {
-        if (tmp instanceof zx.reports.Table) {
+        if (tmp instanceof zx.reports.table.Table) {
           return tmp;
         }
       }
@@ -36,7 +36,7 @@ qx.Class.define("zx.reports.TableRow", {
     /**
      * Returns the columns of the nearest table, or from this if it is overridden
      *
-     * @returns {zx.reports.TableColumn[]}
+     * @returns {zx.reports.table.TableColumn[]}
      */
     getEffectiveColumns() {
       for (let tmp = this.getParent(); tmp; tmp = tmp.getParent()) {

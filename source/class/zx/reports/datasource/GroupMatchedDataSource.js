@@ -1,21 +1,26 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2025 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2025 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
-qx.Class.define("zx.reports.GroupMatchedDataSource", {
+/**
+ * Provides a datasource that iterates over a set of values which match whatever
+ * the group currently is - eg if the group is grouping by "name", then this will
+ * iterate over all the rows with the same name
+ */
+qx.Class.define("zx.reports.datasource.GroupMatchedDataSource", {
   extend: zx.reports.datasource.AbstractDataSource,
 
   /**
@@ -68,8 +73,8 @@ qx.Class.define("zx.reports.GroupMatchedDataSource", {
     /**
      * @override
      */
-    get(columnName) {
-      return this.__ds.get(columnName);
+    current() {
+      return this.__ds.current();
     }
   }
 });

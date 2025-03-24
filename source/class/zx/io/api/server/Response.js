@@ -11,9 +11,12 @@
 *    MIT (see LICENSE in project root)
 *
 *  Authors:
+*    Patryk Malinowski (@p9malino26)
 *    John Spackman (john.spackman@zenesis.com, @johnspackman)
 *
 * ************************************************************************ */
+
+
 
 /**
  * Model class representing a response to a request to the server,

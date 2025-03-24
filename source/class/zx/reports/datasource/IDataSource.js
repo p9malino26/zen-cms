@@ -12,21 +12,36 @@
  *
  *  Authors:
  *    John Spackman (john.spackman@zenesis.com, @johnspackman)
- *    Patryk Malinowski (@p9malino26)
  *
  * ************************************************************************ */
 
-qx.Class.define("zx.demo.server.work.ErrorWork", {
-  extend: qx.core.Object,
-  implement: zx.server.work.IWork,
-
+qx.Interface.define("zx.reports.datasource.IDataSource", {
   members: {
     /**
-     * @override
+     * Opens the data source and advances to the first row
      */
-    async execute(worker) {
-      worker.appendWorkLog("I'm about to throw an exception!");
-      throw new Error("oops");
-    }
+    async open() {},
+
+    /**
+     * Closes the data source
+     */
+    close() {},
+
+    /**
+     * Moves to the next row
+     */
+    async next() {},
+
+    /**
+     * Tests whether at EOF or not
+     *
+     * @returns {Boolean}
+     */
+    isAtEof() {},
+
+    /**
+     * Returns the current row/object
+     */
+    current() {}
   }
 });

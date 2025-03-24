@@ -1,39 +1,30 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2025 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2025 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
-qx.Class.define("zx.reports.TableAccumulatorColumn", {
+qx.Class.define("zx.reports.table.TableColumn", {
   extend: qx.core.Object,
 
-  construct(caption, accumulatorId, format) {
+  construct(caption, columnName, format) {
     super();
     if (caption) {
       this.setCaption(caption);
     }
-    if (accumulatorId) {
-      this.setAccumulatorId(accumulatorId);
-    }
-    if (format) {
-      this.setFormat(format);
-    }
-    if (caption) {
-      this.setCaption(caption);
-    }
-    if (accumulatorId) {
-      this.setAccumulatorId(accumulatorId);
+    if (columnName) {
+      this.setColumnName(columnName);
     }
     if (format) {
       this.setFormat(format);
@@ -45,25 +36,26 @@ qx.Class.define("zx.reports.TableAccumulatorColumn", {
       check: "String"
     },
 
-    accumulatorId: {
+    columnName: {
       check: "String"
     },
 
     format: {
+      init: null,
+      nullable: true,
       check: "Object"
     }
   },
 
   members: {
     getDisplayValue(ds, table) {
-      let acc = table.getAccumulator(this.getAccumulatorId());
-      if (!acc) {
-        return "No accumulator called " + this.getAccumulatorId();
-      }
-
-      let value = acc.getValue();
+      let value = ds.get(this.getColumnName());
       value = this.formatValue(value);
       return value;
+    },
+
+    getHeaderValue(ds, table) {
+      return this.getCaption() || this.getColumnName();
     },
 
     /**
@@ -76,6 +68,7 @@ qx.Class.define("zx.reports.TableAccumulatorColumn", {
       if (value === null) {
         return "";
       }
+      let format = this.getFormat();
       if (format) {
         if (format instanceof qx.util.format.DateFormat) {
           if (!qx.lang.Type.isDate(value)) {

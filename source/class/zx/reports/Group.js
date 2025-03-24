@@ -1,19 +1,19 @@
 /* ************************************************************************
-*
-*  Zen [and the art of] CMS
-*
-*  https://zenesis.com
-*
-*  Copyright:
-*    2019-2025 Zenesis Ltd, https://www.zenesis.com
-*
-*  License:
-*    MIT (see LICENSE in project root)
-*
-*  Authors:
-*    John Spackman (john.spackman@zenesis.com, @johnspackman)
-*
-* ************************************************************************ */
+ *
+ *  Zen [and the art of] CMS
+ *
+ *  https://zenesis.com
+ *
+ *  Copyright:
+ *    2019-2025 Zenesis Ltd, https://www.zenesis.com
+ *
+ *  License:
+ *    MIT (see LICENSE in project root)
+ *
+ *  Authors:
+ *    John Spackman (john.spackman@zenesis.com, @johnspackman)
+ *
+ * ************************************************************************ */
 
 /**
  * Specialisation of block that updates accumulators on each change of group
@@ -24,11 +24,11 @@ qx.Class.define("zx.reports.Group", {
   /**
    * Constructor
    *
-   * @param {String[]} columnNames names of columns to group by
+   * @param {String[]} fieldNames names of columns to group by
    */
-  construct(columnNames) {
+  construct(fieldNames) {
     super();
-    this.__columnNames = columnNames || [];
+    this.__fieldNames = fieldNames || [];
     this.__accumulators = {};
   },
 
@@ -42,7 +42,7 @@ qx.Class.define("zx.reports.Group", {
 
   members: {
     /** @type{String[]} Column names to group by */
-    __columnNames: null,
+    __fieldNames: null,
 
     /** @type{Map<String,zx.reports.Accumulator>} accumulators */
     __accumulators: null,
@@ -126,7 +126,7 @@ qx.Class.define("zx.reports.Group", {
      * @returns {Object[]}
      */
     getValues(ds) {
-      return this.__columnNames.map(name => ds.get(name));
+      return this.__fieldNames.map(name => ds.get(name));
     }
   }
 });

@@ -11,9 +11,12 @@
 *    MIT (see LICENSE in project root)
 *
 *  Authors:
+*    Patryk Malinowski (@p9malino26)
 *    John Spackman (john.spackman@zenesis.com, @johnspackman)
 *
 * ************************************************************************ */
+
+
 
 qx.Class.define("zx.io.api.transport.bluetooth.L2CapBluetoothServerTransport", {
   extend: zx.io.api.server.AbstractServerTransport,

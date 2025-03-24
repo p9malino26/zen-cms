@@ -11,9 +11,12 @@
 *    MIT (see LICENSE in project root)
 *
 *  Authors:
+*    Patryk Malinowski (@p9malino26)
 *    John Spackman (john.spackman@zenesis.com, @johnspackman)
 *
 * ************************************************************************ */
+
+
 
 /**
  * Tagging interface for the headers POJO that is sent with every request and response
