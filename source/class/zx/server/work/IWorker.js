@@ -15,7 +15,7 @@ qx.Interface.define("zx.server.work.IWorker", {
     /**
      * Returns the JSON for the currently running work
      *
-     * @returns {zx.server.work.IWorkJson}
+     * @returns {zx.server.work.IWork.WorkJson}
      */
     getWorkJson() {
       return this.__workJson;

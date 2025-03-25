@@ -177,16 +177,14 @@ qx.Class.define("zx.server.work.Worker", {
      * @Override
      */
     async shutdown() {
-      if (qx.lang.Type.isFunction(this.__workInstance.abort)) {
-        await this.__workInstance.abort(this);
-      }
+      await this.__workInstance.abort(this);
       this.dispose();
       this.__promiseShutdown.resolve();
     },
 
     /**
      * Waits until the worker has shutdown and it is safe to terminate the worker process
-     * @returns {Promise<void>}
+     * @returns {qx.Promise<void>}
      */
     async waitUntilShutdown() {
       return this.__promiseShutdown;

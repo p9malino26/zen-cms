@@ -36,7 +36,9 @@ qx.Class.define("zx.server.email.FlushQueue", {
         await server.deleteObjectsByType(zx.server.email.Message, { _id: { $in: sentUuids } });
       }
       worker.appendWorkLog("Email queue flushed");
-    }
+    },
+    /**@override*/
+    async abort(worker) {}
   },
 
   statics: {

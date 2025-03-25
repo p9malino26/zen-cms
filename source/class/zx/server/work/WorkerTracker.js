@@ -76,7 +76,9 @@ qx.Class.define("zx.server.work.WorkerTracker", {
      */
     async initialize() {
       await this.__workerClientApi.subscribe("log", data => {
-        if (this.getStatus() !== "running") return;
+        if (this.getStatus() !== "running") {
+          return;
+        }
 
         if (this.__jsonWork?.uuid === data.caller) {
           this.appendWorkLog(data.message);
@@ -86,7 +88,9 @@ qx.Class.define("zx.server.work.WorkerTracker", {
         this.__watchDog.run();
       });
       await this.__workerClientApi.subscribe("ping", () => {
-        if (this.getStatus() !== "running") return;
+        if (this.getStatus() !== "running") {
+          return;
+        }
         this.__watchDog.run();
       });
     },

@@ -122,7 +122,7 @@ qx.Class.define("zx.server.work.scheduler.ScheduledTask", {
     },
 
     /**
-     * @type {zx.server.work.IWorkJson}
+     * @type {zx.server.work.IWork.WorkJson}
      * JSON object for Work
      * Title and description fields are optional.
      * If empty, they are taken from the ScheduledTask object

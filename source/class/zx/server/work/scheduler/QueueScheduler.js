@@ -5,7 +5,7 @@ const path = require("path");
  * A simple queue based scheduler
  *
  * @typedef WorkQueueEntry
- * @property {zx.server.work.IWorkJson} workJson the work to do
+ * @property {zx.server.work.IWork.WorkJson} workJson the work to do
  * @property {Promise} promise the promise which resolves when the work is done
  *
  *
@@ -110,7 +110,7 @@ qx.Class.define("zx.server.work.scheduler.QueueScheduler", {
     /**
      * Adds a work item to the queue
      *
-     * @param {zx.server.work.IWorkJson} workJson
+     * @param {zx.server.work.IWork.WorkJson} workJson
      * @return {Promise} resolves when the work is completed
      */
     async pushWork(workJson) {

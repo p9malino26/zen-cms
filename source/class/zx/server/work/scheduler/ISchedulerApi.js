@@ -14,7 +14,7 @@ qx.Interface.define("zx.server.work.scheduler.ISchedulerApi", {
     /**
      * Polls the queue for work to do.  If there is work to do, it is removed from the queue
      *
-     * @return {zx.server.work.WorkJson?} the work to do, or null if there is no work
+     * @return {zx.server.work.IWork.WorkJson?} the work to do, or null if there is no work
      */
     async pollForWork() {},
 

@@ -29,6 +29,14 @@ qx.Class.define("zx.server.work.runtime.NodeWorkerService", {
     this.__workerData = workerData;
   },
 
+  environment: {
+    /**
+     * The name of the concrete class to use for the server.
+     * Must be or be a subclass of `zx.server.Standalone`
+     */
+    "zx.server.work.runtime.NodeWorkerService.serverClass": "zx.server.Standalone"
+  },
+
   members: {
     __workerData: null,
 
@@ -40,9 +48,6 @@ qx.Class.define("zx.server.work.runtime.NodeWorkerService", {
       }
 
       let clazz = qx.core.Environment.get("zx.server.work.runtime.NodeWorkerService.serverClass");
-      if (!clazz) {
-        clazz = "zx.server.Standalone";
-      }
       clazz = qx.Class.getByName(clazz);
       let server = new clazz();
       await server.start();
