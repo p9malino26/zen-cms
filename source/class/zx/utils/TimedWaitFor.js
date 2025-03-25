@@ -1,3 +1,20 @@
+/* ************************************************************************
+*
+*  Zen [and the art of] CMS
+*
+*  https://zenesis.com
+*
+*  Copyright:
+*    2019-2025 Zenesis Ltd, https://www.zenesis.com
+*
+*  License:
+*    MIT (see LICENSE in project root)
+*
+*  Authors:
+*    John Spackman (john.spackman@zenesis.com, @johnspackman)
+*
+* ************************************************************************ */
+
 /**
  * A class that waits for a certain amount of time before firing an event; the event can be
  * triggered manually.

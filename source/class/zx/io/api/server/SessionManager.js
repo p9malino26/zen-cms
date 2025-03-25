@@ -1,3 +1,23 @@
+/* ************************************************************************
+*
+*  Zen [and the art of] CMS
+*
+*  https://zenesis.com
+*
+*  Copyright:
+*    2019-2025 Zenesis Ltd, https://www.zenesis.com
+*
+*  License:
+*    MIT (see LICENSE in project root)
+*
+*  Authors:
+*    Patryk Malinowski (@p9malino26)
+*    John Spackman (john.spackman@zenesis.com, @johnspackman)
+*
+* ************************************************************************ */
+
+
+
 /**
  * The session manager is responsible for keeping a registry of active sessions
  * and killing sessions which have been inactive for too long.

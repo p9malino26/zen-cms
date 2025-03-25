@@ -1,3 +1,20 @@
+/* ************************************************************************
+*
+*  Zen [and the art of] CMS
+*
+*  https://zenesis.com
+*
+*  Copyright:
+*    2019-2025 Zenesis Ltd, https://www.zenesis.com
+*
+*  License:
+*    MIT (see LICENSE in project root)
+*
+*  Authors:
+*    John Spackman (john.spackman@zenesis.com, @johnspackman)
+*
+* ************************************************************************ */
+
 /**
  * Helper functions to convert data that has been returned from Mongo into read-only Qooxdoo objects.
  * These objects behave in the exact same way as server objects, but changes to them aren't saved in the database.
